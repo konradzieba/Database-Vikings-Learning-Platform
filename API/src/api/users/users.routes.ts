@@ -5,5 +5,6 @@ import * as UserController from './users.controllers';
 const router = Router();
 
 router.get('/me', requireUser, UserController.me);
+router.delete('/deleteUser', UserController.deleteUser);
 
 export default router;

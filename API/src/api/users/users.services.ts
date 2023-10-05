@@ -36,3 +36,12 @@ export function findUserById(id: User['id']) {
     },
   });
 }
+
+export function deleteUser(id: User['id']) {
+  return db.user.delete({
+    where: {
+      id,
+    },
+  });
+}
+

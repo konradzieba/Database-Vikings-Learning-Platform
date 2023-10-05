@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { Prisma, Task } from '@prisma/client';
 import { db } from '../../db';
 
 export function createTask(task: Prisma.TaskCreateInput) {
@@ -7,7 +7,7 @@ export function createTask(task: Prisma.TaskCreateInput) {
   });
 }
 
-export function deleteTask(id: number) {
+export function deleteTask(id: Task['id']) {
   return db.task.delete({
     where: {
       id,

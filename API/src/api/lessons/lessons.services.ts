@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { Lesson, Prisma } from '@prisma/client';
 import { db } from '../../db';
 
 export function createLessonByName(lesson: Prisma.LessonCreateInput) {
@@ -7,7 +7,7 @@ export function createLessonByName(lesson: Prisma.LessonCreateInput) {
   });
 }
 
-export function findLessonById(id: number) {
+export function findLessonById(id: Lesson['id']) {
   return db.lesson.findUnique({
     where: {
       id,
@@ -15,7 +15,7 @@ export function findLessonById(id: number) {
   });
 }
 
-export function findLessonsByGroupId(groupId: number) {
+export function findLessonsByGroupId(groupId: Lesson['groupId']) {
   return db.lesson.findMany({
     where: {
       groupId,

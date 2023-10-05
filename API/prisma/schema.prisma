@@ -63,8 +63,8 @@ model Student {
   // relations
   userId      Int       @unique
   groupId     Int?      @unique
-  answearsId  Int[]
-  Answears    Answear[]
+  answersId  Int[]
+  Answers    Answer[]
   User        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   Group       Group?     @relation(fields: [groupId], references: [id], onDelete: Cascade)
 }
@@ -89,7 +89,7 @@ model Task {
   isExtra     Boolean   @db.Boolean @default(false)
   // relations
   lessonId    Int
-  answears    Answear[]
+  answers     Answer[]
   Lesson      Lesson    @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 }
 
@@ -101,7 +101,7 @@ enum ReplyStatus {
   PENDING
 }
 
-model Answear {
+model Answer {
   id          Int       @id @default(autoincrement())
   solution    String    @db.Text
   replyStatus ReplyStatus @default(PENDING)
