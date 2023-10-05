@@ -18,6 +18,6 @@ router.use('/auth', authRoutes);
 router.use('/users', usersRoutes);
 router.use('/groups', groupsRoutes);
 router.use('/lessons', lessonRoutes);
-router.use('/answers', );
+router.use('/answers', answersRoutes);
 
 export default router;
