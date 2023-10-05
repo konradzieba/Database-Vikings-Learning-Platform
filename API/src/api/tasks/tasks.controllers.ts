@@ -1,8 +1,9 @@
 import { Response, Request, NextFunction } from 'express';
 import MessageResponse from 'interfaces/MessageResponse';
 import { TaskInput } from './tasks.schemas';
-import { createTask as createTaskService } from './tasks.services';
+import * as TaskServices from './tasks.services';
 import dayjs from 'dayjs';
+import { ParamsWithId } from 'interfaces/ParamsWithId';
 
 export async function createTask(
   req: Request<{}, MessageResponse, TaskInput>,
@@ -12,21 +13,39 @@ export async function createTask(
   try {
     const { number, question, closeDate, isExtra, lessonId } = req.body;
 
-    const task = await createTaskService({
-        number,
-        question,
-        closeDate,
-        openDate: dayjs().toDate(),
-        isExtra: isExtra || false,
-        Lesson: {
-            connect: {
-                id: req.body.lessonId,
-            },
-        }
-      });
+    const task = await TaskServices.createTask({
+      number,
+      question,
+      closeDate,
+      openDate: dayjs().toDate(),
+      isExtra: isExtra || false,
+      Lesson: {
+        connect: {
+          id: req.body.lessonId,
+        },
+      },
+    });
 
     res.json({
       message: `Task with ${task.id}, number ${task.number} created successfully. Close time is: ${task.closeDate}`,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function deleteTask(
+  req: Request<ParamsWithId, MessageResponse>,
+  res: Response<MessageResponse>,
+  next: NextFunction
+) {
+  try {
+    const { id } = req.params;
+
+    const task = await TaskServices.deleteTask(id);
+
+    res.json({
+      message: `Task with ${task.id}, number ${task.number} deleted successfully.`,
     });
   } catch (error) {
     next(error);

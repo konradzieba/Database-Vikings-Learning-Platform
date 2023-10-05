@@ -6,3 +6,11 @@ export function createTask(task: Prisma.TaskCreateInput) {
     data: task,
   });
 }
+
+export function deleteTask(id: number) {
+  return db.task.delete({
+    where: {
+      id,
+    },
+  });
+}

@@ -22,3 +22,11 @@ export function findGroupById(id: number) {
     },
   });
 }
+
+export function deleteGroup(id: number) {
+  return db.group.delete({
+    where: {
+      id,
+    },
+  });
+}
