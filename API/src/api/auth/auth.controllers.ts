@@ -8,6 +8,7 @@ import {
   createLecturer,
   createStudent,
   createUser,
+  findStudentByIndexNumber,
   findUserByEmail,
   findUserById,
 } from '../users/users.services';
@@ -34,14 +35,14 @@ export async function register(
   next: NextFunction
 ) {
   try {
-    const { email, firstName, lastName, indexNumber } = req.body;
+    const { firstName, lastName, indexNumber } = req.body;
     const { refreshTokenInCookie } = req.query;
 
-    const existingUser = await findUserByEmail(email);
+    const existingUser = await findStudentByIndexNumber(indexNumber);
 
     if (existingUser) {
       res.status(400);
-      throw new Error('Email already in use.');
+      throw new Error('This student already exists.');
     }
     const generatedPassword = generatePasswordByCredentials(
       firstName,
@@ -49,7 +50,7 @@ export async function register(
       indexNumber
     );
     const user = await createUser({
-      email,
+      email: `${indexNumber}@student.uwm.edu.pl`,
       password: generatedPassword,
       firstName,
       lastName,
@@ -101,7 +102,7 @@ export async function registerLecturer(
 
     if (existingUser) {
       res.status(400);
-      throw new Error('Email already in use.');
+      throw new Error('Lecturer with this email is already in use.');
     }
 
     const user = await createUser({ email, password, firstName, lastName });

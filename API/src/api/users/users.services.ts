@@ -1,11 +1,19 @@
 import * as bcrypt from 'bcrypt';
 import { db } from '../../db';
-import type { User, Prisma } from '@prisma/client';
+import type { User, Prisma, Student } from '@prisma/client';
 
 export function findUserByEmail(email: string) {
   return db.user.findUnique({
     where: {
       email,
+    },
+  });
+}
+
+export function findStudentByIndexNumber(indexNumber: Student['indexNumber']) {
+  return db.student.findUnique({
+    where: {
+      indexNumber,
     },
   });
 }
@@ -44,4 +52,3 @@ export function deleteUser(id: User['id']) {
     },
   });
 }
-
