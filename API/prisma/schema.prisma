@@ -84,9 +84,9 @@ model Task {
   id          Int       @id @default(autoincrement())
   number      Int
   question    String
-  openDate    DateTime
+  openDate    DateTime  @default(now())
   closeDate   DateTime
-  isExtra     Boolean
+  isExtra     Boolean   @db.Boolean @default(false)
   // relations
   lessonId    Int
   answears    Answear[]
