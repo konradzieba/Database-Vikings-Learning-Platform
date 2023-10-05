@@ -9,15 +9,26 @@ datasource db {
 
 
 model User {
-  id          Int       @id @default(autoincrement())
-  email       String    @unique @db.Char(maxLength: 25)
-  password    String
-  firstName   String    @db.Char(maxLength: 25)
-  lastName    String    @db.Char(maxLength: 45)
-  createdAt   DateTime  @default(now()) 
-  updatedAt   DateTime  @updatedAt
-  student     Student?
-  lecturer    Lecturer?
+  id            Int       @id @default(autoincrement())
+  email         String    @unique
+  password      String
+  firstName     String
+  lastName      String
+  createdAt     DateTime  @default(now()) 
+  updatedAt     DateTime  @updatedAt
+  refreshTokens RefreshToken[]
+  student       Student?
+  lecturer      Lecturer?
+}
+
+model RefreshToken {
+  id          String   @id @unique @default(uuid())
+  hashedToken String
+  userId      Int
+  User        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  revoked     Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 
@@ -45,24 +56,24 @@ model Group {
 model Student {
   id          Int       @id @default(autoincrement())
   indexNumber Int       @unique
-  score       Int       
-  health      Int
-  rank        Int
-  lastLogin   DateTime
+  score       Int       @default(0)
+  health      Int       @default(3)
+  rank        Int?      @default(-1)
+  lastLogin   DateTime?
   // relations
   userId      Int       @unique
-  groupId     Int       @unique
+  groupId     Int?      @unique
   answearsId  Int[]
   Answears    Answear[]
   User        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Group       Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  Group       Group?     @relation(fields: [groupId], references: [id], onDelete: Cascade)
 }
 
 
 model Lesson {
   id          Int       @id @default(autoincrement())
   number      Int
-  image       String
+  image       String?
   // relations    
   tasks       Task[]
   groupId     Int
