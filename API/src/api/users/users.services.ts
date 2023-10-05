@@ -11,9 +11,9 @@ export function findUserByEmail(email: string) {
 }
 
 export function findStudentByIndexNumber(indexNumber: Student['indexNumber']) {
-  return db.student.findUnique({
+  return db.user.findUnique({
     where: {
-      indexNumber,
+      email: `${indexNumber}@student.uwm.edu.pl`,
     },
   });
 }
