@@ -109,6 +109,52 @@ const setup = async () => {
     },
   });
 
+  const task2 = await db.task.create({
+    data: {
+      number: 16,
+      question: 'Is kot pies?',
+      closeDate: dayjs().add(7, 'day').toDate(),
+      isExtra: false,
+      Lesson: {
+        connect: {
+          id: lesson.id,
+        },
+      },
+    },
+  });
+
+  // const answer = await db.answer.create({
+  //   data: {
+  //     solution: 'GlobalSetup Solution',
+  //     Task: {
+  //       connect: {
+  //         id: task.id,
+  //       },
+  //     },
+  //     Student: {
+  //       connect: {
+  //         id: student.id,
+  //       },
+  //     },
+  //   },
+  // });
+
+  const answerToUpdate = await db.answer.create({
+    data: {
+      solution: 'GlobalSetup Solution',
+      Task: {
+        connect: {
+          id: task2.id,
+        },
+      },
+      Student: {
+        connect: {
+          id: student.id,
+        },
+      },
+    },
+  });
+
   const validToken = generateAccessToken({ userId: student.id }, '15m');
   process.env.VALID_ACCESS_TOKEN_FOR_TESTING = validToken;
   process.env.LECTURER_ID_FOR_TESTING = lecturer.id.toString();
@@ -116,6 +162,7 @@ const setup = async () => {
   process.env.LESSON_ID_FOR_TESTING = lesson.id.toString();
   process.env.TASK_ID_FOR_TESTING = task.id.toString();
   process.env.STUDENT_ID_FOR_TESTING = student.id.toString();
+  process.env.ANSWER_ID_FOR_UPDATE_TESTING = answerToUpdate.id.toString();
 };
 
 export default setup;
