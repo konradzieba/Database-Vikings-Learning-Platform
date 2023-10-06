@@ -19,7 +19,7 @@ export function findAnswerByTaskIdAndStudentId(
   taskId: Answer['taskId'],
   studentId: Answer['studentId']
 ) {
-  return db.answer.findUnique({
+  return db.answer.findMany({
     where: {
       taskId,
       studentId,

@@ -17,7 +17,7 @@ export async function createAnswer(
       studentId
     );
 
-    if (existingAnswer) {
+    if (existingAnswer.length !== 0) {
       res.status(400);
       throw new Error('Answer for this task already exists.');
     }

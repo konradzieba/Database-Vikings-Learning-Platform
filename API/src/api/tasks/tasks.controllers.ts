@@ -16,12 +16,11 @@ export async function createTask(
     const task = await TaskServices.createTask({
       number,
       question,
-      closeDate,
-      openDate: dayjs().toDate(),
+      closeDate: dayjs(closeDate).toDate(),
       isExtra: isExtra || false,
       Lesson: {
         connect: {
-          id: req.body.lessonId,
+          id: lessonId,
         },
       },
     });

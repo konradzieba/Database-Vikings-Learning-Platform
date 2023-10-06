@@ -9,8 +9,12 @@ export const answerInputSchema = z.object({
 
 export const answerReplySchema = z.object({
   id: z.number().int('answerId must be an integer.'),
-  replyStatus: z.nativeEnum(ReplyStatus),
-  replyDate: z.date({ required_error: 'Reply date is required' }),
+  replyStatus: z
+    .nativeEnum(ReplyStatus)
+    .refine((status) => status !== ReplyStatus.PENDING, {
+      message: 'Reply status cannot be PENDING',
+    }),
+  replyDate: z.coerce.date({ required_error: 'Reply date is required' }),
   replyDesc: z.string(),
 });
 

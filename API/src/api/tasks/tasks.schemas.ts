@@ -6,8 +6,7 @@ export const taskSchema = z.object({
     .number({ required_error: 'Task number must be provided' })
     .int('Task number must be integer'),
   question: z.string({ required_error: 'Task question must be provided' }),
-  openDate: z.date({ required_error: 'Task openDate must be provided' }),
-  closeDate: z
+  closeDate: z.coerce
     .date({
       required_error: 'Task closeDate must be provided',
     })

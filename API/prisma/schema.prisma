@@ -109,8 +109,8 @@ model Answer {
   replyDesc   String?
   replyDate   DateTime?
   // relations
-  taskId      Int       @unique
-  studentId   Int       @unique
+  taskId      Int       
+  studentId   Int       
   Task        Task      @relation(fields: [taskId], references: [id], onDelete: Cascade)
   Student     Student   @relation(fields: [studentId], references: [id], onDelete: Cascade)
 }
