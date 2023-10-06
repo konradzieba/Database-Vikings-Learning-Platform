@@ -42,17 +42,18 @@ export async function answerReply(
   next: NextFunction
 ) {
   try {
-    const { id, replyStatus, replyDate, replyDesc } = req.body;
+    const { id, replyStatus, replyDate, replyDesc, grantedScore } = req.body;
 
     const answerReply = await AnswerServices.answerReply(
       id,
       replyStatus,
       replyDesc,
-      replyDate
+      replyDate,
+      grantedScore
     );
 
     res.json({
-      message: `Answer id:${answerReply.id} for task id:${answerReply.taskId} (student id:${answerReply.studentId}) was updated with ${answerReply.replyStatus} successfully.`,
+      message: `Answer id:${answerReply.id} for task id:${answerReply.taskId} (student id:${answerReply.studentId}) was updated with ${answerReply.replyStatus} and score: ${grantedScore} successfully.`,
     });
   } catch (error) {
     next(error);

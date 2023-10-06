@@ -31,7 +31,8 @@ export function answerReply(
   id: Answer['id'],
   replyStatus: Answer['replyStatus'],
   replyDesc: Answer['replyDesc'] = '',
-  replyDate: Answer['replyDate']
+  replyDate: Answer['replyDate'],
+  grantedScore: Answer['grantedScore']
 ) {
   return db.answer.update({
     where: {
@@ -41,6 +42,7 @@ export function answerReply(
       replyStatus,
       replyDate,
       replyDesc: replyDesc,
+      grantedScore,
     },
   });
 }

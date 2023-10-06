@@ -12,7 +12,7 @@ router.post(
 );
 
 router.patch(
-  '/updateAnswer',
+  '/answerReply',
   validateRequest({ body: answerReplySchema }),
   AnswersControllers.answerReply
 );

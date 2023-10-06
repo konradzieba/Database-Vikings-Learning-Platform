@@ -17,22 +17,6 @@ describe('POST /api/v1/auth/register', () => {
     expect(response.statusCode).toBe(400);
   });
 
-  it('responds with an error if payload email is missing ', async () => {
-    const payload = {
-      firstName: 'John',
-      lastName: 'Rambo',
-      indexNumber: globalUserCredentials.indexNumber,
-    };
-
-    const response = await request(app)
-      .post('/api/v1/auth/register')
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .send(payload);
-
-    expect(response.statusCode).toBe(400);
-  });
-
   it('responds with an error if payload firstName is missing ', async () => {
     const payload = {
       email: 'mihai@mihai.com',
@@ -67,7 +51,6 @@ describe('POST /api/v1/auth/register', () => {
 
   it('responds with an access_token and refresh_token', async () => {
     const payload = {
-      email: 'mihai@mihai.com',
       firstName: 'John',
       lastName: 'Rambo',
       indexNumber: globalUserCredentials.indexNumber,
@@ -88,7 +71,6 @@ describe('POST /api/v1/auth/register', () => {
 
   it('responds with an access_token and refresh_token in cookie', async () => {
     const payload = {
-      email: 'mihai2@mihai2.com',
       firstName: 'John',
       lastName: 'Rambo',
       indexNumber: globalUserCredentials.indexNumber+1,
