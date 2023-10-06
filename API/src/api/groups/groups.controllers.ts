@@ -34,14 +34,14 @@ export async function createGroup(
 }
 
 export async function deleteGroup(
-  req: Request<ParamsWithId, MessageResponse>,
+  req: Request<{}, MessageResponse, {}, ParamsWithId>,
   res: Response<MessageResponse>,
   next: NextFunction
 ) {
   try {
-    const { id } = req.params;
+    const { id } = req.query;
 
-    const group = await GroupServices.deleteGroup(id);
+    const group = await GroupServices.deleteGroup(+id);
 
     res.json({
       message: `Group with ${group.id}, number ${group.name} deleted successfully.`,

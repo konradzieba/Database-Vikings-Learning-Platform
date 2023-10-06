@@ -35,14 +35,14 @@ export async function createTask(
 }
 
 export async function deleteTask(
-  req: Request<ParamsWithId, MessageResponse>,
+  req: Request<{}, MessageResponse, {}, ParamsWithId>,
   res: Response<MessageResponse>,
   next: NextFunction
 ) {
   try {
-    const { id } = req.params;
+    const { id } = req.query;
 
-    const task = await TaskServices.deleteTask(id);
+    const task = await TaskServices.deleteTask(+id);
 
     res.json({
       message: `Task with ${task.id}, number ${task.number} deleted successfully.`,

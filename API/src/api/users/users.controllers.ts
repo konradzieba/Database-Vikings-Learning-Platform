@@ -24,17 +24,17 @@ export async function me(req: Request, res: Response, next: NextFunction) {
 }
 
 export async function deleteUser(
-  req: Request<ParamsWithId, MessageResponse>,
+  req: Request<{}, MessageResponse, {}, ParamsWithId>,
   res: Response<MessageResponse>,
   next: NextFunction
 ) {
   try {
-    const { id } = req.params;
+    const { id } = req.query;
 
-    const user = await UserServices.deleteUser(id);
+    await UserServices.deleteUser(+id);
 
     res.json({
-      message: `User ${user.firstName} ${user.lastName} with deleted successfully.`,
+      message: `User with id: ${id} was deleted successfully.`,
     });
   } catch (error) {
     next(error);
