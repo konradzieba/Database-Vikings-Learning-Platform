@@ -53,7 +53,7 @@ describe('POST /api/v1/auth/register', () => {
     const payload = {
       firstName: 'John',
       lastName: 'Rambo',
-      indexNumber: globalUserCredentials.indexNumber,
+      indexNumber: 628425,
     };
 
     const response = await request(app)
