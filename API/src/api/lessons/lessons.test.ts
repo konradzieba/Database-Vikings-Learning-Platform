@@ -49,3 +49,19 @@ describe('POST /api/v1/lessons/createLesson', () => {
     expect(res.statusCode).toBe(400);
   });
 });
+
+describe('DELETE /api/v1/lessons/deleteLesson/:id', () => {
+  let lessonId = +process.env.LESSON_ID_TO_DELETE_TESTING!;
+  it('should delete lesson successfully', async () => {
+    const res = await request(app).delete(
+      `/api/v1/lessons/deleteLesson/${lessonId}`
+    );
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toContain('deleted successfully.');
+  });
+
+  it(`should respond an error if lesson doesn't exist`, async () => {
+    const res = await request(app).delete(`/api/v1/lessons/deleteLesson/9999`);
+    expect(res.statusCode).toBe(404);
+  });
+});

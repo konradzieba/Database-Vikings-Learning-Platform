@@ -106,6 +106,18 @@ const setup = async () => {
     },
   });
 
+  const lessonToDelete = await db.lesson.create({
+    data: {
+      number: 7,
+      image: 'Lesson to delete',
+      Group: {
+        connect: {
+          id: group.id,
+        },
+      },
+    },
+  });
+
   const task = await db.task.create({
     data: {
       number: 15,
@@ -172,6 +184,7 @@ const setup = async () => {
   process.env.GROUP_ID_FOR_TESTING = group.id.toString();
   process.env.GROUP_ID_TO_DELETE_TESTING = groupToDelete.id.toString();
   process.env.LESSON_ID_FOR_TESTING = lesson.id.toString();
+  process.env.LESSON_ID_TO_DELETE_TESTING = lessonToDelete.id.toString();
   process.env.TASK_ID_FOR_TESTING = task.id.toString();
   process.env.STUDENT_ID_FOR_TESTING = student.id.toString();
   process.env.ANSWER_ID_FOR_UPDATE_TESTING = answerToUpdate.id.toString();
