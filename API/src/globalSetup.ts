@@ -83,6 +83,17 @@ const setup = async () => {
     },
   });
 
+  const groupToDelete = await db.group.create({
+    data: {
+      name: 'Group to delete',
+      Lecturer: {
+        connect: {
+          id: lecturer.id,
+        },
+      },
+    },
+  });
+
   const lesson = await db.lesson.create({
     data: {
       number: 20,
@@ -159,6 +170,7 @@ const setup = async () => {
   process.env.VALID_ACCESS_TOKEN_FOR_TESTING = validToken;
   process.env.LECTURER_ID_FOR_TESTING = lecturer.id.toString();
   process.env.GROUP_ID_FOR_TESTING = group.id.toString();
+  process.env.GROUP_ID_TO_DELETE_TESTING = groupToDelete.id.toString();
   process.env.LESSON_ID_FOR_TESTING = lesson.id.toString();
   process.env.TASK_ID_FOR_TESTING = task.id.toString();
   process.env.STUDENT_ID_FOR_TESTING = student.id.toString();
