@@ -15,6 +15,14 @@ export function deleteAnswer(id: Answer['id']) {
   });
 }
 
+export function findAnswerById(id: Answer['id']) {
+  return db.answer.findUnique({
+    where: {
+      id,
+    },
+  });
+}
+
 export function findAnswerByTaskIdAndStudentId(
   taskId: Answer['taskId'],
   studentId: Answer['studentId']
@@ -43,6 +51,22 @@ export function answerReply(
       replyDate,
       replyDesc: replyDesc,
       grantedScore,
+    },
+  });
+}
+
+export function updateAnswer(
+  id: Answer['id'],
+  replyDesc: Answer['replyDesc'] = null,
+  grantedScore: Answer['grantedScore'] = null
+) {
+  return db.answer.update({
+    where: {
+      id,
+    },
+    data: {
+      replyDesc: replyDesc || undefined,
+      grantedScore: grantedScore || undefined,
     },
   });
 }

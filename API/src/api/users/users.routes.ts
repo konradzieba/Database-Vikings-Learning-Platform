@@ -6,6 +6,7 @@ import { paramsWithIdSchema } from '../../interfaces/ParamsWithId';
 const router = Router();
 
 router.get('/me', requireUser, UserController.me);
+
 router.delete(
   '/deleteUser/:id',
   validateRequest({ params: paramsWithIdSchema }),

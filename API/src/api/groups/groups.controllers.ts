@@ -34,12 +34,19 @@ export async function createGroup(
 }
 
 export async function deleteGroup(
-  req: Request<{}, MessageResponse, {}, ParamsWithId>,
+  req: Request<ParamsWithId, MessageResponse>,
   res: Response<MessageResponse>,
   next: NextFunction
 ) {
   try {
-    const { id } = req.query;
+    const { id } = req.params;
+
+    const existingGroup = await GroupServices.findGroupById(+id);
+
+    if (!existingGroup) {
+      res.status(404);
+      throw new Error('Group with this id does not exist.');
+    }
 
     const group = await GroupServices.deleteGroup(+id);
 

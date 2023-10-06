@@ -22,3 +22,11 @@ export function findLessonsByGroupId(groupId: Lesson['groupId']) {
     },
   });
 }
+
+export function deleteLesson(id: Lesson['id']) {
+  return db.lesson.delete({
+    where: {
+      id,
+    },
+  });
+}

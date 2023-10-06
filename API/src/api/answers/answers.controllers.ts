@@ -1,7 +1,7 @@
 import { Response, Request, NextFunction } from 'express';
 import MessageResponse from 'interfaces/MessageResponse';
 import { ParamsWithId } from 'interfaces/ParamsWithId';
-import { AnswerInput, AnswerReply } from './answers.schemas';
+import { AnswerInput, AnswerReply, AnswerUpdate } from './answers.schemas';
 import * as AnswerServices from './answers.services';
 
 export async function createAnswer(
@@ -55,6 +55,36 @@ export async function answerReply(
 
     res.json({
       message: `Answer id:${answerReply.id} for task id:${answerReply.taskId} (student id:${answerReply.studentId}) was updated with ${answerReply.replyStatus} and score: ${grantedScore} successfully.`,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function updateAnswer(
+  req: Request<ParamsWithId, MessageResponse, AnswerUpdate>,
+  res: Response<MessageResponse>,
+  next: NextFunction
+) {
+  try {
+    const { replyDesc, grantedScore } = req.body;
+    const { id } = req.params;
+
+    const existingAnswer = await AnswerServices.findAnswerById(+id);
+
+    if (!existingAnswer) {
+      res.status(404);
+      throw new Error('Answer with this id does not exist.');
+    }
+
+    const answer = await AnswerServices.updateAnswer(
+      +id,
+      replyDesc,
+      grantedScore
+    );
+
+    res.json({
+      message: `Answer id:${answer.id} for task id:${answer.taskId} (student id:${answer.studentId}) was updated successfully.`,
     });
   } catch (error) {
     next(error);
