@@ -1,6 +1,14 @@
 import { Prisma, Task } from '@prisma/client';
 import { db } from '../../db';
 
+export function findTaskById(id: Task['id']) {
+  return db.task.findUnique({
+    where: {
+      id,
+    },
+  });
+}
+
 export function createTask(task: Prisma.TaskCreateInput) {
   return db.task.create({
     data: task,

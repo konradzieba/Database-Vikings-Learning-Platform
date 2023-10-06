@@ -2,6 +2,14 @@ import * as bcrypt from 'bcrypt';
 import { db } from '../../db';
 import type { User, Prisma, Student } from '@prisma/client';
 
+export function findUserById(id: User['id']) {
+  return db.user.findUnique({
+    where: {
+      id,
+    },
+  });
+}
+
 export function findUserByEmail(email: string) {
   return db.user.findUnique({
     where: {
@@ -34,14 +42,6 @@ export function createLecturer(lecturer: Prisma.LecturerCreateInput) {
 export function createStudent(student: Prisma.StudentCreateInput) {
   return db.student.create({
     data: student,
-  });
-}
-
-export function findUserById(id: User['id']) {
-  return db.user.findUnique({
-    where: {
-      id,
-    },
   });
 }
 

@@ -41,7 +41,14 @@ export async function deleteTask(
   try {
     const { id } = req.query;
 
-    const task = await TaskServices.deleteTask(+id);
+    const task = await TaskServices.findTaskById(+id);
+
+    if (!task) {
+      res.status(404);
+      throw new Error(`Task with given id doesn't exists.`);
+    }
+
+    await TaskServices.deleteTask(+id);
 
     res.json({
       message: `Task with ${task.id}, number ${task.number} deleted successfully.`,

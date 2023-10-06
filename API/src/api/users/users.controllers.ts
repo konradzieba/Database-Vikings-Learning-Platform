@@ -31,6 +31,13 @@ export async function deleteUser(
   try {
     const { id } = req.query;
 
+    const user = await UserServices.findUserById(+id);
+
+    if (!user) {
+      res.status(404);
+      throw new Error(`User with given id doesn't exists.`);
+    }
+
     await UserServices.deleteUser(+id);
 
     res.json({
