@@ -24,12 +24,12 @@ export async function me(req: Request, res: Response, next: NextFunction) {
 }
 
 export async function deleteUser(
-  req: Request<{}, MessageResponse, {}, ParamsWithId>,
+  req: Request<ParamsWithId, MessageResponse>,
   res: Response<MessageResponse>,
   next: NextFunction
 ) {
   try {
-    const { id } = req.query;
+    const { id } = req.params;
 
     const user = await UserServices.findUserById(+id);
 

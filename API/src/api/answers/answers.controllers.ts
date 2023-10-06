@@ -3,7 +3,6 @@ import MessageResponse from 'interfaces/MessageResponse';
 import { ParamsWithId } from 'interfaces/ParamsWithId';
 import { AnswerInput, AnswerReply } from './answers.schemas';
 import * as AnswerServices from './answers.services';
-import { ParsedQs } from 'qs';
 
 export async function createAnswer(
   req: Request<{}, MessageResponse, AnswerInput>,
