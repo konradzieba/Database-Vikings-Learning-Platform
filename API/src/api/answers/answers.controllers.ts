@@ -3,6 +3,7 @@ import MessageResponse from 'interfaces/MessageResponse';
 import { ParamsWithId } from 'interfaces/ParamsWithId';
 import { AnswerInput, AnswerReply } from './answers.schemas';
 import * as AnswerServices from './answers.services';
+import { ParsedQs } from 'qs';
 
 export async function createAnswer(
   req: Request<{}, MessageResponse, AnswerInput>,
@@ -37,15 +38,16 @@ export async function createAnswer(
 }
 
 export async function answerReply(
-  req: Request<{}, MessageResponse, AnswerReply>,
+  req: Request<ParamsWithId, MessageResponse, AnswerReply>,
   res: Response<MessageResponse>,
   next: NextFunction
 ) {
   try {
-    const { id, replyStatus, replyDate, replyDesc, grantedScore } = req.body;
+    const { replyStatus, replyDate, replyDesc, grantedScore } = req.body;
+    const { id } = req.params;
 
     const answerReply = await AnswerServices.answerReply(
-      id,
+      +id,
       replyStatus,
       replyDesc,
       replyDate,

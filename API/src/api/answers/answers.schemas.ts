@@ -8,7 +8,6 @@ export const answerInputSchema = z.object({
 });
 
 export const answerReplySchema = z.object({
-  id: z.number().int('answerId must be an integer.'),
   replyStatus: z
     .nativeEnum(ReplyStatus)
     .refine((status) => status !== ReplyStatus.PENDING, {

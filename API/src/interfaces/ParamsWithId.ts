@@ -1,7 +1,7 @@
 import z from 'zod';
 
 export const paramsWithIdSchema = z.object({
-  id: z.number().int('Id must be an integer.'),
+  id: z.string().min(1, 'Invalid id'),
 });
 
 export type ParamsWithId = z.infer<typeof paramsWithIdSchema>;

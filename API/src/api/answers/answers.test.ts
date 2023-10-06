@@ -15,6 +15,7 @@ describe('POST /api/v1/answers/createAnswer', () => {
         studentId: studentId,
       });
     expect(res.statusCode).toBe(200);
+    expect(res.body.message).toContain('successfully.')
   });
 
   it('should respond an error if solution is missing', async () => {
