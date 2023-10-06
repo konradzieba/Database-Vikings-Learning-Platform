@@ -1,36 +1,24 @@
-import { v4 as uuidv4 } from 'uuid';
 import { Response, Request, NextFunction } from 'express';
+import { v4 as uuidv4 } from 'uuid';
+import bcrypt from 'bcrypt';
+
 import { TokensResponseInterface } from '../../interfaces/TokensResponse';
 import { generateTokens, verifyRefreshToken } from '../../utils/jwt';
 import { sendRefreshToken } from '../../utils/sendRefreshToken';
 import { generatePasswordByCredentials } from '../../utils/generatePassword';
-import {
-  createLecturer,
-  createStudent,
-  createUser,
-  findStudentByIndexNumber,
-  findUserByEmail,
-  findUserById,
-} from '../users/users.services';
-import {
-  LoginInput,
-  LoginQuerySchema,
-  RefreshInput,
-  RegisterInput,
-  RegisterLecturerInput,
-  RegisterQuerySchema,
-} from './auth.schemas';
-import {
-  addRefreshTokenToWhitelist,
-  deleteRefreshToken,
-  findRefreshTokenById,
-} from './auth.services';
-import bcrypt from 'bcrypt';
 import { hashToken } from '../../utils/hashToken';
 import MessageResponse from 'interfaces/MessageResponse';
+import * as UserServices from '../users/users.services';
+import * as AuthSchemas from './auth.schemas';
+import * as AuthServices from './auth.services';
 
-export async function register(
-  req: Request<{}, TokensResponseInterface, RegisterInput, RegisterQuerySchema>,
+export async function registerStudent(
+  req: Request<
+    {},
+    TokensResponseInterface,
+    AuthSchemas.RegisterStudentInput,
+    AuthSchemas.RegisterQuerySchema
+  >,
   res: Response<TokensResponseInterface>,
   next: NextFunction
 ) {
@@ -38,7 +26,8 @@ export async function register(
     const { firstName, lastName, indexNumber } = req.body;
     const { refreshTokenInCookie } = req.query;
 
-    const existingUser = await findStudentByIndexNumber(indexNumber);
+    const existingUser =
+      await UserServices.findStudentByIndexNumber(indexNumber);
 
     if (existingUser) {
       res.status(400);
@@ -49,7 +38,7 @@ export async function register(
       lastName,
       indexNumber
     );
-    const user = await createUser({
+    const user = await UserServices.createUser({
       email: `${indexNumber}@student.uwm.edu.pl`,
       password: generatedPassword,
       firstName,
@@ -57,7 +46,7 @@ export async function register(
     });
 
     if (user) {
-      await createStudent({
+      await UserServices.createStudent({
         indexNumber,
         User: { connect: { id: user.id } },
       });
@@ -66,7 +55,11 @@ export async function register(
     const jti = uuidv4();
     const { accessToken, refreshToken } = generateTokens(user, jti);
 
-    await addRefreshTokenToWhitelist({ jti, refreshToken, userId: user.id });
+    await AuthServices.addRefreshTokenToWhitelist({
+      jti,
+      refreshToken,
+      userId: user.id,
+    });
 
     if (refreshTokenInCookie === 'true') {
       sendRefreshToken(res, refreshToken);
@@ -88,8 +81,8 @@ export async function registerLecturer(
   req: Request<
     {},
     TokensResponseInterface,
-    RegisterLecturerInput,
-    RegisterQuerySchema
+    AuthSchemas.RegisterLecturerInput,
+    AuthSchemas.RegisterQuerySchema
   >,
   res: Response<TokensResponseInterface & Partial<MessageResponse>>,
   next: NextFunction
@@ -98,17 +91,22 @@ export async function registerLecturer(
     const { email, password, firstName, lastName, isAdmin } = req.body;
     const { refreshTokenInCookie } = req.query;
 
-    const existingUser = await findUserByEmail(email);
+    const existingUser = await UserServices.findUserByEmail(email);
 
     if (existingUser) {
       res.status(400);
       throw new Error('Lecturer with this email is already in use.');
     }
 
-    const user = await createUser({ email, password, firstName, lastName });
+    const user = await UserServices.createUser({
+      email,
+      password,
+      firstName,
+      lastName,
+    });
 
     if (user) {
-      await createLecturer({
+      await UserServices.createLecturer({
         isAdmin,
         User: { connect: { id: user.id } },
       });
@@ -117,7 +115,11 @@ export async function registerLecturer(
     const jti = uuidv4();
     const { accessToken, refreshToken } = generateTokens(user, jti);
 
-    await addRefreshTokenToWhitelist({ jti, refreshToken, userId: user.id });
+    await AuthServices.addRefreshTokenToWhitelist({
+      jti,
+      refreshToken,
+      userId: user.id,
+    });
 
     if (refreshTokenInCookie === 'true') {
       sendRefreshToken(res, refreshToken);
@@ -137,7 +139,12 @@ export async function registerLecturer(
 }
 
 export async function login(
-  req: Request<{}, TokensResponseInterface, LoginInput, LoginQuerySchema>,
+  req: Request<
+    {},
+    TokensResponseInterface,
+    AuthSchemas.LoginInput,
+    AuthSchemas.LoginQuerySchema
+  >,
   res: Response<TokensResponseInterface>,
   next: NextFunction
 ) {
@@ -145,7 +152,7 @@ export async function login(
     const { email, password } = req.body;
     const { refreshTokenInCookie } = req.query;
 
-    const existingUser = await findUserByEmail(email);
+    const existingUser = await UserServices.findUserByEmail(email);
 
     if (!existingUser) {
       res.status(401);
@@ -161,7 +168,7 @@ export async function login(
     const jti = uuidv4();
     const { accessToken, refreshToken } = generateTokens(existingUser, jti);
 
-    await addRefreshTokenToWhitelist({
+    await AuthServices.addRefreshTokenToWhitelist({
       jti,
       refreshToken,
       userId: existingUser.id,
@@ -184,7 +191,7 @@ export async function login(
 }
 
 export async function refreshTokens(
-  req: Request<{}, TokensResponseInterface, RefreshInput>,
+  req: Request<{}, TokensResponseInterface, AuthSchemas.RefreshInput>,
   res: Response<TokensResponseInterface>,
   next: NextFunction
 ) {
@@ -199,7 +206,9 @@ export async function refreshTokens(
       jti: string;
     };
 
-    const savedRefreshToken = await findRefreshTokenById(payload.jti);
+    const savedRefreshToken = await AuthServices.findRefreshTokenById(
+      payload.jti
+    );
     if (!savedRefreshToken || savedRefreshToken.revoked === true) {
       res.status(401);
       throw new Error('Unauthorized');
@@ -210,20 +219,20 @@ export async function refreshTokens(
       res.status(401);
       throw new Error('Unauthorized');
     }
-    const user = await findUserById(payload.userId);
+    const user = await UserServices.findUserById(payload.userId);
 
     if (!user) {
       res.status(401);
       throw new Error('Unauthorized');
     }
 
-    await deleteRefreshToken(savedRefreshToken.id);
+    await AuthServices.deleteRefreshToken(savedRefreshToken.id);
     const jti = uuidv4();
     const { accessToken, refreshToken: newRefreshToken } = generateTokens(
       user,
       jti
     );
-    await addRefreshTokenToWhitelist({
+    await AuthServices.addRefreshTokenToWhitelist({
       jti,
       refreshToken: newRefreshToken,
       userId: user.id,

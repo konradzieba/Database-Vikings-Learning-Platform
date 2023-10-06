@@ -1,8 +1,8 @@
 import { Response, Request, NextFunction } from 'express';
 import { ParsedToken } from '../../../typings/token';
-import * as UserServices from './users.services';
 import { ParamsWithId } from 'interfaces/ParamsWithId';
 import MessageResponse from 'interfaces/MessageResponse';
+import * as UserServices from './users.services';
 
 export async function me(req: Request, res: Response, next: NextFunction) {
   try {

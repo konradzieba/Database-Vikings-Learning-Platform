@@ -1,24 +1,33 @@
 import { Router } from 'express';
 import { validateRequest } from '../../middlewares';
 import * as AnswersControllers from './answers.controllers';
-import { answerInputSchema, answerReplySchema, answerUpdateSchema } from './answers.schemas';
+import * as AnswerSchemas from './answers.schemas';
 import { paramsWithIdSchema } from '../../interfaces/ParamsWithId';
 
 const router = Router();
 
 router.post(
   '/createAnswer',
-  validateRequest({ body: answerInputSchema }),
+  validateRequest({ body: AnswerSchemas.answerInputSchema }),
   AnswersControllers.createAnswer
 );
 
 router.patch(
   '/answerReply/:id',
-  validateRequest({ params: paramsWithIdSchema, body: answerReplySchema }),
+  validateRequest({
+    params: paramsWithIdSchema,
+    body: AnswerSchemas.answerReplySchema,
+  }),
   AnswersControllers.answerReply
 );
 
-router.patch('/updateAnswer/:id', validateRequest({params: paramsWithIdSchema, body: answerUpdateSchema}), AnswersControllers.updateAnswer);
-
+router.patch(
+  '/updateAnswer/:id',
+  validateRequest({
+    params: paramsWithIdSchema,
+    body: AnswerSchemas.answerUpdateSchema,
+  }),
+  AnswersControllers.updateAnswer
+);
 
 export default router;

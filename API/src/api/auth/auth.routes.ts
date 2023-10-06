@@ -1,41 +1,43 @@
 import { Router } from 'express';
 import { validateRequest } from '../../middlewares';
 import * as AuthControllers from './auth.controllers';
-import {
-  loginQuerySchema,
-  loginSchema,
-  registerQuerySchema,
-  registerSchema,
-  refreshTokenSchema,
-  registerLecturerSchema,
-} from './auth.schemas';
+import * as AuthSchemas from './auth.schemas';
 
 const router = Router();
 
 router.post(
   '/register',
-  validateRequest({ query: registerQuerySchema, body: registerSchema }),
-  AuthControllers.register
+  validateRequest({
+    query: AuthSchemas.registerQuerySchema,
+    body: AuthSchemas.registerStudentSchema,
+  }),
+  AuthControllers.registerStudent
 );
 
 router.post(
   '/registerLecturer',
   validateRequest({
-    query: registerQuerySchema,
-    body: registerLecturerSchema,
+    query: AuthSchemas.registerQuerySchema,
+    body: AuthSchemas.registerLecturerSchema,
   }),
   AuthControllers.registerLecturer
 );
 
 router.post(
   '/login',
-  validateRequest({ query: loginQuerySchema, body: loginSchema }),
+  validateRequest({
+    query: AuthSchemas.loginQuerySchema,
+    body: AuthSchemas.loginSchema,
+  }),
   AuthControllers.login
 );
 
 router.post(
   '/refreshToken',
-  validateRequest({ query: loginQuerySchema, body: refreshTokenSchema }),
+  validateRequest({
+    query: AuthSchemas.loginQuerySchema,
+    body: AuthSchemas.refreshTokenSchema,
+  }),
   AuthControllers.refreshTokens
 );
 

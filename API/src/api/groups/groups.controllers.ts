@@ -1,9 +1,8 @@
 import { Response, Request, NextFunction } from 'express';
-import MessageResponse from 'interfaces/MessageResponse';
 import { GroupInput } from './groups.schemas';
-import { findGroupByName } from './groups.services';
-import * as GroupServices from './groups.services';
 import { ParamsWithId } from 'interfaces/ParamsWithId';
+import MessageResponse from 'interfaces/MessageResponse';
+import * as GroupServices from './groups.services';
 
 export async function createGroup(
   req: Request<{}, MessageResponse, GroupInput>,
@@ -13,7 +12,7 @@ export async function createGroup(
   try {
     const { name, lecturerId } = req.body;
 
-    const existingGroup = await findGroupByName(name);
+    const existingGroup = await GroupServices.findGroupByName(name);
 
     if (existingGroup) {
       res.status(400);

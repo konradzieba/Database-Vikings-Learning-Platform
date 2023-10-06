@@ -1,12 +1,12 @@
-import { Response, Request, NextFunction } from 'express';
-import MessageResponse from 'interfaces/MessageResponse';
-import { TaskInput } from './tasks.schemas';
-import * as TaskServices from './tasks.services';
 import dayjs from 'dayjs';
+import { Response, Request, NextFunction } from 'express';
+import * as TaskSchemas from './tasks.schemas';
 import { ParamsWithId } from 'interfaces/ParamsWithId';
+import MessageResponse from 'interfaces/MessageResponse';
+import * as TaskServices from './tasks.services';
 
 export async function createTask(
-  req: Request<{}, MessageResponse, TaskInput>,
+  req: Request<{}, MessageResponse, TaskSchemas.TaskInput>,
   res: Response<MessageResponse>,
   next: NextFunction
 ) {

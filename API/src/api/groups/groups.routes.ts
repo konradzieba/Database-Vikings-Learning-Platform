@@ -1,14 +1,14 @@
 import { Router } from 'express';
 import { validateRequest } from '../../middlewares';
 import * as GroupsControllers from './groups.controllers';
-import { groupSchema } from './groups.schemas';
+import * as GroupSchemas from './groups.schemas';
 import { paramsWithIdSchema } from '../../interfaces/ParamsWithId';
 
 const router = Router();
 
 router.post(
   '/createGroup',
-  validateRequest({ body: groupSchema }),
+  validateRequest({ body: GroupSchemas.groupSchema }),
   GroupsControllers.createGroup
 );
 

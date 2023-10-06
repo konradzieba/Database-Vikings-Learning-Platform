@@ -1,14 +1,14 @@
 import { Router } from 'express';
 import { validateRequest } from '../../middlewares';
-import * as LessonsControllers from '../lessons/lessons.controllers';
-import { createLessonSchema } from './lessons.schemas';
 import { paramsWithIdSchema } from '../../interfaces/ParamsWithId';
+import * as LessonsControllers from '../lessons/lessons.controllers';
+import * as LessonSchemas from './lessons.schemas';
 
 const router = Router();
 
 router.post(
   '/createLesson',
-  validateRequest({ body: createLessonSchema }),
+  validateRequest({ body: LessonSchemas.createLessonSchema }),
   LessonsControllers.createLesson
 );
 

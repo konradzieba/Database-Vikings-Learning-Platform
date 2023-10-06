@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import MessageResponse from 'interfaces/MessageResponse';
 import * as LessonServices from './lessons.services';
-import { LessonInput } from './lessons.schemas';
+import * as LessonSchemas from './lessons.schemas';
 import { ParamsWithId } from '../../interfaces/ParamsWithId';
 
 export async function createLesson(
-  req: Request<{}, MessageResponse, LessonInput>,
+  req: Request<{}, MessageResponse, LessonSchemas.LessonInput>,
   res: Response<MessageResponse>,
   next: NextFunction
 ) {
