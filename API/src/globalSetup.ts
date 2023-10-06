@@ -146,6 +146,20 @@ const setup = async () => {
     },
   });
 
+  const taskToDelete = await db.task.create({
+    data: {
+      number: 61,
+      question: 'Will I be removed?',
+      closeDate: dayjs().add(7, 'day').toDate(),
+      isExtra: true,
+      Lesson: {
+        connect: {
+          id: lesson.id,
+        },
+      },
+    },
+  });
+
   // const answer = await db.answer.create({
   //   data: {
   //     solution: 'GlobalSetup Solution',
@@ -182,12 +196,15 @@ const setup = async () => {
   process.env.VALID_ACCESS_TOKEN_FOR_TESTING = validToken;
   process.env.LECTURER_ID_FOR_TESTING = lecturer.id.toString();
   process.env.GROUP_ID_FOR_TESTING = group.id.toString();
-  process.env.GROUP_ID_TO_DELETE_TESTING = groupToDelete.id.toString();
   process.env.LESSON_ID_FOR_TESTING = lesson.id.toString();
-  process.env.LESSON_ID_TO_DELETE_TESTING = lessonToDelete.id.toString();
   process.env.TASK_ID_FOR_TESTING = task.id.toString();
   process.env.STUDENT_ID_FOR_TESTING = student.id.toString();
+
   process.env.ANSWER_ID_FOR_UPDATE_TESTING = answerToUpdate.id.toString();
+
+  process.env.GROUP_ID_TO_DELETE_TESTING = groupToDelete.id.toString();
+  process.env.LESSON_ID_TO_DELETE_TESTING = lessonToDelete.id.toString();
+  process.env.TASK_ID_TO_DELETE_TESTING = taskToDelete.id.toString();
 };
 
 export default setup;

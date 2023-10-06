@@ -97,3 +97,16 @@ describe('POST /api/v1/tasks/createTask', () => {
     expect(res.statusCode).toBe(400);
   });
 });
+
+describe('DELETE /api/v1/tasks/deleteTask/:id', () => {
+  let taskId = +process.env.TASK_ID_TO_DELETE_TESTING!;
+  it('should delete task successfully', async () => {
+    const res = await request(app).delete(`/api/v1/tasks/deleteTask/${taskId}`);
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toContain('deleted successfully.');
+  });
+  it(`should respond an error if task doesn't exist`, async () => {
+    const res = await request(app).delete(`/api/v1/tasks/deleteTask/999`);
+    expect(res.statusCode).toBe(404);
+  });
+});
