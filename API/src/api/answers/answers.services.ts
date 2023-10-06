@@ -38,7 +38,7 @@ export function findAnswerByTaskIdAndStudentId(
 export function answerReply(
   id: Answer['id'],
   replyStatus: Answer['replyStatus'],
-  replyDesc: Answer['replyDesc'] = '',
+  replyDesc: Answer['replyDesc'] = null,
   replyDate: Answer['replyDate'],
   grantedScore: Answer['grantedScore']
 ) {
@@ -49,7 +49,7 @@ export function answerReply(
     data: {
       replyStatus,
       replyDate,
-      replyDesc: replyDesc,
+      replyDesc: replyDesc || undefined,
       grantedScore,
     },
   });

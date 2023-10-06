@@ -26,11 +26,13 @@ export const answerInputSchema = answerSchema.omit({
   grantedScore: true,
 });
 
-export const answerReplySchema = answerSchema.omit({
-  solution: true,
-  taskId: true,
-  studentId: true,
-});
+export const answerReplySchema = answerSchema
+  .partial({ replyDesc: true })
+  .omit({
+    solution: true,
+    taskId: true,
+    studentId: true,
+  });
 
 export const answerUpdateSchema = answerReplySchema
   .partial({ replyDesc: true, grantedScore: true })

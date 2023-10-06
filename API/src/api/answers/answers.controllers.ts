@@ -45,6 +45,13 @@ export async function answerReply(
     const { replyStatus, replyDate, replyDesc, grantedScore } = req.body;
     const { id } = req.params;
 
+    const existingAnswer = await AnswerServices.findAnswerById(+id);
+
+    if (!existingAnswer) {
+      res.status(404);
+      throw new Error('Answer with this id does not exist.');
+    }
+
     const answerReply = await AnswerServices.answerReply(
       +id,
       replyStatus,
