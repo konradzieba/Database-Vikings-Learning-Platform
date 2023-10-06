@@ -2,6 +2,10 @@ import { db } from './db';
 import { globalUserCredentials } from './globalSetup';
 
 const teardown = async () => {
+  await db.answer.deleteMany();
+  await db.task.deleteMany();
+  await db.lesson.deleteMany();
+  await db.group.deleteMany();
   await db.user.deleteMany();
   console.log('---------TESTS FINISHED--------');
 };

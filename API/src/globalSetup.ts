@@ -58,9 +58,21 @@ const setup = async () => {
       });
     });
 
+  const group = await db.group.create({
+    data: {
+      name: 'Test Group 2',
+      Lecturer: {
+        connect: {
+          id: lecturer.id,
+        },
+      },
+    },
+  });
+
   const validToken = generateAccessToken({ userId: student.id }, '15m');
   process.env.VALID_ACCESS_TOKEN_FOR_TESTING = validToken;
   process.env.LECTURER_ID_FOR_TESTING = lecturer.id.toString();
+  process.env.GROUP_ID_FOR_TESTING = group.id.toString();
 };
 
 export default setup;
