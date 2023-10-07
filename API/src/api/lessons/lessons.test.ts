@@ -50,6 +50,57 @@ describe('POST /api/v1/lessons/createLesson', () => {
   });
 });
 
+describe('PATCH /api/v1/lessons/updateLesson/:id', () => {
+  let lessonId = +process.env.LESSON_ID_FOR_TESTING!;
+  it('should update lesson with number and image successfully', async () => {
+    const res = await request(app)
+      .patch(`/api/v1/lessons/updateLesson/${lessonId}`)
+      .set('Accept', 'application/json')
+      .send({
+        number: 113,
+        image: 'viking.png',
+      });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toContain('updated successfully.');
+  });
+
+  it('should update lesson with number successfully', async () => {
+    const res = await request(app)
+      .patch(`/api/v1/lessons/updateLesson/${lessonId}`)
+      .set('Accept', 'application/json')
+      .send({
+        number: 133,
+      });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toContain('updated successfully.');
+  });
+
+  it('should update lesson with image successfully', async () => {
+    const res = await request(app)
+      .patch(`/api/v1/lessons/updateLesson/${lessonId}`)
+      .set('Accept', 'application/json')
+      .send({
+        image: 'viking.png',
+      });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toContain('updated successfully.');
+  });
+
+  it(`should respond an error if lesson doesn't exist`, async () => {
+    const res = await request(app)
+      .patch(`/api/v1/lessons/updateLesson/999`)
+      .set('Accept', 'application/json')
+      .send({
+        image: 'viking.png',
+      });
+
+    expect(res.statusCode).toBe(404);
+  });
+});
+
 describe('DELETE /api/v1/lessons/deleteLesson/:id', () => {
   let lessonId = +process.env.LESSON_ID_TO_DELETE_TESTING!;
   it('should delete lesson successfully', async () => {

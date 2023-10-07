@@ -81,9 +81,40 @@ describe('DELETE /api/v1/groups/deleteGroup/:id', () => {
   });
 
   it(`should respond an error if group doesn't exist`, async () => {
-    const res = await request(app).delete(
-      `/api/v1/groups/deleteGroup/9999`
-    );
+    const res = await request(app).delete(`/api/v1/groups/deleteGroup/9999`);
     expect(res.statusCode).toBe(404);
+  });
+});
+
+describe('PATCH /api/v1/groups/renameGroup/:id', () => {
+  let groupId = +process.env.GROUP_ID_FOR_TESTING!;
+  it('should update group name successfully', async () => {
+    const res = await request(app)
+      .patch(`/api/v1/groups/renameGroup/${groupId}`)
+      .set('Accept', 'application/json')
+      .send({
+        name: 'Test PATCH name',
+      });
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toContain('updated successfully.');
+  });
+
+  it(`should respond an error if group doesn't exist`, async () => {
+    const res = await request(app)
+      .patch(`/api/v1/groups/renameGroup/9999`)
+      .set('Accept', 'application/json')
+      .send({
+        name: 'Test PATCH name',
+      });
+    expect(res.statusCode).toBe(404);
+  });
+
+  it(`should respond an error if new groupname is not passed in request body`, async () => {
+    const res = await request(app)
+      .patch(`/api/v1/groups/renameGroup/${groupId}`)
+      .set('Accept', 'application/json');
+
+    expect(res.statusCode).toBe(400);
   });
 });

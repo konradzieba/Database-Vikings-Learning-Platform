@@ -120,6 +120,67 @@ describe('POST /api/v1/tasks/createTask', () => {
   });
 });
 
+describe('PATCH /api/v1/tasks/updateTask/:id', () => {
+  let taskId = +process.env.TASK_ID_FOR_TESTING!;
+  it('should update task with number, question and closeDate successfully', async () => {
+    const res = await request(app)
+      .patch(`/api/v1/tasks/updateTask/${taskId}`)
+      .set('Accept', 'application/json')
+      .send({
+        number: 113,
+        question: 'New task?',
+        closeDate: dayjs().add(7, 'day').toDate(),
+      });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toContain('updated successfully.');
+  });
+
+  it(`should respond an error if task doesn't exist`, async () => {
+    const res = await request(app)
+      .patch(`/api/v1/tasks/updateTask/999`)
+      .set('Accept', 'application/json')
+      .send({
+        number: 114,
+        question: 'New task?2',
+        closeDate: dayjs().add(7, 'day').toDate(),
+      });
+    expect(res.statusCode).toBe(404);
+  });
+
+  it('should update task with number successfully', async () => {
+    const res = await request(app)
+      .patch(`/api/v1/tasks/updateTask/${taskId}`)
+      .set('Accept', 'application/json')
+      .send({
+        number: 115,
+      });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toContain('updated successfully.');
+  });
+
+  it('should update task with question successfully', async () => {
+    const res = await request(app)
+      .patch(`/api/v1/tasks/updateTask/${taskId}`)
+      .set('Accept', 'application/json')
+      .send({
+        closeDate: dayjs().add(14, 'day').toDate(),
+      });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toContain('updated successfully.');
+  });
+
+  it('should update task with closeDate successfully', async () => {
+    const res = await request(app)
+      .patch(`/api/v1/tasks/updateTask/${taskId}`)
+      .set('Accept', 'application/json')
+      .send({
+        question: 'New task?3',
+      });
+    expect(res.statusCode).toBe(200);
+    expect(res.body.message).toContain('updated successfully.');
+  });
+});
+
 describe('DELETE /api/v1/tasks/deleteTask/:id', () => {
   let taskId = +process.env.TASK_ID_TO_DELETE_TESTING!;
   it('should delete task successfully', async () => {
