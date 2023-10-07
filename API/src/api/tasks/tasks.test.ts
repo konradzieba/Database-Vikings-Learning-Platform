@@ -96,6 +96,28 @@ describe('POST /api/v1/tasks/createTask', () => {
       });
     expect(res.statusCode).toBe(400);
   });
+
+  it('should handle errors with catch(next())', async () => {
+    const payload = {
+      number: 5,
+      question: 'Get all data from Users table',
+      closeDate: dayjs().add(7, 'day').toDate(),
+      isExtra: false,
+      lessonId: 9999, // invalid lessonId
+    };
+
+    const res = await request(app)
+      .post('/api/v1/tasks/createTask')
+      .set('Accept', 'application/json')
+      .send(payload);
+
+    expect(res.statusCode).toBe(500);
+    expect(res.body).toHaveProperty('message');
+    expect(res.body).toHaveProperty('stack');
+    expect(res.body.stack).toContain(
+      `An operation failed because it depends on one or more records that were required but not found. No 'Lesson' record(s) (needed to inline the relation on 'Task' record(s)) was found for a nested connect on one-to-many relation 'LessonToTask'.`
+    );
+  });
 });
 
 describe('DELETE /api/v1/tasks/deleteTask/:id', () => {

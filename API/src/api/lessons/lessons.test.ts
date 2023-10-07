@@ -64,4 +64,23 @@ describe('DELETE /api/v1/lessons/deleteLesson/:id', () => {
     const res = await request(app).delete(`/api/v1/lessons/deleteLesson/9999`);
     expect(res.statusCode).toBe(404);
   });
+  it('should handle errors with catch(next())', async () => {
+    const payload = {
+      number: 1,
+      image: 'example_photo.png',
+      groupId: 9999,
+    };
+
+    const res = await request(app)
+      .post('/api/v1/lessons/createLesson')
+      .set('Accept', 'application/json')
+      .send(payload);
+
+    expect(res.statusCode).toBe(500);
+    expect(res.body).toHaveProperty('message');
+    expect(res.body).toHaveProperty('stack');
+    expect(res.body.stack).toContain(
+      `An operation failed because it depends on one or more records that were required but not found. No 'Group' record(s) (needed to inline the relation on 'Lesson' record(s)) was found for a nested connect on one-to-many relation 'GroupToLesson'.`
+    );
+  });
 });

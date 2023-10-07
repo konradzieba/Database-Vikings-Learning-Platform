@@ -2,7 +2,7 @@ import request from 'supertest';
 import app from '../../app';
 import { db } from '../../db';
 import * as bcrypt from 'bcrypt';
-import { generateRefreshToken, verifyRefreshToken } from '../../utils/jwt';
+import { generateRefreshToken } from '../../utils/jwt';
 import { v4 as uuidv4 } from 'uuid';
 import { hashToken } from '../../utils/hashToken';
 import {
@@ -97,6 +97,133 @@ describe('POST /api/v1/auth/register', () => {
 
     const response = await request(app)
       .post('/api/v1/auth/register?refreshTokenInCookie=true')
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .send(payload);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty('access_token');
+    expect(Array.isArray(response.headers['set-cookie'])).toBe(true);
+    expect(response.headers['set-cookie'][0]).toContain('refresh_token');
+    expect(response.body.access_token).toEqual(expect.any(String));
+  });
+});
+
+describe('POST /api/v1/auth/registerLecturer', () => {
+  it('responds with an error if payload is missing', async () => {
+    const response = await request(app)
+      .post('/api/v1/auth/registerLecturer')
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/);
+
+    expect(response.statusCode).toBe(400);
+  });
+  it('responds with an error if payload firstName is missing ', async () => {
+    const payload = {
+      email: 'lecturer@test.com',
+      lastName: 'Lecturer',
+      password: 'Test1@123',
+      isAdmin: true,
+    };
+    const response = await request(app)
+      .post('/api/v1/auth/registerLecturer')
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .send(payload);
+    expect(response.statusCode).toBe(400);
+  });
+  it('responds with an error if payload lastName is missing ', async () => {
+    const payload = {
+      email: 'lecturer@test.com',
+      firstName: 'Test',
+      password: 'Test1@123',
+      isAdmin: true,
+    };
+    const response = await request(app)
+      .post('/api/v1/auth/registerLecturer')
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .send(payload);
+    expect(response.statusCode).toBe(400);
+  });
+  it('responds with an error if payload password is missing ', async () => {
+    const payload = {
+      email: 'lecturer@test.com',
+      firstName: 'Test',
+      lastName: 'Lecturer',
+      isAdmin: true,
+    };
+    const response = await request(app)
+      .post('/api/v1/auth/registerLecturer')
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .send(payload);
+    expect(response.statusCode).toBe(400);
+  });
+  it('responds with an error if payload isAdmin is missing ', async () => {
+    const payload = {
+      email: 'lecturer@test.com',
+      firstName: 'Test',
+      lastName: 'Lecturer',
+      password: 'Test1@123',
+    };
+    const response = await request(app)
+      .post('/api/v1/auth/registerLecturer')
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .send(payload);
+    expect(response.statusCode).toBe(400);
+  });
+  it('responds with an error if email is already in use', async () => {
+    const payload = {
+      email: globalLecturerCredentials.email,
+      firstName: globalLecturerCredentials.firstName,
+      lastName: globalLecturerCredentials.lastName,
+      password: globalLecturerCredentials.password,
+      isAdmin: globalLecturerCredentials.isAdmin,
+    };
+    const response = await request(app)
+      .post('/api/v1/auth/registerLecturer')
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .send(payload);
+
+    expect(response.statusCode).toBe(400);
+    expect(response.body).toHaveProperty('message');
+    expect(response.body.message).toBe(
+      'Lecturer with this email is already in use.'
+    );
+  });
+  it('responds with an access_token and refresh_token', async () => {
+    const payload = {
+      email: `success.test${globalLecturerCredentials.email}`,
+      firstName: `success${globalLecturerCredentials.firstName}`,
+      lastName: `success${globalLecturerCredentials.lastName}`,
+      password: globalLecturerCredentials.password,
+      isAdmin: globalLecturerCredentials.isAdmin,
+    };
+    const response = await request(app)
+      .post('/api/v1/auth/registerLecturer')
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .send(payload);
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty('access_token');
+    expect(response.body).toHaveProperty('refresh_token');
+    expect(response.body.access_token).toEqual(expect.any(String));
+    expect(response.body.refresh_token).toEqual(expect.any(String));
+  });
+  it('responds with an access_token and refresh_token in cookie', async () => {
+    const payload = {
+      email: `success.test2${globalLecturerCredentials.email}`,
+      firstName: `success2${globalLecturerCredentials.firstName}`,
+      lastName: `success2${globalLecturerCredentials.lastName}`,
+      password: globalLecturerCredentials.password,
+      isAdmin: globalLecturerCredentials.isAdmin,
+    };
+
+    const response = await request(app)
+      .post('/api/v1/auth/registerLecturer?refreshTokenInCookie=true')
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
       .send(payload);
@@ -378,131 +505,44 @@ describe('POST /api/v1/auth/refreshToken', () => {
     expect(response.headers['set-cookie'][0]).toContain('refresh_token');
     expect(response.body.access_token).toEqual(expect.any(String));
   });
-});
 
-describe('POST /api/v1/auth/registerLecturer', () => {
-  it('responds with an error if payload is missing', async () => {
-    const response = await request(app)
-      .post('/api/v1/auth/registerLecturer')
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/);
+  //
+  it('responds with Unauthorized if refresh token is revoked', async () => {
+    // Wygeneruj refresh token i zapisz go w bazie danych jako zrezerwowany (revoked)
 
-    expect(response.statusCode).toBe(400);
-  });
-  it('responds with an error if payload firstName is missing ', async () => {
-    const payload = {
-      email: 'lecturer@test.com',
-      lastName: 'Lecturer',
-      password: 'Test1@123',
-      isAdmin: true,
-    };
-    const response = await request(app)
-      .post('/api/v1/auth/registerLecturer')
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .send(payload);
-    expect(response.statusCode).toBe(400);
-  });
-  it('responds with an error if payload lastName is missing ', async () => {
-    const payload = {
-      email: 'lecturer@test.com',
-      firstName: 'Test',
-      password: 'Test1@123',
-      isAdmin: true,
-    };
-    const response = await request(app)
-      .post('/api/v1/auth/registerLecturer')
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .send(payload);
-    expect(response.statusCode).toBe(400);
-  });
-  it('responds with an error if payload password is missing ', async () => {
-    const payload = {
-      email: 'lecturer@test.com',
-      firstName: 'Test',
-      lastName: 'Lecturer',
-      isAdmin: true,
-    };
-    const response = await request(app)
-      .post('/api/v1/auth/registerLecturer')
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .send(payload);
-    expect(response.statusCode).toBe(400);
-  });
-  it('responds with an error if payload isAdmin is missing ', async () => {
-    const payload = {
-      email: 'lecturer@test.com',
-      firstName: 'Test',
-      lastName: 'Lecturer',
-      password: 'Test1@123',
-    };
-    const response = await request(app)
-      .post('/api/v1/auth/registerLecturer')
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .send(payload);
-    expect(response.statusCode).toBe(400);
-  });
-  it('responds with an error if email is already in use', async () => {
-    const payload = {
-      email: globalLecturerCredentials.email,
-      firstName: globalLecturerCredentials.firstName,
-      lastName: globalLecturerCredentials.lastName,
-      password: globalLecturerCredentials.password,
-      isAdmin: globalLecturerCredentials.isAdmin,
-    };
-    const response = await request(app)
-      .post('/api/v1/auth/registerLecturer')
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .send(payload);
+    // Możesz użyć swoich funkcji lub zmockować odpowiednie zachowanie
 
-    expect(response.statusCode).toBe(400);
+    const response = await request(app)
+      .post('/api/v1/auth/refreshToken')
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .send({ refresh_token: validRefreshToken });
+
+    expect(response.statusCode).toBe(401);
     expect(response.body).toHaveProperty('message');
-    expect(response.body.message).toBe(
-      'Lecturer with this email is already in use.'
+    expect(response.body.message).toBe('Unauthorized');
+  });
+
+  it('responds with Unauthorized if user does not exist', async () => {
+    const refreshTokenWithNotExistingUser = generateRefreshToken(
+      { userId: 999999, jti: uuidv4() },
+      '5m'
     );
-  });
-  it('responds with an access_token and refresh_token', async () => {
-    const payload = {
-      email: `success.test${globalLecturerCredentials.email}`,
-      firstName: `success${globalLecturerCredentials.firstName}`,
-      lastName: `success${globalLecturerCredentials.lastName}`,
-      password: globalLecturerCredentials.password,
-      isAdmin: globalLecturerCredentials.isAdmin,
-    };
-    const response = await request(app)
-      .post('/api/v1/auth/registerLecturer')
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .send(payload);
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty('access_token');
-    expect(response.body).toHaveProperty('refresh_token');
-    expect(response.body.access_token).toEqual(expect.any(String));
-    expect(response.body.refresh_token).toEqual(expect.any(String));
-  });
-  it('responds with an access_token and refresh_token in cookie', async () => {
-    const payload = {
-      email: `success.test2${globalLecturerCredentials.email}`,
-      firstName: `success2${globalLecturerCredentials.firstName}`,
-      lastName: `success2${globalLecturerCredentials.lastName}`,
-      password: globalLecturerCredentials.password,
-      isAdmin: globalLecturerCredentials.isAdmin,
-    };
+
+    const user = await db.user.findUnique({ where: { id: 999999 } });
+    expect(user).toBeNull();
 
     const response = await request(app)
-      .post('/api/v1/auth/registerLecturer?refreshTokenInCookie=true')
+      .post('/api/v1/auth/refreshToken')
       .set('Accept', 'application/json')
       .expect('Content-Type', /json/)
-      .send(payload);
+      .send({
+        refresh_token: refreshTokenWithNotExistingUser,
+      });
 
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty('access_token');
-    expect(Array.isArray(response.headers['set-cookie'])).toBe(true);
-    expect(response.headers['set-cookie'][0]).toContain('refresh_token');
-    expect(response.body.access_token).toEqual(expect.any(String));
+    expect(response.statusCode).toBe(401);
+    expect(response.body).toHaveProperty('message');
+    expect(response.body.message).toBe('Unauthorized');
   });
+  //
 });

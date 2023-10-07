@@ -7,14 +7,6 @@ export function createAnswer(answer: Prisma.AnswerCreateInput) {
   });
 }
 
-export function deleteAnswer(id: Answer['id']) {
-  return db.answer.delete({
-    where: {
-      id,
-    },
-  });
-}
-
 export function findAnswerById(id: Answer['id']) {
   return db.answer.findUnique({
     where: {
