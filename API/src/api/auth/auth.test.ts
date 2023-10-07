@@ -69,11 +69,27 @@ describe('POST /api/v1/auth/register', () => {
     expect(response.body.refresh_token).toEqual(expect.any(String));
   });
 
+  it('responds with an error if student already exists', async () => {
+    const payload = {
+      firstName: 'John',
+      lastName: 'Rambo',
+      indexNumber: 628425,
+    };
+
+    const response = await request(app)
+      .post('/api/v1/auth/register')
+      .set('Accept', 'application/json')
+      .expect('Content-Type', /json/)
+      .send(payload);
+
+    expect(response.statusCode).toBe(400);
+  });
+
   it('responds with an access_token and refresh_token in cookie', async () => {
     const payload = {
       firstName: 'John',
       lastName: 'Rambo',
-      indexNumber: globalUserCredentials.indexNumber+1,
+      indexNumber: globalUserCredentials.indexNumber + 1,
     };
 
     const response = await request(app)
