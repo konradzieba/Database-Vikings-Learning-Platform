@@ -10,7 +10,7 @@
     "lint": "eslint --fix src",
     "pretest": "dotenv -e .env.test -- prisma migrate reset --force",
     "test": "dotenv -e .env.test jest --verbose ./src/**/*.test.ts --runInBand",
-    "test:coverage": "dotenv -e .env.test jest -- --collectCoverage ./src/**/*.test.ts --runInBand"
+    "test:coverage": "dotenv -e .env.test -- prisma migrate reset --force && dotenv -e .env.test jest -- --collectCoverage .*.test.ts --runInBand"
   },
   "author": "Konrad Zięba & Arkadiusz Witasik",
   "license": "ISC",

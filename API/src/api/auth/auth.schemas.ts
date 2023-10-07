@@ -21,9 +21,7 @@ const registerSchema = z.object({
       (value) => value.toString().length === 6,
       'Index number must be 6 characters long'
     ),
-  isAdmin: z
-    .boolean({ required_error: 'isAdmin param is required' })
-    .default(true),
+  isAdmin: z.boolean({ required_error: 'isAdmin param is required' }),
 });
 
 export const registerStudentSchema = registerSchema.omit({

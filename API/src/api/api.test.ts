@@ -35,6 +35,3 @@ describe('GET /api/v1', () => {
   });
 });
 
-// function expect(statusCode: number) {
-//   throw new Error('Function not implemented.');
-// }
