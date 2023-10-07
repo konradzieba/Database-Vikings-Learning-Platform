@@ -8,4 +8,10 @@ export const groupSchema = z.object({
   lecturerId: z.number({ required_error: 'Lecturer ID is required' }),
 });
 
+export const renameGroupInput = groupSchema.omit({
+  lecturerId: true,
+});
+
 export type GroupInput = z.infer<typeof groupSchema>;
+
+export type RenameGroupInput = z.infer<typeof renameGroupInput>;

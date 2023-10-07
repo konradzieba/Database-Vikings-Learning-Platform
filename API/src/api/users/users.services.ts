@@ -45,6 +45,15 @@ export function createStudent(student: Prisma.StudentCreateInput) {
   });
 }
 
+export function updateUser(id: User['id'], user: Prisma.UserUpdateInput) {
+  return db.user.update({
+    where: {
+      id,
+    },
+    data: user,
+  });
+}
+
 export function deleteUser(id: User['id']) {
   return db.user.delete({
     where: {

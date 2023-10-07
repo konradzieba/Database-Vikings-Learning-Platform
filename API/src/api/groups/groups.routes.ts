@@ -12,11 +12,19 @@ router.post(
   GroupsControllers.createGroup
 );
 
+router.patch(
+  '/renameGroup/:id',
+  validateRequest({
+    params: paramsWithIdSchema,
+    body: GroupSchemas.renameGroupInput,
+  }),
+  GroupsControllers.renameGroup
+);
+
 router.delete(
   '/deleteGroup/:id',
   validateRequest({ params: paramsWithIdSchema }),
   GroupsControllers.deleteGroup
 );
-
 
 export default router;

@@ -30,6 +30,36 @@ export async function createLesson(
   }
 }
 
+
+export async function updateLesson(
+  req: Request<ParamsWithId, MessageResponse, LessonSchemas.UpdateLessonInput>,
+  res: Response<MessageResponse>,
+  next: NextFunction
+) {
+  try {
+    const { id } = req.params;
+    const { number, image } = req.body;
+
+    const existingLesson = await LessonServices.findLessonById(+id);
+
+    if (!existingLesson) {
+      res.status(404);
+      throw new Error('Lesson with this id does not exist.');
+    }
+
+    const lesson = await LessonServices.updateLesson(+id, {
+      number,
+      image,
+    });
+
+    res.json({
+      message: `Lesson with ${lesson.id}, number ${lesson.number} updated successfully.`,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function deleteLesson(
   req: Request<ParamsWithId, MessageResponse>,
   res: Response<MessageResponse>,

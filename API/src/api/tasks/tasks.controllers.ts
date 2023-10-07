@@ -33,6 +33,36 @@ export async function createTask(
   }
 }
 
+export async function updateTask(
+  req: Request<ParamsWithId, MessageResponse, TaskSchemas.UpdateTaskInput>,
+  res: Response<MessageResponse>,
+  next: NextFunction
+) {
+  try {
+    const { id } = req.params;
+    const { number, question, closeDate } = req.body;
+
+    const existingTask = await TaskServices.findTaskById(+id);
+
+    if (!existingTask) {
+      res.status(404);
+      throw new Error('Task with this id does not exist.');
+    }
+
+    const task = await TaskServices.updateTask(+id, {
+      number,
+      question,
+      closeDate: dayjs(closeDate).toDate(),
+    });
+
+    res.json({
+      message: `Task with ${task.id}, number ${task.number} updated successfully.`,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function deleteTask(
   req: Request<ParamsWithId, MessageResponse>,
   res: Response<MessageResponse>,

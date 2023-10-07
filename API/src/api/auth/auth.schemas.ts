@@ -1,6 +1,6 @@
 import z from 'zod';
 
-const registerSchema = z.object({
+export const registerSchema = z.object({
   email: z
     .string({
       required_error: 'Email is required',

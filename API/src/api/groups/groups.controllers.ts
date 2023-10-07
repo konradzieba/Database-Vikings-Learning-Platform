@@ -1,11 +1,11 @@
 import { Response, Request, NextFunction } from 'express';
-import { GroupInput } from './groups.schemas';
+import * as GroupSchemas from './groups.schemas';
 import { ParamsWithId } from 'interfaces/ParamsWithId';
 import MessageResponse from 'interfaces/MessageResponse';
 import * as GroupServices from './groups.services';
 
 export async function createGroup(
-  req: Request<{}, MessageResponse, GroupInput>,
+  req: Request<{}, MessageResponse, GroupSchemas.GroupInput>,
   res: Response<MessageResponse>,
   next: NextFunction
 ) {
@@ -26,6 +26,34 @@ export async function createGroup(
 
     res.json({
       message: `Group ${group.name} created successfully.`,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function renameGroup(
+  req: Request<ParamsWithId, MessageResponse, GroupSchemas.RenameGroupInput>,
+  res: Response<MessageResponse>,
+  next: NextFunction
+) {
+  try {
+    const { id } = req.params;
+    const { name } = req.body;
+
+    const existingGroup = await GroupServices.findGroupById(+id);
+
+    if (!existingGroup) {
+      res.status(404);
+      throw new Error('Group with this id does not exist.');
+    }
+
+    const group = await GroupServices.renameGroup(+id, {
+      name,
+    });
+
+    res.json({
+      message: `Group with ${group.id} updated successfully.`,
     });
   } catch (error) {
     next(error);

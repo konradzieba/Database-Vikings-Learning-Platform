@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { validateRequest } from '../../middlewares';
 import * as AuthControllers from './auth.controllers';
 import * as AuthSchemas from './auth.schemas';
+import { paramsWithIdSchema } from 'interfaces/ParamsWithId';
 
 const router = Router();
 

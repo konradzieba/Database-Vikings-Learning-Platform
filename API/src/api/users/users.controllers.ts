@@ -23,6 +23,36 @@ export async function me(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+export async function updateUser(
+  req: Request<ParamsWithId, MessageResponse>,
+  res: Response<MessageResponse>,
+  next: NextFunction
+) {
+  try {
+    const { id } = req.params;
+    const { firstName, lastName, indexNumber, isAdmin } = req.body;
+
+    const user = await UserServices.findUserById(+id);
+
+    if (!user) {
+      res.status(404);
+      throw new Error(`User with given id doesn't exists.`);
+    }
+
+    await UserServices.updateUser(+id, {
+      firstName,
+      lastName,
+      
+    });
+
+    res.json({
+      message: `User with id: ${id} was updated successfully.`,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function deleteUser(
   req: Request<ParamsWithId, MessageResponse>,
   res: Response<MessageResponse>,

@@ -12,6 +12,12 @@ router.post(
   LessonsControllers.createLesson
 );
 
+router.patch(
+  '/updateLesson/:id',
+  validateRequest({ params: paramsWithIdSchema, body: LessonSchemas.updateLessonSchema }),
+  LessonsControllers.updateLesson
+);
+
 router.delete(
   '/deleteLesson/:id',
   validateRequest({ params: paramsWithIdSchema }),

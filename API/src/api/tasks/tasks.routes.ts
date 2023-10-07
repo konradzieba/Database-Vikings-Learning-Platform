@@ -12,6 +12,8 @@ router.post(
   TasksControllers.createTask
 );
 
+router.patch('/updateTask/:id', validateRequest({params: paramsWithIdSchema, body: TaskSchemas.updateTaskSchema}), TasksControllers.updateTask);
+
 router.delete(
   '/deleteTask/:id',
   validateRequest({ params: paramsWithIdSchema }),

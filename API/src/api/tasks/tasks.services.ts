@@ -15,6 +15,18 @@ export function createTask(task: Prisma.TaskCreateInput) {
   });
 }
 
+export function updateTask(
+  id: Task['id'],
+  task: Pick<Prisma.TaskUpdateInput, 'number' | 'question' | 'closeDate'>
+) {
+  return db.task.update({
+    where: {
+      id,
+    },
+    data: task,
+  });
+}
+
 export function deleteTask(id: Task['id']) {
   return db.task.delete({
     where: {

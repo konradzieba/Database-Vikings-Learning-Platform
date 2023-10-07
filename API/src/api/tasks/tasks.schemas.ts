@@ -23,4 +23,13 @@ export const taskSchema = z.object({
   lessonId: z.number().int('lessonId must be an integer.'),
 });
 
+export const updateTaskSchema = taskSchema
+  .omit({
+    lessonId: true,
+    isExtra: true,
+  })
+  .partial();
+
 export type TaskInput = z.infer<typeof taskSchema>;
+
+export type UpdateTaskInput = z.infer<typeof updateTaskSchema>;

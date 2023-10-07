@@ -23,6 +23,18 @@ export function findGroupById(id: Group['id']) {
   });
 }
 
+export function renameGroup(
+  id: Group['id'],
+  group: Pick<Prisma.GroupUpdateInput, 'name'>
+) {
+  return db.group.update({
+    where: {
+      id,
+    },
+    data: group,
+  });
+}
+
 export function deleteGroup(id: Group['id']) {
   return db.group.delete({
     where: {
