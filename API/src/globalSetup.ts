@@ -28,6 +28,25 @@ const setup = async () => {
   console.log('---------TESTS STARTED--------');
 
   // student setup
+
+  const user = await db.user.create({
+    data: {
+      email: 'user@example.com',
+      password: bcrypt.hashSync(globalUserCredentials.password, 12),
+      firstName: 'John',
+      lastName: 'Centa',
+    },
+  });
+
+  const userToDelete = await db.user.create({
+    data: {
+      email: 'user@todelete.com',
+      password: bcrypt.hashSync(globalUserCredentials.password, 12),
+      firstName: 'User',
+      lastName: 'Delete',
+    },
+  });
+
   const student = await db.user
     .create({
       data: {
@@ -192,8 +211,11 @@ const setup = async () => {
     },
   });
 
-  const validToken = generateAccessToken({ userId: student.id }, '15m');
+  const validToken = generateAccessToken({ userId: user.id }, '15m');
+  const invalidToken = generateAccessToken({ userId: 9999 }, '15m');
   process.env.VALID_ACCESS_TOKEN_FOR_TESTING = validToken;
+  process.env.INVALID_ACCESS_TOKEN_FOR_TESTING = invalidToken;
+
   process.env.LECTURER_ID_FOR_TESTING = lecturer.id.toString();
   process.env.GROUP_ID_FOR_TESTING = group.id.toString();
   process.env.LESSON_ID_FOR_TESTING = lesson.id.toString();
@@ -205,6 +227,7 @@ const setup = async () => {
   process.env.GROUP_ID_TO_DELETE_TESTING = groupToDelete.id.toString();
   process.env.LESSON_ID_TO_DELETE_TESTING = lessonToDelete.id.toString();
   process.env.TASK_ID_TO_DELETE_TESTING = taskToDelete.id.toString();
+  process.env.USER_ID_TO_DELETE_TESTING = userToDelete.id.toString();
 };
 
 export default setup;
