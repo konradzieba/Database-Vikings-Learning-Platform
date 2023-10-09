@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { ZodError } from 'zod';
-
 import ErrorResponse from './interfaces/ErrorResponse';
 import RequestValidators from './interfaces/RequestValidators';
-import { ParsedToken } from '../typings/token';
+import { ParsedToken, EnumRole, TRole } from '../typings/token';
 import { config } from './utils/config';
 import { verifyAccessToken } from './utils/jwt';
 
@@ -28,6 +27,38 @@ export function errorHandler(
   });
 }
 
+export function requireRole(role: TRole) {
+  return (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const user = req.user;
+
+      if (!user) {
+        res.status(401);
+        throw new Error('Unauthorized.');
+      }
+
+      if (role === EnumRole.STUDENT && user.role === EnumRole.STUDENT) {
+        next();
+      } else if (
+        role === EnumRole.LECTURER &&
+        (user.role === EnumRole.LECTURER || user.role === EnumRole.SUPERUSER)
+      ) {
+        next();
+      } else if (
+        role === EnumRole.SUPERUSER &&
+        user.role === EnumRole.SUPERUSER
+      ) {
+        next();
+      } else {
+        res.status(403);
+        throw new Error('Forbidden.');
+      }
+    } catch (error) {
+      next(error);
+    }
+  };
+}
+
 export function validateRequest(validators: RequestValidators) {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -48,6 +79,13 @@ export function validateRequest(validators: RequestValidators) {
       next(error);
     }
   };
+}
+
+export function validateRequestAndCheckRole(
+  validators: RequestValidators,
+  role: TRole
+) {
+  return [validateRequest(validators), requireUser, requireRole(role)];
 }
 
 export function deserializeUser(

@@ -4,9 +4,11 @@ import { config } from './config';
 
 export interface IAccessTokenPayload {
   userId: User['id'];
+  role: User['role'];
 }
 export interface IRefreshTokenPayload {
   userId: User['id'];
+  role: User['role'];
   jti: string;
 }
 
@@ -36,10 +38,12 @@ export function generateRefreshToken(
 export function generateTokens(user: User, jti: string) {
   const accessTokenPayload: IAccessTokenPayload = {
     userId: user.id,
+    role: user.role,
   };
   const refreshTokenPayload: IRefreshTokenPayload = {
     jti: jti,
     userId: user.id,
+    role: user.role,
   };
   const accessToken = generateAccessToken(accessTokenPayload);
   const refreshToken = generateRefreshToken(refreshTokenPayload);

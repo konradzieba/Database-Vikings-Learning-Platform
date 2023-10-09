@@ -11,6 +11,7 @@ import MessageResponse from 'interfaces/MessageResponse';
 import * as UserServices from '../users/users.services';
 import * as AuthSchemas from './auth.schemas';
 import * as AuthServices from './auth.services';
+import { EnumRole } from '../../../typings/token';
 
 export async function registerStudent(
   req: Request<
@@ -103,6 +104,7 @@ export async function registerLecturer(
       password,
       firstName,
       lastName,
+      role: EnumRole.LECTURER,
     });
 
     if (user) {

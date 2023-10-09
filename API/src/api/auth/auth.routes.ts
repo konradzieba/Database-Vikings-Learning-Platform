@@ -1,8 +1,12 @@
 import { Router } from 'express';
-import { validateRequest } from '../../middlewares';
+import {
+  validateRequest,
+  validateRequestAndCheckRole,
+} from '../../middlewares';
 import * as AuthControllers from './auth.controllers';
 import * as AuthSchemas from './auth.schemas';
 import { paramsWithIdSchema } from 'interfaces/ParamsWithId';
+import { EnumRole } from '../../../typings/token';
 
 const router = Router();
 
@@ -15,12 +19,24 @@ router.post(
   AuthControllers.registerStudent
 );
 
+// router.post(
+//   '/registerLecturer',
+//   validateRequest({
+//     query: AuthSchemas.registerQuerySchema,
+//     body: AuthSchemas.registerLecturerSchema,
+//   }),
+//   AuthControllers.registerLecturer
+// );
+
 router.post(
   '/registerLecturer',
-  validateRequest({
-    query: AuthSchemas.registerQuerySchema,
-    body: AuthSchemas.registerLecturerSchema,
-  }),
+  validateRequestAndCheckRole(
+    {
+      query: AuthSchemas.registerQuerySchema,
+      body: AuthSchemas.registerLecturerSchema,
+    },
+    EnumRole.LECTURER
+  ),
   AuthControllers.registerLecturer
 );
 
