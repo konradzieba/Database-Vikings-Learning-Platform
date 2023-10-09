@@ -2,11 +2,13 @@ import request from 'supertest';
 import app from '../../app';
 
 describe('POST /api/v1/lessons/createLesson', () => {
+  let validLecturerToken = process.env.VALID_LECTURER_TOKEN_FOR_TESTING!;
   let groupId = +process.env.GROUP_ID_FOR_TESTING!;
   it('should create a lesson without photo parameter', async () => {
     const res = await request(app)
       .post('/api/v1/lessons/createLesson')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         number: 11,
         groupId: groupId,
@@ -20,6 +22,7 @@ describe('POST /api/v1/lessons/createLesson', () => {
     const res = await request(app)
       .post('/api/v1/lessons/createLesson')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         number: 12,
         photo: 'example photo url',
@@ -34,6 +37,7 @@ describe('POST /api/v1/lessons/createLesson', () => {
     const res = await request(app)
       .post('/api/v1/lessons/createLesson')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         groupId: groupId,
       });
@@ -43,6 +47,7 @@ describe('POST /api/v1/lessons/createLesson', () => {
     const res = await request(app)
       .post('/api/v1/lessons/createLesson')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         number: 13,
       });
@@ -51,11 +56,13 @@ describe('POST /api/v1/lessons/createLesson', () => {
 });
 
 describe('PATCH /api/v1/lessons/updateLesson/:id', () => {
+  let validLecturerToken = process.env.VALID_LECTURER_TOKEN_FOR_TESTING!;
   let lessonId = +process.env.LESSON_ID_FOR_TESTING!;
   it('should update lesson with number and image successfully', async () => {
     const res = await request(app)
       .patch(`/api/v1/lessons/updateLesson/${lessonId}`)
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         number: 113,
         image: 'viking.png',
@@ -69,6 +76,7 @@ describe('PATCH /api/v1/lessons/updateLesson/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/lessons/updateLesson/${lessonId}`)
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         number: 133,
       });
@@ -81,6 +89,7 @@ describe('PATCH /api/v1/lessons/updateLesson/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/lessons/updateLesson/${lessonId}`)
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         image: 'viking.png',
       });
@@ -93,6 +102,7 @@ describe('PATCH /api/v1/lessons/updateLesson/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/lessons/updateLesson/999`)
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         image: 'viking.png',
       });
@@ -102,17 +112,20 @@ describe('PATCH /api/v1/lessons/updateLesson/:id', () => {
 });
 
 describe('DELETE /api/v1/lessons/deleteLesson/:id', () => {
+  let validLecturerToken = process.env.VALID_LECTURER_TOKEN_FOR_TESTING!;
   let lessonId = +process.env.LESSON_ID_TO_DELETE_TESTING!;
   it('should delete lesson successfully', async () => {
-    const res = await request(app).delete(
-      `/api/v1/lessons/deleteLesson/${lessonId}`
-    );
+    const res = await request(app)
+      .delete(`/api/v1/lessons/deleteLesson/${lessonId}`)
+      .set('Authorization', `Bearer ${validLecturerToken}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toContain('deleted successfully.');
   });
 
   it(`should respond an error if lesson doesn't exist`, async () => {
-    const res = await request(app).delete(`/api/v1/lessons/deleteLesson/9999`);
+    const res = await request(app)
+      .delete(`/api/v1/lessons/deleteLesson/9999`)
+      .set('Authorization', `Bearer ${validLecturerToken}`);
     expect(res.statusCode).toBe(404);
   });
   it('should handle errors with catch(next())', async () => {
@@ -125,6 +138,7 @@ describe('DELETE /api/v1/lessons/deleteLesson/:id', () => {
     const res = await request(app)
       .post('/api/v1/lessons/createLesson')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send(payload);
 
     expect(res.statusCode).toBe(500);

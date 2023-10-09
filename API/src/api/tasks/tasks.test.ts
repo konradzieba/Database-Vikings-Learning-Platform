@@ -4,10 +4,12 @@ import dayjs from 'dayjs';
 
 describe('POST /api/v1/tasks/createTask', () => {
   let lessonId = +process.env.LESSON_ID_FOR_TESTING!;
+  let validLecturerToken = process.env.VALID_LECTURER_TOKEN_FOR_TESTING!;
   it('should create a task for lesson', async () => {
     const res = await request(app)
       .post('/api/v1/tasks/createTask')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         number: 5,
         question: 'Is kot pies?',
@@ -22,6 +24,7 @@ describe('POST /api/v1/tasks/createTask', () => {
     const res = await request(app)
       .post('/api/v1/tasks/createTask')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         question: 'Is kot pies?',
         closeDate: dayjs().add(7, 'day').toDate(),
@@ -35,6 +38,7 @@ describe('POST /api/v1/tasks/createTask', () => {
     const res = await request(app)
       .post('/api/v1/tasks/createTask')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         number: 5,
         closeDate: dayjs().add(7, 'day').toDate(),
@@ -48,6 +52,7 @@ describe('POST /api/v1/tasks/createTask', () => {
     const res = await request(app)
       .post('/api/v1/tasks/createTask')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         number: 5,
         question: 'Is kot pies?',
@@ -61,6 +66,7 @@ describe('POST /api/v1/tasks/createTask', () => {
     const res = await request(app)
       .post('/api/v1/tasks/createTask')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         number: 5,
         question: 'Is kot pies?',
@@ -74,6 +80,7 @@ describe('POST /api/v1/tasks/createTask', () => {
     const res = await request(app)
       .post('/api/v1/tasks/createTask')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         number: 5,
         question: 'Is kot pies?',
@@ -87,6 +94,7 @@ describe('POST /api/v1/tasks/createTask', () => {
     const res = await request(app)
       .post('/api/v1/tasks/createTask')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         number: 5,
         question: 'Is kot pies?',
@@ -109,6 +117,7 @@ describe('POST /api/v1/tasks/createTask', () => {
     const res = await request(app)
       .post('/api/v1/tasks/createTask')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send(payload);
 
     expect(res.statusCode).toBe(500);
@@ -122,10 +131,12 @@ describe('POST /api/v1/tasks/createTask', () => {
 
 describe('PATCH /api/v1/tasks/updateTask/:id', () => {
   let taskId = +process.env.TASK_ID_FOR_TESTING!;
+  let validLecturerToken = process.env.VALID_LECTURER_TOKEN_FOR_TESTING!;
   it('should update task with number, question and closeDate successfully', async () => {
     const res = await request(app)
       .patch(`/api/v1/tasks/updateTask/${taskId}`)
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         number: 113,
         question: 'New task?',
@@ -139,6 +150,7 @@ describe('PATCH /api/v1/tasks/updateTask/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/tasks/updateTask/999`)
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         number: 114,
         question: 'New task?2',
@@ -151,6 +163,7 @@ describe('PATCH /api/v1/tasks/updateTask/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/tasks/updateTask/${taskId}`)
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         number: 115,
       });
@@ -162,6 +175,7 @@ describe('PATCH /api/v1/tasks/updateTask/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/tasks/updateTask/${taskId}`)
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         closeDate: dayjs().add(14, 'day').toDate(),
       });
@@ -173,6 +187,7 @@ describe('PATCH /api/v1/tasks/updateTask/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/tasks/updateTask/${taskId}`)
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         question: 'New task?3',
       });
@@ -183,13 +198,18 @@ describe('PATCH /api/v1/tasks/updateTask/:id', () => {
 
 describe('DELETE /api/v1/tasks/deleteTask/:id', () => {
   let taskId = +process.env.TASK_ID_TO_DELETE_TESTING!;
+  let validLecturerToken = process.env.VALID_LECTURER_TOKEN_FOR_TESTING!;
   it('should delete task successfully', async () => {
-    const res = await request(app).delete(`/api/v1/tasks/deleteTask/${taskId}`);
+    const res = await request(app)
+      .delete(`/api/v1/tasks/deleteTask/${taskId}`)
+      .set('Authorization', `Bearer ${validLecturerToken}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toContain('deleted successfully.');
   });
   it(`should respond an error if task doesn't exist`, async () => {
-    const res = await request(app).delete(`/api/v1/tasks/deleteTask/999`);
+    const res = await request(app)
+      .delete(`/api/v1/tasks/deleteTask/999`)
+      .set('Authorization', `Bearer ${validLecturerToken}`);
     expect(res.statusCode).toBe(404);
   });
 });

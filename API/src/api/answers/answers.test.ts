@@ -5,11 +5,13 @@ import dayjs from 'dayjs';
 describe('POST /api/v1/answers/createAnswer', () => {
   let taskId = +process.env.TASK_ID_FOR_TESTING!;
   let studentId = +process.env.STUDENT_ID_FOR_TESTING!;
+  let validStudentToken = process.env.VALID_STUDENT_TOKEN_FOR_TESTING!;
 
   it('should create an answer', async () => {
     const res = await request(app)
       .post('/api/v1/answers/createAnswer')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validStudentToken}`)
       .send({
         solution: 'SELECT * FROM test;',
         taskId: taskId,
@@ -23,6 +25,7 @@ describe('POST /api/v1/answers/createAnswer', () => {
     const res = await request(app)
       .post('/api/v1/answers/createAnswer')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validStudentToken}`)
       .send({
         solution: 'SELECT * FROM test;',
         taskId: taskId,
@@ -35,6 +38,7 @@ describe('POST /api/v1/answers/createAnswer', () => {
     const res = await request(app)
       .post('/api/v1/answers/createAnswer')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validStudentToken}`)
       .send({
         taskId: taskId,
         studentId: studentId,
@@ -46,6 +50,7 @@ describe('POST /api/v1/answers/createAnswer', () => {
     const res = await request(app)
       .post('/api/v1/answers/createAnswer')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validStudentToken}`)
       .send({
         solution: 'SELECT * FROM test;',
         studentId: studentId,
@@ -57,6 +62,7 @@ describe('POST /api/v1/answers/createAnswer', () => {
     const res = await request(app)
       .post('/api/v1/answers/createAnswer')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validStudentToken}`)
       .send({
         solution: 'SELECT * FROM test;',
         taskId: taskId,
@@ -67,10 +73,12 @@ describe('POST /api/v1/answers/createAnswer', () => {
 
 describe('PATCH /api/v1/answers/answerReply/:id', () => {
   let answerId = +process.env.ANSWER_ID_FOR_UPDATE_TESTING!;
+  let validLecturerToken = process.env.VALID_LECTURER_TOKEN_FOR_TESTING!;
   it('should patch an answer', async () => {
     const res = await request(app)
       .patch(`/api/v1/answers/answerReply/${answerId}`)
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         replyStatus: 'CORRECT',
         replyDate: dayjs().add(7, 'day').toDate(),
@@ -87,6 +95,7 @@ describe('PATCH /api/v1/answers/answerReply/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/answers/answerReply/${answerId}`)
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         replyStatus: 'INCORRECT',
         replyDate: dayjs().add(7, 'day').toDate(),
@@ -102,6 +111,7 @@ describe('PATCH /api/v1/answers/answerReply/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/answers/answerReply/${answerId}`)
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         replyStatus: 'PENDING',
         replyDate: dayjs().add(7, 'day').toDate(),
@@ -115,6 +125,7 @@ describe('PATCH /api/v1/answers/answerReply/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/answers/answerReply/${answerId}`)
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         replyStatus: 'WAITING',
         replyDate: dayjs().add(7, 'day').toDate(),
@@ -128,6 +139,7 @@ describe('PATCH /api/v1/answers/answerReply/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/answers/answerReply/${answerId}`)
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         replyDate: dayjs().add(7, 'day').toDate(),
         replyDesc: 'Excellent work!',
@@ -140,6 +152,7 @@ describe('PATCH /api/v1/answers/answerReply/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/answers/answerReply/${answerId}`)
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         replyStatus: 'INCORRECT',
         replyDesc: 'Excellent work!',
@@ -152,6 +165,7 @@ describe('PATCH /api/v1/answers/answerReply/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/answers/answerReply/${answerId}`)
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         replyStatus: 'INCORRECT',
         replyDate: dayjs().add(7, 'day').toDate(),
@@ -164,6 +178,7 @@ describe('PATCH /api/v1/answers/answerReply/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/answers/answerReply/9999`)
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         replyStatus: 'INCORRECT',
         replyDate: dayjs().add(7, 'day').toDate(),
@@ -176,11 +191,13 @@ describe('PATCH /api/v1/answers/answerReply/:id', () => {
 
 describe('PATCH /api/v1/answers/updateAnswer/:id', () => {
   let answerId = +process.env.ANSWER_ID_FOR_UPDATE_TESTING!;
+  let validLecturerToken = process.env.VALID_LECTURER_TOKEN_FOR_TESTING!;
 
   it('should patch an answer with replyDesc and grantedScore', async () => {
     const res = await request(app)
       .patch(`/api/v1/answers/updateAnswer/${answerId}`)
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         replyDesc: 'Great work!',
         grantedScore: 45,
@@ -193,6 +210,7 @@ describe('PATCH /api/v1/answers/updateAnswer/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/answers/updateAnswer/${answerId}`)
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         replyDesc: 'Great work!',
       });
@@ -204,6 +222,7 @@ describe('PATCH /api/v1/answers/updateAnswer/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/answers/updateAnswer/${answerId}`)
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         grantedScore: 45,
       });
@@ -215,6 +234,7 @@ describe('PATCH /api/v1/answers/updateAnswer/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/answers/updateAnswer/9999`)
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .send({
         replyDesc: 'Great work!',
         grantedScore: 45,
