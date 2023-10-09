@@ -9,6 +9,7 @@ import {
   globalLecturerCredentials,
   globalUserCredentials,
 } from '../../globalSetup';
+import { Role } from '@prisma/client';
 
 describe('POST /api/v1/auth/register', () => {
   it('responds with an error if payload is missing', async () => {
@@ -110,10 +111,12 @@ describe('POST /api/v1/auth/register', () => {
 });
 
 describe('POST /api/v1/auth/registerLecturer', () => {
+  let validLecturerToken = process.env.VALID_LECTURER_TOKEN_FOR_TESTING!;
   it('responds with an error if payload is missing', async () => {
     const response = await request(app)
       .post('/api/v1/auth/registerLecturer')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .expect('Content-Type', /json/);
 
     expect(response.statusCode).toBe(400);
@@ -128,6 +131,7 @@ describe('POST /api/v1/auth/registerLecturer', () => {
     const response = await request(app)
       .post('/api/v1/auth/registerLecturer')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .expect('Content-Type', /json/)
       .send(payload);
     expect(response.statusCode).toBe(400);
@@ -142,6 +146,7 @@ describe('POST /api/v1/auth/registerLecturer', () => {
     const response = await request(app)
       .post('/api/v1/auth/registerLecturer')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .expect('Content-Type', /json/)
       .send(payload);
     expect(response.statusCode).toBe(400);
@@ -156,6 +161,7 @@ describe('POST /api/v1/auth/registerLecturer', () => {
     const response = await request(app)
       .post('/api/v1/auth/registerLecturer')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .expect('Content-Type', /json/)
       .send(payload);
     expect(response.statusCode).toBe(400);
@@ -170,6 +176,7 @@ describe('POST /api/v1/auth/registerLecturer', () => {
     const response = await request(app)
       .post('/api/v1/auth/registerLecturer')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .expect('Content-Type', /json/)
       .send(payload);
     expect(response.statusCode).toBe(400);
@@ -185,6 +192,7 @@ describe('POST /api/v1/auth/registerLecturer', () => {
     const response = await request(app)
       .post('/api/v1/auth/registerLecturer')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .expect('Content-Type', /json/)
       .send(payload);
 
@@ -205,6 +213,7 @@ describe('POST /api/v1/auth/registerLecturer', () => {
     const response = await request(app)
       .post('/api/v1/auth/registerLecturer')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .expect('Content-Type', /json/)
       .send(payload);
     expect(response.statusCode).toBe(200);
@@ -225,6 +234,7 @@ describe('POST /api/v1/auth/registerLecturer', () => {
     const response = await request(app)
       .post('/api/v1/auth/registerLecturer?refreshTokenInCookie=true')
       .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validLecturerToken}`)
       .expect('Content-Type', /json/)
       .send(payload);
 
@@ -364,14 +374,17 @@ describe('POST /api/v1/auth/refreshToken', () => {
     userId = user.id;
 
     expiredRefreshToken = generateRefreshToken(
-      { userId: user.id, jti: uuidv4() },
+      { userId: user.id, jti: uuidv4(), role: Role.LECTURER },
       '1s'
     );
 
     const jti = uuidv4();
-    validRefreshToken = generateRefreshToken({ userId: user.id, jti }, '5m');
+    validRefreshToken = generateRefreshToken(
+      { userId: user.id, jti, role: Role.LECTURER },
+      '5m'
+    );
     refreshTokenNotPresentInDb = generateRefreshToken(
-      { userId: user.id, jti: uuidv4() },
+      { userId: user.id, jti: uuidv4(), role: Role.LECTURER },
       '5m'
     );
 
@@ -508,10 +521,6 @@ describe('POST /api/v1/auth/refreshToken', () => {
 
   //
   it('responds with Unauthorized if refresh token is revoked', async () => {
-    // Wygeneruj refresh token i zapisz go w bazie danych jako zrezerwowany (revoked)
-
-    // Możesz użyć swoich funkcji lub zmockować odpowiednie zachowanie
-
     const response = await request(app)
       .post('/api/v1/auth/refreshToken')
       .set('Accept', 'application/json')
@@ -525,7 +534,7 @@ describe('POST /api/v1/auth/refreshToken', () => {
 
   it('responds with Unauthorized if user does not exist', async () => {
     const refreshTokenWithNotExistingUser = generateRefreshToken(
-      { userId: 999999, jti: uuidv4() },
+      { userId: 999999, jti: uuidv4(), role: Role.LECTURER },
       '5m'
     );
 

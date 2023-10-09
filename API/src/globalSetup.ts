@@ -2,6 +2,7 @@ import { db } from './db';
 import bcrypt from 'bcrypt';
 import { generateAccessToken } from './utils/jwt';
 import dayjs from 'dayjs';
+import { Role } from '@prisma/client';
 
 export const globalUserCredentials = {
   email: '123456@student.uwm.edu.pl',
@@ -211,10 +212,25 @@ const setup = async () => {
     },
   });
 
-  const validToken = generateAccessToken({ userId: user.id }, '15m');
-  const invalidToken = generateAccessToken({ userId: 9999 }, '15m');
+  const validToken = generateAccessToken(
+    { userId: user.id, role: Role.SUPERUSER },
+    '15m'
+  );
+  const invalidToken = generateAccessToken(
+    { userId: 9999, role: Role.SUPERUSER },
+    '15m'
+  );
+  const validLecturerToken = generateAccessToken(
+    {
+      userId: lecturer.userId,
+      role: Role.LECTURER,
+    },
+    '15m'
+  );
+
   process.env.VALID_ACCESS_TOKEN_FOR_TESTING = validToken;
   process.env.INVALID_ACCESS_TOKEN_FOR_TESTING = invalidToken;
+  process.env.VALID_LECTURER_TOKEN_FOR_TESTING = validLecturerToken;
 
   process.env.LECTURER_ID_FOR_TESTING = lecturer.id.toString();
   process.env.GROUP_ID_FOR_TESTING = group.id.toString();
