@@ -1,32 +1,45 @@
 import { Router } from 'express';
-import { validateRequest } from '../../middlewares';
+import {
+  validateRequest,
+  validateRequestAndCheckRole,
+} from '../../middlewares';
 import * as AnswersControllers from './answers.controllers';
 import * as AnswerSchemas from './answers.schemas';
 import { paramsWithIdSchema } from '../../interfaces/ParamsWithId';
+import { EnumRole } from '../../../typings/token';
 
 const router = Router();
 
 router.post(
   '/createAnswer',
-  validateRequest({ body: AnswerSchemas.answerInputSchema }),
+  validateRequestAndCheckRole(
+    { body: AnswerSchemas.answerInputSchema },
+    EnumRole.STUDENT
+  ),
   AnswersControllers.createAnswer
 );
 
 router.patch(
   '/answerReply/:id',
-  validateRequest({
-    params: paramsWithIdSchema,
-    body: AnswerSchemas.answerReplySchema,
-  }),
+  validateRequestAndCheckRole(
+    {
+      params: paramsWithIdSchema,
+      body: AnswerSchemas.answerReplySchema,
+    },
+    EnumRole.LECTURER
+  ),
   AnswersControllers.answerReply
 );
 
 router.patch(
   '/updateAnswer/:id',
-  validateRequest({
-    params: paramsWithIdSchema,
-    body: AnswerSchemas.answerUpdateSchema,
-  }),
+  validateRequestAndCheckRole(
+    {
+      params: paramsWithIdSchema,
+      body: AnswerSchemas.answerUpdateSchema,
+    },
+    EnumRole.LECTURER
+  ),
   AnswersControllers.updateAnswer
 );
 

@@ -9,7 +9,7 @@ const router = Router();
 router.get('/me', requireUser, UserController.me);
 
 router.patch(
-  '/updateUser',
+  '/updateUser/:id',
   validateRequest({
     params: paramsWithIdSchema,
     body: UserSchemas.updateUserSchema,

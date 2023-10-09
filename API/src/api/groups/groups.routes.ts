@@ -1,29 +1,42 @@
 import { Router } from 'express';
-import { validateRequest } from '../../middlewares';
+import {
+  validateRequest,
+  validateRequestAndCheckRole,
+} from '../../middlewares';
 import * as GroupsControllers from './groups.controllers';
 import * as GroupSchemas from './groups.schemas';
 import { paramsWithIdSchema } from '../../interfaces/ParamsWithId';
+import { EnumRole } from '../../../typings/token';
 
 const router = Router();
 
 router.post(
   '/createGroup',
-  validateRequest({ body: GroupSchemas.groupSchema }),
+  validateRequestAndCheckRole(
+    { body: GroupSchemas.groupSchema },
+    EnumRole.LECTURER
+  ),
   GroupsControllers.createGroup
 );
 
 router.patch(
   '/renameGroup/:id',
-  validateRequest({
-    params: paramsWithIdSchema,
-    body: GroupSchemas.renameGroupInput,
-  }),
+  validateRequestAndCheckRole(
+    {
+      params: paramsWithIdSchema,
+      body: GroupSchemas.renameGroupInput,
+    },
+    EnumRole.LECTURER
+  ),
   GroupsControllers.renameGroup
 );
 
 router.delete(
   '/deleteGroup/:id',
-  validateRequest({ params: paramsWithIdSchema }),
+  validateRequestAndCheckRole(
+    { params: paramsWithIdSchema },
+    EnumRole.LECTURER
+  ),
   GroupsControllers.deleteGroup
 );
 

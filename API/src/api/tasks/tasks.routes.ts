@@ -1,22 +1,39 @@
 import { Router } from 'express';
-import { validateRequest } from '../../middlewares';
+import { validateRequestAndCheckRole } from '../../middlewares';
 import * as TaskSchemas from './tasks.schemas';
 import { paramsWithIdSchema } from '../../interfaces/ParamsWithId';
 import * as TasksControllers from '../tasks/tasks.controllers';
+import { EnumRole } from '../../../typings/token';
 
 const router = Router();
 
 router.post(
   '/createTask',
-  validateRequest({ body: TaskSchemas.taskSchema }),
+  validateRequestAndCheckRole(
+    { body: TaskSchemas.taskSchema },
+    EnumRole.LECTURER
+  ),
   TasksControllers.createTask
 );
 
-router.patch('/updateTask/:id', validateRequest({params: paramsWithIdSchema, body: TaskSchemas.updateTaskSchema}), TasksControllers.updateTask);
+router.patch(
+  '/updateTask/:id',
+  validateRequestAndCheckRole(
+    {
+      params: paramsWithIdSchema,
+      body: TaskSchemas.updateTaskSchema,
+    },
+    EnumRole.LECTURER
+  ),
+  TasksControllers.updateTask
+);
 
 router.delete(
   '/deleteTask/:id',
-  validateRequest({ params: paramsWithIdSchema }),
+  validateRequestAndCheckRole(
+    { params: paramsWithIdSchema },
+    EnumRole.LECTURER
+  ),
   TasksControllers.deleteTask
 );
 
