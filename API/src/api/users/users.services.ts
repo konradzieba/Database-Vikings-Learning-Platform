@@ -33,9 +33,19 @@ export function createUser(user: Prisma.UserCreateInput) {
   });
 }
 
-export function createLecturer(lecturer: Prisma.LecturerCreateInput) {
+export function createLecturer(
+  lecturer: Omit<Prisma.LecturerCreateInput, 'isAdmin'>
+) {
   return db.lecturer.create({
-    data: lecturer,
+    data: { ...lecturer, isAdmin: false },
+  });
+}
+
+export function createSuperUser(
+  superUser: Omit<Prisma.LecturerCreateInput, 'isAdmin'>
+) {
+  return db.lecturer.create({
+    data: { ...superUser, isAdmin: true },
   });
 }
 

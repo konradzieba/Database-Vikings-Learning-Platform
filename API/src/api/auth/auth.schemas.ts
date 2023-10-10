@@ -34,12 +34,17 @@ export const registerLecturerSchema = registerSchema.omit({
   indexNumber: true,
 });
 
+export const registerSuperUserSchema = registerSchema.omit({
+  indexNumber: true,
+});
+
 export const registerQuerySchema = z.object({
   refreshTokenInCookie: z.enum(['true', 'false']).default('false'),
 });
 
 export type RegisterStudentInput = z.infer<typeof registerStudentSchema>;
 export type RegisterLecturerInput = z.infer<typeof registerLecturerSchema>;
+export type RegisterSuperUserInput = z.infer<typeof registerSuperUserSchema>;
 export type RegisterQuerySchema = z.infer<typeof registerQuerySchema>;
 
 export const loginSchema = z.object({

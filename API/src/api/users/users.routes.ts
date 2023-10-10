@@ -1,8 +1,13 @@
 import { Router } from 'express';
-import { requireUser, validateRequest } from '../../middlewares';
+import {
+  requireUser,
+  validateRequest,
+  validateRequestAndCheckRole,
+} from '../../middlewares';
 import * as UserController from './users.controllers';
 import * as UserSchemas from './users.schemas';
 import { paramsWithIdSchema } from '../../interfaces/ParamsWithId';
+import { EnumRole } from '../../../typings/token';
 
 const router = Router();
 
@@ -10,16 +15,22 @@ router.get('/me', requireUser, UserController.me);
 
 router.patch(
   '/updateUser/:id',
-  validateRequest({
-    params: paramsWithIdSchema,
-    body: UserSchemas.updateUserSchema,
-  }),
+  validateRequestAndCheckRole(
+    {
+      params: paramsWithIdSchema,
+      body: UserSchemas.updateUserSchema,
+    },
+    EnumRole.SUPERUSER
+  ),
   UserController.updateUser
 );
 
 router.delete(
   '/deleteUser/:id',
-  validateRequest({ params: paramsWithIdSchema }),
+  validateRequestAndCheckRole(
+    { params: paramsWithIdSchema },
+    EnumRole.SUPERUSER
+  ),
   UserController.deleteUser
 );
 

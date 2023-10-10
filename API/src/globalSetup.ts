@@ -3,27 +3,12 @@ import bcrypt from 'bcrypt';
 import { generateAccessToken } from './utils/jwt';
 import dayjs from 'dayjs';
 import { Role } from '@prisma/client';
-
-export const globalUserCredentials = {
-  email: '123456@student.uwm.edu.pl',
-  password: 'JohRam682&',
-  firstName: 'John',
-  lastName: 'Doe',
-  indexNumber: 123456,
-};
-
-export const globalLecturerCredentials = {
-  email: 'lecturer@lecturer.pl',
-  password: 'lecturer123',
-  firstName: 'FirstName',
-  lastName: 'LastName',
-  isAdmin: true,
-};
-
-export const globalGroupCredentials = {
-  name: 'Test Group',
-  lecturerId: 1,
-};
+import {
+  globalUserCredentials,
+  globalLecturerCredentials,
+  globalSuperUserCredentials,
+  globalGroupCredentials,
+} from 'mocks/globalCredentials';
 
 const setup = async () => {
   console.log('---------TESTS STARTED--------');
@@ -83,6 +68,28 @@ const setup = async () => {
       return db.lecturer.create({
         data: {
           isAdmin: globalLecturerCredentials.isAdmin,
+          User: {
+            connect: {
+              id: user.id,
+            },
+          },
+        },
+      });
+    });
+
+  const superuser = await db.user
+    .create({
+      data: {
+        email: globalSuperUserCredentials.email,
+        password: bcrypt.hashSync(globalSuperUserCredentials.password, 12),
+        firstName: globalSuperUserCredentials.firstName,
+        lastName: globalSuperUserCredentials.lastName,
+      },
+    })
+    .then((user) => {
+      return db.lecturer.create({
+        data: {
+          isAdmin: globalSuperUserCredentials.isAdmin,
           User: {
             connect: {
               id: user.id,

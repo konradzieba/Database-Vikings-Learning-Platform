@@ -89,7 +89,7 @@ export async function registerLecturer(
   next: NextFunction
 ) {
   try {
-    const { email, password, firstName, lastName, isAdmin } = req.body;
+    const { email, password, firstName, lastName } = req.body;
     const { refreshTokenInCookie } = req.query;
 
     const existingUser = await UserServices.findUserByEmail(email);
@@ -109,7 +109,6 @@ export async function registerLecturer(
 
     if (user) {
       await UserServices.createLecturer({
-        isAdmin,
         User: { connect: { id: user.id } },
       });
     }
@@ -131,6 +130,67 @@ export async function registerLecturer(
     } else {
       res.json({
         message: `Lecturer ${user.firstName} ${user.lastName} created successfully.`,
+        access_token: accessToken,
+        refresh_token: refreshToken,
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function registerSuperUser(
+  req: Request<
+    {},
+    TokensResponseInterface,
+    AuthSchemas.RegisterSuperUserInput,
+    AuthSchemas.RegisterQuerySchema
+  >,
+  res: Response<TokensResponseInterface & Partial<MessageResponse>>,
+  next: NextFunction
+) {
+  try {
+    const { email, password, firstName, lastName } = req.body;
+    const { refreshTokenInCookie } = req.query;
+
+    const existingUser = await UserServices.findUserByEmail(email);
+
+    if (existingUser) {
+      res.status(400);
+      throw new Error('User with this email is already in use.');
+    }
+
+    const user = await UserServices.createUser({
+      email,
+      password,
+      firstName,
+      lastName,
+      role: EnumRole.SUPERUSER,
+    });
+
+    if (user) {
+      await UserServices.createSuperUser({
+        User: { connect: { id: user.id } },
+      });
+    }
+
+    const jti = uuidv4();
+    const { accessToken, refreshToken } = generateTokens(user, jti);
+
+    await AuthServices.addRefreshTokenToWhitelist({
+      jti,
+      refreshToken,
+      userId: user.id,
+    });
+
+    if (refreshTokenInCookie === 'true') {
+      sendRefreshToken(res, refreshToken);
+      res.json({
+        access_token: accessToken,
+      });
+    } else {
+      res.json({
+        message: `SuperUser ${user.firstName} ${user.lastName} created successfully.`,
         access_token: accessToken,
         refresh_token: refreshToken,
       });

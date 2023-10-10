@@ -19,15 +19,6 @@ router.post(
   AuthControllers.registerStudent
 );
 
-// router.post(
-//   '/registerLecturer',
-//   validateRequest({
-//     query: AuthSchemas.registerQuerySchema,
-//     body: AuthSchemas.registerLecturerSchema,
-//   }),
-//   AuthControllers.registerLecturer
-// );
-
 router.post(
   '/registerLecturer',
   validateRequestAndCheckRole(
@@ -38,6 +29,18 @@ router.post(
     EnumRole.LECTURER
   ),
   AuthControllers.registerLecturer
+);
+
+router.post(
+  '/registerSuperUser',
+  validateRequestAndCheckRole(
+    {
+      query: AuthSchemas.registerQuerySchema,
+      body: AuthSchemas.registerSuperUserSchema,
+    },
+    EnumRole.SUPERUSER
+  ),
+  AuthControllers.registerSuperUser
 );
 
 router.post(
