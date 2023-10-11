@@ -1,5 +1,4 @@
 import { db } from './db';
-import { globalUserCredentials } from './globalSetup';
 
 const teardown = async () => {
   await db.answer.deleteMany();

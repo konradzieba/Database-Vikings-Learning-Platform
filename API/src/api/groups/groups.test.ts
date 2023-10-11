@@ -1,6 +1,6 @@
 import request from 'supertest';
 import app from '../../app';
-import { globalGroupCredentials } from '../../globalSetup';
+import { globalGroupCredentials } from '../../mocks/globalCredentials';
 
 describe('POST /api/v1/groups/createGroup', () => {
   let lecturerId = +process.env.LECTURER_ID_FOR_TESTING!;

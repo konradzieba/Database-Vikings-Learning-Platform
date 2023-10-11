@@ -1,6 +1,6 @@
 import request from 'supertest';
 import app from '../../app';
-import { globalUserCredentials } from '../../globalSetup';
+// import { globalUserCredentials } from '../../mocks/globalCredentials';
 
 describe('GET /api/v1/users/me', () => {
   let validAccessToken = process.env.VALID_ACCESS_TOKEN_FOR_TESTING!;
@@ -39,14 +39,19 @@ describe('GET /api/v1/users/me', () => {
 
 describe('DELETE /api/v1/users/deleteUser/:id', () => {
   let userId = +process.env.USER_ID_TO_DELETE_TESTING!;
+  let validAccessToken = process.env.VALID_ACCESS_TOKEN_FOR_TESTING!;
   it('should delete user successfully', async () => {
-    const res = await request(app).delete(`/api/v1/users/deleteUser/${userId}`);
+    const res = await request(app)
+      .delete(`/api/v1/users/deleteUser/${userId}`)
+      .set('Authorization', `Bearer ${validAccessToken}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toContain('deleted successfully.');
   });
 
   it(`should respond an error if user doesn't exist`, async () => {
-    const res = await request(app).delete(`/api/v1/users/deleteUser/999`);
+    const res = await request(app)
+      .delete(`/api/v1/users/deleteUser/999`)
+      .set('Authorization', `Bearer ${validAccessToken}`);
     expect(res.statusCode).toBe(404);
   });
 });

@@ -8,7 +8,7 @@ import { hashToken } from '../../utils/hashToken';
 import {
   globalLecturerCredentials,
   globalUserCredentials,
-} from '../../globalSetup';
+} from '../../mocks/globalCredentials';
 import { Role } from '@prisma/client';
 
 describe('POST /api/v1/auth/register', () => {
@@ -243,6 +243,113 @@ describe('POST /api/v1/auth/registerLecturer', () => {
     expect(Array.isArray(response.headers['set-cookie'])).toBe(true);
     expect(response.headers['set-cookie'][0]).toContain('refresh_token');
     expect(response.body.access_token).toEqual(expect.any(String));
+  });
+});
+
+describe('POST /api/v1/auth/registerSuperUser', () => {
+  let validAccessToken = process.env.VALID_SUPERUSER_TOKEN_FOR_TESTING!;
+  it('responds with an error if payload is missing', async () => {
+    const res = await request(app)
+      .post('/api/v1/auth/registerSuperUser')
+      .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validAccessToken}`)
+      .expect('Content-Type', /json/);
+
+    expect(res.statusCode).toBe(400);
+  });
+
+  it('responds with an error if payload firstName is missing', async () => {
+    const res = await request(app)
+      .post('/api/v1/auth/registerSuperUser')
+      .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validAccessToken}`)
+      .expect('Content-Type', /json/)
+      .send({
+        email: 'customSuper@user.com',
+        password: 'superUser123',
+        lastName: 'User',
+        isAdmin: true,
+      });
+
+    expect(res.statusCode).toBe(400);
+  });
+
+  it('responds with an error if payload lastName is missing', async () => {
+    const res = await request(app)
+      .post('/api/v1/auth/registerSuperUser')
+      .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validAccessToken}`)
+      .expect('Content-Type', /json/)
+      .send({
+        email: 'customSuper@user.com',
+        password: 'superUser123',
+        firstName: 'Super',
+        isAdmin: true,
+      });
+
+    expect(res.statusCode).toBe(400);
+  });
+
+  it('responds with an access_token and refresh_token', async () => {
+    const payload = {
+      email: 'superUser@gmail.com',
+      password: 'superUserPassword123',
+      firstName: 'John',
+      lastName: 'Bambo',
+      isAdmin: true,
+    };
+    const response = await request(app)
+      .post('/api/v1/auth/registerSuperUser')
+      .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validAccessToken}`)
+      .expect('Content-Type', /json/)
+      .send(payload);
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty('access_token');
+    expect(response.body).toHaveProperty('refresh_token');
+    expect(response.body.access_token).toEqual(expect.any(String));
+    expect(response.body.refresh_token).toEqual(expect.any(String));
+  });
+
+  it('responds with an error if superuser already exists', async () => {
+    const payload = {
+      email: 'superuser@superuser.pl',
+      password: 'superUserPassword123',
+      firstName: 'John',
+      lastName: 'Bambo',
+      isAdmin: true,
+    };
+
+    const res = await request(app)
+      .post('/api/v1/auth/registerSuperUser')
+      .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validAccessToken}`)
+      .expect('Content-Type', /json/)
+      .send(payload);
+
+    expect(res.statusCode).toBe(400);
+  });
+
+  it('responds with an access_token and refresh_token in cookie', async () => {
+    const payload = {
+      email: 'superuser123@superuser.pl',
+      password: 'superUserPassword123',
+      firstName: 'John',
+      lastName: 'Bambo',
+      isAdmin: true,
+    };
+
+    const res = await request(app)
+      .post('/api/v1/auth/registerSuperUser?refreshTokenInCookie=true')
+      .set('Accept', 'application/json')
+      .set('Authorization', `Bearer ${validAccessToken}`)
+      .expect('Content-Type', /json/)
+      .send(payload);
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty('access_token');
+    expect(Array.isArray(res.headers['set-cookie'])).toBe(true);
+    expect(res.headers['set-cookie'][0]).toContain('refresh_token');
+    expect(res.body.access_token).toEqual(expect.any(String));
   });
 });
 

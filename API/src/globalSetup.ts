@@ -8,7 +8,7 @@ import {
   globalLecturerCredentials,
   globalSuperUserCredentials,
   globalGroupCredentials,
-} from 'mocks/globalCredentials';
+} from './mocks/globalCredentials';
 
 const setup = async () => {
   console.log('---------TESTS STARTED--------');
@@ -187,22 +187,6 @@ const setup = async () => {
     },
   });
 
-  // const answer = await db.answer.create({
-  //   data: {
-  //     solution: 'GlobalSetup Solution',
-  //     Task: {
-  //       connect: {
-  //         id: task.id,
-  //       },
-  //     },
-  //     Student: {
-  //       connect: {
-  //         id: student.id,
-  //       },
-  //     },
-  //   },
-  // });
-
   const answerToUpdate = await db.answer.create({
     data: {
       solution: 'GlobalSetup Solution',
@@ -241,7 +225,15 @@ const setup = async () => {
     },
     '15m'
   );
+  const validSuperUserToken = generateAccessToken(
+    {
+      userId: superuser.userId,
+      role: Role.SUPERUSER,
+    },
+    '15m'
+  );
 
+  process.env.VALID_SUPERUSER_TOKEN_FOR_TESTING = validSuperUserToken;
   process.env.VALID_ACCESS_TOKEN_FOR_TESTING = validToken;
   process.env.INVALID_ACCESS_TOKEN_FOR_TESTING = invalidToken;
   process.env.VALID_LECTURER_TOKEN_FOR_TESTING = validLecturerToken;
