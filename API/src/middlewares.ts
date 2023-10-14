@@ -94,10 +94,7 @@ export function deserializeUser(
   next: NextFunction
 ) {
   try {
-    const accessToken = (req.headers.authorization || '').replace(
-      /^Bearer\s/,
-      ''
-    );
+    const accessToken = req.cookies['access_token'];
     if (!accessToken) {
       return next();
     }

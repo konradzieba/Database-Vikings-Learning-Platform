@@ -63,12 +63,8 @@ export const loginSchema = z.object({
     .min(6, 'Invalid credentials'),
 });
 
-export const loginQuerySchema = z.object({
-  refreshTokenInCookie: z.enum(['true', 'false']).default('false'),
-});
 
 export type LoginInput = z.infer<typeof loginSchema>;
-export type LoginQuerySchema = z.infer<typeof loginQuerySchema>;
 
 export const refreshTokenSchema = z.object({
   refresh_token: z.string().optional(),

@@ -5,7 +5,6 @@ import {
 } from '../../middlewares';
 import * as AuthControllers from './auth.controllers';
 import * as AuthSchemas from './auth.schemas';
-import { paramsWithIdSchema } from 'interfaces/ParamsWithId';
 import { EnumRole } from '../../../typings/token';
 
 const router = Router();
@@ -46,7 +45,6 @@ router.post(
 router.post(
   '/login',
   validateRequest({
-    query: AuthSchemas.loginQuerySchema,
     body: AuthSchemas.loginSchema,
   }),
   AuthControllers.login
@@ -55,7 +53,6 @@ router.post(
 router.post(
   '/refreshToken',
   validateRequest({
-    query: AuthSchemas.loginQuerySchema,
     body: AuthSchemas.refreshTokenSchema,
   }),
   AuthControllers.refreshTokens

@@ -1,8 +1,5 @@
 import { Router } from 'express';
-import {
-  validateRequest,
-  validateRequestAndCheckRole,
-} from '../../middlewares';
+import { validateRequestAndCheckRole } from '../../middlewares';
 import * as GroupsControllers from './groups.controllers';
 import * as GroupSchemas from './groups.schemas';
 import { paramsWithIdSchema } from '../../interfaces/ParamsWithId';

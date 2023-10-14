@@ -1,10 +1,7 @@
 import { Response, Request, NextFunction } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcrypt';
-
-import { TokensResponseInterface } from '../../interfaces/TokensResponse';
 import { generateTokens, verifyRefreshToken } from '../../utils/jwt';
-import { sendRefreshToken } from '../../utils/sendRefreshToken';
 import { generatePasswordByCredentials } from '../../utils/generatePassword';
 import { hashToken } from '../../utils/hashToken';
 import MessageResponse from 'interfaces/MessageResponse';
@@ -14,18 +11,12 @@ import * as AuthServices from './auth.services';
 import { EnumRole } from '../../../typings/token';
 
 export async function registerStudent(
-  req: Request<
-    {},
-    TokensResponseInterface,
-    AuthSchemas.RegisterStudentInput,
-    AuthSchemas.RegisterQuerySchema
-  >,
-  res: Response<TokensResponseInterface>,
+  req: Request<{}, {}, AuthSchemas.RegisterStudentInput>,
+  res: Response<MessageResponse>,
   next: NextFunction
 ) {
   try {
     const { firstName, lastName, indexNumber } = req.body;
-    const { refreshTokenInCookie } = req.query;
 
     const existingUser =
       await UserServices.findStudentByIndexNumber(indexNumber);
@@ -54,7 +45,7 @@ export async function registerStudent(
     }
 
     const jti = uuidv4();
-    const { accessToken, refreshToken } = generateTokens(user, jti);
+    const { refreshToken } = generateTokens(user, jti);
 
     await AuthServices.addRefreshTokenToWhitelist({
       jti,
@@ -62,17 +53,9 @@ export async function registerStudent(
       userId: user.id,
     });
 
-    if (refreshTokenInCookie === 'true') {
-      sendRefreshToken(res, refreshToken);
-      res.json({
-        access_token: accessToken,
-      });
-    } else {
-      res.json({
-        access_token: accessToken,
-        refresh_token: refreshToken,
-      });
-    }
+    res.json({
+      message: `Student ${user.firstName} ${user.lastName} created successfully.`,
+    });
   } catch (error) {
     next(error);
   }
@@ -81,16 +64,15 @@ export async function registerStudent(
 export async function registerLecturer(
   req: Request<
     {},
-    TokensResponseInterface,
+    {},
     AuthSchemas.RegisterLecturerInput,
     AuthSchemas.RegisterQuerySchema
   >,
-  res: Response<TokensResponseInterface & Partial<MessageResponse>>,
+  res: Response<MessageResponse>,
   next: NextFunction
 ) {
   try {
     const { email, password, firstName, lastName } = req.body;
-    const { refreshTokenInCookie } = req.query;
 
     const existingUser = await UserServices.findUserByEmail(email);
 
@@ -114,7 +96,7 @@ export async function registerLecturer(
     }
 
     const jti = uuidv4();
-    const { accessToken, refreshToken } = generateTokens(user, jti);
+    const { refreshToken } = generateTokens(user, jti);
 
     await AuthServices.addRefreshTokenToWhitelist({
       jti,
@@ -122,18 +104,9 @@ export async function registerLecturer(
       userId: user.id,
     });
 
-    if (refreshTokenInCookie === 'true') {
-      sendRefreshToken(res, refreshToken);
-      res.json({
-        access_token: accessToken,
-      });
-    } else {
-      res.json({
-        message: `Lecturer ${user.firstName} ${user.lastName} created successfully.`,
-        access_token: accessToken,
-        refresh_token: refreshToken,
-      });
-    }
+    res.json({
+      message: `Lecturer ${user.firstName} ${user.lastName} created successfully.`,
+    });
   } catch (error) {
     next(error);
   }
@@ -142,11 +115,11 @@ export async function registerLecturer(
 export async function registerSuperUser(
   req: Request<
     {},
-    TokensResponseInterface,
+    {},
     AuthSchemas.RegisterSuperUserInput,
     AuthSchemas.RegisterQuerySchema
   >,
-  res: Response<TokensResponseInterface & Partial<MessageResponse>>,
+  res: Response<MessageResponse>,
   next: NextFunction
 ) {
   try {
@@ -183,36 +156,21 @@ export async function registerSuperUser(
       userId: user.id,
     });
 
-    if (refreshTokenInCookie === 'true') {
-      sendRefreshToken(res, refreshToken);
-      res.json({
-        access_token: accessToken,
-      });
-    } else {
-      res.json({
-        message: `SuperUser ${user.firstName} ${user.lastName} created successfully.`,
-        access_token: accessToken,
-        refresh_token: refreshToken,
-      });
-    }
+    res.json({
+      message: `SuperUser ${user.firstName} ${user.lastName} created successfully.`,
+    });
   } catch (error) {
     next(error);
   }
 }
 
 export async function login(
-  req: Request<
-    {},
-    TokensResponseInterface,
-    AuthSchemas.LoginInput,
-    AuthSchemas.LoginQuerySchema
-  >,
-  res: Response<TokensResponseInterface>,
+  req: Request<{}, {}, AuthSchemas.LoginInput>,
+  res: Response<MessageResponse>,
   next: NextFunction
 ) {
   try {
     const { email, password } = req.body;
-    const { refreshTokenInCookie } = req.query;
 
     const existingUser = await UserServices.findUserByEmail(email);
 
@@ -236,29 +194,30 @@ export async function login(
       userId: existingUser.id,
     });
 
-    if (refreshTokenInCookie === 'true') {
-      sendRefreshToken(res, refreshToken);
-      res.json({
-        access_token: accessToken,
-      });
-    } else {
-      res.json({
-        access_token: accessToken,
-        refresh_token: refreshToken,
-      });
-    }
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.cookie('access_token', accessToken, {
+      maxAge: 1000 * 60 * 15,
+      httpOnly: true,
+    });
+    res.cookie('refresh_token', refreshToken, {
+      maxAge: 1000 * 60 * 60 * 8,
+      httpOnly: true,
+    });
+    res.json({
+      message: 'Logged in successfully.',
+    });
   } catch (error) {
     next(error);
   }
 }
 
 export async function refreshTokens(
-  req: Request<{}, TokensResponseInterface, AuthSchemas.RefreshInput>,
-  res: Response<TokensResponseInterface>,
+  req: Request<{}, {}, AuthSchemas.RefreshInput>,
+  res: Response<MessageResponse>,
   next: NextFunction
 ) {
   try {
-    const refreshToken = req.body.refresh_token || req.cookies?.refresh_token;
+    const refreshToken = req.cookies?.refresh_token;
     if (!refreshToken) {
       res.status(400);
       throw new Error('Missing refresh token.');
@@ -300,19 +259,18 @@ export async function refreshTokens(
       userId: user.id,
     });
 
-    const { refreshTokenInCookie } = req.query;
-
-    if (refreshTokenInCookie === 'true') {
-      sendRefreshToken(res, newRefreshToken);
-      res.json({
-        access_token: accessToken,
-      });
-    } else {
-      res.json({
-        access_token: accessToken,
-        refresh_token: newRefreshToken,
-      });
-    }
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.cookie('access_token', accessToken, {
+      maxAge: 1000 * 60 * 15,
+      httpOnly: true,
+    });
+    res.cookie('refresh_token', newRefreshToken, {
+      maxAge: 1000 * 60 * 60 * 8,
+      httpOnly: true,
+    });
+    res.json({
+      message: 'Token refreshed successfully.',
+    });
   } catch (error) {
     if (
       error instanceof Error &&
