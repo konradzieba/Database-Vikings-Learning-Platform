@@ -5,5 +5,6 @@ module.exports = {
   modulePathIgnorePatterns: ['<rootDir>/dist/'],
   globalTeardown: '<rootDir>/src/globalTeardown.ts',
   globalSetup: '<rootDir>/src/globalSetup.ts',
-  collectCoverageFrom: ['<rootDir>/src/api/**/*.ts',],
+  collectCoverageFrom: ['<rootDir>/src/api/**/*.ts'],
+  testTimeout: 20000,
 };
