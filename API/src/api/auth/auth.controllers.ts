@@ -281,3 +281,46 @@ export async function refreshTokens(
     next(error);
   }
 }
+
+export async function logout(
+  req: Request,
+  res: Response<MessageResponse>,
+  next: NextFunction
+) {
+  try {
+    const refreshToken = req.cookies?.refresh_token;
+    if (!refreshToken) {
+      res.status(400);
+      throw new Error('Missing refresh token.');
+    }
+    const payload = verifyRefreshToken(refreshToken) as {
+      userId: number;
+      jti: string;
+    };
+
+    const savedRefreshToken = await AuthServices.findRefreshTokenById(
+      payload.jti
+    );
+    if (!savedRefreshToken || savedRefreshToken.revoked === true) {
+      res.status(401);
+      throw new Error('Unauthorized');
+    }
+
+    const hashedToken = hashToken(refreshToken);
+    if (hashedToken !== savedRefreshToken.hashedToken) {
+      res.status(401);
+      throw new Error('Unauthorized');
+    }
+
+    await AuthServices.deleteRefreshToken(savedRefreshToken.id);
+
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.clearCookie('access_token');
+    res.clearCookie('refresh_token');
+    res.json({
+      message: 'Logged out successfully.',
+    });
+  } catch (error) {
+    next(error);
+  }
+}

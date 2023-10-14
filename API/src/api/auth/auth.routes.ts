@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import {
+  requireUser,
   validateRequest,
   validateRequestAndCheckRole,
 } from '../../middlewares';
@@ -57,5 +58,7 @@ router.post(
   }),
   AuthControllers.refreshTokens
 );
+
+router.post('/logout', requireUser, AuthControllers.logout);
 
 export default router;
