@@ -60,7 +60,10 @@ export function updateUser(id: User['id'], user: Prisma.UserUpdateInput) {
     where: {
       id,
     },
-    data: user,
+    data: {
+      ...user,
+      password: user.password ? bcrypt.hashSync(user.password as string, 12) : undefined,
+    },
   });
 }
 

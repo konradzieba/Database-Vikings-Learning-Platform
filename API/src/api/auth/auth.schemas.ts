@@ -1,4 +1,5 @@
 import z from 'zod';
+import { EnumRole } from '../../../typings/token';
 
 export const registerSchema = z.object({
   email: z
@@ -22,19 +23,23 @@ export const registerSchema = z.object({
       'Index number must be 6 characters long'
     ),
   isAdmin: z.boolean({ required_error: 'isAdmin param is required' }),
+  role: z.nativeEnum(EnumRole),
 });
 
 export const registerStudentSchema = registerSchema.omit({
   email: true,
   password: true,
   isAdmin: true,
+  role: true,
 });
 
 export const registerLecturerSchema = registerSchema.omit({
+  role: true,
   indexNumber: true,
 });
 
 export const registerSuperUserSchema = registerSchema.omit({
+  role: true,
   indexNumber: true,
 });
 

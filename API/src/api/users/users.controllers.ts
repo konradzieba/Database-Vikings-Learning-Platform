@@ -8,7 +8,7 @@ export async function me(req: Request, res: Response, next: NextFunction) {
   try {
     const parsedToken: ParsedToken = req.user;
     const user = await UserServices.findUserById(parsedToken.userId);
-
+    
     if (!user) {
       res.status(404);
       throw new Error('User not found.');
@@ -17,6 +17,7 @@ export async function me(req: Request, res: Response, next: NextFunction) {
     res.json({
       id: user.id,
       email: user.email,
+      role: user.role,
     });
   } catch (error) {
     next(error);
@@ -30,7 +31,7 @@ export async function updateUser(
 ) {
   try {
     const { id } = req.params;
-    const { firstName, lastName, indexNumber, isAdmin } = req.body;
+    const { firstName, lastName, password, role } = req.body;
 
     const user = await UserServices.findUserById(+id);
 
@@ -42,7 +43,8 @@ export async function updateUser(
     await UserServices.updateUser(+id, {
       firstName,
       lastName,
-      
+      password,
+      role,
     });
 
     res.json({
