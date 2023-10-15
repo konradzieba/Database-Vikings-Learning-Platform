@@ -217,7 +217,7 @@ export async function refreshTokens(
   next: NextFunction
 ) {
   try {
-    const refreshToken = req.cookies?.refresh_token;
+    const refreshToken = req.cookies.refresh_token;
     if (!refreshToken) {
       res.status(400);
       throw new Error('Missing refresh token.');
@@ -288,7 +288,7 @@ export async function logout(
   next: NextFunction
 ) {
   try {
-    const refreshToken = req.cookies?.refresh_token;
+    const refreshToken = req.cookies.refresh_token;
     if (!refreshToken) {
       res.status(400);
       throw new Error('Missing refresh token.');

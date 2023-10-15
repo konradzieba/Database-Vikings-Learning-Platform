@@ -2,7 +2,7 @@ import request from 'supertest';
 import app from '../../app';
 import { db } from '../../db';
 import * as bcrypt from 'bcrypt';
-import { generateRefreshToken } from '../../utils/jwt';
+import { generateAccessToken, generateRefreshToken } from '../../utils/jwt';
 import { v4 as uuidv4 } from 'uuid';
 import { hashToken } from '../../utils/hashToken';
 import {
@@ -351,7 +351,7 @@ describe('POST /api/v1/auth/login', () => {
     expect(response.body.message).toBe('Invalid login credentials.');
   });
 
-  it('responds with an access_token and refresh_token', async () => {
+  it('responds with an Logged in successfully message', async () => {
     const response = await request(app)
       .post('/api/v1/auth/login')
       .set('Accept', 'application/json')
@@ -376,6 +376,8 @@ describe('POST /api/v1/auth/refreshToken', () => {
   let expiredRefreshToken = '';
   let validRefreshToken = '';
   let refreshTokenNotPresentInDb = '';
+  let refreshTokenWithDifferentUserId = '';
+  let tokenWithNotExistingUser = '';
 
   beforeAll(async () => {
     const user = await db.user.create({
@@ -395,14 +397,38 @@ describe('POST /api/v1/auth/refreshToken', () => {
     );
 
     const jti = uuidv4();
+    const jtiForNotExistingUser = uuidv4();
     validRefreshToken = generateRefreshToken(
       { userId: user.id, jti, role: Role.LECTURER },
       '5m'
     );
+
+    tokenWithNotExistingUser = generateRefreshToken(
+      {
+        userId: 99999,
+        jti: jtiForNotExistingUser,
+        role: Role.LECTURER,
+      },
+      '5m'
+    );
+
+    refreshTokenWithDifferentUserId = generateRefreshToken(
+      { userId: user.id + 1, jti, role: Role.LECTURER },
+      '5m'
+    );
+
     refreshTokenNotPresentInDb = generateRefreshToken(
       { userId: user.id, jti: uuidv4(), role: Role.LECTURER },
       '5m'
     );
+
+    await db.refreshToken.create({
+      data: {
+        id: jtiForNotExistingUser,
+        hashedToken: hashToken(tokenWithNotExistingUser),
+        userId: user.id,
+      },
+    });
 
     await db.refreshToken.create({
       data: {
@@ -430,6 +456,28 @@ describe('POST /api/v1/auth/refreshToken', () => {
     expect(response.statusCode).toBe(400);
     expect(response.body).toHaveProperty('message');
     expect(response.body.message).toBe('Missing refresh token.');
+  });
+
+  it('responds with Unauthorized if token is not match with hashed token', async () => {
+    const response = await request(app)
+      .post('/api/v1/auth/refreshToken')
+      .set('Accept', 'application/json')
+      .set('Cookie', `refresh_token=${refreshTokenWithDifferentUserId}`)
+      .expect('Content-Type', /json/);
+
+    expect(response.statusCode).toBe(401);
+    expect(response.body.message).toBe('Unauthorized');
+  });
+
+  it(`responds with Unauthorized if used doesn't exists`, async () => {
+    const response = await request(app)
+      .post('/api/v1/auth/refreshToken')
+      .set('Accept', 'application/json')
+      .set('Cookie', `refresh_token=${tokenWithNotExistingUser}`)
+      .expect('Content-Type', /json/);
+
+    expect(response.statusCode).toBe(401);
+    expect(response.body.message).toBe('Unauthorized');
   });
 
   it('responds with Unauthorized if token is expired ( cookie case ) ', async () => {
@@ -465,7 +513,7 @@ describe('POST /api/v1/auth/refreshToken', () => {
       .expect('Content-Type', /json/);
 
     expect(response.statusCode).toBe(200);
-    expect(response.body.message).toContain('successfully.')
+    expect(response.body.message).toContain('successfully.');
     validRefreshToken = response.body.refresh_token;
   });
 
@@ -475,7 +523,7 @@ describe('POST /api/v1/auth/refreshToken', () => {
       .post('/api/v1/auth/refreshToken')
       .set('Accept', 'application/json')
       .set('Cookie', `refresh_token=${validRefreshToken}`)
-      .expect('Content-Type', /json/)
+      .expect('Content-Type', /json/);
 
     expect(response.statusCode).toBe(401);
     expect(response.body).toHaveProperty('message');
@@ -495,11 +543,130 @@ describe('POST /api/v1/auth/refreshToken', () => {
       .post('/api/v1/auth/refreshToken')
       .set('Accept', 'application/json')
       .set('Cookie', `refresh_token=${refreshTokenWithNotExistingUser}`)
-      .expect('Content-Type', /json/)
+      .expect('Content-Type', /json/);
 
     expect(response.statusCode).toBe(401);
     expect(response.body).toHaveProperty('message');
     expect(response.body.message).toBe('Unauthorized');
   });
   //
+});
+
+describe('POST /api/v1/auth/logout', () => {
+  const userCredentials = {
+    email: 'mihai@testrefresh.com',
+    password: 'Test1@ 123',
+  };
+
+  let userId: number;
+  let expiredRefreshToken = '';
+  let validRefreshToken = '';
+  let refreshTokenNotPresentInDb = '';
+  let accessToken = '';
+
+  beforeAll(async () => {
+    const user = await db.user.create({
+      data: {
+        email: userCredentials.email,
+        password: bcrypt.hashSync(userCredentials.password, 12),
+        firstName: 'John',
+        lastName: 'Rambo',
+      },
+    });
+
+    userId = user.id;
+
+    accessToken = generateAccessToken(
+      {
+        userId: user.id,
+        role: Role.LECTURER,
+      },
+      '5m'
+    );
+
+    const jti = uuidv4();
+
+    expiredRefreshToken = generateRefreshToken(
+      { userId: user.id + 1, jti, role: Role.LECTURER },
+      '5m'
+    );
+
+    validRefreshToken = generateRefreshToken(
+      { userId: user.id, jti, role: Role.LECTURER },
+      '5m'
+    );
+    refreshTokenNotPresentInDb = generateRefreshToken(
+      { userId: user.id, jti: uuidv4(), role: Role.LECTURER },
+      '5m'
+    );
+
+    await db.refreshToken.create({
+      data: {
+        id: jti,
+        hashedToken: hashToken(validRefreshToken),
+        userId: user.id,
+      },
+    });
+  });
+
+  afterAll(async () => {
+    await db.user.delete({
+      where: {
+        email: userCredentials.email,
+      },
+    });
+  });
+
+  it('responds with an error if refresh token is missing', async () => {
+    const response = await request(app)
+      .post('/api/v1/auth/logout')
+      .set('Accept', 'application/json')
+      .set('Cookie', [`access_token=${accessToken}`])
+      .expect('Content-Type', /json/);
+
+    expect(response.statusCode).toBe(400);
+    expect(response.body.message).toBe('Missing refresh token.');
+  });
+
+  it('responds with an error if refresh token is not in data base', async () => {
+    const response = await request(app)
+      .post('/api/v1/auth/logout')
+      .set('Accept', 'application/json')
+      .set('Cookie', [
+        `refresh_token=${refreshTokenNotPresentInDb}`,
+        `access_token=${accessToken}`,
+      ])
+      .expect('Content-Type', /json/);
+
+    expect(response.statusCode).toBe(401);
+    expect(response.body.message).toBe('Unauthorized');
+  });
+
+  it('responds with an error if refresh token is not equal to hashed token', async () => {
+    const response = await request(app)
+      .post('/api/v1/auth/logout')
+      .set('Accept', 'application/json')
+      .set('Cookie', [
+        `refresh_token=${expiredRefreshToken}`,
+        `access_token=${accessToken}`,
+      ])
+      .expect('Content-Type', /json/);
+
+    expect(response.statusCode).toBe(401);
+    expect(response.body.message).toBe('Unauthorized');
+  });
+
+  it('responds with a success message if refresh token is valid', async () => {
+    const response = await request(app)
+      .post('/api/v1/auth/logout')
+      .set('Accept', 'application/json')
+      .set('Cookie', [
+        `refresh_token=${validRefreshToken}`,
+        `access_token=${accessToken}`,
+      ])
+      .expect('Content-Type', /json/);
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.message).toBe('Logged out successfully.');
+  });
 });

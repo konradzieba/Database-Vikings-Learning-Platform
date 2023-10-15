@@ -7,13 +7,9 @@ import {
   globalUserCredentials,
   globalLecturerCredentials,
   globalSuperUserCredentials,
-  globalGroupCredentials,
 } from './mocks/globalCredentials';
-
 const setup = async () => {
   console.log('---------TESTS STARTED--------');
-
-  // student setup
 
   const user = await db.user.create({
     data: {
@@ -207,6 +203,7 @@ const setup = async () => {
     { userId: user.id, role: Role.SUPERUSER },
     '15m'
   );
+
   const invalidToken = generateAccessToken(
     { userId: 9999, role: Role.SUPERUSER },
     '15m'
