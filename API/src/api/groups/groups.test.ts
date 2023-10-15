@@ -9,7 +9,7 @@ describe('POST /api/v1/groups/createGroup', () => {
     const res = await request(app)
       .post('/api/v1/groups/createGroup')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         name: globalGroupCredentials.name,
         lecturerId: lecturerId,
@@ -22,7 +22,7 @@ describe('POST /api/v1/groups/createGroup', () => {
     const res = await request(app)
       .post('/api/v1/groups/createGroup')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         name: globalGroupCredentials.name,
       });
@@ -33,7 +33,7 @@ describe('POST /api/v1/groups/createGroup', () => {
     const res = await request(app)
       .post('/api/v1/groups/createGroup')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         lecturerId: lecturerId,
       });
@@ -44,7 +44,7 @@ describe('POST /api/v1/groups/createGroup', () => {
     const res = await request(app)
       .post('/api/v1/groups/createGroup')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         name: globalGroupCredentials.name.substring(0, 2),
         lecturerId: lecturerId,
@@ -56,7 +56,7 @@ describe('POST /api/v1/groups/createGroup', () => {
     const res = await request(app)
       .post('/api/v1/groups/createGroup')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         name: `${globalGroupCredentials.name}${globalGroupCredentials.name}${globalGroupCredentials.name}${globalGroupCredentials.name}`,
         lecturerId: lecturerId,
@@ -68,7 +68,7 @@ describe('POST /api/v1/groups/createGroup', () => {
     const res = await request(app)
       .post('/api/v1/groups/createGroup')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         name: 'Test Group 2',
         lecturerId: lecturerId,
@@ -83,7 +83,7 @@ describe('DELETE /api/v1/groups/deleteGroup/:id', () => {
   it('should delete group successfully', async () => {
     const res = await request(app)
       .delete(`/api/v1/groups/deleteGroup/${groupId}`)
-      .set('Authorization', `Bearer ${validLecturerToken}`);
+      .set('Cookie', `access_token=${validLecturerToken}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toContain('deleted successfully.');
   });
@@ -91,7 +91,7 @@ describe('DELETE /api/v1/groups/deleteGroup/:id', () => {
   it(`should respond an error if group doesn't exist`, async () => {
     const res = await request(app)
       .delete(`/api/v1/groups/deleteGroup/9999`)
-      .set('Authorization', `Bearer ${validLecturerToken}`);
+      .set('Cookie', `access_token=${validLecturerToken}`);
     expect(res.statusCode).toBe(404);
   });
 });
@@ -103,7 +103,7 @@ describe('PATCH /api/v1/groups/renameGroup/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/groups/renameGroup/${groupId}`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         name: 'Test PATCH name',
       });
@@ -116,7 +116,7 @@ describe('PATCH /api/v1/groups/renameGroup/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/groups/renameGroup/9999`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         name: 'Test PATCH name',
       });
@@ -127,7 +127,7 @@ describe('PATCH /api/v1/groups/renameGroup/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/groups/renameGroup/${groupId}`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`);
+      .set('Cookie', `access_token=${validLecturerToken}`);
 
     expect(res.statusCode).toBe(400);
   });

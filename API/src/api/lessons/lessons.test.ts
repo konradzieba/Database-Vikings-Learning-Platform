@@ -8,7 +8,7 @@ describe('POST /api/v1/lessons/createLesson', () => {
     const res = await request(app)
       .post('/api/v1/lessons/createLesson')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         number: 11,
         groupId: groupId,
@@ -22,7 +22,7 @@ describe('POST /api/v1/lessons/createLesson', () => {
     const res = await request(app)
       .post('/api/v1/lessons/createLesson')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         number: 12,
         photo: 'example photo url',
@@ -37,7 +37,7 @@ describe('POST /api/v1/lessons/createLesson', () => {
     const res = await request(app)
       .post('/api/v1/lessons/createLesson')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         groupId: groupId,
       });
@@ -47,7 +47,7 @@ describe('POST /api/v1/lessons/createLesson', () => {
     const res = await request(app)
       .post('/api/v1/lessons/createLesson')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         number: 13,
       });
@@ -62,7 +62,7 @@ describe('PATCH /api/v1/lessons/updateLesson/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/lessons/updateLesson/${lessonId}`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         number: 113,
         image: 'viking.png',
@@ -76,7 +76,7 @@ describe('PATCH /api/v1/lessons/updateLesson/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/lessons/updateLesson/${lessonId}`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         number: 133,
       });
@@ -89,7 +89,7 @@ describe('PATCH /api/v1/lessons/updateLesson/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/lessons/updateLesson/${lessonId}`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         image: 'viking.png',
       });
@@ -102,7 +102,7 @@ describe('PATCH /api/v1/lessons/updateLesson/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/lessons/updateLesson/999`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         image: 'viking.png',
       });
@@ -117,7 +117,7 @@ describe('DELETE /api/v1/lessons/deleteLesson/:id', () => {
   it('should delete lesson successfully', async () => {
     const res = await request(app)
       .delete(`/api/v1/lessons/deleteLesson/${lessonId}`)
-      .set('Authorization', `Bearer ${validLecturerToken}`);
+      .set('Cookie', `access_token=${validLecturerToken}`)
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toContain('deleted successfully.');
   });
@@ -125,7 +125,7 @@ describe('DELETE /api/v1/lessons/deleteLesson/:id', () => {
   it(`should respond an error if lesson doesn't exist`, async () => {
     const res = await request(app)
       .delete(`/api/v1/lessons/deleteLesson/9999`)
-      .set('Authorization', `Bearer ${validLecturerToken}`);
+      .set('Cookie', `access_token=${validLecturerToken}`)
     expect(res.statusCode).toBe(404);
   });
   it('should handle errors with catch(next())', async () => {
@@ -138,7 +138,7 @@ describe('DELETE /api/v1/lessons/deleteLesson/:id', () => {
     const res = await request(app)
       .post('/api/v1/lessons/createLesson')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send(payload);
 
     expect(res.statusCode).toBe(500);

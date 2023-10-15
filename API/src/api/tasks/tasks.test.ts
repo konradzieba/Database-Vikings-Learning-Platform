@@ -9,7 +9,7 @@ describe('POST /api/v1/tasks/createTask', () => {
     const res = await request(app)
       .post('/api/v1/tasks/createTask')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         number: 5,
         question: 'Is kot pies?',
@@ -24,7 +24,7 @@ describe('POST /api/v1/tasks/createTask', () => {
     const res = await request(app)
       .post('/api/v1/tasks/createTask')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         question: 'Is kot pies?',
         closeDate: dayjs().add(7, 'day').toDate(),
@@ -38,7 +38,7 @@ describe('POST /api/v1/tasks/createTask', () => {
     const res = await request(app)
       .post('/api/v1/tasks/createTask')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         number: 5,
         closeDate: dayjs().add(7, 'day').toDate(),
@@ -52,7 +52,7 @@ describe('POST /api/v1/tasks/createTask', () => {
     const res = await request(app)
       .post('/api/v1/tasks/createTask')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         number: 5,
         question: 'Is kot pies?',
@@ -66,7 +66,7 @@ describe('POST /api/v1/tasks/createTask', () => {
     const res = await request(app)
       .post('/api/v1/tasks/createTask')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         number: 5,
         question: 'Is kot pies?',
@@ -80,7 +80,7 @@ describe('POST /api/v1/tasks/createTask', () => {
     const res = await request(app)
       .post('/api/v1/tasks/createTask')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         number: 5,
         question: 'Is kot pies?',
@@ -94,7 +94,7 @@ describe('POST /api/v1/tasks/createTask', () => {
     const res = await request(app)
       .post('/api/v1/tasks/createTask')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         number: 5,
         question: 'Is kot pies?',
@@ -111,13 +111,13 @@ describe('POST /api/v1/tasks/createTask', () => {
       question: 'Get all data from Users table',
       closeDate: dayjs().add(7, 'day').toDate(),
       isExtra: false,
-      lessonId: 9999, // invalid lessonId
+      lessonId: 9999,
     };
 
     const res = await request(app)
       .post('/api/v1/tasks/createTask')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send(payload);
 
     expect(res.statusCode).toBe(500);
@@ -136,7 +136,7 @@ describe('PATCH /api/v1/tasks/updateTask/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/tasks/updateTask/${taskId}`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         number: 113,
         question: 'New task?',
@@ -150,7 +150,7 @@ describe('PATCH /api/v1/tasks/updateTask/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/tasks/updateTask/999`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         number: 114,
         question: 'New task?2',
@@ -163,7 +163,7 @@ describe('PATCH /api/v1/tasks/updateTask/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/tasks/updateTask/${taskId}`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         number: 115,
       });
@@ -175,7 +175,7 @@ describe('PATCH /api/v1/tasks/updateTask/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/tasks/updateTask/${taskId}`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         closeDate: dayjs().add(14, 'day').toDate(),
       });
@@ -187,7 +187,7 @@ describe('PATCH /api/v1/tasks/updateTask/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/tasks/updateTask/${taskId}`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         question: 'New task?3',
       });
@@ -202,14 +202,14 @@ describe('DELETE /api/v1/tasks/deleteTask/:id', () => {
   it('should delete task successfully', async () => {
     const res = await request(app)
       .delete(`/api/v1/tasks/deleteTask/${taskId}`)
-      .set('Authorization', `Bearer ${validLecturerToken}`);
+      .set('Cookie', `access_token=${validLecturerToken}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toContain('deleted successfully.');
   });
   it(`should respond an error if task doesn't exist`, async () => {
     const res = await request(app)
       .delete(`/api/v1/tasks/deleteTask/999`)
-      .set('Authorization', `Bearer ${validLecturerToken}`);
+      .set('Cookie', `access_token=${validLecturerToken}`);
     expect(res.statusCode).toBe(404);
   });
 });

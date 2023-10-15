@@ -11,7 +11,7 @@ describe('POST /api/v1/answers/createAnswer', () => {
     const res = await request(app)
       .post('/api/v1/answers/createAnswer')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validStudentToken}`)
+      .set('Cookie', `access_token=${validStudentToken}`)
       .send({
         solution: 'SELECT * FROM test;',
         taskId: taskId,
@@ -25,7 +25,7 @@ describe('POST /api/v1/answers/createAnswer', () => {
     const res = await request(app)
       .post('/api/v1/answers/createAnswer')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validStudentToken}`)
+      .set('Cookie', `access_token=${validStudentToken}`)
       .send({
         solution: 'SELECT * FROM test;',
         taskId: taskId,
@@ -38,7 +38,7 @@ describe('POST /api/v1/answers/createAnswer', () => {
     const res = await request(app)
       .post('/api/v1/answers/createAnswer')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validStudentToken}`)
+      .set('Cookie', `access_token=${validStudentToken}`)
       .send({
         taskId: taskId,
         studentId: studentId,
@@ -50,7 +50,7 @@ describe('POST /api/v1/answers/createAnswer', () => {
     const res = await request(app)
       .post('/api/v1/answers/createAnswer')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validStudentToken}`)
+      .set('Cookie', `access_token=${validStudentToken}`)
       .send({
         solution: 'SELECT * FROM test;',
         studentId: studentId,
@@ -62,7 +62,7 @@ describe('POST /api/v1/answers/createAnswer', () => {
     const res = await request(app)
       .post('/api/v1/answers/createAnswer')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validStudentToken}`)
+      .set('Cookie', `access_token=${validStudentToken}`)
       .send({
         solution: 'SELECT * FROM test;',
         taskId: taskId,
@@ -78,7 +78,7 @@ describe('PATCH /api/v1/answers/answerReply/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/answers/answerReply/${answerId}`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         replyStatus: 'CORRECT',
         replyDate: dayjs().add(7, 'day').toDate(),
@@ -95,7 +95,7 @@ describe('PATCH /api/v1/answers/answerReply/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/answers/answerReply/${answerId}`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         replyStatus: 'INCORRECT',
         replyDate: dayjs().add(7, 'day').toDate(),
@@ -111,7 +111,7 @@ describe('PATCH /api/v1/answers/answerReply/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/answers/answerReply/${answerId}`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         replyStatus: 'PENDING',
         replyDate: dayjs().add(7, 'day').toDate(),
@@ -125,7 +125,7 @@ describe('PATCH /api/v1/answers/answerReply/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/answers/answerReply/${answerId}`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         replyStatus: 'WAITING',
         replyDate: dayjs().add(7, 'day').toDate(),
@@ -139,7 +139,7 @@ describe('PATCH /api/v1/answers/answerReply/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/answers/answerReply/${answerId}`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         replyDate: dayjs().add(7, 'day').toDate(),
         replyDesc: 'Excellent work!',
@@ -152,7 +152,7 @@ describe('PATCH /api/v1/answers/answerReply/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/answers/answerReply/${answerId}`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         replyStatus: 'INCORRECT',
         replyDesc: 'Excellent work!',
@@ -165,7 +165,7 @@ describe('PATCH /api/v1/answers/answerReply/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/answers/answerReply/${answerId}`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         replyStatus: 'INCORRECT',
         replyDate: dayjs().add(7, 'day').toDate(),
@@ -178,7 +178,7 @@ describe('PATCH /api/v1/answers/answerReply/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/answers/answerReply/9999`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         replyStatus: 'INCORRECT',
         replyDate: dayjs().add(7, 'day').toDate(),
@@ -197,7 +197,7 @@ describe('PATCH /api/v1/answers/updateAnswer/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/answers/updateAnswer/${answerId}`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         replyDesc: 'Great work!',
         grantedScore: 45,
@@ -210,7 +210,7 @@ describe('PATCH /api/v1/answers/updateAnswer/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/answers/updateAnswer/${answerId}`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         replyDesc: 'Great work!',
       });
@@ -222,7 +222,7 @@ describe('PATCH /api/v1/answers/updateAnswer/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/answers/updateAnswer/${answerId}`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         grantedScore: 45,
       });
@@ -234,7 +234,7 @@ describe('PATCH /api/v1/answers/updateAnswer/:id', () => {
     const res = await request(app)
       .patch(`/api/v1/answers/updateAnswer/9999`)
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .send({
         replyDesc: 'Great work!',
         grantedScore: 45,

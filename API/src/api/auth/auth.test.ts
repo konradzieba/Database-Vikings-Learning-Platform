@@ -53,7 +53,7 @@ describe('POST /api/v1/auth/register', () => {
     expect(response.statusCode).toBe(400);
   });
 
-  it('responds with an access_token and refresh_token', async () => {
+  it('responds with an message', async () => {
     const payload = {
       firstName: 'John',
       lastName: 'Rambo',
@@ -67,10 +67,7 @@ describe('POST /api/v1/auth/register', () => {
       .send(payload);
 
     expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty('access_token');
-    expect(response.body).toHaveProperty('refresh_token');
-    expect(response.body.access_token).toEqual(expect.any(String));
-    expect(response.body.refresh_token).toEqual(expect.any(String));
+    expect(response.body.message).toContain('created successfully.');
   });
 
   it('responds with an error if student already exists', async () => {
@@ -88,26 +85,6 @@ describe('POST /api/v1/auth/register', () => {
 
     expect(response.statusCode).toBe(400);
   });
-
-  it('responds with an access_token and refresh_token in cookie', async () => {
-    const payload = {
-      firstName: 'John',
-      lastName: 'Rambo',
-      indexNumber: globalUserCredentials.indexNumber + 1,
-    };
-
-    const response = await request(app)
-      .post('/api/v1/auth/register?refreshTokenInCookie=true')
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .send(payload);
-
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty('access_token');
-    expect(Array.isArray(response.headers['set-cookie'])).toBe(true);
-    expect(response.headers['set-cookie'][0]).toContain('refresh_token');
-    expect(response.body.access_token).toEqual(expect.any(String));
-  });
 });
 
 describe('POST /api/v1/auth/registerLecturer', () => {
@@ -116,11 +93,12 @@ describe('POST /api/v1/auth/registerLecturer', () => {
     const response = await request(app)
       .post('/api/v1/auth/registerLecturer')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .expect('Content-Type', /json/);
 
     expect(response.statusCode).toBe(400);
   });
+
   it('responds with an error if payload firstName is missing ', async () => {
     const payload = {
       email: 'lecturer@test.com',
@@ -131,11 +109,12 @@ describe('POST /api/v1/auth/registerLecturer', () => {
     const response = await request(app)
       .post('/api/v1/auth/registerLecturer')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .expect('Content-Type', /json/)
       .send(payload);
     expect(response.statusCode).toBe(400);
   });
+
   it('responds with an error if payload lastName is missing ', async () => {
     const payload = {
       email: 'lecturer@test.com',
@@ -146,7 +125,7 @@ describe('POST /api/v1/auth/registerLecturer', () => {
     const response = await request(app)
       .post('/api/v1/auth/registerLecturer')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .expect('Content-Type', /json/)
       .send(payload);
     expect(response.statusCode).toBe(400);
@@ -161,7 +140,7 @@ describe('POST /api/v1/auth/registerLecturer', () => {
     const response = await request(app)
       .post('/api/v1/auth/registerLecturer')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .expect('Content-Type', /json/)
       .send(payload);
     expect(response.statusCode).toBe(400);
@@ -176,7 +155,7 @@ describe('POST /api/v1/auth/registerLecturer', () => {
     const response = await request(app)
       .post('/api/v1/auth/registerLecturer')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .expect('Content-Type', /json/)
       .send(payload);
     expect(response.statusCode).toBe(400);
@@ -192,7 +171,7 @@ describe('POST /api/v1/auth/registerLecturer', () => {
     const response = await request(app)
       .post('/api/v1/auth/registerLecturer')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .expect('Content-Type', /json/)
       .send(payload);
 
@@ -213,36 +192,11 @@ describe('POST /api/v1/auth/registerLecturer', () => {
     const response = await request(app)
       .post('/api/v1/auth/registerLecturer')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
+      .set('Cookie', `access_token=${validLecturerToken}`)
       .expect('Content-Type', /json/)
       .send(payload);
     expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty('access_token');
-    expect(response.body).toHaveProperty('refresh_token');
-    expect(response.body.access_token).toEqual(expect.any(String));
-    expect(response.body.refresh_token).toEqual(expect.any(String));
-  });
-  it('responds with an access_token and refresh_token in cookie', async () => {
-    const payload = {
-      email: `success.test2${globalLecturerCredentials.email}`,
-      firstName: `success2${globalLecturerCredentials.firstName}`,
-      lastName: `success2${globalLecturerCredentials.lastName}`,
-      password: globalLecturerCredentials.password,
-      isAdmin: globalLecturerCredentials.isAdmin,
-    };
-
-    const response = await request(app)
-      .post('/api/v1/auth/registerLecturer?refreshTokenInCookie=true')
-      .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validLecturerToken}`)
-      .expect('Content-Type', /json/)
-      .send(payload);
-
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty('access_token');
-    expect(Array.isArray(response.headers['set-cookie'])).toBe(true);
-    expect(response.headers['set-cookie'][0]).toContain('refresh_token');
-    expect(response.body.access_token).toEqual(expect.any(String));
+    expect(response.body.message).toContain('created successfully.');
   });
 });
 
@@ -252,7 +206,7 @@ describe('POST /api/v1/auth/registerSuperUser', () => {
     const res = await request(app)
       .post('/api/v1/auth/registerSuperUser')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validAccessToken}`)
+      .set('Cookie', `access_token=${validAccessToken}`)
       .expect('Content-Type', /json/);
 
     expect(res.statusCode).toBe(400);
@@ -262,7 +216,7 @@ describe('POST /api/v1/auth/registerSuperUser', () => {
     const res = await request(app)
       .post('/api/v1/auth/registerSuperUser')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validAccessToken}`)
+      .set('Cookie', `access_token=${validAccessToken}`)
       .expect('Content-Type', /json/)
       .send({
         email: 'customSuper@user.com',
@@ -278,7 +232,7 @@ describe('POST /api/v1/auth/registerSuperUser', () => {
     const res = await request(app)
       .post('/api/v1/auth/registerSuperUser')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validAccessToken}`)
+      .set('Cookie', `access_token=${validAccessToken}`)
       .expect('Content-Type', /json/)
       .send({
         email: 'customSuper@user.com',
@@ -301,14 +255,11 @@ describe('POST /api/v1/auth/registerSuperUser', () => {
     const response = await request(app)
       .post('/api/v1/auth/registerSuperUser')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validAccessToken}`)
+      .set('Cookie', `access_token=${validAccessToken}`)
       .expect('Content-Type', /json/)
       .send(payload);
     expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty('access_token');
-    expect(response.body).toHaveProperty('refresh_token');
-    expect(response.body.access_token).toEqual(expect.any(String));
-    expect(response.body.refresh_token).toEqual(expect.any(String));
+    expect(response.body.message).toContain('created successfully.');
   });
 
   it('responds with an error if superuser already exists', async () => {
@@ -323,33 +274,11 @@ describe('POST /api/v1/auth/registerSuperUser', () => {
     const res = await request(app)
       .post('/api/v1/auth/registerSuperUser')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validAccessToken}`)
+      .set('Cookie', `access_token=${validAccessToken}`)
       .expect('Content-Type', /json/)
       .send(payload);
 
     expect(res.statusCode).toBe(400);
-  });
-
-  it('responds with an access_token and refresh_token in cookie', async () => {
-    const payload = {
-      email: 'superuser123@superuser.pl',
-      password: 'superUserPassword123',
-      firstName: 'John',
-      lastName: 'Bambo',
-      isAdmin: true,
-    };
-
-    const res = await request(app)
-      .post('/api/v1/auth/registerSuperUser?refreshTokenInCookie=true')
-      .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validAccessToken}`)
-      .expect('Content-Type', /json/)
-      .send(payload);
-    expect(res.statusCode).toBe(200);
-    expect(res.body).toHaveProperty('access_token');
-    expect(Array.isArray(res.headers['set-cookie'])).toBe(true);
-    expect(res.headers['set-cookie'][0]).toContain('refresh_token');
-    expect(res.body.access_token).toEqual(expect.any(String));
   });
 });
 
@@ -433,27 +362,7 @@ describe('POST /api/v1/auth/login', () => {
       });
 
     expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty('access_token');
-    expect(response.body).toHaveProperty('refresh_token');
-    expect(response.body.access_token).toEqual(expect.any(String));
-    expect(response.body.refresh_token).toEqual(expect.any(String));
-  });
-
-  it('responds with an access_token and refresh_token in cookie', async () => {
-    const response = await request(app)
-      .post('/api/v1/auth/login?refreshTokenInCookie=true')
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .send({
-        email: globalUserCredentials.email,
-        password: globalUserCredentials.password,
-      });
-
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty('access_token');
-    expect(Array.isArray(response.headers['set-cookie'])).toBe(true);
-    expect(response.headers['set-cookie'][0]).toContain('refresh_token');
-    expect(response.body.access_token).toEqual(expect.any(String));
+    expect(response.body.message).toBe('Logged in successfully.');
   });
 });
 
@@ -512,17 +421,6 @@ describe('POST /api/v1/auth/refreshToken', () => {
     });
   });
 
-  it('responds with error if refresh_token is missing ( body case )', async () => {
-    const response = await request(app)
-      .post('/api/v1/auth/refreshToken')
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/);
-
-    expect(response.statusCode).toBe(400);
-    expect(response.body).toHaveProperty('message');
-    expect(response.body.message).toBe('Missing refresh token.');
-  });
-
   it('responds with error if refresh_token is missing ( cookie case )', async () => {
     const response = await request(app)
       .post('/api/v1/auth/refreshToken')
@@ -534,109 +432,54 @@ describe('POST /api/v1/auth/refreshToken', () => {
     expect(response.body.message).toBe('Missing refresh token.');
   });
 
-  it('responds with Unauthorized if token is expired ( body case ) ', async () => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    const response = await request(app)
-      .post('/api/v1/auth/refreshToken')
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .send({ refresh_token: expiredRefreshToken });
-
-    expect(response.statusCode).toBe(401);
-    expect(response.body).toHaveProperty('message');
-    expect(response.body.message).toBe('jwt expired');
-  });
-
   it('responds with Unauthorized if token is expired ( cookie case ) ', async () => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     const response = await request(app)
       .post('/api/v1/auth/refreshToken')
       .set('Accept', 'application/json')
-      .set('Cookie', [`refresh_token=${expiredRefreshToken}`])
+      .set('Cookie', `refresh_token=${expiredRefreshToken}`)
       .expect('Content-Type', /json/);
 
     expect(response.statusCode).toBe(401);
     expect(response.body).toHaveProperty('message');
     expect(response.body.message).toBe('jwt expired');
-  });
-  it('responds with Unauthorized if token is not present in db ( body case ) ', async () => {
-    const response = await request(app)
-      .post('/api/v1/auth/refreshToken')
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .send({ refresh_token: '1231231a' });
-
-    expect(response.statusCode).toBe(401);
-    expect(response.body).toHaveProperty('message');
-    expect(response.body.message).toBe('jwt malformed');
   });
 
   it('responds with Unauthorized if token is not present in db ( cookie case ) ', async () => {
     const response = await request(app)
       .post('/api/v1/auth/refreshToken')
       .set('Accept', 'application/json')
-      .set('Cookie', [`refresh_token=${refreshTokenNotPresentInDb}`])
+      .set('Cookie', `refresh_token=${refreshTokenNotPresentInDb}`)
       .expect('Content-Type', /json/);
 
     expect(response.statusCode).toBe(401);
     expect(response.body).toHaveProperty('message');
     expect(response.body.message).toBe('Unauthorized');
-  });
-
-  it('responds with an access_token and refresh_token ( body case )', async () => {
-    const response = await request(app)
-      .post('/api/v1/auth/refreshToken')
-      .set('Accept', 'application/json')
-      .expect('Content-Type', /json/)
-      .send({ refresh_token: validRefreshToken });
-
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty('access_token');
-    expect(response.body).toHaveProperty('refresh_token');
-    expect(response.body.access_token).toEqual(expect.any(String));
-    expect(response.body.refresh_token).toEqual(expect.any(String));
-    validRefreshToken = response.body.refresh_token;
   });
 
   it('responds with an access_token and refresh_token ( cookie case )', async () => {
     const response = await request(app)
       .post('/api/v1/auth/refreshToken')
       .set('Accept', 'application/json')
-      .set('Cookie', [`refresh_token=${validRefreshToken}`])
+      .set('Cookie', `refresh_token=${validRefreshToken}`)
       .expect('Content-Type', /json/);
 
     expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty('access_token');
-    expect(response.body).toHaveProperty('refresh_token');
-    expect(response.body.access_token).toEqual(expect.any(String));
-    expect(response.body.refresh_token).toEqual(expect.any(String));
+    expect(response.body.message).toContain('successfully.')
     validRefreshToken = response.body.refresh_token;
-  });
-  it('responds with an access_token and refresh_token in cookie', async () => {
-    const response = await request(app)
-      .post('/api/v1/auth/refreshToken?refreshTokenInCookie=true')
-      .set('Accept', 'application/json')
-      .set('Cookie', [`refresh_token=${validRefreshToken}`])
-      .expect('Content-Type', /json/);
-
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveProperty('access_token');
-    expect(Array.isArray(response.headers['set-cookie'])).toBe(true);
-    expect(response.headers['set-cookie'][0]).toContain('refresh_token');
-    expect(response.body.access_token).toEqual(expect.any(String));
   });
 
   //
-  it('responds with Unauthorized if refresh token is revoked', async () => {
+  it('responds with jwt malformed if refresh token is revoked', async () => {
     const response = await request(app)
       .post('/api/v1/auth/refreshToken')
       .set('Accept', 'application/json')
+      .set('Cookie', `refresh_token=${validRefreshToken}`)
       .expect('Content-Type', /json/)
-      .send({ refresh_token: validRefreshToken });
 
     expect(response.statusCode).toBe(401);
     expect(response.body).toHaveProperty('message');
-    expect(response.body.message).toBe('Unauthorized');
+    expect(response.body.message).toBe('jwt malformed');
   });
 
   it('responds with Unauthorized if user does not exist', async () => {
@@ -651,10 +494,8 @@ describe('POST /api/v1/auth/refreshToken', () => {
     const response = await request(app)
       .post('/api/v1/auth/refreshToken')
       .set('Accept', 'application/json')
+      .set('Cookie', `refresh_token=${refreshTokenWithNotExistingUser}`)
       .expect('Content-Type', /json/)
-      .send({
-        refresh_token: refreshTokenWithNotExistingUser,
-      });
 
     expect(response.statusCode).toBe(401);
     expect(response.body).toHaveProperty('message');

@@ -1,6 +1,5 @@
 import request from 'supertest';
 import app from '../../app';
-// import { globalUserCredentials } from '../../mocks/globalCredentials';
 
 describe('GET /api/v1/users/me', () => {
   let validAccessToken = process.env.VALID_ACCESS_TOKEN_FOR_TESTING!;
@@ -18,7 +17,7 @@ describe('GET /api/v1/users/me', () => {
     const response = await request(app)
       .get('/api/v1/users/me')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${validAccessToken}`)
+      .set('Cookie', `access_token=${validAccessToken}`)
       .expect('Content-Type', /json/);
 
     expect(response.statusCode).toBe(200);
@@ -32,7 +31,7 @@ describe('GET /api/v1/users/me', () => {
     const res = await request(app)
       .get('/api/v1/users/me')
       .set('Accept', 'application/json')
-      .set('Authorization', `Bearer ${invalidAccessToken}`);
+      .set('Cookie', `access_token=${invalidAccessToken}`);
     expect(res.statusCode).toBe(404);
   });
 });
@@ -43,7 +42,7 @@ describe('DELETE /api/v1/users/deleteUser/:id', () => {
   it('should delete user successfully', async () => {
     const res = await request(app)
       .delete(`/api/v1/users/deleteUser/${userId}`)
-      .set('Authorization', `Bearer ${validAccessToken}`);
+      .set('Cookie', `access_token=${validAccessToken}`);
     expect(res.statusCode).toBe(200);
     expect(res.body.message).toContain('deleted successfully.');
   });
@@ -51,7 +50,7 @@ describe('DELETE /api/v1/users/deleteUser/:id', () => {
   it(`should respond an error if user doesn't exist`, async () => {
     const res = await request(app)
       .delete(`/api/v1/users/deleteUser/999`)
-      .set('Authorization', `Bearer ${validAccessToken}`);
+      .set('Cookie', `access_token=${validAccessToken}`);
     expect(res.statusCode).toBe(404);
   });
 });
