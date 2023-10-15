@@ -10,6 +10,7 @@ import {
   globalUserCredentials,
 } from '../../mocks/globalCredentials';
 import { Role } from '@prisma/client';
+import { revokeTokens } from './auth.services';
 
 describe('POST /api/v1/auth/register', () => {
   it('responds with an error if payload is missing', async () => {
@@ -378,7 +379,7 @@ describe('POST /api/v1/auth/refreshToken', () => {
   let refreshTokenNotPresentInDb = '';
   let refreshTokenWithDifferentUserId = '';
   let tokenWithNotExistingUser = '';
-
+  let revokedToken = '';
   beforeAll(async () => {
     const user = await db.user.create({
       data: {
@@ -440,6 +441,7 @@ describe('POST /api/v1/auth/refreshToken', () => {
   });
 
   afterAll(async () => {
+    await revokeTokens(userId);
     await db.user.delete({
       where: {
         email: userCredentials.email,
