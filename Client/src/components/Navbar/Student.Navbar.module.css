@@ -1,0 +1,27 @@
+.link {
+    color: var(--mantine-font-color);
+    font-size: var(--mantine-font-size-lg);
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.activeLink {
+    color: var(--mantine-primary-color);
+}
+
+.score {
+    color: var(--score-color);
+}
+
+.unfilledHeart {
+    color: var(--mantine-color-gray-5);
+}
+
+.filledHeart {
+    color: var(--heart-color);
+}
+
+
+.logoutBtn {
+    color: var(--heart-color);
+}

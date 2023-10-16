@@ -1,9 +1,10 @@
-import { Welcome } from '../components/Welcome/Welcome';
+import StudentNavbar from '@/components/Navbar/Student.navbar';
+import StudentLayout from '@/layouts/Student.layout';
 
 export function HomePage() {
-  return (
-    <>
-      <Welcome />
-    </>
-  );
+	return (
+		<>
+			<StudentLayout />
+		</>
+	);
 }
