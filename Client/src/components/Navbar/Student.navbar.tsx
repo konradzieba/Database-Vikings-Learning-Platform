@@ -3,6 +3,10 @@ import { NavLink } from 'react-router-dom';
 import { IconCoins, IconHeartFilled } from '@tabler/icons-react';
 import classes from './Student.Navbar.module.css';
 
+type HearthCounterProps = {
+	hearts: number;
+};
+
 const navLinks = [
 	{
 		label: 'Główna',
@@ -19,40 +23,49 @@ const navLinks = [
 ];
 
 const mockedUserInfo = {
-	score: 600,
-	lifes: 3,
+	score: 1600,
+	hearts: 2,
 	email: '162624@student.uwm.edu.pl',
 };
 
 function Nav() {
 	return (
-		<>
-			{navLinks.map((link) => {
+		<Group gap='xl'>
+			{navLinks.map(link => {
 				return (
 					<NavLink
 						to={link.link}
 						className={({ isActive }) =>
-							isActive ? `${classes.link} ${classes.activeLink}` : classes.link
+							isActive ? `${classes.link} ${classes.activeLink}` : `${classes.link} ${classes.inactiveLink}`
 						}
-						key={link.link}
-					>
+						key={link.link}>
 						{link.label}
 					</NavLink>
 				);
 			})}
-		</>
+		</Group>
+	);
+}
+
+function HeartCounter({ hearts }: HearthCounterProps) {
+	return (
+		<Group gap={0} py={6.5}>
+			<IconHeartFilled size={22} className={hearts >= 1 ? classes.filledHeart : classes.unfilledHeart} />
+			<IconHeartFilled size={22} className={hearts >= 2 ? classes.filledHeart : classes.unfilledHeart} />
+			<IconHeartFilled size={22} className={hearts >= 3 ? classes.filledHeart : classes.unfilledHeart} />
+		</Group>
 	);
 }
 
 function Info() {
 	return (
-		<Group>
+		<Group gap='xl'>
 			<Stack align='center' gap={1}>
 				<Text size='lg' fw={500}>
 					Wynik
 				</Text>
-				<Group className={classes.score}>
-					<IconCoins size={18} />
+				<Group className={classes.score} gap={2} py={3.1}>
+					<IconCoins size={22} />
 					<Text size='lg' fw={500}>
 						{mockedUserInfo.score}
 					</Text>
@@ -62,25 +75,13 @@ function Info() {
 				<Text size='lg' fw={500}>
 					Życia
 				</Text>
-				<Group>
-					<Rating
-						defaultValue={2}
-						readOnly
-						count={3}
-						emptySymbol={
-							<IconHeartFilled size={22} className={classes.unfilledHeart} />
-						}
-						fullSymbol={
-							<IconHeartFilled size={22} className={classes.filledHeart} />
-						}
-					/>
-				</Group>
+				<HeartCounter hearts={mockedUserInfo.hearts} />
 			</Stack>
-			<Stack gap={1} align='flex-end'>
+			<Stack gap={0} align='flex-end'>
 				<Text size='lg' fw={500}>
 					{mockedUserInfo.email}
 				</Text>
-				<Button ta='right' variant='transparent'>
+				<Button ta='right' variant='transparent' px={0}>
 					<Text size='lg' fw={500} className={classes.logoutBtn}>
 						Wyloguj
 					</Text>

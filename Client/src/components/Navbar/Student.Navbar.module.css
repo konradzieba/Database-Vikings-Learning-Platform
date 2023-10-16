@@ -1,27 +1,62 @@
 .link {
-    color: var(--mantine-font-color);
-    font-size: var(--mantine-font-size-lg);
-    font-weight: 500;
-    text-decoration: none;
+	color: var(--font-color);
+	font-size: var(--mantine-font-size-lg);
+	font-weight: 500;
+	text-decoration: none;
+}
+
+.inactiveLink {
+	background-image: linear-gradient(to left, var(--mantine-primary-color), var(--mantine-primary-color) 50%, var(--font-color) 50%);
+	background-size: 200% 100%;
+	background-position: 0;
+	background-clip: text;
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	transition: all 0.3s ease-in-out;
+
+    &::after {
+		content: '';
+		display: block;
+		position: relative;
+		bottom: 0%;
+		left: 50%;
+		width: 5px;
+		height: 5px;
+	}
+	&:hover {
+		background-position: -100%;
+	}
 }
 
 .activeLink {
-    color: var(--mantine-primary-color);
+	color: var(--mantine-primary-color);
+
+	&::after {
+		content: '';
+		background: var(--mantine-primary-color);
+		display: block;
+		position: relative;
+		bottom: 0%;
+		left: 50%;
+		width: 5px;
+		height: 5px;
+		border-radius: 50%;
+		transform: translateX(-50%);
+	}
 }
 
 .score {
-    color: var(--score-color);
+	color: var(--score-color);
 }
 
 .unfilledHeart {
-    color: var(--mantine-color-gray-5);
+	color: var(--mantine-color-gray-5);
 }
 
 .filledHeart {
-    color: var(--heart-color);
+	color: var(--heart-color);
 }
 
-
 .logoutBtn {
-    color: var(--heart-color);
+	color: var(--heart-color);
 }
