@@ -1,29 +1,33 @@
 .sql {
-    color: var(--mantine-primary-color);
-    font-weight: inherit;
-    font-size: inherit;
-
+	color: var(--mantine-primary-color);
+	font-weight: inherit;
+	font-size: inherit;
 }
 
 .typingCursor {
-    color: var(--font-color)
+	color: var(--font-color);
 }
 
 .form {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 .input {
-    background-color: transparent;
-    /* color: var(--mantine-font-color), */
+	background-color: transparent;
+}
+
+.inputError {
+	background-color: transparent;
+	color: var(--bad-state-color);
+	border: calc(0.0625rem * var(--mantine-scale)) solid var(--bad-state-color);
 }
 
 .visibilityToggler {
-    color: var(--font-color);
+	color: var(--font-color);
 }
 
 .loginBtn {
-    width: 25%;
-    align-self: flex-end;
+	width: 25%;
+	align-self: flex-end;
 }

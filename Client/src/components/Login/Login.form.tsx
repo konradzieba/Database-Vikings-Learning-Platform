@@ -1,14 +1,4 @@
-import {
-	Box,
-	Button,
-	Loader,
-	PasswordInput,
-	Stack,
-	Text,
-	TextInput,
-	Title,
-	rem,
-} from '@mantine/core';
+import { Box, Button, Loader, PasswordInput, Stack, Text, TextInput, Title, rem } from '@mantine/core';
 import classes from './Login.form.module.css';
 import ReactTypingEffect from 'react-typing-effect';
 import { useForm, zodResolver } from '@mantine/form';
@@ -75,48 +65,38 @@ function Form() {
 	});
 
 	return (
-		<Stack gap={rem(1)} miw={rem(400)}>
-			<form
-				className={classes.form}
-				onSubmit={form.onSubmit((values) => loginMutation.mutate(values))}
-			>
+		<Stack gap={rem(0)} miw={rem(400)}>
+			<form className={classes.form} onSubmit={form.onSubmit(values => loginMutation.mutate(values))}>
 				<Box>
 					<TextInput
-						required
+						required={false}
 						withAsterisk={false}
+						pb={form.errors['email'] ? 0 : rem(21.8)}
 						size='md'
 						label='Email:'
 						placeholder='Email...'
 						classNames={{
-							input: classes.input,
+							input: form.errors['email'] ? classes.inputError : classes.input,
 						}}
 						{...form.getInputProps('email')}
 					/>
 					<PasswordInput
-						required
+						required={false}
+						pb={form.errors['password'] ? 0 : rem(21.8)}
 						withAsterisk={false}
 						size='md'
-						my='xs'
+						mt={rem(5)}
 						label='Hasło:'
 						placeholder='Hasło...'
 						classNames={{
-							input: classes.input,
+							input: form.errors['password'] ? classes.inputError : classes.input,
 							visibilityToggle: classes.visibilityToggler,
 						}}
 						{...form.getInputProps('password')}
 					/>
 				</Box>
-				<Button
-					type='submit'
-					my='md'
-					className={classes.loginBtn}
-					disabled={loginMutation.isPending}
-				>
-					{loginMutation.isPending ? (
-						<Loader color='var(--font-color)' size='sm' />
-					) : (
-						'Zaloguj'
-					)}
+				<Button type='submit' my='xs' className={classes.loginBtn} disabled={loginMutation.isPending} color='teal.8'>
+					{loginMutation.isPending ? <Loader color='var(--font-color)' size='sm' /> : 'Zaloguj'}
 				</Button>
 			</form>
 		</Stack>
