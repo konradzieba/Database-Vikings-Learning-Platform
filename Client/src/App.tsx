@@ -1,13 +1,17 @@
 import '@mantine/core/styles.css';
 import './global.css';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { resolver, theme } from './theme';
 import { MantineProvider } from '@mantine/core';
 import { Router } from './Router';
-import { resolver, theme } from './theme';
+import queryClient from './utils/query-client';
 
 export default function App() {
-  return (
-    <MantineProvider theme={{ ...theme }} cssVariablesResolver={resolver}>
-      <Router />
-    </MantineProvider>
-  );
+	return (
+		<QueryClientProvider client={queryClient}>
+			<MantineProvider theme={{ ...theme }} cssVariablesResolver={resolver}>
+				<Router />
+			</MantineProvider>
+		</QueryClientProvider>
+	);
 }

@@ -2,3 +2,10 @@ body {
     background-color: var(--mantine-color-gray-8);
     color: var(--mantine-color-gray-0);
   }
+
+.mantine-Button-root {
+  &[data-disabled] {
+    background-color: var(--mantine-primary-color);
+    opacity: 0.75;
+  }
+}

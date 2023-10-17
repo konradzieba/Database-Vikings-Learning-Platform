@@ -1,5 +1,7 @@
 import {
+	Box,
 	Button,
+	Loader,
 	PasswordInput,
 	Stack,
 	Text,
@@ -11,6 +13,10 @@ import classes from './Login.form.module.css';
 import ReactTypingEffect from 'react-typing-effect';
 import { useForm, zodResolver } from '@mantine/form';
 import { loginSchema } from './Login.schema';
+import { useMutation } from '@tanstack/react-query';
+import { loginQueryFn } from '@/utils/axios-queries';
+import { useNavigate } from 'react-router-dom';
+import { AxiosError } from 'axios';
 
 function Header() {
 	return (
@@ -43,6 +49,7 @@ function Header() {
 }
 
 function Form() {
+	const navigate = useNavigate();
 	const form = useForm({
 		validate: zodResolver(loginSchema),
 		initialValues: {
@@ -51,38 +58,65 @@ function Form() {
 		},
 	});
 
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-	};
+	const loginMutation = useMutation({
+		mutationFn: loginQueryFn,
+		onSuccess: () => {
+			navigate('/');
+		},
+		onError: (error: AxiosError) => {
+			if (error.response?.status === 401) {
+				form.setFieldError('password', 'Nieprawidłowy email lub hasło');
+			} else if (error.response?.status === 400) {
+				form.setFieldError('password', 'Nieprawidłowy email lub hasło');
+			} else {
+				form.setFieldError('password', 'Wystąpił błąd po stronie serwera');
+			}
+		},
+	});
 
 	return (
 		<Stack gap={rem(1)} miw={rem(400)}>
 			<form
 				className={classes.form}
-				onSubmit={form.onSubmit((values) => console.log(values))}
+				onSubmit={form.onSubmit((values) => loginMutation.mutate(values))}
 			>
-				<TextInput
-					size='md'
-					label='Email:'
-					placeholder='Email...'
-					classNames={{
-						input: classes.input,
-					}}
-					{...form.getInputProps('email')}
-				/>
-				<PasswordInput
-					size='md'
-					my='xs'
-					label='Hasło:'
-					placeholder='Hasło...'
-					classNames={{
-						input: classes.input,
-						visibilityToggle: classes.visibilityToggler,
-					}}
-					{...form.getInputProps('password')}
-				/>
-				<Button type='submit' my='md' className={classes.loginBtn}>
-					Zaloguj
+				<Box>
+					<TextInput
+						required
+						withAsterisk={false}
+						size='md'
+						label='Email:'
+						placeholder='Email...'
+						classNames={{
+							input: classes.input,
+						}}
+						{...form.getInputProps('email')}
+					/>
+					<PasswordInput
+						required
+						withAsterisk={false}
+						size='md'
+						my='xs'
+						label='Hasło:'
+						placeholder='Hasło...'
+						classNames={{
+							input: classes.input,
+							visibilityToggle: classes.visibilityToggler,
+						}}
+						{...form.getInputProps('password')}
+					/>
+				</Box>
+				<Button
+					type='submit'
+					my='md'
+					className={classes.loginBtn}
+					disabled={loginMutation.isPending}
+				>
+					{loginMutation.isPending ? (
+						<Loader color='var(--font-color)' size='sm' />
+					) : (
+						'Zaloguj'
+					)}
 				</Button>
 			</form>
 		</Stack>

@@ -1,7 +1,10 @@
 import { Button, Flex, Group, Stack, Text, rem } from '@mantine/core';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { IconCoins, IconHeartFilled } from '@tabler/icons-react';
 import classes from './Student.Navbar.module.css';
+import { useMutation } from '@tanstack/react-query';
+import { AxiosError } from 'axios';
+import { logoutQueryFn } from '@/utils/axios-queries';
 
 interface HearthCounterProps {
 	hearts: number;
@@ -70,6 +73,18 @@ function HeartCounter({ hearts }: HearthCounterProps) {
 }
 
 function Info() {
+	const navigate = useNavigate();
+
+	const logoutMutation = useMutation({
+		mutationFn: logoutQueryFn,
+		onSuccess: () => {
+			navigate('/login');
+		},
+		onError: (error: AxiosError) => {
+			console.error(error);
+		},
+	});
+
 	return (
 		<Group gap='xl'>
 			<Stack align='center' gap={1}>
@@ -93,7 +108,14 @@ function Info() {
 				<Text size='lg' fw={500}>
 					{mockedUserInfo.email}
 				</Text>
-				<Button ta='right' variant='transparent' px={0}>
+				<Button
+					ta='right'
+					variant='transparent'
+					px={0}
+					onClick={() => {
+						logoutMutation.mutate();
+					}}
+				>
 					<Text size='lg' fw={500} className={classes.logoutBtn}>
 						Wyloguj
 					</Text>
