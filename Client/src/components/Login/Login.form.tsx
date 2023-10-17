@@ -95,8 +95,8 @@ function Form() {
 						{...form.getInputProps('password')}
 					/>
 				</Box>
-				<Button type='submit' my='xs' className={classes.loginBtn} disabled={loginMutation.isPending} color='teal.8'>
-					{loginMutation.isPending ? <Loader color='var(--font-color)' size='sm' /> : 'Zaloguj'}
+				<Button type='submit' my='xs' className={classes.loginBtn} loading={loginMutation.isPending}>
+					{loginMutation.isPending ? '' : 'Zaloguj'}
 				</Button>
 			</form>
 		</Stack>
