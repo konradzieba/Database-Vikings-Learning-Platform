@@ -1,18 +1,17 @@
 import { CSSVariablesResolver, createTheme } from '@mantine/core';
 
 export const theme = createTheme({
-	primaryColor: 'cyan',
+	primaryColor: 'teal',
 	primaryShade: 8,
 	fontFamily: 'Roboto, sans-serif',
 	defaultRadius: 'xs',
-	black: '#F8F9FA', // gray[0]
 });
 
-export const resolver: CSSVariablesResolver = (theme) => ({
+export const resolver: CSSVariablesResolver = theme => ({
 	variables: {
-		'--mantine-primary-color': theme.colors.cyan[8],
+		'--mantine-primary-color': theme.colors.teal[8],
 		'--disabled-color': theme.colors.gray[7],
-		'--primary-bg-color': theme.colors.gray[8],
+		'--primary-bg-color': '#1C1C1C',
 		'--font-color': theme.colors.gray[0],
 		'--heart-color': theme.colors.red[8],
 		'--score-color': theme.colors.yellow[5],

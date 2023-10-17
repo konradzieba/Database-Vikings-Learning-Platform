@@ -1,11 +1,14 @@
 body {
-    background-color: var(--mantine-color-gray-8);
-    color: var(--mantine-color-gray-0);
-  }
+	background-color: var(--primary-bg-color);
+	color: var(--font-color);
+}
 
-.mantine-Button-root {
-  &[data-disabled] {
-    background-color: var(--mantine-primary-color);
-    opacity: 0.75;
-  }
+.mantine-TextInput-input,
+.mantine-PasswordInput-input {
+	color: var(--font-color);
+}
+
+.mantine-TextInput-error,
+.mantine-PasswordInput-error {
+	color: var(--bad-state-color);
 }
