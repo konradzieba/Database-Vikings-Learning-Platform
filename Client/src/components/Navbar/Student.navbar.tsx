@@ -5,7 +5,8 @@ import classes from './Student.Navbar.module.css';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { logoutQueryFn } from '@/utils/axios-queries';
-import LessonCard from '../LessonCard/LessonCard';
+import LessonCard from '../LessonCard/Lesson.card';
+import TaskTab from '../TaskTab/Task.tab';
 
 interface HearthCounterProps {
 	hearts: number;
@@ -134,6 +135,7 @@ function StudentNavbar() {
 				<Info />
 			</Flex>
 			<LessonCard />
+			<TaskTab />
 		</>
 	);
 }

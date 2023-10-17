@@ -1,6 +1,7 @@
 .lessonCardWrapper {
     width: 20%;
     background-color: #292929;
+    border-radius: var(--mantine-radius-xs);
 }
 
 .progressLabel {

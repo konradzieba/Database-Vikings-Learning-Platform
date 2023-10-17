@@ -1,6 +1,6 @@
 import { Button, Flex, Image, Progress, Stack, Text, rem } from '@mantine/core';
 import lesson1 from '../../assets/lesson1.png';
-import classes from './LessonCard.module.css';
+import classes from './Lesson.card.module.css';
 
 const mockLessonData = {
 	lessonNumber: 1,
@@ -8,8 +8,6 @@ const mockLessonData = {
 	tasksAmount: 10,
 	photoLink: lesson1,
 };
-// 10 - 100%
-// 5 - x
 
 function LessonCard() {
 	const lessonProgress =
