@@ -1,0 +1,29 @@
+.sql {
+    color: var(--mantine-primary-color);
+    font-weight: inherit;
+    font-size: inherit;
+
+}
+
+.typingCursor {
+    color: var(--font-color)
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+}
+
+.input {
+    background-color: transparent;
+    /* color: var(--mantine-font-color), */
+}
+
+.visibilityToggler {
+    color: var(--font-color);
+}
+
+.loginBtn {
+    width: 25%;
+    align-self: flex-end;
+}
