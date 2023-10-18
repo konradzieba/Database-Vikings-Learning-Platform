@@ -134,7 +134,7 @@ function StudentNavbar() {
 				<Nav />
 				<Info />
 			</Flex>
-			<LessonCard />
+			{/* <LessonCard /> */}
 			<TaskTab />
 		</>
 	);
