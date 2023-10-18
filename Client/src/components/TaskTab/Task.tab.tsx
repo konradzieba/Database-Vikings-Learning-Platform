@@ -1,5 +1,5 @@
 import { Flex, Group, Stack, Text, ThemeIcon, rem } from '@mantine/core';
-import { IconSun, IconClockHour4 } from '@tabler/icons-react';
+import { IconClockHour4 } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import classes from './Task.tab.module.css';
 
