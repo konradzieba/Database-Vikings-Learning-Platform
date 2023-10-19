@@ -18,24 +18,21 @@ function TaskTab() {
 		}
 	};
 	return (
-		<>
-			<Flex my='md' />
-			<Flex gap='lg' align='center' mx='auto' className={classes.taskTabWrapper}>
-				<ThemeIcon size='lg' w='10%' ml='md' radius='sm'>
-					<Text fw={500}>{mockData.taskNumber}</Text>
-				</ThemeIcon>
-				<Text my='md'>{spliceQuestion(mockData.taskQuestion)}</Text>
-				<DateTimeDisplay
-					date={mockData.closeDate}
-					title='Data zakończenia'
-					icon={<IconClockHour4 size={20} />}
-					w='50%'
-					gap={0}
-					align='flex-end'
-					mr='md'
-				/>
-			</Flex>
-		</>
+		<Flex gap='lg' align='center' mx='auto' className={classes.taskTabWrapper}>
+			<ThemeIcon size='lg' w='10%' ml='md' radius='sm'>
+				<Text fw={500}>{mockData.taskNumber}</Text>
+			</ThemeIcon>
+			<Text my='md'>{spliceQuestion(mockData.taskQuestion)}</Text>
+			<DateTimeDisplay
+				date={mockData.closeDate}
+				title='Data zakończenia'
+				icon={<IconClockHour4 size={20} />}
+				w='50%'
+				gap={0}
+				align='flex-end'
+				mr='md'
+			/>
+		</Flex>
 	);
 }
 
