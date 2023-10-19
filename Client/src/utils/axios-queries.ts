@@ -1,6 +1,11 @@
 import { TLoginRequest, TSendAnswerRequest } from '@/types/RequestTypes';
-import { TMessageResponse } from '@/types/ResponseTypes';
+import { TMeResponse, TMessageResponse } from '@/types/ResponseTypes';
 import axios from '@/utils/axios';
+
+export const meQueryFn = async () => {
+	const { data } = await axios.get<TMeResponse>('/users/me');
+	return data;
+};
 
 export const loginMutationFn = async (loginRequest: TLoginRequest) => {
 	const { data } = await axios.post<TMessageResponse>(

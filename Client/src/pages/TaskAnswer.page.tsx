@@ -2,7 +2,6 @@ import DateTimeDisplay from '@/components/UI/DateTimeDisplay';
 import PrimaryButton from '@/components/UI/PrimaryButton';
 import { useSendAnswerMutation } from '@/hooks/answer/useSendAnswerMutation';
 import {
-	Button,
 	Flex,
 	Group,
 	ScrollArea,
@@ -34,7 +33,7 @@ function TaskAnswerPage() {
 	};
 
 	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault()
+		e.preventDefault();
 		if (!answerTextareaRef.current?.value) {
 			return;
 		}
