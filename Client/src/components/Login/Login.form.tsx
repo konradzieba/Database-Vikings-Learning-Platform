@@ -13,6 +13,7 @@ import ReactTypingEffect from 'react-typing-effect';
 import { useForm, zodResolver } from '@mantine/form';
 import { loginSchema } from './Login.schema';
 import { useLoginMutation } from '@/hooks/auth/useLoginMutation';
+import PrimaryButton from '../UI/PrimaryButton';
 
 function Header() {
 	return (
@@ -91,14 +92,14 @@ function Form() {
 						{...form.getInputProps('password')}
 					/>
 				</Box>
-				<Button
+				<PrimaryButton
 					type='submit'
+					loading={loginMutation.isPending}
 					my='xs'
 					className={classes.loginBtn}
-					loading={loginMutation.isPending}
 				>
-					{loginMutation.isPending ? '' : 'Zaloguj'}
-				</Button>
+					Zaloguj
+				</PrimaryButton>
 			</form>
 		</Stack>
 	);

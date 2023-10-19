@@ -34,3 +34,30 @@ body {
 		color: var(--placeholder-color);
 	}
 }
+
+.mantine-Textarea-input {
+	color: var(--font-color);
+	border-color: var(--font-color);
+
+	&::placeholder {
+		color: var(--placeholder-color);
+	}
+
+	&:focus {
+		border-color: var(--mantine-primary-color);
+	}
+}
+
+.mantine-ScrollArea-scrollbar {
+	background-color: var(--primary-bg-color-lighter);
+	border-radius: var(--mantine-radius-md);
+}
+
+.mantine-ScrollArea-thumb {
+	opacity: 0.85;
+	transition: opacity 0.2s ease-in-out;
+
+	&:hover {
+		opacity: 1;
+	}
+}

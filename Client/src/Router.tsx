@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import StudentLayout from './layouts/Student.layout';
 import StudentNavbar from './components/Navbar/Student.navbar';
 import LoginForm from './components/Login/Login.form';
+import TaskAnswerPage from './pages/TaskAnswer.page';
 
 const router = createBrowserRouter([
 	{
@@ -19,6 +19,10 @@ const router = createBrowserRouter([
 	{
 		path: '/my-tasks',
 		element: <StudentNavbar />,
+	},
+	{
+		path: '/task/:id',
+		element: <TaskAnswerPage />,
 	},
 ]);
 

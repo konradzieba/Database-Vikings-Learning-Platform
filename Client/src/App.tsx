@@ -9,7 +9,11 @@ import queryClient from './utils/query-client';
 export default function App() {
 	return (
 		<QueryClientProvider client={queryClient}>
-			<MantineProvider theme={{ ...theme }} cssVariablesResolver={resolver} defaultColorScheme='dark'>
+			<MantineProvider
+				theme={{ ...theme }}
+				cssVariablesResolver={resolver}
+				defaultColorScheme='dark'
+			>
 				<Router />
 			</MantineProvider>
 		</QueryClientProvider>

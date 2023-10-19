@@ -1,7 +1,7 @@
-import { Flex, Group, Stack, Text, ThemeIcon, rem } from '@mantine/core';
+import { Flex, Text, ThemeIcon } from '@mantine/core';
 import { IconClockHour4 } from '@tabler/icons-react';
-import dayjs from 'dayjs';
 import classes from './Task.tab.module.css';
+import DateTimeDisplay from '../UI/DateTimeDisplay';
 
 const mockData = {
 	taskNumber: 12,
@@ -10,7 +10,6 @@ const mockData = {
 };
 
 function TaskTab() {
-	const formattedDate = dayjs(mockData.closeDate).format('D/MM/YYYY, HH:mm');
 	const spliceQuestion = (question: string) => {
 		if (question.length > 251) {
 			return question.substring(0, 251) + '...';
@@ -21,22 +20,25 @@ function TaskTab() {
 	return (
 		<>
 			<Flex my='md' />
-			<Flex gap='lg' align='center' mx='auto' className={classes.taskTabWrapper}>
+			<Flex
+				gap='lg'
+				align='center'
+				mx='auto'
+				className={classes.taskTabWrapper}
+			>
 				<ThemeIcon size='lg' w='10%' ml='md' radius='sm'>
 					<Text fw={500}>{mockData.taskNumber}</Text>
 				</ThemeIcon>
 				<Text my='md'>{spliceQuestion(mockData.taskQuestion)}</Text>
-				<Stack w='50%' gap={0} align='flex-end' mr='md'>
-					<Text fw={500} size='md'>
-						Data zakończenia
-					</Text>
-					<Group gap={rem(5)}>
-						<ThemeIcon variant='transparent'>
-							<IconClockHour4 size={20} />
-						</ThemeIcon>
-						<Text>{formattedDate}</Text>
-					</Group>
-				</Stack>
+				<DateTimeDisplay
+					date={mockData.closeDate}
+					title='Data zakończenia'
+					icon={<IconClockHour4 size={20} />}
+					w='50%'
+					gap={0}
+					align='flex-end'
+					mr='md'
+				/>
 			</Flex>
 		</>
 	);
