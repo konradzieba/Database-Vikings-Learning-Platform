@@ -1,12 +1,18 @@
-import { Box, Button, Loader, PasswordInput, Stack, Text, TextInput, Title, rem } from '@mantine/core';
+import {
+	Box,
+	Button,
+	PasswordInput,
+	Stack,
+	Text,
+	TextInput,
+	Title,
+	rem,
+} from '@mantine/core';
 import classes from './Login.form.module.css';
 import ReactTypingEffect from 'react-typing-effect';
 import { useForm, zodResolver } from '@mantine/form';
 import { loginSchema } from './Login.schema';
-import { useMutation } from '@tanstack/react-query';
-import { loginQueryFn } from '@/utils/axios-queries';
-import { useNavigate } from 'react-router-dom';
-import { AxiosError } from 'axios';
+import { useLoginMutation } from '@/hooks/auth/useLoginMutation';
 
 function Header() {
 	return (
@@ -39,7 +45,6 @@ function Header() {
 }
 
 function Form() {
-	const navigate = useNavigate();
 	const form = useForm({
 		validate: zodResolver(loginSchema),
 		initialValues: {
@@ -48,25 +53,14 @@ function Form() {
 		},
 	});
 
-	const loginMutation = useMutation({
-		mutationFn: loginQueryFn,
-		onSuccess: () => {
-			navigate('/');
-		},
-		onError: (error: AxiosError) => {
-			if (error.response?.status === 401) {
-				form.setFieldError('password', 'Nieprawidłowy email lub hasło');
-			} else if (error.response?.status === 400) {
-				form.setFieldError('password', 'Nieprawidłowy email lub hasło');
-			} else {
-				form.setFieldError('password', 'Wystąpił błąd po stronie serwera');
-			}
-		},
-	});
+	const loginMutation = useLoginMutation({ form });
 
 	return (
 		<Stack gap={rem(0)} miw={rem(400)}>
-			<form className={classes.form} onSubmit={form.onSubmit(values => loginMutation.mutate(values))}>
+			<form
+				className={classes.form}
+				onSubmit={form.onSubmit((values) => loginMutation.mutate(values))}
+			>
 				<Box>
 					<TextInput
 						required={false}
@@ -89,13 +83,20 @@ function Form() {
 						label='Hasło:'
 						placeholder='Hasło...'
 						classNames={{
-							input: form.errors['password'] ? classes.inputError : classes.input,
+							input: form.errors['password']
+								? classes.inputError
+								: classes.input,
 							visibilityToggle: classes.visibilityToggler,
 						}}
 						{...form.getInputProps('password')}
 					/>
 				</Box>
-				<Button type='submit' my='xs' className={classes.loginBtn} loading={loginMutation.isPending}>
+				<Button
+					type='submit'
+					my='xs'
+					className={classes.loginBtn}
+					loading={loginMutation.isPending}
+				>
 					{loginMutation.isPending ? '' : 'Zaloguj'}
 				</Button>
 			</form>

@@ -2,11 +2,8 @@ import { Button, Flex, Group, Stack, Text, rem } from '@mantine/core';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { IconCoins, IconHeartFilled } from '@tabler/icons-react';
 import classes from './Student.Navbar.module.css';
-import { useMutation } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
-import { logoutQueryFn } from '@/utils/axios-queries';
-import LessonCard from '../LessonCard/Lesson.card';
 import TaskTab from '../TaskTab/Task.tab';
+import { useLogoutMutation } from '@/hooks/auth/useLogoutMutation';
 
 interface HearthCounterProps {
 	hearts: number;
@@ -75,17 +72,7 @@ function HeartCounter({ hearts }: HearthCounterProps) {
 }
 
 function Info() {
-	const navigate = useNavigate();
-
-	const logoutMutation = useMutation({
-		mutationFn: logoutQueryFn,
-		onSuccess: () => {
-			navigate('/login');
-		},
-		onError: (error: AxiosError) => {
-			console.error(error);
-		},
-	});
+	const logoutMutation = useLogoutMutation();
 
 	return (
 		<Group gap='xl'>
