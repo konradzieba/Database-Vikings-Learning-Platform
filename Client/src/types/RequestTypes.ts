@@ -7,3 +7,9 @@ interface UserRequest {
 }
 
 export type TLoginRequest = Pick<UserRequest, 'email' | 'password'>;
+
+export type TSendAnswerRequest = {
+	solution: string;
+	taskId: number;
+	studentId: number;
+};

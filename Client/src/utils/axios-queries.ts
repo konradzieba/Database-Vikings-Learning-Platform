@@ -1,8 +1,8 @@
-import { TLoginRequest } from '@/types/RequestTypes';
+import { TLoginRequest, TSendAnswerRequest } from '@/types/RequestTypes';
 import { TMessageResponse } from '@/types/ResponseTypes';
 import axios from '@/utils/axios';
 
-export const loginQueryFn = async (loginRequest: TLoginRequest) => {
+export const loginMutationFn = async (loginRequest: TLoginRequest) => {
 	const { data } = await axios.post<TMessageResponse>(
 		'/auth/login',
 		loginRequest
@@ -10,7 +10,17 @@ export const loginQueryFn = async (loginRequest: TLoginRequest) => {
 	return data;
 };
 
-export const logoutQueryFn = async () => {
+export const logoutMutationFn = async () => {
 	const { data } = await axios.post<TMessageResponse>('/auth/logout');
+	return data;
+};
+
+export const sendAnswerMutationFn = async (
+	sendAnswerRequest: TSendAnswerRequest
+) => {
+	const { data } = await axios.post<TMessageResponse>(
+		'/answers/createAnswer',
+		sendAnswerRequest
+	);
 	return data;
 };

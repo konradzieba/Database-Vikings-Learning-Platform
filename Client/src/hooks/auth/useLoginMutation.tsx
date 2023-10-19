@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query';
 import { UseFormReturnType } from '@mantine/form';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { loginQueryFn } from '@/utils/axios-queries';
+import { loginMutationFn } from '@/utils/axios-queries';
 
 interface LoginMutationProps {
 	form: UseFormReturnType<
@@ -21,7 +21,7 @@ export function useLoginMutation({ form }: LoginMutationProps) {
 	const navigate = useNavigate();
 
 	const loginMutation = useMutation({
-		mutationFn: loginQueryFn,
+		mutationFn: loginMutationFn,
 		onSuccess: () => {
 			navigate('/');
 		},

@@ -1,5 +1,6 @@
 import DateTimeDisplay from '@/components/UI/DateTimeDisplay';
 import PrimaryButton from '@/components/UI/PrimaryButton';
+import { useSendAnswerMutation } from '@/hooks/answer/useSendAnswerMutation';
 import {
 	Button,
 	Flex,
@@ -13,24 +14,43 @@ import {
 } from '@mantine/core';
 import { IconClockHour1, IconCode } from '@tabler/icons-react';
 import { IconClockHour11 } from '@tabler/icons-react';
-import { useRef } from 'react';
+import { FormEvent, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 
 function TaskAnswerPage() {
 	const { id } = useParams();
 	const answerTextareaRef = useRef<HTMLTextAreaElement>(null);
 
+	const sendAnswerMutation = useSendAnswerMutation();
+
 	const mockData = {
+		taskId: id,
 		lessonNumber: 4,
 		taskNumber: 1,
+		studentId: 13,
 		taskQuestion: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. `,
 		openDate: '2023-10-19T19:26:15.000Z',
 		closeDate: '2023-10-26T19:26:15.000Z',
 	};
+
+	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault()
+		if (!answerTextareaRef.current?.value) {
+			return;
+		}
+		const answer = answerTextareaRef.current?.value;
+		if (answer) {
+			sendAnswerMutation.mutate({
+				solution: answer,
+				taskId: +id!,
+				studentId: mockData.studentId,
+			});
+		}
+	};
+
 	return (
 		<Flex px='xl' align='flex-start' justify='space-between'>
 			<Stack w='50%' gap={0}>
-				{/* <Stack gap={0}> */}
 				<Title fw={700} py={0} order={2}>
 					Zadanie {mockData.taskNumber}
 				</Title>
@@ -42,28 +62,30 @@ function TaskAnswerPage() {
 						{mockData.taskQuestion}
 					</Text>
 				</ScrollArea.Autosize>
-				<Stack gap='sm'>
-					<Group gap='lg' align='flex-start'>
-						<ThemeIcon size='lg' variant='transparent'>
-							<IconCode size={36} />
-						</ThemeIcon>
-						<Textarea
-							size='md'
-							ref={answerTextareaRef}
-							w='100%'
-							rows={8}
-							placeholder='Twoja odpowiedź...'
-							style={{ flex: 1 }}
-						/>
-					</Group>
-					<PrimaryButton
-						type='submit'
-						maw={300}
-						style={{ alignSelf: 'flex-end' }}
-					>
-						Prześlij
-					</PrimaryButton>
-				</Stack>
+				<form onSubmit={handleSubmit}>
+					<Stack gap='sm'>
+						<Group gap='lg' align='flex-start'>
+							<ThemeIcon size='lg' variant='transparent'>
+								<IconCode size={36} />
+							</ThemeIcon>
+							<Textarea
+								ref={answerTextareaRef}
+								w='100%'
+								size='md'
+								rows={8}
+								placeholder='Twoja odpowiedź...'
+								style={{ flex: 1 }}
+							/>
+						</Group>
+						<PrimaryButton
+							type='submit'
+							maw={300}
+							style={{ alignSelf: 'flex-end' }}
+						>
+							Prześlij
+						</PrimaryButton>
+					</Stack>
+				</form>
 			</Stack>
 			<Group gap='lg' style={{ justifySelf: 'flex-end' }}>
 				<DateTimeDisplay

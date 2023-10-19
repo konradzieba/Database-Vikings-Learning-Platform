@@ -1,12 +1,12 @@
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { logoutQueryFn } from '@/utils/axios-queries';
+import { logoutMutationFn } from '@/utils/axios-queries';
 
 export function useLogoutMutation() {
 	const navigate = useNavigate();
 	const logoutMutation = useMutation({
-		mutationFn: logoutQueryFn,
+		mutationFn: logoutMutationFn,
 		onSuccess: () => {
 			navigate('/login');
 		},
