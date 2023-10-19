@@ -1,0 +1,15 @@
+.taskAnswerQuestionText {
+	text-wrap: balance;
+}
+
+.taskAnswerTextArea {
+	flex: 1;
+}
+
+.taskAnswerPrimaryButton {
+	align-self: flex-end;
+}
+
+.taskAnswerDateDisplayGroup {
+	justify-self: flex-end;
+}
