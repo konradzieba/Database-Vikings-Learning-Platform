@@ -14,16 +14,20 @@ export async function me(req: Request, res: Response, next: NextFunction) {
       throw new Error('User not found.');
     }
 
+    const userData = {
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      role: user.role,
+    };
+
     if (user.role === EnumRole.STUDENT) {
       const student = await UserServices.findStudentByUserId(user.id);
 
       if (student) {
         res.json({
-          id: user.id,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          role: user.role,
+          ...userData,
           studentInfos: {
             studentId: student.id,
             indexNumber: student.indexNumber,
@@ -43,11 +47,7 @@ export async function me(req: Request, res: Response, next: NextFunction) {
       const lecturer = await UserServices.findLecturerByUserId(user.id);
       if (lecturer) {
         res.json({
-          id: user.id,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          role: user.role,
+          ...userData,
           lecturerInfos: {
             lecturerId: lecturer.id,
             isAdmin: lecturer.isAdmin,
@@ -59,12 +59,6 @@ export async function me(req: Request, res: Response, next: NextFunction) {
         throw new Error('Lecturer not found');
       }
     }
-
-    // res.json({
-    //   id: user.id,
-    //   email: user.email,
-    //   role: user.role,
-    // });
   } catch (error) {
     next(error);
   }
