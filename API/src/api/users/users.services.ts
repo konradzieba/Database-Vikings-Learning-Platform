@@ -18,6 +18,22 @@ export function findUserByEmail(email: string) {
   });
 }
 
+export function findStudentByUserId(userId: number) {
+  return db.student.findUnique({
+    where: {
+      userId: userId,
+    },
+  });
+}
+
+export function findLecturerByUserId(userId: number) {
+  return db.lecturer.findUnique({
+    where: {
+      userId: userId,
+    },
+  });
+}
+
 export function findStudentByIndexNumber(indexNumber: Student['indexNumber']) {
   return db.user.findUnique({
     where: {
@@ -62,7 +78,9 @@ export function updateUser(id: User['id'], user: Prisma.UserUpdateInput) {
     },
     data: {
       ...user,
-      password: user.password ? bcrypt.hashSync(user.password as string, 12) : undefined,
+      password: user.password
+        ? bcrypt.hashSync(user.password as string, 12)
+        : undefined,
     },
   });
 }
