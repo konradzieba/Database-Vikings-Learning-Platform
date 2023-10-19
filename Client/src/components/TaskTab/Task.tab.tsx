@@ -20,12 +20,7 @@ function TaskTab() {
 	return (
 		<>
 			<Flex my='md' />
-			<Flex
-				gap='lg'
-				align='center'
-				mx='auto'
-				className={classes.taskTabWrapper}
-			>
+			<Flex gap='lg' align='center' mx='auto' className={classes.taskTabWrapper}>
 				<ThemeIcon size='lg' w='10%' ml='md' radius='sm'>
 					<Text fw={500}>{mockData.taskNumber}</Text>
 				</ThemeIcon>
