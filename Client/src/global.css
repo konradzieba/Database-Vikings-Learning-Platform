@@ -3,19 +3,34 @@ body {
 	color: var(--font-color);
 }
 
-.mantine-TextInput-input,
-.mantine-PasswordInput-input,
-.mantine-PasswordInput-innerInput {
+.mantine-TextInput-error,
+.mantine-PasswordInput-error {
+	color: var(--bad-state-color);
+}
+.mantine-TextInput-input {
 	color: var(--font-color);
-
 	border-color: var(--font-color);
 
 	&::placeholder {
 		color: var(--placeholder-color);
 	}
+
+	&:focus {
+		border-color: var(--mantine-primary-color);
+	}
 }
 
-.mantine-TextInput-error,
-.mantine-PasswordInput-error {
-	color: var(--bad-state-color);
+.mantine-PasswordInput-input {
+	color: var(--font-color);
+	border-color: var(--font-color);
+
+	&:focus-within {
+		border-color: var(--mantine-primary-color);
+	}
+}
+
+.mantine-PasswordInput-innerInput {
+	&::placeholder {
+		color: var(--placeholder-color);
+	}
 }

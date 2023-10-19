@@ -20,7 +20,15 @@
 .inputError {
 	background-color: transparent;
 	color: var(--bad-state-color);
-	border: calc(0.0625rem * var(--mantine-scale)) solid var(--bad-state-color);
+	border-color: var(--bad-state-color);
+
+	&:focus {
+		border-color: var(--bad-state-color);
+	}
+
+	&:focus-within {
+		border-color: var(--bad-state-color);
+	}
 }
 
 .visibilityToggler {
