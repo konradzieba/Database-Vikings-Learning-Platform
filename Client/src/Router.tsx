@@ -16,7 +16,7 @@ import { loginMiddleware } from './utils/middlewares';
 const router = createBrowserRouter([
 	{
 		path: '/',
-		loader: loginMiddleware,
+		// loader: loginMiddleware,
 		element: <StudentLayout />,
 		children: [
 			{ index: true, element: <Center>STRONA GŁOWNA</Center> },
@@ -27,7 +27,7 @@ const router = createBrowserRouter([
 	},
 	{
 		path: '/dashboard',
-		loader: loginMiddleware,
+		// loader: loginMiddleware,
 		element: <LecturerLayout />,
 		children: [
 			{ index: true, element: <Center>Widok Grup</Center> },

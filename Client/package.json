@@ -26,7 +26,8 @@
 		"react-dom": "^18.2.0",
 		"react-router-dom": "^6.11.2",
 		"react-typing-effect": "^2.0.5",
-		"zod": "^3.22.4"
+		"zod": "^3.22.4",
+		"zustand": "^4.4.3"
 	},
 	"devDependencies": {
 		"@testing-library/dom": "^9.3.0",

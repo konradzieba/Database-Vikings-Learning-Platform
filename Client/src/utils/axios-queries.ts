@@ -1,5 +1,5 @@
 import { TLoginRequest, TSendAnswerRequest } from '@/types/RequestTypes';
-import { TMeResponse, TMessageResponse } from '@/types/ResponseTypes';
+import { TLoginResponse, TMeResponse, TMessageResponse } from '@/types/ResponseTypes';
 import axios from '@/utils/axios';
 
 export const meQueryFn = async () => {
@@ -8,10 +8,7 @@ export const meQueryFn = async () => {
 };
 
 export const loginMutationFn = async (loginRequest: TLoginRequest) => {
-	const { data } = await axios.post<TMessageResponse>(
-		'/auth/login',
-		loginRequest
-	);
+	const { data } = await axios.post<TLoginResponse>('/auth/login', loginRequest);
 	return data;
 };
 
@@ -20,12 +17,7 @@ export const logoutMutationFn = async () => {
 	return data;
 };
 
-export const sendAnswerMutationFn = async (
-	sendAnswerRequest: TSendAnswerRequest
-) => {
-	const { data } = await axios.post<TMessageResponse>(
-		'/answers/createAnswer',
-		sendAnswerRequest
-	);
+export const sendAnswerMutationFn = async (sendAnswerRequest: TSendAnswerRequest) => {
+	const { data } = await axios.post<TMessageResponse>('/answers/createAnswer', sendAnswerRequest);
 	return data;
 };

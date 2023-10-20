@@ -1,6 +1,7 @@
 import { redirect } from 'react-router-dom';
 import axios from './axios';
 import { TMeResponse } from '@/types/ResponseTypes';
+import { UserRole } from '@/types/Enums';
 
 export async function loginMiddleware() {
 	try {

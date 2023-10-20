@@ -3,6 +3,7 @@ import { UseFormReturnType } from '@mantine/form';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { loginMutationFn } from '@/utils/axios-queries';
+import { UserRole } from '@/types/Enums';
 
 interface LoginMutationProps {
 	form: UseFormReturnType<
@@ -22,10 +23,17 @@ export function useLoginMutation({ form }: LoginMutationProps) {
 
 	const loginMutation = useMutation({
 		mutationFn: loginMutationFn,
-		onSuccess: () => {
-			navigate('/');
+		onSuccess: ({ role }) => {
+			if (role === UserRole.STUDENT) {
+				navigate('/');
+			}
+			if (role === UserRole.LECTURER || role === UserRole.SUPERUSER) {
+				navigate('/dashboard');
+			}
+			//zapisanie roli do zustanda
 		},
 		onError: (error: AxiosError) => {
+			console.error(error);
 			if (error.response?.status === 401 || error.response?.status === 400) {
 				form.setFieldError('password', 'Nieprawidłowy email lub hasło');
 			} else {

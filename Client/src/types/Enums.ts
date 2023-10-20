@@ -1,4 +1,4 @@
-declare enum UserRole {
+export enum UserRole {
 	STUDENT = 'STUDENT',
 	LECTURER = 'LECTURER',
 	SUPERUSER = 'SUPERUSER',

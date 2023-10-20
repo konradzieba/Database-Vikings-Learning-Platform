@@ -1,3 +1,5 @@
+import { UserRole } from "./Enums";
+
 interface UserRequest {
 	email: string;
 	password: string;

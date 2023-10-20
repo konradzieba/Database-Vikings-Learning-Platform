@@ -1,6 +1,12 @@
+import { UserRole } from "./Enums";
+
 export type TMessageResponse = {
 	message: string;
 };
+
+export type TLoginResponse = {
+	role: UserRole;
+} & TMessageResponse;
 
 type TLecturerInfo = {
 	lecturerId: number;
