@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 import { generateTokens, verifyRefreshToken } from '../../utils/jwt';
 import { generatePasswordByCredentials } from '../../utils/generatePassword';
 import { hashToken } from '../../utils/hashToken';
-import MessageResponse from 'interfaces/MessageResponse';
+import MessageResponse, { LoginResponse } from 'interfaces/MessageResponse';
 import * as UserServices from '../users/users.services';
 import * as AuthSchemas from './auth.schemas';
 import * as AuthServices from './auth.services';
@@ -166,7 +166,7 @@ export async function registerSuperUser(
 
 export async function login(
   req: Request<{}, {}, AuthSchemas.LoginInput>,
-  res: Response<MessageResponse>,
+  res: Response<LoginResponse>,
   next: NextFunction
 ) {
   try {
@@ -205,6 +205,7 @@ export async function login(
     });
     res.json({
       message: 'Logged in successfully.',
+      role: existingUser.role,
     });
   } catch (error) {
     next(error);
