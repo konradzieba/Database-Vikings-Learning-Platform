@@ -1,6 +1,7 @@
 import { Center } from '@mantine/core';
 import {
 	createBrowserRouter,
+	Navigate,
 	redirect,
 	RouterProvider,
 } from 'react-router-dom';
@@ -12,6 +13,7 @@ import ScoreBoardPage from './pages/ScoreBoard.page';
 import TaskAnswerPage from './pages/TaskAnswer.page';
 import LecturerLayout from './layouts/Lecturer.layout';
 import { loginMiddleware } from './utils/middlewares';
+import { NotFoundPage } from './pages/404.page';
 
 const router = createBrowserRouter([
 	{
@@ -42,6 +44,8 @@ const router = createBrowserRouter([
 		element: <LoginForm />,
 	},
 	{ path: '/me', element: <BlankContent /> },
+	{ path: '/not-found', element: <NotFoundPage /> },
+	{ path: '*', element: <Navigate to='/not-found' replace /> },
 ]);
 
 export function Router() {

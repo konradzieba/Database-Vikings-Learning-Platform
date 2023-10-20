@@ -1,7 +1,12 @@
 import { UserRole } from '@/types/Enums';
 import { create } from 'zustand';
 
-const useStore = create(set => ({
-	role: '',
-	setRole: () => set((state: UserRole) => ({ role: state })),
+interface IStore {
+	role: UserRole | null;
+	setRole: (role: UserRole) => void;
+}
+
+export const useStore = create<IStore>((set) => ({
+	role: null,
+	setRole: (role: UserRole) => set({ role }),
 }));

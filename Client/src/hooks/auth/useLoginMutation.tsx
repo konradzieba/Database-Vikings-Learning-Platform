@@ -4,6 +4,7 @@ import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { loginMutationFn } from '@/utils/axios-queries';
 import { UserRole } from '@/types/Enums';
+import { useStore } from '@/utils/store';
 
 interface LoginMutationProps {
 	form: UseFormReturnType<
@@ -20,17 +21,21 @@ interface LoginMutationProps {
 
 export function useLoginMutation({ form }: LoginMutationProps) {
 	const navigate = useNavigate();
+	const { role: roleFromStore, setRole } = useStore();
 
 	const loginMutation = useMutation({
 		mutationFn: loginMutationFn,
 		onSuccess: ({ role }) => {
 			if (role === UserRole.STUDENT) {
+				setRole(role);
+				console.log(roleFromStore);
 				navigate('/');
 			}
 			if (role === UserRole.LECTURER || role === UserRole.SUPERUSER) {
+				setRole(role);
+				console.log(roleFromStore);
 				navigate('/dashboard');
 			}
-			//zapisanie roli do zustanda
 		},
 		onError: (error: AxiosError) => {
 			console.error(error);
