@@ -14,9 +14,9 @@
 }
 
 .accordionSolutionContainer {
-	border: 1px solid var(--font-color);
+	border: rem(1) solid var(--font-color);
 }
 
 .accordionPanelWrapper {
-	border: 1px solid green;
+	border: rem(1) solid green;
 }

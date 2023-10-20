@@ -1,7 +1,12 @@
+import ScoreBoard from '@/components/ScoreBoard/ScoreBoard.component';
 import { Center } from '@mantine/core';
 
 function ScoreBoardPage() {
-	return <Center>Ranking</Center>;
+	return (
+		<Center>
+			<ScoreBoard />
+		</Center>
+	);
 }
 
 export default ScoreBoardPage;
