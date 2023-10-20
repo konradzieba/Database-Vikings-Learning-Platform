@@ -1,0 +1,22 @@
+.accordionControlWrapper {
+	background-color: #292929;
+	border-radius: var(--mantine-radius-xs);
+	/* border: 1px solid red; */
+}
+
+.accordionTabWrapper {
+	width: 50%;
+	/* border: 1px solid blue; */
+}
+
+.accordionBadge {
+	align-self: flex-start;
+}
+
+.accordionSolutionContainer {
+	border: 1px solid var(--font-color);
+}
+
+.accordionPanelWrapper {
+	border: 1px solid green;
+}
