@@ -1,10 +1,9 @@
-import { Button, Flex, Group, Stack, Text, rem } from '@mantine/core';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { Flex, Group, Stack, Text, rem } from '@mantine/core';
+import { NavLink } from 'react-router-dom';
 import { IconCoins, IconHeartFilled } from '@tabler/icons-react';
-import classes from './Student.Navbar.module.css';
-import TaskTab from '../TaskTab/Task.tab';
-import { useLogoutMutation } from '@/hooks/auth/useLogoutMutation';
-import StudentTaskTab from '../StudentTaskAccordion/StudentTask.accordion';
+import UserPanel from '../UI/UserPanel';
+
+import classes from './Navbar.module.css';
 
 interface HearthCounterProps {
 	hearts: number;
@@ -17,7 +16,7 @@ const navLinks = [
 	},
 	{
 		label: 'Tablica wyników',
-		link: '/scoreboard',
+		link: '/score-board',
 	},
 	{
 		label: 'Moje zadania',
@@ -34,14 +33,17 @@ const mockedUserInfo = {
 function Nav() {
 	return (
 		<Group gap='xl'>
-			{navLinks.map(link => {
+			{navLinks.map((link) => {
 				return (
 					<NavLink
 						to={link.link}
 						className={({ isActive }) =>
-							isActive ? `${classes.link} ${classes.activeLink}` : `${classes.link} ${classes.inactiveLink}`
+							isActive
+								? `${classes.link} ${classes.activeLink}`
+								: `${classes.link} ${classes.inactiveLink}`
 						}
-						key={link.link}>
+						key={link.link}
+					>
 						{link.label}
 					</NavLink>
 				);
@@ -53,66 +55,53 @@ function Nav() {
 function HeartCounter({ hearts }: HearthCounterProps) {
 	return (
 		<Group gap={0} py={rem(6.5)}>
-			<IconHeartFilled size={22} className={hearts >= 1 ? classes.filledHeart : classes.unfilledHeart} />
-			<IconHeartFilled size={22} className={hearts >= 2 ? classes.filledHeart : classes.unfilledHeart} />
-			<IconHeartFilled size={22} className={hearts >= 3 ? classes.filledHeart : classes.unfilledHeart} />
+			<IconHeartFilled
+				size={22}
+				className={hearts >= 1 ? classes.filledHeart : classes.unfilledHeart}
+			/>
+			<IconHeartFilled
+				size={22}
+				className={hearts >= 2 ? classes.filledHeart : classes.unfilledHeart}
+			/>
+			<IconHeartFilled
+				size={22}
+				className={hearts >= 3 ? classes.filledHeart : classes.unfilledHeart}
+			/>
 		</Group>
 	);
 }
 
 function Info() {
-	const logoutMutation = useLogoutMutation();
-
 	return (
 		<Group gap='xl'>
-			<Stack align='center' gap={1}>
+			<Stack align='center' gap={rem(1)}>
 				<Text size='lg' fw={500}>
 					Wynik
 				</Text>
-				<Group className={classes.score} gap={2} py={3.1}>
+				<Group className={classes.score} gap={rem(2)} py={rem(3.1)}>
 					<IconCoins size={22} />
 					<Text size='lg' fw={500}>
 						{mockedUserInfo.score}
 					</Text>
 				</Group>
 			</Stack>
-			<Stack align='center' gap={1}>
+			<Stack align='center' gap={rem(1)}>
 				<Text size='lg' fw={500}>
 					Życia
 				</Text>
 				<HeartCounter hearts={mockedUserInfo.hearts} />
 			</Stack>
-			<Stack gap={0} align='flex-end'>
-				<Text size='lg' fw={500}>
-					{mockedUserInfo.email}
-				</Text>
-				<Button
-					ta='right'
-					variant='transparent'
-					px={0}
-					onClick={() => {
-						logoutMutation.mutate();
-					}}>
-					<Text size='lg' fw={500} className={classes.logoutBtn}>
-						Wyloguj
-					</Text>
-				</Button>
-			</Stack>
+			<UserPanel email={mockedUserInfo.email} className={classes.logoutBtn} />
 		</Group>
 	);
 }
 
 function StudentNavbar() {
 	return (
-		<>
-			<Flex justify='space-around' gap='xl' py='lg' align='center'>
-				<Nav />
-				<Info />
-			</Flex>
-			{/* <LessonCard /> */}
-			<TaskTab />
-			<StudentTaskTab />
-		</>
+		<Flex justify='space-around' gap='xl' py='lg' align='center' mb={rem(60)}>
+			<Nav />
+			<Info />
+		</Flex>
 	);
 }
 

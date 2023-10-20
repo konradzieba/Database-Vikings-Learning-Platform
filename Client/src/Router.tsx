@@ -1,31 +1,40 @@
+import { Center } from '@mantine/core';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import StudentNavbar from './components/Navbar/Student.navbar';
 import LoginForm from './components/Login/Login.form';
-import TaskAnswerPage from './pages/TaskAnswer.page';
 import BlankContent from './components/UI/BlankContent';
+import StudentLayout from './layouts/Student.layout';
+import MyTasksPage from './pages/MyTasks.page';
+import ScoreBoardPage from './pages/ScoreBoard.page';
+import TaskAnswerPage from './pages/TaskAnswer.page';
+import LecturerLayout from './layouts/Lecturer.layout';
 
 const router = createBrowserRouter([
-	{
-		path: '/',
-		element: <StudentNavbar />,
-	},
 	{
 		path: '/login',
 		element: <LoginForm />,
 	},
 	{
-		path: '/scoreBoard',
-		element: <StudentNavbar />,
+		path: '/',
+		element: <StudentLayout />,
+		children: [
+			{ index: true, element: <Center>STRONA GŁOWNA</Center> },
+			{ path: '/score-board', element: <ScoreBoardPage /> },
+			{ path: '/my-tasks', element: <MyTasksPage /> },
+			{ path: '/task/:id', element: <TaskAnswerPage /> },
+		],
 	},
 	{
-		path: '/my-tasks',
-		element: <StudentNavbar />,
+		path: '/dashboard',
+		element: <LecturerLayout />,
+		children: [
+			{ index: true, element: <Center>Widok Grup</Center> },
+			{
+				path: 'group/:id',
+				element: <Center>Podglad jednej grupy</Center>,
+			},
+		],
 	},
 	{ path: '/me', element: <BlankContent /> },
-	{
-		path: '/task/:id',
-		element: <TaskAnswerPage />,
-	},
 ]);
 
 export function Router() {
