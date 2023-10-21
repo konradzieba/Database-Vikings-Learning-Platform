@@ -10,7 +10,6 @@ function AuthMiddleware({ children }: PropsWithChildren) {
 		queryKey: ['test'],
 		queryFn: refreshTokenQueryFn,
 		enabled: !userData,
-		retry: false,
 	});
 
 	if (status === 'error') {
