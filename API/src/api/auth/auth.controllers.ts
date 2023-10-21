@@ -196,12 +196,15 @@ export async function login(
 
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.cookie('access_token', accessToken, {
-      maxAge: 1000 * 60 * 15,
+      maxAge: 1000 * 60 * 1,
       httpOnly: true,
     });
     res.cookie('refresh_token', refreshToken, {
       maxAge: 1000 * 60 * 60 * 8,
       httpOnly: true,
+    });
+    res.cookie('loggedIn', true, {
+      maxAge: 1000 * 60 * 1,
     });
     res.json({
       message: 'Logged in successfully.',
@@ -262,12 +265,15 @@ export async function refreshTokens(
 
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.cookie('access_token', accessToken, {
-      maxAge: 1000 * 60 * 15,
+      maxAge: 1000 * 60 * 1,
       httpOnly: true,
     });
     res.cookie('refresh_token', newRefreshToken, {
       maxAge: 1000 * 60 * 60 * 8,
       httpOnly: true,
+    });
+    res.cookie('loggedIn', true, {
+      maxAge: 1000 * 60 * 1,
     });
     res.json({
       message: 'Token refreshed successfully.',
@@ -318,6 +324,7 @@ export async function logout(
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.clearCookie('access_token');
     res.clearCookie('refresh_token');
+    res.clearCookie('loggedIn');
     res.json({
       message: 'Logged out successfully.',
     });
