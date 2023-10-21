@@ -33,17 +33,14 @@ const mockedUserInfo = {
 function Nav() {
 	return (
 		<Group gap='xl'>
-			{navLinks.map((link) => {
+			{navLinks.map(link => {
 				return (
 					<NavLink
 						to={link.link}
 						className={({ isActive }) =>
-							isActive
-								? `${classes.link} ${classes.activeLink}`
-								: `${classes.link} ${classes.inactiveLink}`
+							isActive ? `${classes.link} ${classes.activeLink}` : `${classes.link} ${classes.inactiveLink}`
 						}
-						key={link.link}
-					>
+						key={link.link}>
 						{link.label}
 					</NavLink>
 				);
@@ -55,18 +52,9 @@ function Nav() {
 function HeartCounter({ hearts }: HearthCounterProps) {
 	return (
 		<Group gap={0} py={rem(6.5)}>
-			<IconHeartFilled
-				size={22}
-				className={hearts >= 1 ? classes.filledHeart : classes.unfilledHeart}
-			/>
-			<IconHeartFilled
-				size={22}
-				className={hearts >= 2 ? classes.filledHeart : classes.unfilledHeart}
-			/>
-			<IconHeartFilled
-				size={22}
-				className={hearts >= 3 ? classes.filledHeart : classes.unfilledHeart}
-			/>
+			<IconHeartFilled size={22} className={hearts >= 1 ? classes.filledHeart : classes.unfilledHeart} />
+			<IconHeartFilled size={22} className={hearts >= 2 ? classes.filledHeart : classes.unfilledHeart} />
+			<IconHeartFilled size={22} className={hearts >= 3 ? classes.filledHeart : classes.unfilledHeart} />
 		</Group>
 	);
 }

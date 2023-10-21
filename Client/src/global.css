@@ -61,3 +61,16 @@ body {
 		opacity: 1;
 	}
 }
+
+.mantine-Accordion-root {
+	color: var(--font-color);
+}
+
+.mantine-Accordion-control {
+	color: var(--font-color);
+}
+
+.mantine-Accordion-item {
+	color: var(--font-color);
+	background-color: var(--primary-bg-color-lighter);
+}

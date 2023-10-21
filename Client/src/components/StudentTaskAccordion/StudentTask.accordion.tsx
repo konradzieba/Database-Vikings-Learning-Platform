@@ -1,4 +1,4 @@
-import { Accordion, Badge, Box, Code, Divider, Flex, Group, Stack, Text, ThemeIcon, rem } from '@mantine/core';
+import { Accordion, Badge, Box, Center, Code, Divider, Flex, Group, Stack, Text, ThemeIcon, rem } from '@mantine/core';
 import classes from './StudentTask.accordion.module.css';
 import { IconBlockquote, IconChevronDown, IconCode } from '@tabler/icons-react';
 
@@ -35,10 +35,10 @@ function StudentTaskAccordion() {
 
 	//key i value do zmiany
 	const studentTaskAnswers = mockData.map(data => (
-		<Accordion.Item key={data.taskNumber} value={data.solution} className={classes.accordionTabWrapper}>
+		<Accordion.Item key={data.taskNumber} value={data.solution}>
 			<Accordion.Control>
 				<Flex align='center' justify='space-evenly' gap='lg' mx='auto' className={classes.accordionControlWrapper}>
-					<ThemeIcon size='lg' maw='10%' ml='md' radius='sm' my='md'>
+					<ThemeIcon size='lg' maw='10%'  radius='sm' my='md' className={classes.accordionIconColor}>
 						<Text fw={500}>{data.taskNumber}</Text>
 					</ThemeIcon>
 
@@ -46,14 +46,14 @@ function StudentTaskAccordion() {
 						{spliceQuestion(data.taskQuestion)}
 					</Text>
 
-					<Badge maw='10%' my='md' color='var(--mantine-primary-color)' size='lg' className={classes.accordionBadge}>
+					<Badge my='md' color='var(--mantine-primary-color)' size='lg' className={classes.accordionBadge}>
 						{data.replyStatus}
 					</Badge>
 				</Flex>
 			</Accordion.Control>
 			<Accordion.Panel>
-				<Divider />
-				<Stack gap='lg' mx='auto' className={classes.accordionPanelWrapper}>
+				<Divider color='#a6a6a6' />
+				<Stack gap='lg' mx='auto'>
 					<Group mt='sm'>
 						<ThemeIcon variant='transparent' size='lg'>
 							<IconCode />
@@ -74,12 +74,13 @@ function StudentTaskAccordion() {
 	));
 
 	return (
-		<Flex align='center' mx='auto'>
-			<Accordion variant='separated' chevron={<IconChevronDown />} chevronSize={rem(24)}>
-				{studentTaskAnswers}
-			</Accordion>
-			;
-		</Flex>
+		<Accordion
+			variant='separated'
+			chevron={<IconChevronDown />}
+			chevronSize={rem(24)}
+			className={classes.accordionTabWrapper}>
+			{studentTaskAnswers}
+		</Accordion>
 	);
 }
 
