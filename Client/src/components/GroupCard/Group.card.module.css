@@ -4,3 +4,17 @@
 	background-color: var(--primary-bg-color-lighter);
 	border-radius: var(--mantine-radius-xs);
 }
+
+.addGroupCardButton {
+	&::after {
+		content: 'Dodaj grupę';
+		font-size: 0.625rem;
+		font-weight: 400;
+		color: var(--font-color);
+		transition: all 0.3s ease-in-out;
+		opacity: 0;
+	}
+	&:hover::after {
+		opacity: 1;
+	}
+}

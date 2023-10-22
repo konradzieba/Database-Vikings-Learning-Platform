@@ -8,13 +8,13 @@ function AddGroupCard() {
 	};
 
 	return (
-		<Button onClick={handleOpenCreateGroupModal} className={classes.groupCardWrapper}>
-			<Flex justify='center' align='center'>
+		<Flex justify='center' align='center' className={classes.groupCardWrapper}>
+			<Button onClick={handleOpenCreateGroupModal} variant='transparent' className={classes.addGroupCardButton}>
 				<ThemeIcon variant='light' c='var(--mantine-primary-color)' size='md'>
 					<IconPlus size={rem(30)} />
 				</ThemeIcon>
-			</Flex>
-		</Button>
+			</Button>
+		</Flex>
 	);
 }
 
