@@ -2,6 +2,7 @@ import { redirect } from 'react-router-dom';
 import axios from './axios';
 import { TMeResponse } from '@/types/ResponseTypes';
 import { UserRole } from '@/types/Enums';
+import { AxiosError, AxiosRequestConfig } from 'axios';
 
 export async function loginMiddleware() {
 	try {
@@ -20,3 +21,4 @@ export async function loginMiddleware() {
 		return redirect('/login');
 	}
 }
+
