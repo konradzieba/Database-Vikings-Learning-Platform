@@ -2,7 +2,8 @@ import '@mantine/core/styles.css';
 import './global.css';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { resolver, theme } from './theme';
-import { MantineProvider } from '@mantine/core';
+import { MantineProvider, rem } from '@mantine/core';
+import { ModalsProvider } from '@mantine/modals';
 import { Router } from './Router';
 import queryClient from './utils/query-client';
 
@@ -14,7 +15,12 @@ export default function App() {
 				cssVariablesResolver={resolver}
 				defaultColorScheme='dark'
 			>
-				<Router />
+				<ModalsProvider
+					labels={{ confirm: 'Anuluj', cancel: 'Prześlij' }}
+					modalProps={{ overlayProps: { blur: 2 }, yOffset: rem(100) }}
+				>
+					<Router />
+				</ModalsProvider>
 			</MantineProvider>
 		</QueryClientProvider>
 	);
