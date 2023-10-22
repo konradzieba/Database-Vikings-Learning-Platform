@@ -10,7 +10,7 @@ interface UserPanelProps {
 function UserPanel({ email, className }: UserPanelProps) {
 	const logoutMutation = useLogoutMutation();
 
-	const openDeleteModal = () =>
+	const openLogoutModal = () =>
 		modals.openConfirmModal({
 			title: 'Potwierdź wylogowanie',
 			children: <Text size='sm'>Czy na pewno chcesz się wylogować?</Text>,
@@ -27,7 +27,7 @@ function UserPanel({ email, className }: UserPanelProps) {
 			<Text size='lg' fw={500}>
 				{email}
 			</Text>
-			<Button ta='right' variant='transparent' px={0} onClick={openDeleteModal}>
+			<Button ta='right' variant='transparent' px={0} onClick={openLogoutModal}>
 				<Text size='lg' fw={500} className={className}>
 					Wyloguj
 				</Text>
