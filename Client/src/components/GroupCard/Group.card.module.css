@@ -1,0 +1,6 @@
+.groupCardWrapper {
+	width: 250px;
+	height: 250px;
+	background-color: var(--primary-bg-color-lighter);
+	border-radius: var(--mantine-radius-xs);
+}

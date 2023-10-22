@@ -1,10 +1,5 @@
 import { Center } from '@mantine/core';
-import {
-	createBrowserRouter,
-	Navigate,
-	redirect,
-	RouterProvider,
-} from 'react-router-dom';
+import { createBrowserRouter, Navigate, redirect, RouterProvider } from 'react-router-dom';
 import LoginForm from './components/Login/Login.form';
 import BlankContent from './components/UI/BlankContent';
 import StudentLayout from './layouts/Student.layout';
@@ -14,6 +9,7 @@ import TaskAnswerPage from './pages/TaskAnswer.page';
 import LecturerLayout from './layouts/Lecturer.layout';
 import { loginMiddleware } from './utils/middlewares';
 import { NotFoundPage } from './pages/404.page';
+import DashboardPage from './pages/Dashboard.page';
 
 const router = createBrowserRouter([
 	{
@@ -32,7 +28,7 @@ const router = createBrowserRouter([
 		// loader: loginMiddleware,
 		element: <LecturerLayout />,
 		children: [
-			{ index: true, element: <Center>Widok Grup</Center> },
+			{ index: true, element: <DashboardPage /> },
 			{
 				path: 'group/:id',
 				element: <Center>Podglad jednej grupy</Center>,
