@@ -10,12 +10,17 @@ import LecturerLayout from './layouts/Lecturer.layout';
 import { loginMiddleware } from './utils/middlewares';
 import { NotFoundPage } from './pages/404.page';
 import DashboardPage from './pages/Dashboard.page';
+import AuthMiddleware from './utils/Auth.middleware';
 
 const router = createBrowserRouter([
 	{
 		path: '/',
 		// loader: loginMiddleware,
-		element: <StudentLayout />,
+		element: (
+			<AuthMiddleware>
+				<StudentLayout />
+			</AuthMiddleware>
+		),
 		children: [
 			{ index: true, element: <Center>STRONA GŁOWNA</Center> },
 			{ path: '/score-board', element: <ScoreBoardPage /> },
@@ -26,7 +31,11 @@ const router = createBrowserRouter([
 	{
 		path: '/dashboard',
 		// loader: loginMiddleware,
-		element: <LecturerLayout />,
+		element: (
+			<AuthMiddleware>
+				<LecturerLayout />
+			</AuthMiddleware>
+		),
 		children: [
 			{ index: true, element: <DashboardPage /> },
 			{

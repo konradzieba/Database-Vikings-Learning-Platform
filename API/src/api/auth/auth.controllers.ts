@@ -203,6 +203,9 @@ export async function login(
       maxAge: 1000 * 60 * 60 * 8,
       httpOnly: true,
     });
+    res.cookie('loggedIn', true, {
+      maxAge: 1000 * 60 * 15,
+    });
     res.json({
       message: 'Logged in successfully.',
       role: existingUser.role,
@@ -269,6 +272,9 @@ export async function refreshTokens(
       maxAge: 1000 * 60 * 60 * 8,
       httpOnly: true,
     });
+    res.cookie('loggedIn', true, {
+      maxAge: 1000 * 60 * 15,
+    });
     res.json({
       message: 'Token refreshed successfully.',
     });
@@ -318,6 +324,7 @@ export async function logout(
     res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.clearCookie('access_token');
     res.clearCookie('refresh_token');
+    res.clearCookie('loggedIn');
     res.json({
       message: 'Logged out successfully.',
     });

@@ -7,6 +7,11 @@ export const meQueryFn = async () => {
 	return data;
 };
 
+export const refreshTokenQueryFn = async () => {
+	const { data } = await axios.post<TMessageResponse>('/auth/refreshToken');
+	return data;
+};
+
 export const loginMutationFn = async (loginRequest: TLoginRequest) => {
 	const { data } = await axios.post<TLoginResponse>('/auth/login', loginRequest);
 	return data;

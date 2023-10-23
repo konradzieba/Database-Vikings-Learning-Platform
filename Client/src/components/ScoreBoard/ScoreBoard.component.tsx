@@ -1,12 +1,4 @@
-import {
-	Table,
-	Progress,
-	Anchor,
-	Text,
-	Group,
-	ThemeIcon,
-	rem,
-} from '@mantine/core';
+import { Table, Progress, Anchor, Text, Group, ThemeIcon, rem } from '@mantine/core';
 import classes from './TableReviews.module.css';
 import { IconCoins, IconTrophy } from '@tabler/icons-react';
 
@@ -48,11 +40,7 @@ const data = [
 	},
 ];
 
-const topColors = [
-	'var(--score-color)',
-	'var(--mantine-color-gray-4)',
-	'#9F563A',
-];
+const topColors = ['var(--score-color)', 'var(--mantine-color-gray-4)', '#9F563A'];
 
 function ScoreBoard() {
 	const rows = data.map((row, index) => {
@@ -62,17 +50,11 @@ function ScoreBoard() {
 			<Table.Tr key={row.studentName}>
 				<Table.Td>
 					{isTop3 ? (
-						<ThemeIcon
-							variant='transparent'
-							size='md'
-							c={topColors[position - 1]}
-							p={0}
-							m={0}
-						>
+						<ThemeIcon variant='transparent' size='md' c={topColors[position - 1]} p={0} m={0}>
 							<IconTrophy />
 						</ThemeIcon>
 					) : (
-						<Text ml='xs' size='md'>
+						<Text ml={rem(8)} size='md'>
 							{position}
 						</Text>
 					)}
