@@ -4,6 +4,7 @@ import { UserRole } from '@/types/Enums';
 import { useStore } from '@/utils/store';
 import { Link, Navigate, Outlet } from 'react-router-dom';
 import { Box } from '@mantine/core';
+import dayjs from 'dayjs';
 
 function StudentLayout() {
 	const { role } = useStore();
@@ -20,7 +21,12 @@ function StudentLayout() {
 			<StudentNavbar />
 			<Outlet />
 
-			<DateTimePicker w='30%' />
+			<DateTimePicker
+				minDate={dayjs().toDate()}
+				maxDate={dayjs().add(5, 'month').endOf('month').toDate()}
+				defaultValue={dayjs().add(7, 'days').endOf('day').toDate()}
+				w='30%'
+			/>
 			<Link to='/dashboard'>Panel wykladowcy</Link>
 			<Link to='/task/4'>Przejdź do Task4</Link>
 		</>
