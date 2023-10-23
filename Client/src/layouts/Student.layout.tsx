@@ -17,7 +17,8 @@ function StudentLayout() {
 		<>
 			<StudentNavbar />
 			<Outlet />
-			<Link to={'/dashboard'}>Panel wykladowcy</Link>
+			<Link to='/dashboard'>Panel wykladowcy</Link>
+			<Link to='/task/4'>Przejdź do Task4</Link>
 		</>
 	);
 }

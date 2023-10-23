@@ -1,7 +1,17 @@
 import { FormEvent, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSendAnswerMutation } from '@/hooks/answer/useSendAnswerMutation';
-import { Flex, Group, ScrollArea, Stack, Text, Textarea, ThemeIcon, Title } from '@mantine/core';
+import {
+	Flex,
+	Group,
+	ScrollArea,
+	Stack,
+	Text,
+	Textarea,
+	ThemeIcon,
+	Title,
+} from '@mantine/core';
+import { modals } from '@mantine/modals';
 import { IconClockHour1, IconClockHour11, IconCode } from '@tabler/icons-react';
 import DateTimeDisplay from '../UI/DateTimeDisplay';
 import PrimaryButton from '../UI/PrimaryButton';
@@ -18,7 +28,11 @@ interface TaskAnswerHeaderProps {
 	taskQuestion: string;
 }
 
-function TaskAnswerHeader({ taskNumber, lessonNumber, taskQuestion }: TaskAnswerHeaderProps) {
+function TaskAnswerHeader({
+	taskNumber,
+	lessonNumber,
+	taskQuestion,
+}: TaskAnswerHeaderProps) {
 	return (
 		<>
 			<Title fw={700} py={0} order={2}>
@@ -28,7 +42,12 @@ function TaskAnswerHeader({ taskNumber, lessonNumber, taskQuestion }: TaskAnswer
 				Lekcja {lessonNumber}
 			</Text>
 			<ScrollArea.Autosize type='auto' mah={280} pb='lg' offsetScrollbars='y'>
-				<Text size='md' py='md' px='md' className={classes.taskAnswerQuestionText}>
+				<Text
+					size='md'
+					py='md'
+					px='md'
+					className={classes.taskAnswerQuestionText}
+				>
 					{taskQuestion}
 				</Text>
 			</ScrollArea.Autosize>
@@ -41,22 +60,32 @@ function TaskAnswerForm({ taskId, studentId }: TaskAnswerFormProps) {
 
 	const sendAnswerMutation = useSendAnswerMutation();
 
-	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		if (!answerTextareaRef.current?.value) {
+	const sendAnswer = () => {
+		const answer = answerTextareaRef.current?.value;
+
+		if (!answer) {
 			return;
 		}
-		const answer = answerTextareaRef.current?.value;
-		if (answer) {
-			sendAnswerMutation.mutate({
-				solution: answer,
-				taskId: taskId,
-				studentId: studentId,
-			});
-		}
+
+		sendAnswerMutation.mutate({
+			solution: answer,
+			taskId,
+			studentId,
+		});
 	};
+
+	const openConfirmAnswerModal = (e: FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		modals.openConfirmModal({
+			children: <Text size='sm'>Czy na pewno chcesz wysłać odpowiedź?</Text>,
+			onConfirm: () => {
+				sendAnswer();
+			},
+		});
+	};
+
 	return (
-		<form onSubmit={handleSubmit}>
+		<form onSubmit={openConfirmAnswerModal}>
 			<Stack gap='sm'>
 				<Group gap='lg' align='flex-start'>
 					<ThemeIcon size='lg' variant='transparent'>
@@ -71,7 +100,11 @@ function TaskAnswerForm({ taskId, studentId }: TaskAnswerFormProps) {
 						className={classes.taskAnswerTextArea}
 					/>
 				</Group>
-				<PrimaryButton type='submit' maw={300} className={classes.taskAnswerPrimaryButton}>
+				<PrimaryButton
+					type='submit'
+					maw={300}
+					className={classes.taskAnswerPrimaryButton}
+				>
 					Prześlij
 				</PrimaryButton>
 			</Stack>
@@ -100,11 +133,22 @@ function TaskAnswer() {
 					lessonNumber={mockData.lessonNumber}
 					taskQuestion={mockData.taskQuestion}
 				/>
-				<TaskAnswerForm taskId={mockData.taskId} studentId={mockData.studentId} />
+				<TaskAnswerForm
+					taskId={mockData.taskId}
+					studentId={mockData.studentId}
+				/>
 			</Stack>
 			<Group gap='lg' className={classes.taskAnswerDateDisplayGroup}>
-				<DateTimeDisplay title='Data rozpoczęcia' icon={<IconClockHour1 size={20} />} date={mockData.openDate} />
-				<DateTimeDisplay title='Data zakończenia' icon={<IconClockHour11 size={20} />} date={mockData.closeDate} />
+				<DateTimeDisplay
+					title='Data rozpoczęcia'
+					icon={<IconClockHour1 size={20} />}
+					date={mockData.openDate}
+				/>
+				<DateTimeDisplay
+					title='Data zakończenia'
+					icon={<IconClockHour11 size={20} />}
+					date={mockData.closeDate}
+				/>
 			</Group>
 		</Flex>
 	);

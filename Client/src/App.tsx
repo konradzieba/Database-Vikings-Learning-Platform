@@ -16,7 +16,7 @@ export default function App() {
 				defaultColorScheme='dark'
 			>
 				<ModalsProvider
-					labels={{ confirm: 'Anuluj', cancel: 'Prześlij' }}
+					labels={{ confirm: 'Prześlij', cancel: 'Anuluj' }}
 					modalProps={{ overlayProps: { blur: 2 }, yOffset: rem(100) }}
 				>
 					<Router />
