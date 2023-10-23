@@ -1,13 +1,11 @@
 import StudentNavbar from '@/components/Navbar/Student.navbar';
 import { DateTimePicker } from '@mantine/dates';
-import { UserRole } from '@/types/Enums';
 import { useStore } from '@/utils/store';
 import { Link, Navigate, Outlet } from 'react-router-dom';
-import { Box } from '@mantine/core';
 import dayjs from 'dayjs';
 
 function StudentLayout() {
-	// const { role } = useStore();
+	// 	const { role } = useStore();
 
 	// if (!role) {
 	// 	return <Navigate to='/login' replace />;
@@ -27,7 +25,7 @@ function StudentLayout() {
 				defaultValue={dayjs().add(7, 'days').endOf('day').toDate()}
 				w='30%'
 			/>
-			<Link to='/dashboard'>Panel wykladowcy</Link>
+			<Link to='/dashboard'>Panel wykładowcy</Link>
 			<Link to='/task/4'>Przejdź do Task4</Link>
 		</>
 	);

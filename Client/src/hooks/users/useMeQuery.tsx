@@ -3,10 +3,10 @@ import { meQueryFn } from '@/utils/axios-queries';
 import { useCookies } from 'react-cookie';
 
 export function useMeQuery() {
-	const [loggedIn] = useCookies(['loggedIn']);
+	const [cookies] = useCookies(['loggedIn']);
 	const meQuery = useQuery({
 		queryFn: meQueryFn,
-		queryKey: ['me', loggedIn],
+		queryKey: ['me', cookies.loggedIn],
 		refetchInterval: 900000,
 	});
 

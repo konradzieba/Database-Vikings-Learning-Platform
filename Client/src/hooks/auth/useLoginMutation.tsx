@@ -28,12 +28,10 @@ export function useLoginMutation({ form }: LoginMutationProps) {
 		onSuccess: ({ role }) => {
 			if (role === UserRole.STUDENT) {
 				setRole(role);
-				console.log(roleFromStore);
 				navigate('/');
 			}
 			if (role === UserRole.LECTURER || role === UserRole.SUPERUSER) {
 				setRole(role);
-				console.log(roleFromStore);
 				navigate('/dashboard');
 			}
 		},
