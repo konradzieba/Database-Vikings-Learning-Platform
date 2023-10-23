@@ -59,6 +59,8 @@ router.post(
   AuthControllers.refreshTokens
 );
 
+router.post('/checkRole', requireUser, AuthControllers.checkRole);
+
 router.post('/logout', requireUser, AuthControllers.logout);
 
 export default router;

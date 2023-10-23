@@ -332,3 +332,30 @@ export async function logout(
     next(error);
   }
 }
+
+export function checkRole(req: Request, res: Response, next: NextFunction) {
+  try {
+    const user = req.user;
+
+    if (!user) {
+      res.status(401);
+      throw new Error('Unauthorized.');
+    }
+
+    // if (user.role !== EnumRole.SUPERUSER && user.role !== EnumRole.LECTURER) {
+    //   res.json({
+    //     role: EnumRole.STUDENT,
+    //   });
+    //   throw new Error('Forbidden.');
+    // } else {
+    //   res.json({
+    //     message: 'User is admin.',
+    //   });
+    // }
+    res.json({
+      role: user.role,
+    });
+  } catch (error) {
+    next(error);
+  }
+}

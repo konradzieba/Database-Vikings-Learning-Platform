@@ -1,5 +1,10 @@
 import { Center } from '@mantine/core';
-import { createBrowserRouter, Navigate, redirect, RouterProvider } from 'react-router-dom';
+import {
+	createBrowserRouter,
+	Navigate,
+	redirect,
+	RouterProvider,
+} from 'react-router-dom';
 import LoginForm from './components/Login/Login.form';
 import BlankContent from './components/UI/BlankContent';
 import StudentLayout from './layouts/Student.layout';
@@ -11,11 +16,24 @@ import { loginMiddleware } from './utils/middlewares';
 import { NotFoundPage } from './pages/404.page';
 import DashboardPage from './pages/Dashboard.page';
 import AuthMiddleware from './utils/Auth.middleware';
+import axios from '@/utils/axios';
+import { TMeResponse, TMessageResponse } from './types/ResponseTypes';
+import { UserRole } from './types/Enums';
 
 const router = createBrowserRouter([
 	{
 		path: '/',
-		// loader: loginMiddleware,
+		loader: async () => {
+			const { data } = await axios.post<Pick<TMeResponse, 'role'>>(
+				'/auth/checkRole'
+			);
+			if (data.role === UserRole.LECTURER || data.role === UserRole.SUPERUSER) {
+				return redirect('/dashboard');
+			} else {
+				return null;
+			}
+		},
+		// ErrorBoundary: () => <Navigate to='/not-found' replace />,
 		element: (
 			<AuthMiddleware>
 				<StudentLayout />
@@ -30,7 +48,17 @@ const router = createBrowserRouter([
 	},
 	{
 		path: '/dashboard',
-		// loader: loginMiddleware,
+		loader: async () => {
+			const { data } = await axios.post<Pick<TMeResponse, 'role'>>(
+				'/auth/checkRole'
+			);
+			if (data.role === UserRole.LECTURER || data.role === UserRole.SUPERUSER) {
+				return null;
+			} else {
+				return redirect('/not-found');
+			}
+		},
+		// ErrorBoundary: () => <Navigate to='/not-found' replace />,
 		element: (
 			<AuthMiddleware>
 				<LecturerLayout />

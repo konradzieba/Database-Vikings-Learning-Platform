@@ -7,14 +7,14 @@ import { Box } from '@mantine/core';
 import dayjs from 'dayjs';
 
 function StudentLayout() {
-	const { role } = useStore();
+	// const { role } = useStore();
 
-	if (!role) {
-		return <Navigate to='/login' replace />;
-	}
-	if (role === UserRole.LECTURER || role === UserRole.SUPERUSER) {
-		return <Navigate to='/not-found' replace />;
-	}
+	// if (!role) {
+	// 	return <Navigate to='/login' replace />;
+	// }
+	// if (role === UserRole.LECTURER || role === UserRole.SUPERUSER) {
+	// 	return <Navigate to='/not-found' replace />;
+	// }
 
 	return (
 		<>
