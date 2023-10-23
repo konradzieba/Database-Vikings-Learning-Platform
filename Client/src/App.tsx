@@ -10,21 +10,18 @@ import { Router } from './Router';
 import queryClient from './utils/query-client';
 import dayjs from 'dayjs';
 import { DatesProvider } from '@mantine/dates';
+import SessionExpiredModal from './modals/SessionExpire.modal';
 
 export default function App() {
 	dayjs.locale('pl');
 	return (
 		<QueryClientProvider client={queryClient}>
 			<DatesProvider settings={{ locale: 'pl' }}>
-				<MantineProvider
-					theme={{ ...theme }}
-					cssVariablesResolver={resolver}
-					defaultColorScheme='dark'
-				>
+				<MantineProvider theme={{ ...theme }} cssVariablesResolver={resolver} defaultColorScheme='dark'>
 					<ModalsProvider
+						modals={{ sessionExpired: SessionExpiredModal }}
 						labels={{ confirm: 'Prześlij', cancel: 'Anuluj' }}
-						modalProps={{ overlayProps: { blur: 2 }, yOffset: rem(100) }}
-					>
+						modalProps={{ overlayProps: { blur: 2 }, yOffset: rem(100) }}>
 						<Router />
 					</ModalsProvider>
 				</MantineProvider>
