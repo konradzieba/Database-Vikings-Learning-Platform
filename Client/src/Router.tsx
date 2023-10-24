@@ -11,6 +11,8 @@ import { NotFoundPage } from './pages/404.page';
 import DashboardPage from './pages/Dashboard.page';
 import AuthMiddleware from './utils/Auth.middleware';
 import { lecturerLayoutLoaderFn, loginLoaderFn, studentLayoutLoaderFn } from './utils/middlewares';
+import { HomePage } from './pages/Home.page';
+import LessonsTasksPage from './pages/LessonsTasks.page';
 
 const router = createBrowserRouter([
 	{
@@ -23,9 +25,10 @@ const router = createBrowserRouter([
 			</AuthMiddleware>
 		),
 		children: [
-			{ index: true, element: <Center>STRONA GŁOWNA</Center> },
+			{ index: true, element: <HomePage /> },
 			{ path: '/score-board', element: <ScoreBoardPage /> },
 			{ path: '/my-tasks', element: <MyTasksPage /> },
+			{ path: '/lesson-tasks/:id', element: <LessonsTasksPage /> },
 			{ path: '/task/:id', element: <TaskAnswerPage /> },
 		],
 	},

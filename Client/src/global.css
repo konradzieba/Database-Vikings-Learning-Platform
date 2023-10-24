@@ -74,3 +74,13 @@ body {
 	color: var(--font-color);
 	background-color: var(--primary-bg-color-lighter);
 }
+
+.mantine-Carousel-indicator {
+	width: rem(12px);
+	height: rem(4px);
+	transition: width 250ms ease;
+
+	&[data-active] {
+		width: rem(40px);
+	}
+}
