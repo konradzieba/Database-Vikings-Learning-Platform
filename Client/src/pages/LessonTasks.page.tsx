@@ -38,7 +38,7 @@ const mockData = {
 	],
 };
 
-function LessonsTasksPage() {
+function LessonTasksPage() {
 	return (
 		<Center>
 			<Stack align='center'>
@@ -48,7 +48,7 @@ function LessonsTasksPage() {
 				</Stack>
 				<ScrollArea type='auto' h={450} pb='sm' offsetScrollbars='y' w='50%'>
 					{mockData.tasks.map(task => (
-						<Box>
+						<Box  >
 							<TaskTab
 								key={task.taskNumber}
 								taskNumber={task.taskNumber}
@@ -63,4 +63,4 @@ function LessonsTasksPage() {
 	);
 }
 
-export default LessonsTasksPage;
+export default LessonTasksPage;

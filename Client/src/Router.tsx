@@ -12,7 +12,8 @@ import DashboardPage from './pages/Dashboard.page';
 import AuthMiddleware from './utils/Auth.middleware';
 import { lecturerLayoutLoaderFn, loginLoaderFn, studentLayoutLoaderFn } from './utils/middlewares';
 import { HomePage } from './pages/Home.page';
-import LessonsTasksPage from './pages/LessonsTasks.page';
+import LessonTasksPage from './pages/LessonTasks.page';
+import GroupPanelPage from './pages/GroupPanel.page';
 
 const router = createBrowserRouter([
 	{
@@ -28,7 +29,7 @@ const router = createBrowserRouter([
 			{ index: true, element: <HomePage /> },
 			{ path: '/score-board', element: <ScoreBoardPage /> },
 			{ path: '/my-tasks', element: <MyTasksPage /> },
-			{ path: '/lesson-tasks/:id', element: <LessonsTasksPage /> },
+			{ path: '/lesson-tasks/:id', element: <LessonTasksPage /> },
 			{ path: '/task/:id', element: <TaskAnswerPage /> },
 		],
 	},
@@ -44,7 +45,7 @@ const router = createBrowserRouter([
 			{ index: true, element: <DashboardPage /> },
 			{
 				path: 'group/:id',
-				element: <Center>Podglad jednej grupy</Center>,
+				element: <GroupPanelPage />,
 			},
 		],
 	},
