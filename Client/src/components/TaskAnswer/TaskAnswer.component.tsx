@@ -105,7 +105,7 @@ function TaskAnswer() {
 	};
 
 	return (
-		<Flex px='xl' align='flex-start' justify='space-between'>
+		<Flex px='xl' align='flex-start' justify='space-evenly'>
 			<Stack w='50%' gap={0}>
 				<TaskAnswerHeader
 					taskNumber={mockData.taskNumber}
