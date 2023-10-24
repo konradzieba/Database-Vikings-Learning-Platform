@@ -1,14 +1,15 @@
 import { Accordion, Badge, Box, Center, Code, Divider, Flex, Group, Stack, Text, ThemeIcon, rem } from '@mantine/core';
 import classes from './StudentTask.accordion.module.css';
 import { IconBlockquote, IconChevronDown, IconCode } from '@tabler/icons-react';
+import { AnswerReplyStatus } from '@/types/Enums';
 
 const mockData = [
 	{
 		taskNumber: 12,
 		taskQuestion: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget.`,
 		//Te wartości pochodzą z tabeli Answer więc trzeba będzie w get odwoływać się do TASK i ANSWER
-		replyStatus: 'PENDING',
-		replyDesc: 'Super zadanie',
+		replyStatus: 'INCORRECT',
+		// replyDesc: 'Super zadanie',
 		solution: `SELECT * FROM DB;
 SELECT * FROM DB WHERE STUDENT > 1;`,
 		grantedScore: 100,
@@ -33,12 +34,38 @@ function StudentTaskAccordion() {
 		}
 	};
 
+	const statusBadgeColor = (status: string) => {
+		switch (status) {
+			case AnswerReplyStatus.CORRECT:
+				return 'var(--good-state-color)';
+			case AnswerReplyStatus.PARTLY_CORRECT:
+				return 'var(--neutral-state-color)';
+			case AnswerReplyStatus.INCORRECT:
+				return 'var(--bad-state-color)';
+			default:
+				return 'var(--mantine-primary-color)';
+		}
+	};
+
+	const translateStatus = (status: string) => {
+		switch (status) {
+			case AnswerReplyStatus.CORRECT:
+				return 'Poprawna';
+			case AnswerReplyStatus.PARTLY_CORRECT:
+				return 'Częściowo poprawna';
+			case AnswerReplyStatus.INCORRECT:
+				return 'Niepoprawna';
+			default:
+				return 'Oczekująca';
+		}
+	};
+
 	//key i value do zmiany
 	const studentTaskAnswers = mockData.map(data => (
 		<Accordion.Item key={data.taskNumber} value={data.solution}>
 			<Accordion.Control>
 				<Flex align='center' justify='space-evenly' gap='lg' mx='auto' className={classes.accordionControlWrapper}>
-					<ThemeIcon size='lg' maw='10%'  radius='sm' my='md' className={classes.accordionIconColor}>
+					<ThemeIcon size='lg' maw='10%' radius='sm' my='md' className={classes.accordionIconColor}>
 						<Text fw={500}>{data.taskNumber}</Text>
 					</ThemeIcon>
 
@@ -46,8 +73,8 @@ function StudentTaskAccordion() {
 						{spliceQuestion(data.taskQuestion)}
 					</Text>
 
-					<Badge my='md' color='var(--mantine-primary-color)' size='lg' className={classes.accordionBadge}>
-						{data.replyStatus}
+					<Badge my='md' color={statusBadgeColor(data.replyStatus)} size='lg' className={classes.accordionBadge}>
+						{translateStatus(data.replyStatus)}
 					</Badge>
 				</Flex>
 			</Accordion.Control>
@@ -62,12 +89,14 @@ function StudentTaskAccordion() {
 							<pre>{data.solution}</pre>
 						</Box>
 					</Group>
-					<Group>
-						<ThemeIcon variant='transparent' size='lg'>
-							<IconBlockquote />
-						</ThemeIcon>
-						{data.replyDesc}
-					</Group>
+					{data.replyDesc && data.replyStatus !== AnswerReplyStatus.PENDING ? (
+						<Group>
+							<ThemeIcon variant='transparent' size='lg'>
+								<IconBlockquote />
+							</ThemeIcon>
+							{data.replyDesc}
+						</Group>
+					) : null}
 				</Stack>
 			</Accordion.Panel>
 		</Accordion.Item>

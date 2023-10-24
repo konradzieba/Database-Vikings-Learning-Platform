@@ -3,3 +3,10 @@ export enum UserRole {
 	LECTURER = 'LECTURER',
 	SUPERUSER = 'SUPERUSER',
 }
+
+export enum AnswerReplyStatus {
+	PENDING = 'PENDING',
+	PARTLY_CORRECT = 'PARTLY_CORRECT',
+	INCORRECT = 'INCORRECT',
+	CORRECT = 'CORRECT',
+}

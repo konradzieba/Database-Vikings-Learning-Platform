@@ -16,6 +16,7 @@ const router = createBrowserRouter([
 	{
 		path: '/',
 		loader: studentLayoutLoaderFn,
+		ErrorBoundary: () => <Navigate to='/login' replace />,
 		element: (
 			<AuthMiddleware>
 				<StudentLayout />
