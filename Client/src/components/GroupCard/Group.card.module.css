@@ -8,7 +8,10 @@
 .addGroupCardButton {
 	&::after {
 		content: 'Dodaj grupę';
-		font-size: 0.625rem;
+		position: relative;
+		font-size: 0.875rem;
+		top: 0.75rem;
+
 		font-weight: 400;
 		color: var(--font-color);
 		transition: all 0.3s ease-in-out;

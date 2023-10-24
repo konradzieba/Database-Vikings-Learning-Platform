@@ -30,7 +30,7 @@ function GroupCard({ groupName, assignedStudents, assignedLessons }: GroupCardPr
 	};
 	return (
 		<Flex direction='column' px='md' py='md' gap='md' className={classes.groupCardWrapper}>
-			<Text fz={18} fw={500}>
+			<Text fz='md' fw={500}>
 				{groupName}
 			</Text>
 			<Flex direction='column'>

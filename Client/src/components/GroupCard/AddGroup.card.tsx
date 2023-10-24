@@ -11,7 +11,7 @@ function AddGroupCard() {
 		<Flex justify='center' align='center' className={classes.groupCardWrapper}>
 			<Button onClick={handleOpenCreateGroupModal} variant='transparent' className={classes.addGroupCardButton}>
 				<ThemeIcon variant='light' c='var(--mantine-primary-color)' size='md'>
-					<IconPlus size={rem(30)} />
+					<IconPlus />
 				</ThemeIcon>
 			</Button>
 		</Flex>
