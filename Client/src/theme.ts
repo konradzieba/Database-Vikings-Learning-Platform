@@ -10,6 +10,7 @@ export const theme = createTheme({
 export const resolver: CSSVariablesResolver = (theme) => ({
 	variables: {
 		'--mantine-primary-color': theme.colors.teal[8],
+		'--mantine-primary-color-lighter': theme.colors.teal[6],
 		'--placeholder-color': theme.colors.gray[6],
 		'--disabled-color': theme.colors.gray[7],
 		'--primary-bg-color': '#1C1C1C',

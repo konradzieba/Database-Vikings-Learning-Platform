@@ -1,3 +1,4 @@
+import FrequencyList from '@/components/FrequencyList/FrequencyList.component';
 import LecturerLessonCard from '@/components/LessonCard/LecturerLesson.card';
 import StudentLessonCard from '@/components/LessonCard/StudentLesson.card';
 import LecturerNavbar from '@/components/Navbar/Lecturer.navbar';
@@ -16,6 +17,7 @@ function LecturerLayout() {
 				<Text>Student Card</Text>
 				<StudentLessonCard />
 			</Center>
+			<FrequencyList />
 		</>
 	);
 }
