@@ -1,6 +1,7 @@
 import 'dayjs/locale/pl';
 import '@mantine/core/styles.css';
 import '@mantine/dates/styles.css';
+import '@mantine/carousel/styles.css';
 import './global.css';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { resolver, theme } from './theme';
@@ -17,11 +18,16 @@ export default function App() {
 	return (
 		<QueryClientProvider client={queryClient}>
 			<DatesProvider settings={{ locale: 'pl' }}>
-				<MantineProvider theme={{ ...theme }} cssVariablesResolver={resolver} defaultColorScheme='dark'>
+				<MantineProvider
+					theme={{ ...theme }}
+					cssVariablesResolver={resolver}
+					defaultColorScheme='dark'
+				>
 					<ModalsProvider
 						modals={{ sessionExpired: SessionExpiredModal }}
 						labels={{ confirm: 'Prześlij', cancel: 'Anuluj' }}
-						modalProps={{ overlayProps: { blur: 2 }, yOffset: rem(100) }}>
+						modalProps={{ overlayProps: { blur: 2 }, yOffset: rem(100) }}
+					>
 						<Router />
 					</ModalsProvider>
 				</MantineProvider>
