@@ -3,29 +3,20 @@ import classes from './StudentTask.accordion.module.css';
 import { IconBlockquote, IconChevronDown, IconCode } from '@tabler/icons-react';
 import { AnswerReplyStatus } from '@/types/Enums';
 
-const mockData = [
-	{
-		taskNumber: 12,
-		taskQuestion: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget.`,
-		//Te wartości pochodzą z tabeli Answer więc trzeba będzie w get odwoływać się do TASK i ANSWER
-		replyStatus: 'INCORRECT',
-		// replyDesc: 'Super zadanie',
-		solution: `SELECT * FROM DB;
-SELECT * FROM DB WHERE STUDENT > 1;`,
-		grantedScore: 100,
-	},
-	{
-		taskNumber: 13,
-		taskQuestion: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been torem Ipsum is ng and typesetting i `,
-		//Te wartości pochodzą z tabeli Answer więc trzeba będzie w get odwoływać się do TASK i ANSWER
-		replyStatus: 'PENDING',
-		replyDesc: 'Super zadanie 123',
-		solution: 'SELECT * FROM DB; 123',
-		grantedScore: 99,
-	},
-];
+interface TaskInterface {
+	taskNumber: number;
+	taskQuestion: string;
+	replyStatus: string;
+	replyDesc: string | null;
+	solution: string;
+	grantedScore: number | null;
+}
 
-function StudentTaskAccordion() {
+interface StudentTaskAccordionProps {
+	tasks: TaskInterface[];
+}
+
+function StudentTaskAccordion({ tasks }: StudentTaskAccordionProps) {
 	const spliceQuestion = (question: string) => {
 		if (question.length > 251) {
 			return question.substring(0, 251) + '...';
@@ -61,20 +52,20 @@ function StudentTaskAccordion() {
 	};
 
 	//key i value do zmiany
-	const studentTaskAnswers = mockData.map(data => (
-		<Accordion.Item key={data.taskNumber} value={data.solution}>
+	const studentTaskAnswers = tasks.map((task, index) => (
+		<Accordion.Item key={`${task.taskNumber}-${index}`} value={`${task.taskNumber}-${index}`}>
 			<Accordion.Control>
 				<Flex align='center' justify='space-evenly' gap='lg' mx='auto' className={classes.accordionControlWrapper}>
 					<ThemeIcon size='lg' maw='10%' radius='sm' my='md' className={classes.accordionIconColor}>
-						<Text fw={500}>{data.taskNumber}</Text>
+						<Text fw={500}>{task.taskNumber}</Text>
 					</ThemeIcon>
 
 					<Text w='70%' my='md'>
-						{spliceQuestion(data.taskQuestion)}
+						{spliceQuestion(task.taskQuestion)}
 					</Text>
 
-					<Badge my='md' color={statusBadgeColor(data.replyStatus)} size='lg' className={classes.accordionBadge}>
-						{translateStatus(data.replyStatus)}
+					<Badge my='md' color={statusBadgeColor(task.replyStatus)} size='lg' className={classes.accordionBadge}>
+						{translateStatus(task.replyStatus)}
 					</Badge>
 				</Flex>
 			</Accordion.Control>
@@ -86,15 +77,15 @@ function StudentTaskAccordion() {
 							<IconCode />
 						</ThemeIcon>
 						<Box w='90%' px='md' className={classes.accordionSolutionContainer}>
-							<pre>{data.solution}</pre>
+							<pre>{task.solution}</pre>
 						</Box>
 					</Group>
-					{data.replyDesc && data.replyStatus !== AnswerReplyStatus.PENDING ? (
+					{task.replyDesc && task.replyStatus !== AnswerReplyStatus.PENDING ? (
 						<Group>
 							<ThemeIcon variant='transparent' size='lg'>
 								<IconBlockquote />
 							</ThemeIcon>
-							{data.replyDesc}
+							{task.replyDesc}
 						</Group>
 					) : null}
 				</Stack>

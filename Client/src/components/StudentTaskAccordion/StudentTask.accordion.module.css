@@ -3,7 +3,8 @@
 }
 
 .accordionTabWrapper {
-	width: 50%;
+	/* width: 50%; */
+	margin-right: var(--mantine-spacing-sm);
 }
 
 .accordionBadge {
