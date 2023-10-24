@@ -1,4 +1,4 @@
-import { Flex, Group, Stack, Text, rem } from '@mantine/core';
+import { Flex, Group, Stack, Text, ThemeIcon, rem } from '@mantine/core';
 import { NavLink } from 'react-router-dom';
 import { IconCoins, IconHeartFilled } from '@tabler/icons-react';
 import UserPanel from '../UI/UserPanel';
@@ -52,9 +52,24 @@ function Nav() {
 function HeartCounter({ hearts }: HearthCounterProps) {
 	return (
 		<Group gap={0} py={rem(6.5)}>
-			<IconHeartFilled size={22} className={hearts >= 1 ? classes.filledHeart : classes.unfilledHeart} />
-			<IconHeartFilled size={22} className={hearts >= 2 ? classes.filledHeart : classes.unfilledHeart} />
-			<IconHeartFilled size={22} className={hearts >= 3 ? classes.filledHeart : classes.unfilledHeart} />
+			<ThemeIcon
+				variant='transparent'
+				size={rem(24)}
+				className={hearts >= 1 ? classes.filledHeart : classes.unfilledHeart}>
+				<IconHeartFilled />
+			</ThemeIcon>
+			<ThemeIcon
+				variant='transparent'
+				size={rem(24)}
+				className={hearts >= 2 ? classes.filledHeart : classes.unfilledHeart}>
+				<IconHeartFilled />
+			</ThemeIcon>
+			<ThemeIcon
+				variant='transparent'
+				size={rem(24)}
+				className={hearts >= 3 ? classes.filledHeart : classes.unfilledHeart}>
+				<IconHeartFilled />
+			</ThemeIcon>
 		</Group>
 	);
 }
@@ -67,7 +82,9 @@ function Info() {
 					Wynik
 				</Text>
 				<Group className={classes.score} gap={rem(2)} py={rem(3.1)}>
-					<IconCoins size={22} />
+					<ThemeIcon variant='transparent' size={rem(24)} className={classes.score}>
+						<IconCoins />
+					</ThemeIcon>
 					<Text size='lg' fw={500}>
 						{mockedUserInfo.score}
 					</Text>
