@@ -9,7 +9,7 @@ const mockLessonData = {
 	photoLink: lesson1,
 };
 
-function LessonCard() {
+function StudentLessonCard() {
 	const lessonProgress =
 		(mockLessonData.tasksDone / mockLessonData.tasksAmount) * 100;
 	const isLessonCompleted =
@@ -64,4 +64,4 @@ function LessonCard() {
 	);
 }
 
-export default LessonCard;
+export default StudentLessonCard;
