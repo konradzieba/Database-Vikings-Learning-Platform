@@ -1,10 +1,10 @@
-import { Center, Text } from '@mantine/core';
+import { Outlet } from 'react-router-dom';
 
 function GroupPanelPage() {
 	return (
-		<Center>
-			<Text>{`This page will show control panel for specific group (using TABS) -> Lessons, Students`}</Text>
-		</Center>
+		<>
+			<Outlet />
+		</>
 	);
 }
 

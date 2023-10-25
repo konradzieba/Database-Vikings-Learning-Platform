@@ -30,7 +30,7 @@ function GroupCard({ groupName, assignedStudents, assignedLessons }: GroupCardPr
 		}
 	};
 	return (
-		<Box component='a' onClick={() => navigate('group/1')} tabIndex={1}>
+		<Box component='a' onClick={() => navigate('group/1/lessons')} tabIndex={1}>
 			<Flex direction='column' px='md' py='md' gap='md' className={classes.groupCardWrapper}>
 				<Text fz='md' fw={500}>
 					{groupName}

@@ -46,6 +46,20 @@ const router = createBrowserRouter([
 			{
 				path: 'group/:id',
 				element: <GroupPanelPage />,
+				children: [
+					{
+						path: 'lessons',
+						element: <Center>Lekcje</Center>
+					},
+					{
+						path: 'students',
+						element: <Center>Studenci</Center>,
+					},
+					{
+						path: 'ranking',
+						element: <Center>Ranking</Center>,
+					},
+				],
 			},
 		],
 	},
