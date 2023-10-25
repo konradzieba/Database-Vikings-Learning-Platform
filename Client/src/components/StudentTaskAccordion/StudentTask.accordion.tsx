@@ -1,6 +1,6 @@
-import { Accordion, Badge, Box, Center, Code, Divider, Flex, Group, Stack, Text, ThemeIcon, rem } from '@mantine/core';
+import { Accordion, Badge, Box, Divider, Flex, Group, Stack, Text, ThemeIcon, rem } from '@mantine/core';
 import classes from './StudentTask.accordion.module.css';
-import { IconBlockquote, IconChevronDown, IconCode } from '@tabler/icons-react';
+import { IconBlockquote, IconChevronDown, IconCode, IconCoins } from '@tabler/icons-react';
 import { AnswerReplyStatus } from '@/types/Enums';
 
 interface TaskInterface {
@@ -64,9 +64,21 @@ function StudentTaskAccordion({ tasks }: StudentTaskAccordionProps) {
 						{spliceQuestion(task.taskQuestion)}
 					</Text>
 
-					<Badge my='md' color={statusBadgeColor(task.replyStatus)} size='lg' className={classes.accordionBadge}>
-						{translateStatus(task.replyStatus)}
-					</Badge>
+					<Flex direction='column' align='end'>
+						<Badge my='md' color={statusBadgeColor(task.replyStatus)} size='lg' className={classes.accordionBadge}>
+							{translateStatus(task.replyStatus)}
+						</Badge>
+						{task.grantedScore && (
+							<Group className={classes.grantedScore} gap={rem(2)} py={rem(3.1)}>
+								<ThemeIcon variant='transparent' size={rem(24)} className={classes.grantedScore}>
+									<IconCoins />
+								</ThemeIcon>
+								<Text size='lg' fw={500}>
+									{900}
+								</Text>
+							</Group>
+						)}
+					</Flex>
 				</Flex>
 			</Accordion.Control>
 			<Accordion.Panel>

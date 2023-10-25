@@ -19,3 +19,7 @@
 .accordionIconColor {
 	color: var(--font-color);
 }
+
+.grantedScore {
+	color: var(--score-color);
+}
