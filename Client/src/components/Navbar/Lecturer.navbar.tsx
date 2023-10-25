@@ -1,7 +1,9 @@
-import { Divider, Flex, Group, rem } from '@mantine/core';
+import { Divider, Flex, Group, Menu, Popover, Stack, Text, ThemeIcon, rem } from '@mantine/core';
 import { NavLink, useLocation } from 'react-router-dom';
 import classes from './Navbar.module.css';
 import UserPanel from '../UI/UserPanel';
+import { IconChevronDown } from '@tabler/icons-react';
+import { useState } from 'react';
 
 const mockedUserInfo = {
 	email: 'lecturer@test.com',
@@ -35,10 +37,10 @@ const groupNavLinks = [
 
 function Nav() {
 	const { pathname } = useLocation();
-
+	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	return (
 		<Group gap='xl'>
-			{navLinks.map(link => {
+			{/* {navLinks.map(link => {
 				return (
 					<NavLink
 						to={link.link}
@@ -51,7 +53,47 @@ function Nav() {
 						{link.label}
 					</NavLink>
 				);
-			})}
+			})} */}
+
+			<Group align='center' gap='sm'>
+				<NavLink
+					to={navLinks[0].link}
+					className={({ isActive }) =>
+						isActive && pathname.endsWith('dashboard')
+							? `${classes.link} ${classes.activeLink}`
+							: `${classes.link} ${classes.inactiveLink}`
+					}>
+					{navLinks[0].label}
+				</NavLink>
+				<Menu onOpen={() => setIsMenuOpen(true)} onClose={() => setIsMenuOpen(false)} position='bottom-end' offset={20}>
+					<Menu.Target>
+						<ThemeIcon
+							variant='transparent'
+							className={isMenuOpen ? `${classes.rotateGroupMenuIcon}` : `${classes.groupMenuIcon}`}
+							size='md'
+							mb={5}
+							c='var(--font-color)'>
+							<IconChevronDown />
+						</ThemeIcon>
+					</Menu.Target>
+					<Menu.Dropdown>
+						<Menu.Item>
+							<NavLink
+								to='/dashboard/group/1/lessons'
+								className={`${classes.link} ${classes.inactiveLink} ${classes.groupMenuItem}`}>
+								Grupa - ISI - 3
+							</NavLink>
+						</Menu.Item>
+						<Menu.Item>
+							<NavLink
+								to='/dashboard/group/1/lessons'
+								className={`${classes.link} ${classes.inactiveLink} ${classes.groupMenuItem}`}>
+								Grupa - ISI - 4
+							</NavLink>
+						</Menu.Item>
+					</Menu.Dropdown>
+				</Menu>
+			</Group>
 			{pathname.includes('/dashboard/group/') && (
 				<>
 					<Divider orientation='vertical' />

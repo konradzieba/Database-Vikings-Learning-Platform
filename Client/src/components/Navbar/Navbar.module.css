@@ -6,7 +6,12 @@
 }
 
 .inactiveLink {
-	background-image: linear-gradient(to left, var(--mantine-primary-color), var(--mantine-primary-color) 50%, var(--font-color) 50%);
+	background-image: linear-gradient(
+		to left,
+		var(--mantine-primary-color),
+		var(--mantine-primary-color) 50%,
+		var(--font-color) 50%
+	);
 	background-size: 200% 100%;
 	background-position: 0;
 	background-clip: text;
@@ -14,7 +19,7 @@
 	-webkit-text-fill-color: transparent;
 	transition: all 0.3s ease-in-out;
 
-    &::after {
+	&::after {
 		content: '';
 		display: block;
 		position: relative;
@@ -59,4 +64,17 @@
 
 .logoutBtn {
 	color: var(--heart-color);
+}
+
+.groupMenuIcon {
+	transition: transform 0.1s linear;
+}
+
+.rotateGroupMenuIcon {
+	transform: rotate(180deg);
+	transition: transform 0.1s linear;
+}
+
+.groupMenuItem {
+	padding: 3px 0;
 }

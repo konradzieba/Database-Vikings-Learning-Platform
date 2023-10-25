@@ -1,4 +1,4 @@
-import { Button, Flex, ThemeIcon, rem } from '@mantine/core';
+import { Button, Flex, ThemeIcon } from '@mantine/core';
 import classes from './Group.card.module.css';
 import { IconPlus } from '@tabler/icons-react';
 

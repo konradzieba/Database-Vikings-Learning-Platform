@@ -84,3 +84,7 @@ body {
 		width: rem(40px);
 	}
 }
+
+.mantine-Menu-dropdown {
+	background-color: var(--primary-bg-color-lighter);
+}
