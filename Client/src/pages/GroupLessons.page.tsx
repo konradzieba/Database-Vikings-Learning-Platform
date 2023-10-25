@@ -40,7 +40,7 @@ const carouselSlides = [
 
 function GroupLessonsPage() {
 	const { pathname } = useLocation();
-	const slides = carouselSlides.map(slide => {
+	const slides = carouselSlides.map((slide) => {
 		return (
 			<Carousel.Slide key={slide.lessonNumber}>
 				<LecturerLessonCard
@@ -61,10 +61,12 @@ function GroupLessonsPage() {
 						maw={1175}
 						withIndicators
 						slidesToScroll={1}
+						initialSlide={carouselSlides.length - 2}
 						slideSize='33.333333%'
 						slideGap='sm'
 						align='start'
-						draggable>
+						draggable
+					>
 						{slides}
 						<Carousel.Slide>
 							<AddLessonCard />
