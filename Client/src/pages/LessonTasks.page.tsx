@@ -48,9 +48,9 @@ function LessonTasksPage() {
 				</Stack>
 				<ScrollArea type='auto' h={450} pb='sm' offsetScrollbars='y' w='50%'>
 					{mockData.tasks.map(task => (
-						<Box  >
+						<Box>
 							<TaskTab
-								key={task.taskNumber}
+								key={`${task.taskNumber}-${task.closeDate}`}
 								taskNumber={task.taskNumber}
 								taskQuestion={task.taskQuestion}
 								closeDate={task.closeDate}
