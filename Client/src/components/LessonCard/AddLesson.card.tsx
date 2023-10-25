@@ -1,11 +1,10 @@
 import { Button, Flex, ThemeIcon } from '@mantine/core';
 import classes from './Lesson.card.module.css';
 import { IconPlus } from '@tabler/icons-react';
+import { useNavigate } from 'react-router-dom';
 
 function AddLessonCard() {
-	const handleAddLesson = () => {
-		console.log('Dodawanie lekcji');
-	};
+	const navigate = useNavigate();
 
 	return (
 		<Flex
@@ -17,7 +16,7 @@ function AddLessonCard() {
 			align='center'
 			justify='center'
 			className={classes.lessonCardWrapper}>
-			<Button onClick={handleAddLesson} variant='transparent' className={classes.addLessonCardButton}>
+			<Button onClick={() => navigate('createLesson')} variant='transparent' className={classes.addLessonCardButton}>
 				<ThemeIcon variant='light' c='var(--mantine-primary-color)' size='md'>
 					<IconPlus />
 				</ThemeIcon>

@@ -15,6 +15,8 @@ import { HomePage } from './pages/Home.page';
 import LessonTasksPage from './pages/LessonTasks.page';
 import GroupPanelPage from './pages/GroupPanel.page';
 import GroupLessonsPage from './pages/GroupLessons.page';
+import CreateLessonPage from './pages/CreateLesson.page';
+import CheckFrequencyPage from './pages/CheckFrequency.page';
 
 const router = createBrowserRouter([
 	{
@@ -51,6 +53,10 @@ const router = createBrowserRouter([
 					{
 						path: 'lessons',
 						element: <GroupLessonsPage />,
+						children: [
+							{ path: '/createLesson', element: <CreateLessonPage /> },
+							{ path: '/checkFrequency', element: <CheckFrequencyPage /> },
+						],
 					},
 					{
 						path: 'students',
@@ -70,8 +76,8 @@ const router = createBrowserRouter([
 		element: <LoginForm />,
 	},
 	{ path: '/me', element: <BlankContent /> },
-	{ path: '/not-found', element: <NotFoundPage /> },
-	{ path: '*', element: <Navigate to='/not-found' replace /> },
+	// { path: '/not-found', element: <NotFoundPage /> },
+	// { path: '*', element: <Navigate to='/not-found' replace /> },
 ]);
 
 export function Router() {
