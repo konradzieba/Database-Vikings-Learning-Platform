@@ -1,12 +1,29 @@
 .lessonCardWrapper {
-    width: 20%;
-    background-color: #292929;
-    border-radius: var(--mantine-radius-xs);
+	width: 20%;
+	background-color: #292929;
+	border-radius: var(--mantine-radius-xs);
 }
 
 .progressLabel {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.addLessonCardButton {
+	&::after {
+		content: 'Dodaj lekcję';
+		position: relative;
+		font-size: 0.875rem;
+		top: 0.75rem;
+
+		font-weight: 400;
+		color: var(--font-color);
+		transition: all 0.3s ease-in-out;
+		opacity: 0;
+	}
+	&:hover::after {
+		opacity: 1;
+	}
 }

@@ -14,6 +14,7 @@ import { lecturerLayoutLoaderFn, loginLoaderFn, studentLayoutLoaderFn } from './
 import { HomePage } from './pages/Home.page';
 import LessonTasksPage from './pages/LessonTasks.page';
 import GroupPanelPage from './pages/GroupPanel.page';
+import GroupLessonsPage from './pages/GroupLessons.page';
 
 const router = createBrowserRouter([
 	{
@@ -49,7 +50,7 @@ const router = createBrowserRouter([
 				children: [
 					{
 						path: 'lessons',
-						element: <Center>Lekcje</Center>
+						element: <GroupLessonsPage />,
 					},
 					{
 						path: 'students',
