@@ -48,6 +48,8 @@ const data = [
 		score: 1530,
 	},
 ];
+// search for position of logged student
+const loggedStudentPosition = 3;
 
 const topColors = [
 	'var(--score-color)',
@@ -65,7 +67,14 @@ function ScoreBoard({ type }: ScoreBoardProps) {
 		const position = index + 1;
 		const isTop3 = position < 4;
 		return (
-			<Table.Tr key={row.studentName}>
+			<Table.Tr
+				bg={
+					position === loggedStudentPosition
+						? 'var(--mantine-primary-color)'
+						: undefined
+				}
+				key={row.studentName}
+			>
 				<Table.Td>
 					{isTop3 ? (
 						<ThemeIcon
@@ -115,7 +124,7 @@ function ScoreBoard({ type }: ScoreBoardProps) {
 			</Table.ScrollContainer>
 			<Stack my='lg'>
 				<Text ta='center' size='md' fw={500}>
-					Twoja pozycja w rankingu {isGlobal ? 'całego roku' : 'grupy'}:{' '}
+					Twoja pozycja w rankingu {isGlobal ? 'całego roku' : 'grupy'}:
 					<Text
 						size={rem(24)}
 						ta='center'
