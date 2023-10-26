@@ -15,7 +15,7 @@ function ScoreBoardPage() {
 							w='50%'
 							c={isGlobal ? undefined : 'var(--mantine-primary-color)'}
 							value='local'
-							leftSection={<IconUsersGroup />}
+							leftSection={<IconUsersGroup size='1.5rem' />}
 							onClick={() => setSearchParams(undefined)}
 						>
 							<Text c='var(--font-color)' fw={500} fz='md'>
@@ -25,7 +25,7 @@ function ScoreBoardPage() {
 						<Tabs.Tab
 							w='50%'
 							value='global'
-							leftSection={<IconTrophy />}
+							leftSection={<IconTrophy size='1.5rem' />}
 							c={!isGlobal ? undefined : 'var(--mantine-primary-color)'}
 							onClick={() => setSearchParams({ type: 'global' })}
 						>
