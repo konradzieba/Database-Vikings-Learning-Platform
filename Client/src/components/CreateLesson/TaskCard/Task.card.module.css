@@ -1,0 +1,11 @@
+.addTaskCardContainer,
+.taskCardContainer {
+	height: 100px;
+	width: 100px;
+	background-color: var(--primary-bg-color-lighter);
+	border-radius: var(--mantine-radius-xs) var(--mantine-radius-lg);
+}
+
+.taskCardContainer {
+	border: 0.15rem solid var(--mantine-primary-color);
+}

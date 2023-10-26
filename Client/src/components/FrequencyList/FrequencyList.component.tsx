@@ -1,14 +1,6 @@
 import cx from 'clsx';
 import { useState } from 'react';
-import {
-	Table,
-	Checkbox,
-	ScrollArea,
-	Group,
-	Text,
-	rem,
-	ThemeIcon,
-} from '@mantine/core';
+import { Table, Checkbox, ScrollArea, Group, Text, rem, ThemeIcon, BoxProps } from '@mantine/core';
 import classes from './FrequencyList.component.module.css';
 import { IconCoins } from '@tabler/icons-react';
 
@@ -44,26 +36,63 @@ const data = [
 		score: 150,
 		lifes: 2,
 	},
+	{
+		id: 6,
+		studentName: 'Jeremy Footviewer',
+		score: 150,
+		lifes: 2,
+	},
+	{
+		id: 7,
+		studentName: 'Jeremy Footviewer',
+		score: 150,
+		lifes: 2,
+	},
+	{
+		id: 8,
+		studentName: 'Jeremy Footviewer',
+		score: 150,
+		lifes: 2,
+	},
+	{
+		id: 9,
+		studentName: 'Jeremy Footviewer',
+		score: 150,
+		lifes: 2,
+	},
+	{
+		id: 10,
+		studentName: 'Jeremy Footviewer',
+		score: 150,
+		lifes: 2,
+	},
+	{
+		id: 11,
+		studentName: 'Jeremy Footviewer',
+		score: 150,
+		lifes: 2,
+	},
+	{
+		id: 12,
+		studentName: 'Jeremy Footviewer',
+		score: 150,
+		lifes: 2,
+	},
 ];
 
-function FrequencyList() {
+interface FrequencyListProps extends BoxProps {}
+
+function FrequencyList({ ...BoxProps }: FrequencyListProps) {
 	const [selection, setSelection] = useState<number[] | null>(null);
 	const toggleRow = (id: number) => {
-		setSelection((current) =>
-			current?.includes(id)
-				? current.filter((item) => item !== id)
-				: [...(current || []), id]
-		);
+		setSelection(current => (current?.includes(id) ? current.filter(item => item !== id) : [...(current || []), id]));
 	};
 
-	const rows = data.map((item) => {
+	const rows = data.map(item => {
 		const selected = selection?.includes(item.id) || false;
 		const hasZeroLifes = item.lifes === 0;
 		return (
-			<Table.Tr
-				key={item.id}
-				className={cx({ [classes.rowSelected]: selected })}
-			>
+			<Table.Tr key={item.id} className={cx({ [classes.rowSelected]: selected })}>
 				<Table.Td>
 					<Group gap='sm'>
 						<Text size='sm' fw={500}>
@@ -81,10 +110,7 @@ function FrequencyList() {
 						</Text>
 					</Group>
 				</Table.Td>
-				<Table.Td
-					lts={rem(2)}
-					c={hasZeroLifes ? 'var(--bad-state-color)' : undefined}
-				>
+				<Table.Td lts={rem(2)} c={hasZeroLifes ? 'var(--bad-state-color)' : undefined}>
 					<Text size='sm' fw={500}>{`${item.lifes}/3`}</Text>
 				</Table.Td>
 				<Table.Td>
@@ -95,8 +121,8 @@ function FrequencyList() {
 	});
 
 	return (
-		<ScrollArea>
-			<Table maw={800} verticalSpacing='sm'>
+		<ScrollArea offsetScrollbars='y' {...BoxProps}>
+			<Table verticalSpacing='sm'>
 				<Table.Thead>
 					<Table.Tr>
 						<Table.Th>Imię i nazwisko</Table.Th>

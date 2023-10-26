@@ -1,0 +1,28 @@
+.lessonPhotoContainer {
+	background-color: var(--primary-bg-color-lighter);
+}
+
+.lessonSelectedPhotoContainer {
+	background-color: var(--primary-bg-color-lighter);
+	opacity: 0.35;
+	filter: blur(1.5px);
+}
+
+.selectedPhotoIcon {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 1;
+	color: var(--mantine-primary-color-lighter);
+}
+
+.lessonSelectedPhotoWrapper {
+	border: rem(5) solid var(--mantine-primary-color);
+	border-radius: 50%;
+}
+
+.lessonPhotoWrapper {
+	border: rem(5) solid var(--mantine-color-dark-4);
+	border-radius: 50%;
+}
