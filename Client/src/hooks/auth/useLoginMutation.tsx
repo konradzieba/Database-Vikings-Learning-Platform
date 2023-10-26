@@ -3,7 +3,7 @@ import { UseFormReturnType } from '@mantine/form';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { loginMutationFn } from '@/utils/axios-queries';
-import { UserRole } from '@/types/Enums';
+import { UserRoleEnum } from '@/types/Enums';
 import { useStore } from '@/utils/store';
 
 interface LoginMutationProps {
@@ -21,16 +21,19 @@ interface LoginMutationProps {
 
 export function useLoginMutation({ form }: LoginMutationProps) {
 	const navigate = useNavigate();
-	const { role: roleFromStore, setRole } = useStore();
+	const { setRole } = useStore();
 
 	const loginMutation = useMutation({
 		mutationFn: loginMutationFn,
 		onSuccess: ({ role }) => {
-			if (role === UserRole.STUDENT) {
+			if (role === UserRoleEnum.Enum.STUDENT) {
 				setRole(role);
 				navigate('/');
 			}
-			if (role === UserRole.LECTURER || role === UserRole.SUPERUSER) {
+			if (
+				role === UserRoleEnum.Enum.LECTURER ||
+				role === UserRoleEnum.Enum.SUPERUSER
+			) {
 				setRole(role);
 				navigate('/dashboard');
 			}

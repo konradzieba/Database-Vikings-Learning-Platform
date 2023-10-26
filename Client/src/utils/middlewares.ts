@@ -1,13 +1,18 @@
 import { redirect } from 'react-router-dom';
 import axios from './axios';
 import { TMeResponse } from '@/types/ResponseTypes';
-import { UserRole } from '@/types/Enums';
+import { UserRoleEnum } from '@/types/Enums';
 
 export async function studentLayoutLoaderFn() {
 	try {
-		const { data } = await axios.post<Pick<TMeResponse, 'role'>>('/auth/checkRole');
+		const { data } = await axios.post<Pick<TMeResponse, 'role'>>(
+			'/auth/checkRole'
+		);
 
-		if (data.role === UserRole.LECTURER || data.role === UserRole.SUPERUSER) {
+		if (
+			data.role === UserRoleEnum.Enum.LECTURER ||
+			data.role === UserRoleEnum.Enum.SUPERUSER
+		) {
 			return redirect('/dashboard');
 		} else {
 			return null;
@@ -19,9 +24,14 @@ export async function studentLayoutLoaderFn() {
 
 export async function lecturerLayoutLoaderFn() {
 	try {
-		const { data } = await axios.post<Pick<TMeResponse, 'role'>>('/auth/checkRole');
+		const { data } = await axios.post<Pick<TMeResponse, 'role'>>(
+			'/auth/checkRole'
+		);
 
-		if (data.role === UserRole.LECTURER || data.role === UserRole.SUPERUSER) {
+		if (
+			data.role === UserRoleEnum.Enum.LECTURER ||
+			data.role === UserRoleEnum.Enum.SUPERUSER
+		) {
 			return null;
 		} else {
 			return redirect('/not-found');
@@ -33,11 +43,16 @@ export async function lecturerLayoutLoaderFn() {
 
 export async function loginLoaderFn() {
 	try {
-		const { data } = await axios.post<Pick<TMeResponse, 'role'>>('/auth/checkRole');
+		const { data } = await axios.post<Pick<TMeResponse, 'role'>>(
+			'/auth/checkRole'
+		);
 
-		if (data.role === UserRole.LECTURER || data.role === UserRole.SUPERUSER) {
+		if (
+			data.role === UserRoleEnum.Enum.LECTURER ||
+			data.role === UserRoleEnum.Enum.SUPERUSER
+		) {
 			return redirect('/dashboard');
-		} else if (data.role === UserRole.STUDENT) {
+		} else if (data.role === UserRoleEnum.Enum.STUDENT) {
 			return redirect('/');
 		} else {
 			return null;

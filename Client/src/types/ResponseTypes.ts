@@ -21,8 +21,8 @@ const StudentInfoSchema = z.object({
 	studentId: z.number(),
 	indexNumber: z.number(),
 	score: z.number(),
-	health: z.number(),
-	rank: z.number(),
+	health: z.number().int().min(0).max(3),
+	rank: z.number().int(),
 	idCheck: z.number(),
 });
 
