@@ -1,32 +1,48 @@
-import { UserRole } from "./Enums";
+import z from 'zod';
+import { UserRoleEnum } from './Enums';
 
-export type TMessageResponse = {
-	message: string;
-};
+const MessageResponseSchema = z.object({
+	message: z.string(),
+});
 
-export type TLoginResponse = {
-	role: UserRole;
-} & TMessageResponse;
+const LoginResponseSchema = z
+	.object({
+		role: UserRoleEnum,
+	})
+	.merge(MessageResponseSchema);
 
-type TLecturerInfo = {
-	lecturerId: number;
-	isAdmin: boolean;
-	idCheck: number;
-};
+const LecturerInfoSchema = z.object({
+	lecturerId: z.number(),
+	isAdmin: z.boolean(),
+	idCheck: z.number(),
+});
 
-type TStudentInfo = {
-	studentId: number;
-	indexNumber: number;
-	score: number;
-	health: number;
-	rank: number;
-	idCheck: number;
-};
+const StudentInfoSchema = z.object({
+	studentId: z.number(),
+	indexNumber: z.number(),
+	score: z.number(),
+	health: z.number(),
+	rank: z.number(),
+	idCheck: z.number(),
+});
 
-export type TMeResponse = {
-	id: number;
-	email: string;
-	firstName: string;
-	lastName: string;
-	role: UserRole;
-} & ({ lecturerInfos: TLecturerInfo } | { studentInfos: TStudentInfo });
+const MeResponseSchema = z
+	.object({
+		id: z.number(),
+		email: z.string(),
+		firstName: z.string(),
+		lastName: z.string(),
+		role: UserRoleEnum,
+	})
+	.and(
+		z.union([
+			z.object({ lecturerInfos: LecturerInfoSchema }),
+			z.object({ studentInfos: StudentInfoSchema }),
+		])
+	);
+
+export type TMessageResponse = z.infer<typeof MessageResponseSchema>;
+export type TLoginResponse = z.infer<typeof LoginResponseSchema>;
+export type TLecturerInfo = z.infer<typeof LecturerInfoSchema>;
+export type TStudentInfo = z.infer<typeof StudentInfoSchema>;
+export type TMeResponse = z.infer<typeof MeResponseSchema>;
