@@ -1,8 +1,5 @@
-import { DateTimePicker } from '@mantine/dates';
 import { Carousel } from '@mantine/carousel';
-import { Link } from 'react-router-dom';
 import lesson1 from '@/assets/lesson1.png';
-import dayjs from 'dayjs';
 import StudentLessonCard from '@/components/LessonCard/StudentLesson.card';
 import { Center } from '@mantine/core';
 
@@ -54,12 +51,6 @@ export function HomePage() {
 	});
 	return (
 		<>
-			{/* <DateTimePicker
-				minDate={dayjs().toDate()}
-				maxDate={dayjs().add(5, 'month').endOf('month').toDate()}
-				defaultValue={dayjs().add(7, 'days').endOf('day').toDate()}
-				w='30%'
-			/> */}
 			<Center>
 				<Carousel
 					maw={1175}
