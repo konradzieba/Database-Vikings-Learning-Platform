@@ -73,41 +73,45 @@ function StudentTaskAccordion({ tasks }: StudentTaskAccordionProps) {
 			key={`${task.taskNumber}-${index}`}
 			value={`${task.taskNumber}-${index}`}
 		>
-			<Accordion.Control>
+			<Accordion.Control mih={rem(120)}>
 				<Flex
 					align='center'
 					justify='space-evenly'
 					gap='lg'
-					mx='auto'
+					mx='sm'
 					className={classes.accordionControlWrapper}
 				>
-					<ThemeIcon
-						size='lg'
-						maw='10%'
-						radius='sm'
-						my='md'
-						className={classes.accordionIconColor}
-					>
-						<Text fw={500}>{task.taskNumber}</Text>
-					</ThemeIcon>
+					<Flex w='80%' align='center'>
+						<ThemeIcon
+							size='lg'
+							maw='10%'
+							radius='sm'
+							my='md'
+							mr='md'
+							className={classes.accordionIconColor}
+						>
+							<Text fw={500}>{task.taskNumber}</Text>
+						</ThemeIcon>
 
-					<Text w='70%' my='md'>
-						{spliceQuestion(task.taskQuestion)}
-					</Text>
+						<Text my='md'>{spliceQuestion(task.taskQuestion)}</Text>
+					</Flex>
 
-					<Flex direction='column' align='end'>
+					<Flex direction='column' align='flex-end' w='20%'>
 						<Badge
+							title={`Status odpowiedzi: ${translateStatus(task.replyStatus)}`}
+							size='lg'
 							my='md'
 							color={statusBadgeColor(task.replyStatus)}
-							size='lg'
 							className={classes.accordionBadge}
 						>
 							{translateStatus(task.replyStatus)}
 						</Badge>
 						{task.grantedScore && (
 							<Group
+								title={`Przyznane punkty za odpowiedź: ${900}`}
+								align='center'
 								className={classes.grantedScore}
-								gap={rem(2)}
+								gap={rem(5)}
 								py={rem(3.1)}
 							>
 								<ThemeIcon
@@ -136,7 +140,8 @@ function StudentTaskAccordion({ tasks }: StudentTaskAccordionProps) {
 							<pre>{task.solution}</pre>
 						</Box>
 					</Group>
-					{task.replyDesc && task.replyStatus !== AnswerReplyStatusEnum.Enum.PENDING ? (
+					{task.replyDesc &&
+					task.replyStatus !== AnswerReplyStatusEnum.Enum.PENDING ? (
 						<Group>
 							<ThemeIcon variant='transparent' size='lg'>
 								<IconBlockquote />

@@ -1,5 +1,7 @@
 import StudentTaskAccordion from '@/components/StudentTaskAccordion/StudentTask.accordion';
 import { Center, Flex, ScrollArea, Tabs, Text, Title } from '@mantine/core';
+import { IconArrowBackUpDouble, IconSend } from '@tabler/icons-react';
+import { useSearchParams } from 'react-router-dom';
 
 const mockDataPendingAnswers = [
 	{
@@ -111,7 +113,13 @@ function SendStudentAnswers() {
 	return (
 		<>
 			{mockDataPendingAnswers.map((answer, index) => (
-				<Flex direction='column' align='center' key={`${answer.lessonNumber}-${index}`} mb='xl'>
+				<Flex
+					key={`${answer.lessonNumber}-${index}`}
+					direction='column'
+					align='center'
+					px='sm'
+					mb='xl'
+				>
 					<Title order={2} mb='xs'>
 						Lekcja&nbsp;{answer.lessonNumber}
 					</Title>
@@ -126,7 +134,13 @@ function RestStudentAnswers() {
 	return (
 		<>
 			{mockDataRestAnswers.map((answer, index) => (
-				<Flex direction='column' align='center' key={`${answer.lessonNumber}-${index}`} mb='xl'>
+				<Flex
+					key={`${answer.lessonNumber}-${index}`}
+					direction='column'
+					align='center'
+					px='sm'
+					mb='xl'
+				>
 					<Title order={2} mb='xs'>
 						Lekcja&nbsp;{answer.lessonNumber}
 					</Title>
@@ -138,26 +152,44 @@ function RestStudentAnswers() {
 }
 
 function MyTasksPage() {
+	const [searchParams, setSearchParams] = useSearchParams();
+	const isReplied = searchParams.get('status') === 'replied';
 	return (
 		<Center>
-			<Tabs defaultValue='send' w='50%'>
-				<Tabs.List mb='sm' justify='center'>
-					<Tabs.Tab value='send'>
-						<Text>Przesłane</Text>
+			<Tabs defaultValue={isReplied ? 'replied' : 'send'} w='50%'>
+				<Tabs.List mb='lg' justify='center'>
+					<Tabs.Tab
+						w='50%'
+						value='send'
+						c={isReplied ? undefined : 'var(--mantine-primary-color)'}
+						leftSection={<IconSend size='1.5rem' />}
+						onClick={() => setSearchParams(undefined)}
+					>
+						<Text c='var(--font-color)' fw={500} fz='md'>
+							Przesłane
+						</Text>
 					</Tabs.Tab>
-					<Tabs.Tab value='revised'>
-						<Text>Zwrócone</Text>
+					<Tabs.Tab
+						w='50%'
+						value='replied'
+						c={!isReplied ? undefined : 'var(--mantine-primary-color)'}
+						leftSection={<IconArrowBackUpDouble size='1.5rem' />}
+						onClick={() => setSearchParams({ status: 'replied' })}
+					>
+						<Text c='var(--font-color)' fw={500} fz='md'>
+							Zwrócone
+						</Text>
 					</Tabs.Tab>
 				</Tabs.List>
 
 				<Tabs.Panel value='send'>
-					<ScrollArea type='auto' h={470} pb='sm' offsetScrollbars='y'>
+					<ScrollArea type='auto' h={600} pb='sm' offsetScrollbars='y'>
 						<SendStudentAnswers />
 					</ScrollArea>
 				</Tabs.Panel>
 
-				<Tabs.Panel value='revised'>
-					<ScrollArea type='auto' h={470} pb='sm' offsetScrollbars='y'>
+				<Tabs.Panel value='replied'>
+					<ScrollArea type='auto' h={600} pb='sm' offsetScrollbars='y'>
 						<RestStudentAnswers />
 					</ScrollArea>
 				</Tabs.Panel>
