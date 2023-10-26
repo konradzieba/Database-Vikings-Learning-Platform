@@ -1,7 +1,15 @@
-import { Button, Flex, Group, Image, Stack, Text, ThemeIcon, rem } from '@mantine/core';
+import {
+	Button,
+	Flex,
+	Group,
+	Image,
+	Stack,
+	Text,
+	ThemeIcon,
+	rem,
+} from '@mantine/core';
 import classes from './Lesson.card.module.css';
 import { IconChecklist, IconList } from '@tabler/icons-react';
-
 
 interface LecturerLessonCardProps {
 	lessonNumber: number;
@@ -16,23 +24,40 @@ const getTasksPlural = (taskAmount: number) => {
 	if (taskAmount >= 5) return 'zadań';
 };
 
-function LecturerLessonCard({ lessonNumber, taskAmount, isFrequencyChecked, photoLink }: LecturerLessonCardProps) {
+function LecturerLessonCard({
+	lessonNumber,
+	taskAmount,
+	isFrequencyChecked,
+	photoLink,
+}: LecturerLessonCardProps) {
 	const isZeroTasks = taskAmount === 0;
-	const frequencyColor = isFrequencyChecked ? 'var(--good-state-color)' : 'var(--bad-state-color)';
+	const frequencyColor = isFrequencyChecked
+		? 'var(--good-state-color)'
+		: 'var(--bad-state-color)';
 	return (
-		<Flex direction='column' miw={380} px='xs' py='xl' className={classes.lessonCardWrapper}>
+		<Flex
+			direction='column'
+			miw={380}
+			px='xs'
+			py='xl'
+			className={classes.lessonCardWrapper}
+		>
 			<Text ta='center' size='xl' fw={500} pb='xs' mt='md'>
 				Lekcja&nbsp;{lessonNumber}
 			</Text>
 			<Stack gap={rem(5)} pb='md' align='center'>
-				<Group gap={rem(5)}>
-					<ThemeIcon variant='transparent' c='var(--font-color)'>
+				<Group gap={rem(5)} align='center'>
+					<ThemeIcon size='sm' variant='transparent' c='var(--font-color)'>
 						<IconList />
 					</ThemeIcon>
-					<Text size='md'>{isZeroTasks ? `Brak zadań` : `${taskAmount} ${getTasksPlural(taskAmount)}`}</Text>
+					<Text size='md'>
+						{isZeroTasks
+							? `Brak zadań`
+							: `${taskAmount} ${getTasksPlural(taskAmount)}`}
+					</Text>
 				</Group>
-				<Group gap={rem(5)}>
-					<ThemeIcon variant='transparent' c={frequencyColor}>
+				<Group gap={rem(5)} align='center'>
+					<ThemeIcon size='sm' variant='transparent' c={frequencyColor}>
 						<IconChecklist />
 					</ThemeIcon>
 					<Text size='md' c={frequencyColor}>
@@ -40,7 +65,13 @@ function LecturerLessonCard({ lessonNumber, taskAmount, isFrequencyChecked, phot
 					</Text>
 				</Group>
 			</Stack>
-			<Image src={photoLink} mx='auto' w={rem(340)} h={rem(220)} alt={`Lesson number ${lessonNumber} photo`} />
+			<Image
+				src={photoLink}
+				mx='auto'
+				w={rem(340)}
+				h={rem(220)}
+				alt={`Lesson number ${lessonNumber} photo`}
+			/>
 			<Button maw={200} my='lg' mx='auto'>
 				Przejdź
 			</Button>
