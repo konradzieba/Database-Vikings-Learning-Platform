@@ -1,0 +1,8 @@
+.studentInfoCardContainer {
+	border-radius: var(--mantine-radius-xs);
+	background-color: var(--primary-bg-color-lighter);
+}
+
+.score {
+	color: var(--score-color);
+}

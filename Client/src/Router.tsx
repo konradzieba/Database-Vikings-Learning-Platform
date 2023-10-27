@@ -1,9 +1,5 @@
 import { Center } from '@mantine/core';
-import {
-	createBrowserRouter,
-	Navigate,
-	RouterProvider,
-} from 'react-router-dom';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import LoginForm from './components/Login/Login.form';
 import BlankContent from './components/UI/BlankContent';
 import StudentLayout from './layouts/Student.layout';
@@ -14,17 +10,14 @@ import LecturerLayout from './layouts/Lecturer.layout';
 import { NotFoundPage } from './pages/404.page';
 import DashboardPage from './pages/Dashboard.page';
 import AuthMiddleware from './utils/Auth.middleware';
-import {
-	lecturerLayoutLoaderFn,
-	loginLoaderFn,
-	studentLayoutLoaderFn,
-} from './utils/middlewares';
+import { lecturerLayoutLoaderFn, loginLoaderFn, studentLayoutLoaderFn } from './utils/middlewares';
 import { HomePage } from './pages/Home.page';
 import LessonTasksPage from './pages/LessonTasks.page';
 import GroupPanelPage from './pages/GroupPanel.page';
 import GroupLessonsPage from './pages/GroupLessons.page';
 import CreateLessonPage from './pages/CreateLesson.page';
 import CheckFrequencyPage from './pages/CheckFrequency.page';
+import GroupStudentsInfoPage from './pages/GroupStudentsInfo.page';
 
 const router = createBrowserRouter([
 	{
@@ -68,7 +61,7 @@ const router = createBrowserRouter([
 					},
 					{
 						path: 'students',
-						element: <Center>Studenci</Center>,
+						element: <GroupStudentsInfoPage />,
 					},
 					{
 						path: 'ranking',

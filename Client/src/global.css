@@ -88,3 +88,7 @@ body {
 .mantine-HoverCard-dropdown {
 	background-color: var(--primary-bg-color);
 }
+
+.mantine-Menu-dropdown {
+	background-color: var(--primary-bg-color);
+}

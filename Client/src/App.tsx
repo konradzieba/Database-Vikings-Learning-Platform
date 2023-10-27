@@ -13,6 +13,9 @@ import dayjs from 'dayjs';
 import { DatesProvider } from '@mantine/dates';
 import SessionExpiredModal from './modals/SessionExpire.modal';
 import AddTaskModal from './modals/AddTask.modal';
+import StudentGroupChangeModal from './modals/StudentGroupChange.modal';
+import EditStudentInfoModal from './modals/EditStudentInfo.modal';
+import DeleteStudentModal from './modals/DeleteStudent.modal';
 
 export default function App() {
 	dayjs.locale('pl');
@@ -21,7 +24,13 @@ export default function App() {
 			<DatesProvider settings={{ locale: 'pl' }}>
 				<MantineProvider theme={{ ...theme }} cssVariablesResolver={resolver} defaultColorScheme='dark'>
 					<ModalsProvider
-						modals={{ sessionExpired: SessionExpiredModal, addTask: AddTaskModal }}
+						modals={{
+							sessionExpired: SessionExpiredModal,
+							addTask: AddTaskModal,
+							changeStudentGroup: StudentGroupChangeModal,
+							editStudentInfo: EditStudentInfoModal,
+							deleteStudent: DeleteStudentModal,
+						}}
 						labels={{ confirm: 'Prześlij', cancel: 'Anuluj' }}
 						modalProps={{ overlayProps: { blur: 2 }, yOffset: rem(100) }}>
 						<Router />
