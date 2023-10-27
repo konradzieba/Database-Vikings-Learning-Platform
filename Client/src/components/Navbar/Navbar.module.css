@@ -66,17 +66,3 @@
 .logoutBtn {
 	color: var(--heart-color);
 }
-
-.groupHoverCardIcon {
-	transition: transform 0.1s linear;
-}
-
-.rotateGroupHoverCardIcon {
-	transform: rotate(180deg);
-	transition: transform 0.1s linear;
-}
-
-.groupHoverCardItem {
-	padding: 3px 0;
-	font-size: var(--mantine-font-size-md);
-}
