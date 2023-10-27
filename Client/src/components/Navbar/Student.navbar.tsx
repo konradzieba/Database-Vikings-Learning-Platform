@@ -1,13 +1,10 @@
 import { Flex, Group, Stack, Text, ThemeIcon, rem } from '@mantine/core';
 import { NavLink } from 'react-router-dom';
-import { IconCoins, IconHeartFilled } from '@tabler/icons-react';
+import { IconCoins } from '@tabler/icons-react';
 import UserPanel from '../UI/UserPanel';
 
 import classes from './Navbar.module.css';
-
-interface HearthCounterProps {
-	hearts: number;
-}
+import HeartCounter from '../UI/HeartCounter';
 
 const navLinks = [
 	{
@@ -45,31 +42,6 @@ function Nav() {
 					</NavLink>
 				);
 			})}
-		</Group>
-	);
-}
-
-function HeartCounter({ hearts }: HearthCounterProps) {
-	return (
-		<Group gap={0} py={rem(6.5)}>
-			<ThemeIcon
-				variant='transparent'
-				size={rem(24)}
-				className={hearts >= 1 ? classes.filledHeart : classes.unfilledHeart}>
-				<IconHeartFilled />
-			</ThemeIcon>
-			<ThemeIcon
-				variant='transparent'
-				size={rem(24)}
-				className={hearts >= 2 ? classes.filledHeart : classes.unfilledHeart}>
-				<IconHeartFilled />
-			</ThemeIcon>
-			<ThemeIcon
-				variant='transparent'
-				size={rem(24)}
-				className={hearts >= 3 ? classes.filledHeart : classes.unfilledHeart}>
-				<IconHeartFilled />
-			</ThemeIcon>
 		</Group>
 	);
 }

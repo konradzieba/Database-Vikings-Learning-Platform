@@ -55,14 +55,6 @@
 	color: var(--score-color);
 }
 
-.unfilledHeart {
-	color: var(--mantine-color-gray-5);
-}
-
-.filledHeart {
-	color: var(--heart-color);
-}
-
 .logoutBtn {
 	color: var(--heart-color);
 }
