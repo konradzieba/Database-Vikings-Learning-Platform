@@ -1,7 +1,12 @@
 import { Button, Flex, Group, Stack, Stepper, Title, rem } from '@mantine/core';
 import lesson1 from '@/assets/lesson1.png';
 import { useState } from 'react';
-import { IconCheck, IconChecklist, IconList, IconPhoto } from '@tabler/icons-react';
+import {
+	IconCheck,
+	IconChecklist,
+	IconList,
+	IconPhoto,
+} from '@tabler/icons-react';
 import PhotoPicker from '@/components/CreateLesson/PhotoPicker/Photo.picker';
 import FrequencyList from '@/components/FrequencyList/FrequencyList.component';
 import LessonCreated from '@/components/CreateLesson/LessonCreated/LessonCreated.component';
@@ -35,10 +40,10 @@ function CreateLessonPage() {
 	const [activeStep, setActiveStep] = useState(0);
 
 	const nextStep = () => {
-		setActiveStep(current => (current < 3 ? current + 1 : current));
+		setActiveStep((current) => (current < 3 ? current + 1 : current));
 	};
 	const prevStep = () => {
-		setActiveStep(current => (current > 0 ? current - 1 : current));
+		setActiveStep((current) => (current > 0 ? current - 1 : current));
 	};
 	const isLastStep = activeStep === 2;
 
@@ -48,16 +53,30 @@ function CreateLessonPage() {
 			<Stepper
 				w='50%'
 				mx='auto'
+				mt='xs'
 				active={activeStep}
 				onStepClick={setActiveStep}
-				completedIcon={<IconCheck size='1.2rem' />}>
-				<Stepper.Step allowStepSelect={false} label='Tworzenie zadań' icon={<IconList size='1.2rem' />}>
+				completedIcon={<IconCheck size='1.2rem' />}
+			>
+				<Stepper.Step
+					allowStepSelect={false}
+					label='Tworzenie zadań'
+					icon={<IconList size='1.2rem' />}
+				>
 					<TasksCardList tasksNumbers={data.taskNumbers} />
 				</Stepper.Step>
-				<Stepper.Step allowStepSelect={false} label='Wybór grafiki lekcji' icon={<IconPhoto size='1.2rem' />}>
+				<Stepper.Step
+					allowStepSelect={false}
+					label='Wybór grafiki lekcji'
+					icon={<IconPhoto size='1.2rem' />}
+				>
 					<PhotoPicker avatars={data.avatars} />
 				</Stepper.Step>
-				<Stepper.Step allowStepSelect={false} label='Sprawdzanie obecności' icon={<IconChecklist size='1.2rem' />}>
+				<Stepper.Step
+					allowStepSelect={false}
+					label='Sprawdzanie obecności'
+					icon={<IconChecklist size='1.2rem' />}
+				>
 					<Flex align='center' h={rem(550)}>
 						<FrequencyList w='100%' h='85%' />
 					</Flex>
@@ -69,7 +88,12 @@ function CreateLessonPage() {
 			<Group mx='auto'>
 				{activeStep < 3 ? (
 					<>
-						<Button miw={150} variant='outline' disabled={activeStep == 0} onClick={prevStep}>
+						<Button
+							miw={150}
+							variant='outline'
+							disabled={activeStep == 0}
+							onClick={prevStep}
+						>
 							Cofnij
 						</Button>
 						<Button miw={150} onClick={nextStep}>

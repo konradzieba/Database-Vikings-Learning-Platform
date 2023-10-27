@@ -16,8 +16,19 @@ function PhotoPicker({ avatars }: PhotoPickerProps) {
 				{avatars.map((avatar, index) => (
 					<Box
 						pos='relative'
-						className={avatar == selectedPhoto ? classes.lessonSelectedPhotoWrapper : classes.lessonPhotoWrapper}>
-						{avatar === selectedPhoto && <IconCheck className={classes.selectedPhotoIcon} size='2.5rem' stroke={3} />}
+						className={
+							avatar === selectedPhoto
+								? classes.lessonSelectedPhotoWrapper
+								: classes.lessonPhotoWrapper
+						}
+					>
+						{avatar === selectedPhoto && (
+							<IconCheck
+								className={classes.selectedPhotoIcon}
+								size='2.5rem'
+								stroke={3}
+							/>
+						)}
 						<Avatar
 							key={avatar + index}
 							src={avatar}
@@ -25,9 +36,12 @@ function PhotoPicker({ avatars }: PhotoPickerProps) {
 							size={rem(123)}
 							radius='50%'
 							className={
-								avatar == selectedPhoto ? classes.lessonSelectedPhotoContainer : classes.lessonPhotoPickerContainer
+								avatar == selectedPhoto
+									? classes.lessonSelectedPhotoContainer
+									: classes.lessonPhotoPickerContainer
 							}
 							component='button'
+							style={{ cursor: 'inherit' }}
 							onClick={() => setSelectedPhoto(avatar)}
 						/>
 					</Box>

@@ -1,9 +1,10 @@
-.lessonPhotoContainer {
+.lessonPhotoContainer,
+.lessonSelectedPhotoContainer {
 	background-color: var(--primary-bg-color-lighter);
+	cursor: inherit;
 }
 
 .lessonSelectedPhotoContainer {
-	background-color: var(--primary-bg-color-lighter);
 	opacity: 0.35;
 	filter: blur(1.5px);
 }
@@ -17,12 +18,13 @@
 	color: var(--mantine-primary-color-lighter);
 }
 
-.lessonSelectedPhotoWrapper {
+.lessonSelectedPhotoWrapper,
+.lessonPhotoWrapper {
 	border: rem(5) solid var(--mantine-primary-color);
 	border-radius: 50%;
+	cursor: pointer;
 }
 
 .lessonPhotoWrapper {
 	border: rem(5) solid var(--mantine-color-dark-4);
-	border-radius: 50%;
 }
