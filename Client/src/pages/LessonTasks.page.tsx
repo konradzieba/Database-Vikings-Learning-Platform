@@ -3,7 +3,6 @@ import { Box, Center, ScrollArea, Stack, Title } from '@mantine/core';
 
 const mockData = {
 	lessonNumber: 1,
-	lessonDescription: 'Poczatki z bazami danych!',
 	tasks: [
 		{
 			taskNumber: 1,
@@ -44,7 +43,6 @@ function LessonTasksPage() {
 			<Stack align='center'>
 				<Stack align='center' gap='sm'>
 					<Title order={1}>Lekcja&nbsp;{mockData.lessonNumber}</Title>
-					<Title order={2}>{mockData.lessonDescription}</Title>
 				</Stack>
 				<ScrollArea type='auto' h={450} pb='sm' offsetScrollbars='y' w='50%'>
 					{mockData.tasks.map(task => (
