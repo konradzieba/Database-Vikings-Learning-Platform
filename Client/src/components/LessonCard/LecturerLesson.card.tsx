@@ -42,7 +42,7 @@ function LecturerLessonCard({ lessonNumber, taskAmount, isFrequencyChecked, phot
 				</Group>
 			</Stack>
 			<Image src={photoLink} mx='auto' w={rem(340)} h={rem(220)} alt={`Lesson number ${lessonNumber} photo`} />
-			<Button maw={200} my='lg' mx='auto' onClick={() => navigate('lessonDashboard')}>
+			<Button maw={200} my='lg' mx='auto' onClick={() => navigate('dashboard')}>
 				Przejdź
 			</Button>
 		</Flex>
