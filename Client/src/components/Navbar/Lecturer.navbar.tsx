@@ -51,8 +51,11 @@ function Nav() {
 						</Group>
 					</HoverCard.Target>
 					<HoverCard.Dropdown px='sm'>
-						{['Grupa IV - ISI', 'Grupa II - IO'].map(group => (
-							<NavLink to='/dashboard/group/1/lessons' className={`${classes.link} ${classes.inactiveLink}`}>
+						{['Grupa IV - ISI', 'Grupa II - IO'].map((group, index) => (
+							<NavLink
+								to='/dashboard/group/1/lessons'
+								className={`${classes.link} ${classes.inactiveLink}`}
+								key={index}>
 								{group}
 							</NavLink>
 						))}
