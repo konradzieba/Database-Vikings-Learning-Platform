@@ -1,0 +1,12 @@
+.answerCardWrapper {
+	background-color: var(--primary-bg-color-lighter);
+	border-radius: var(--mantine-radius-xs);
+}
+
+.answerCardFullName {
+	text-wrap: balance;
+}
+
+.answerCardButton {
+	justify-self: center;
+}
