@@ -1,6 +1,7 @@
 import StudentAnswerCard from '@/components/StudentAnswerCard/StudentAnswer.card';
 import TaskAnswersStats from '@/components/UI/TaskAnswersStats';
 import { Button, Center, Flex, ScrollArea, Tabs, Title } from '@mantine/core';
+import { modals } from '@mantine/modals';
 
 const mockData = {
 	lessonNumber: 4,
@@ -182,6 +183,18 @@ const mockData = {
 };
 
 function LessonDashboardPage() {
+	const handleOpenAddTaksModal = () => {
+		modals.openContextModal({
+			modal: 'addTask',
+			title: 'Dodaj zadanie',
+			size: 'xl',
+			closeOnClickOutside: false,
+			innerProps: {
+				modalBody: '',
+			},
+		});
+	};
+
 	const tasksTabs = mockData.tasks.map(task => {
 		return (
 			<Tabs.Tab
@@ -218,11 +231,11 @@ function LessonDashboardPage() {
 
 	return (
 		<>
-			<Center>
+			<Center mb='sm'>
 				<Title>Lekcja&nbsp;{mockData.lessonNumber}</Title>
 			</Center>
 			<Center>
-				<Button variant='outline' size='xs'>
+				<Button variant='outline' size='xs' onClick={handleOpenAddTaksModal}>
 					Dodaj zadanie
 				</Button>
 			</Center>

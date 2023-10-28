@@ -16,6 +16,7 @@ import AddTaskModal from './modals/AddTask.modal';
 import StudentGroupChangeModal from './modals/StudentGroupChange.modal';
 import EditStudentInfoModal from './modals/EditStudentInfo.modal';
 import DeleteStudentModal from './modals/DeleteStudent.modal';
+import PreviewStudentAnswerModal from './modals/PreviewStudentAnswer.modal';
 
 export default function App() {
 	dayjs.locale('pl');
@@ -30,6 +31,7 @@ export default function App() {
 							changeStudentGroup: StudentGroupChangeModal,
 							editStudentInfo: EditStudentInfoModal,
 							deleteStudent: DeleteStudentModal,
+							previewStudentAnswer: PreviewStudentAnswerModal,
 						}}
 						labels={{ confirm: 'Prześlij', cancel: 'Anuluj' }}
 						modalProps={{ overlayProps: { blur: 2 }, yOffset: rem(100) }}>
