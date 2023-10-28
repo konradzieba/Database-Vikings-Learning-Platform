@@ -45,6 +45,7 @@ function GroupStudentsInfoPage() {
 		<Flex direction='column' align='center' justify='center' gap='md'>
 			{mockData.map(data => (
 				<StudentInfoCard
+					key={`${data.index}`}
 					firstName={data.firstName}
 					lastName={data.lastName}
 					index={data.index}
