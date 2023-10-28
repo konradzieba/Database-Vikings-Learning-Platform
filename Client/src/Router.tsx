@@ -18,6 +18,7 @@ import GroupLessonsPage from './pages/GroupLessons.page';
 import CreateLessonPage from './pages/CreateLesson.page';
 import CheckFrequencyPage from './pages/CheckFrequency.page';
 import GroupStudentsInfoPage from './pages/GroupStudentsInfo.page';
+import LessonDashboardPage from './pages/LessonDashboard.page';
 
 const router = createBrowserRouter([
 	{
@@ -55,8 +56,9 @@ const router = createBrowserRouter([
 						path: 'lessons',
 						element: <GroupLessonsPage />,
 						children: [
+							{ path: 'lessonDashboard', element: <LessonDashboardPage /> },
 							{ path: 'createLesson', element: <CreateLessonPage /> },
-							{ path: 'checkFrequency', element: <CheckFrequencyPage /> },
+							// { path: 'checkFrequency', element: <CheckFrequencyPage /> },
 						],
 					},
 					{
