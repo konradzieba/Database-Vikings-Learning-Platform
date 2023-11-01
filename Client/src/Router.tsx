@@ -57,6 +57,7 @@ const router = createBrowserRouter([
 		),
 		children: [
 			{ index: true, element: <DashboardPage /> },
+			{ path: 'me', element: <BlankContent /> },
 			{
 				path: 'group/:id',
 				element: <GroupPanelPage />,

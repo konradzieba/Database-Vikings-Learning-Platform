@@ -1,6 +1,6 @@
 import { useMeQuery } from '@/hooks/users/useMeQuery';
 import { PropsWithChildren, useEffect, useState } from 'react';
-import { useStudentStore, useUserStore } from './store';
+import { useLecturerStore, useStudentStore, useUserStore } from './store';
 import { AxiosError } from 'axios';
 import client from './axios';
 import { modals } from '@mantine/modals';
@@ -8,8 +8,10 @@ import { useNavigate } from 'react-router-dom';
 import { APIError, MyAxiosRequestConfig } from '@/types/AxiosInterfaces';
 
 function AuthMiddleware({ children }: PropsWithChildren) {
-	const { setRole } = useUserStore();
+	const { setRole, setUserData } = useUserStore();
 	const { setStudentData } = useStudentStore();
+	const { setLecturerData } = useLecturerStore();
+
 	const { data: userData } = useMeQuery();
 	const navigate = useNavigate();
 
@@ -52,19 +54,28 @@ function AuthMiddleware({ children }: PropsWithChildren) {
 	useEffect(() => {
 		if (userData) {
 			setRole(userData.role);
+			setUserData({
+				userId: userData.id,
+				email: userData.email,
+				firstName: userData.firstName,
+				lastName: userData.lastName,
+			});
 			if (userData.studentInfos) {
 				setStudentData({
-					userId: userData.id,
-					email: userData.email,
-					firstName: userData.firstName,
-					lastName: userData.lastName,
 					studentId: userData.studentInfos.studentId,
 					indexNumber: userData.studentInfos.indexNumber,
 					score: userData.studentInfos.score,
 					health: userData.studentInfos.health,
 					rank: userData.studentInfos.rank,
-					// groupId: userData.studentInfos.groupId,
-					// answersIds: userData.studentInfos.answersIds,
+					groupId: userData.studentInfos.groupId,
+					answersIds: userData.studentInfos.answersIds,
+				});
+			}
+			if (userData.lecturerInfos) {
+				setLecturerData({
+					lecturerId: userData.lecturerInfos.lecturerId,
+					isAdmin: userData.lecturerInfos.isAdmin,
+					idCheck: userData.lecturerInfos.idCheck,
 				});
 			}
 		}

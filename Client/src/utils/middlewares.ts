@@ -18,7 +18,7 @@ export async function studentLayoutLoaderFn() {
 			return null;
 		}
 	} catch {
-		redirect('/login');
+		return redirect('/login');
 	}
 }
 
@@ -37,7 +37,7 @@ export async function lecturerLayoutLoaderFn() {
 			return redirect('/not-found');
 		}
 	} catch {
-		redirect('/login');
+		return redirect('/login');
 	}
 }
 

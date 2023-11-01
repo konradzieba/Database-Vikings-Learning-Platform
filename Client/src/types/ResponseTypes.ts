@@ -26,6 +26,8 @@ const StudentInfoSchema = z.object({
 	health: z.number().int().min(0).max(3),
 	rank: z.number().int(),
 	idCheck: z.number(),
+	groupId: z.number(),
+	answersIds: z.array(z.number()),
 });
 
 const MeResponseSchema = z.object({

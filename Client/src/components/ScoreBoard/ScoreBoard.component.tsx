@@ -1,20 +1,12 @@
 import {
 	Table,
-	Progress,
-	Anchor,
 	Text,
 	Group,
 	ThemeIcon,
 	rem,
 	Stack,
 } from '@mantine/core';
-import classes from './TableReviews.module.css';
 import { IconCoins, IconTrophy } from '@tabler/icons-react';
-
-//Pozycja
-// Imię i nazwisko
-// Grupa
-// Score
 
 const data = [
 	{
@@ -102,7 +94,6 @@ function ScoreBoard({ type }: ScoreBoardProps) {
 						{row.score}
 					</Group>
 				</Table.Td>
-				{/* <Table.Td>{Intl.NumberFormat().format(totalReviews)}</Table.Td> */}
 			</Table.Tr>
 		);
 	});
@@ -129,9 +120,6 @@ function ScoreBoard({ type }: ScoreBoardProps) {
 				<Text
 					size={rem(24)}
 					ta='center'
-					// span
-					// fz='inherit'
-					// td='underline'
 					c='var(--mantine-primary-color)'
 					fw={700}
 				>

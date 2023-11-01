@@ -1,29 +1,28 @@
 import StudentNavbar from '@/components/Navbar/Student.navbar';
-import { useStudentStore } from '@/utils/store';
-import { Center, Loader } from '@mantine/core';
+import FullScreenLoader from '@/components/UI/FullScreenLoader';
+import { useStudentStore, useUserStore } from '@/utils/store';
 import { Outlet } from 'react-router-dom';
 
 function StudentLayout() {
+	const { userData } = useUserStore();
 	const { studentData } = useStudentStore();
 	const studentNavbarData = {
-		email: studentData.email,
+		email: userData.email,
 		score: studentData.score,
 		health: studentData.health,
 	};
 
-	const isLoading = studentData.email ? false : true;
+	const isLoading = !!studentNavbarData.email || !!studentNavbarData.score;
 
 	return (
 		<>
-			{studentData.email ? (
+			{isLoading ? (
 				<>
 					<StudentNavbar studentInfo={studentNavbarData} />
 					<Outlet />
 				</>
 			) : (
-				<Center h='85vh'>
-					<Loader size='lg' />
-				</Center>
+				<FullScreenLoader />
 			)}
 		</>
 	);

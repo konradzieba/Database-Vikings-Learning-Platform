@@ -44,7 +44,8 @@ function Nav() {
 									isActive && pathname.endsWith('dashboard')
 										? `${classes.link} ${classes.activeLink}`
 										: `${classes.link} ${classes.inactiveLink}`
-								}>
+								}
+							>
 								{navLinks[0].label}{' '}
 							</NavLink>
 							<IconChevronDown size='1.5rem' color='var(--font-color)' />
@@ -55,7 +56,8 @@ function Nav() {
 							<NavLink
 								to='/dashboard/group/1/lessons'
 								className={`${classes.link} ${classes.inactiveLink}`}
-								key={index}>
+								key={index}
+							>
 								{group}
 							</NavLink>
 						))}
@@ -65,14 +67,17 @@ function Nav() {
 			{pathname.includes('/dashboard/group/') && (
 				<>
 					<Divider orientation='vertical' />
-					{groupNavLinks.map(link => {
+					{groupNavLinks.map((link) => {
 						return (
 							<NavLink
 								to={link.link}
 								className={({ isActive }) =>
-									isActive ? `${classes.link} ${classes.activeLink}` : `${classes.link} ${classes.inactiveLink}`
+									isActive
+										? `${classes.link} ${classes.activeLink}`
+										: `${classes.link} ${classes.inactiveLink}`
 								}
-								key={link.link}>
+								key={link.link}
+							>
 								{link.label}
 							</NavLink>
 						);
@@ -83,11 +88,16 @@ function Nav() {
 	);
 }
 
-function LecturerNavbar() {
+interface LecturerNavbarProps {
+	lecturerInfo: {
+		email: string | null;
+	};
+}
+function LecturerNavbar({ lecturerInfo }: LecturerNavbarProps) {
 	return (
 		<Flex justify='space-around' gap='xl' py='lg' align='center' mb={rem(60)}>
 			<Nav />
-			<UserPanel email={mockedUserInfo.email} className={classes.logoutBtn} />
+			<UserPanel email={lecturerInfo.email} className={classes.logoutBtn} />
 		</Flex>
 	);
 }

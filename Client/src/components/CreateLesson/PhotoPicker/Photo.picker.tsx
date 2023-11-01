@@ -15,6 +15,7 @@ function PhotoPicker({ avatars }: PhotoPickerProps) {
 			<SimpleGrid cols={avatars.length > 7 ? 5 : 3} spacing='xl'>
 				{avatars.map((avatar, index) => (
 					<Box
+						key={avatar + index}
 						pos='relative'
 						className={
 							avatar === selectedPhoto

@@ -3,46 +3,69 @@ import { create } from 'zustand';
 
 interface IUserStoreStore {
 	role: UserRole | null;
+	userData: {
+		firstName: string | null;
+		lastName: string | null;
+		email: string | null;
+		userId: number | null;
+	};
 	setRole: (role: UserRole) => void;
+	setUserData: (userData: IUserStoreStore['userData']) => void;
 }
 
 interface IStudentStoreStore {
 	studentData: {
 		indexNumber: number | null;
-		firstName: string | null;
-		lastName: string | null;
 		health: number | null;
 		score: number | null;
 		rank: number | null;
-		email: string | null;
 		// lastLogin: null,
-		userId: number | null;
 		studentId: number | null;
-		// groupId: number | null;
-		// answersIds: number[] | null;
+		groupId: number | null;
+		answersIds: number[] | null;
 	};
 	setStudentData: (studentData: IStudentStoreStore['studentData']) => void;
 }
 
 export const useUserStore = create<IUserStoreStore>((set) => ({
 	role: null,
+	userData: {
+		firstName: null,
+		lastName: null,
+		email: null,
+		userId: null,
+	},
 	setRole: (role: UserRole) => set({ role }),
+	setUserData: (userData) => set({ userData }),
 }));
 
 export const useStudentStore = create<IStudentStoreStore>((set) => ({
 	studentData: {
 		indexNumber: null,
-		firstName: null,
-		lastName: null,
 		health: null,
 		score: null,
 		rank: null,
-		email: null,
 		// lastLogin: null,
-		userId: null,
 		studentId: null,
-		// groupId: null,
-		// answersIds: null,
+		groupId: null,
+		answersIds: null,
 	},
 	setStudentData: (studentData) => set({ studentData }),
+}));
+
+interface ILecturerStore {
+	lecturerData: {
+		lecturerId: number | null;
+		isAdmin: boolean | null;
+		idCheck: number | null;
+	};
+	setLecturerData: (lecturerData: ILecturerStore['lecturerData']) => void;
+}
+export const useLecturerStore = create<ILecturerStore>((set) => ({
+	lecturerData: {
+		lecturerId: null,
+		isAdmin: null,
+		idCheck: null,
+	},
+	setLecturerData: (lecturerData) => set({ lecturerData }),
 }));
