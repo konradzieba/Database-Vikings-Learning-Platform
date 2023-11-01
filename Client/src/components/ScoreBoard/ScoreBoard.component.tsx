@@ -122,20 +122,20 @@ function ScoreBoard({ type }: ScoreBoardProps) {
 					<Table.Tbody>{rows}</Table.Tbody>
 				</Table>
 			</Table.ScrollContainer>
-			<Stack my='lg'>
+			<Stack my='lg' gap={rem(5)}>
 				<Text ta='center' size='md' fw={500}>
 					Twoja pozycja w rankingu {isGlobal ? 'całego roku' : 'grupy'}:
-					<Text
-						size={rem(24)}
-						ta='center'
-						// span
-						// fz='inherit'
-						// td='underline'
-						c='var(--mantine-primary-color)'
-						fw={700}
-					>
-						2
-					</Text>
+				</Text>
+				<Text
+					size={rem(24)}
+					ta='center'
+					// span
+					// fz='inherit'
+					// td='underline'
+					c='var(--mantine-primary-color)'
+					fw={700}
+				>
+					2
 				</Text>
 			</Stack>
 		</Stack>
