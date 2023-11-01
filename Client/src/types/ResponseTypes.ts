@@ -18,6 +18,8 @@ const LecturerInfoSchema = z.object({
 });
 
 const StudentInfoSchema = z.object({
+	firstName: z.string(),
+	lastName: z.string(),
 	studentId: z.number(),
 	indexNumber: z.number(),
 	score: z.number(),
@@ -26,20 +28,15 @@ const StudentInfoSchema = z.object({
 	idCheck: z.number(),
 });
 
-const MeResponseSchema = z
-	.object({
-		id: z.number(),
-		email: z.string(),
-		firstName: z.string(),
-		lastName: z.string(),
-		role: UserRoleEnum,
-	})
-	.and(
-		z.union([
-			z.object({ lecturerInfos: LecturerInfoSchema }),
-			z.object({ studentInfos: StudentInfoSchema }),
-		])
-	);
+const MeResponseSchema = z.object({
+	id: z.number(),
+	email: z.string(),
+	firstName: z.string(),
+	lastName: z.string(),
+	role: UserRoleEnum,
+	lecturerInfos: LecturerInfoSchema.nullable(),
+	studentInfos: StudentInfoSchema.nullable(),
+});
 
 export type TMessageResponse = z.infer<typeof MessageResponseSchema>;
 export type TLoginResponse = z.infer<typeof LoginResponseSchema>;

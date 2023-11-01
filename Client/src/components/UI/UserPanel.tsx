@@ -3,7 +3,7 @@ import { Button, Stack, Text } from '@mantine/core';
 import { modals } from '@mantine/modals';
 
 interface UserPanelProps {
-	email: string;
+	email: string | null;
 	className?: string;
 }
 
@@ -24,9 +24,11 @@ function UserPanel({ email, className }: UserPanelProps) {
 
 	return (
 		<Stack gap={0} align='flex-end'>
-			<Text size='lg' fw={500}>
-				{email}
-			</Text>
+			{email && (
+				<Text size='lg' fw={500}>
+					{email}
+				</Text>
+			)}
 			<Button ta='right' variant='transparent' px={0} onClick={openLogoutModal}>
 				<Text size='lg' fw={500} className={className}>
 					Wyloguj
