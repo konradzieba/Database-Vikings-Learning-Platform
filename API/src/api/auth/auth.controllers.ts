@@ -16,7 +16,7 @@ export async function registerStudent(
   next: NextFunction
 ) {
   try {
-    const { firstName, lastName, indexNumber } = req.body;
+    const { firstName, lastName, indexNumber, groupId } = req.body;
 
     const existingUser =
       await UserServices.findStudentByIndexNumber(indexNumber);
@@ -25,11 +25,13 @@ export async function registerStudent(
       res.status(400);
       throw new Error('This student already exists.');
     }
+
     const generatedPassword = generatePasswordByCredentials(
       firstName,
       lastName,
       indexNumber
     );
+
     const user = await UserServices.createUser({
       email: `${indexNumber}@student.uwm.edu.pl`,
       password: generatedPassword,
@@ -40,6 +42,7 @@ export async function registerStudent(
     if (user) {
       await UserServices.createStudent({
         indexNumber,
+        Group: { connect: { id: groupId } },
         User: { connect: { id: user.id } },
       });
     }

@@ -68,11 +68,11 @@ model Student {
   lastLogin   DateTime?
   // relations
   userId      Int       @unique
-  groupId     Int?      @unique
-  answersId  Int[]
-  Answers    Answer[]
+  groupId     Int       
+  answersId   Int[]
+  Answers     Answer[]
   User        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Group       Group?     @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  Group       Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
 }
 
 

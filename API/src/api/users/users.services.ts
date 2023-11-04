@@ -26,6 +26,10 @@ export function findStudentByUserId(userId: number) {
   });
 }
 
+// export function findStudentGroup(userId: number) {
+//   return db.student.
+// }
+
 export function findLecturerByUserId(userId: number) {
   return db.lecturer.findUnique({
     where: {

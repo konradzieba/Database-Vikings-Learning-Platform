@@ -22,6 +22,7 @@ export const registerSchema = z.object({
       (value) => value.toString().length === 6,
       'Index number must be 6 characters long'
     ),
+  groupId: z.number({ required_error: 'Group id is required' }),
   isAdmin: z.boolean({ required_error: 'isAdmin param is required' }),
   role: z.nativeEnum(EnumRole),
 });
@@ -36,11 +37,13 @@ export const registerStudentSchema = registerSchema.omit({
 export const registerLecturerSchema = registerSchema.omit({
   role: true,
   indexNumber: true,
+  groupId: true,
 });
 
 export const registerSuperUserSchema = registerSchema.omit({
   role: true,
   indexNumber: true,
+  groupId: true,
 });
 
 export const registerQuerySchema = z.object({
@@ -62,7 +65,6 @@ export const loginSchema = z.object({
     .string({ required_error: 'Password is required' })
     .min(6, 'Invalid credentials'),
 });
-
 
 export type LoginInput = z.infer<typeof loginSchema>;
 
