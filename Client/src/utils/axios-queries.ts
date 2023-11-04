@@ -26,3 +26,8 @@ export const sendAnswerMutationFn = async (sendAnswerRequest: TSendAnswerRequest
 	const { data } = await axios.post<TMessageResponse>('/answers/createAnswer', sendAnswerRequest);
 	return data;
 };
+
+export const changeDefaultPasswordMutationFn = async (newPassword: Pick<TLoginRequest, 'password'>) => {
+	const { data } = await axios.patch<TMessageResponse>('/users/changeDefaultPassword', newPassword);
+	return data;
+};
