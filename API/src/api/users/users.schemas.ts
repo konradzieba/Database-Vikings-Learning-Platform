@@ -44,24 +44,29 @@ export const updateUserSchema = registerSchema
   .partial();
 
 export const changePasswordSchema = z.object({
-  password: z.string().refine(
-    (password) => {
-      const validationResult = isPasswordValid(password);
-      if (validationResult) {
-        throw new ZodError([
-          {
-            code: 'custom',
-            message: validationResult,
-            path: ['password'],
-          },
-        ]);
+  password: z
+    .string()
+    .trim()
+    .min(1, 'Password can not be empty')
+    .max(100, 'Password is too long')
+    .refine(
+      (password) => {
+        const validationResult = isPasswordValid(password);
+        if (validationResult) {
+          throw new ZodError([
+            {
+              code: 'custom',
+              message: validationResult,
+              path: ['password'],
+            },
+          ]);
+        }
+        return true;
+      },
+      {
+        message: 'Invalid password',
       }
-      return true;
-    },
-    {
-      message: 'Invalid password',
-    }
-  ),
+    ),
 });
 
 export type UpdateUserInput = z.infer<typeof updateUserSchema>;

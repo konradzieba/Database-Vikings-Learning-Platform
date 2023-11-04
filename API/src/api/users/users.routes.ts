@@ -15,10 +15,12 @@ router.get('/me', requireUser, UserController.me);
 
 router.patch(
   '/changePassword',
-  validateRequest({
-    params: paramsWithIdSchema,
-    body: UserSchemas.changePasswordSchema,
-  }),
+  [
+    validateRequest({
+      body: UserSchemas.changePasswordSchema,
+    }),
+    requireUser,
+  ],
   UserController.changePassword
 );
 
