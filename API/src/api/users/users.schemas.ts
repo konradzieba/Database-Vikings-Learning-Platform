@@ -43,7 +43,7 @@ export const updateUserSchema = registerSchema
   })
   .partial();
 
-export const changePasswordSchema = z.object({
+export const changeDefaultPasswordSchema = z.object({
   password: z
     .string()
     .trim()

@@ -14,14 +14,14 @@ const router = Router();
 router.get('/me', requireUser, UserController.me);
 
 router.patch(
-  '/changePassword',
+  '/changeDefaultPassword',
   [
     validateRequest({
-      body: UserSchemas.changePasswordSchema,
+      body: UserSchemas.changeDefaultPasswordSchema,
     }),
     requireUser,
   ],
-  UserController.changePassword
+  UserController.changeDefaultPassword
 );
 
 router.patch(

@@ -68,7 +68,7 @@ export async function me(req: Request, res: Response, next: NextFunction) {
   }
 }
 
-export async function changePassword(
+export async function changeDefaultPassword(
   req: Request<ParamsWithId, {}, { password: string }>,
   res: Response<MessageResponse>,
   next: NextFunction
@@ -84,7 +84,7 @@ export async function changePassword(
       throw new Error('User not found.');
     }
 
-    await UserServices.changePassword(user.id, password);
+    await UserServices.changeDefaultPassword(user.id, password);
 
     res.json({
       message: 'Password changed successfully.',

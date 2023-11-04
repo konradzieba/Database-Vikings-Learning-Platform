@@ -75,7 +75,7 @@ export function createStudent(student: Prisma.StudentCreateInput) {
   });
 }
 
-export async function changePassword(id: User['id'], password: string) {
+export async function changeDefaultPassword(id: User['id'], password: string) {
   const student = await db.student.findUnique({
     where: { userId: id },
   });
