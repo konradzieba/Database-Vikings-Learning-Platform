@@ -75,8 +75,25 @@ export function createStudent(student: Prisma.StudentCreateInput) {
   });
 }
 
-export function changePassword(id: User['id'], password: string) {
-  return db.user.update({
+export async function changePassword(id: User['id'], password: string) {
+  const student = await db.student.findUnique({
+    where: { userId: id },
+  });
+
+  if (!student) {
+    throw new Error(`Student with userID ${id} not found`);
+  }
+
+  await db.student.update({
+    where: { id: student.id },
+    data: {
+      isPasswordChanged: {
+        set: true,
+      },
+    },
+  });
+
+  await db.user.update({
     where: {
       id,
     },

@@ -35,6 +35,7 @@ export async function me(req: Request, res: Response, next: NextFunction) {
             score: student.score,
             health: student.health,
             rank: student.rank,
+            isPasswordChanged: student.isPasswordChanged,
             groupId: student.groupId,
             answersId: student.answersId,
             idCheck: student.userId,
