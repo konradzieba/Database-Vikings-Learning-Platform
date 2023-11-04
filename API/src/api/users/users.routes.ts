@@ -14,6 +14,15 @@ const router = Router();
 router.get('/me', requireUser, UserController.me);
 
 router.patch(
+  '/changePassword',
+  validateRequest({
+    params: paramsWithIdSchema,
+    body: UserSchemas.changePasswordSchema,
+  }),
+  UserController.changePassword
+);
+
+router.patch(
   '/updateUser/:id',
   validateRequestAndCheckRole(
     {

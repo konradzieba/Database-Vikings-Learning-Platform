@@ -67,8 +67,34 @@ export async function me(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+export async function changePassword(
+  req: Request<ParamsWithId, {}, { password: string }>,
+  res: Response<MessageResponse>,
+  next: NextFunction
+) {
+  try {
+    const parsedToken: ParsedToken = req.user;
+    const { password } = req.body;
+
+    const user = await UserServices.findUserById(parsedToken.userId);
+
+    if (!user) {
+      res.status(404);
+      throw new Error('User not found.');
+    }
+
+    await UserServices.changePassword(user.id, password);
+
+    res.json({
+      message: 'Password changed successfully.',
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function updateUser(
-  req: Request<ParamsWithId, MessageResponse>,
+  req: Request<ParamsWithId>,
   res: Response<MessageResponse>,
   next: NextFunction
 ) {
@@ -99,7 +125,7 @@ export async function updateUser(
 }
 
 export async function deleteUser(
-  req: Request<ParamsWithId, MessageResponse>,
+  req: Request<ParamsWithId>,
   res: Response<MessageResponse>,
   next: NextFunction
 ) {

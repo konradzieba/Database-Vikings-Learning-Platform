@@ -75,6 +75,17 @@ export function createStudent(student: Prisma.StudentCreateInput) {
   });
 }
 
+export function changePassword(id: User['id'], password: string) {
+  return db.user.update({
+    where: {
+      id,
+    },
+    data: {
+      password: bcrypt.hashSync(password, 12),
+    },
+  });
+}
+
 export function updateUser(id: User['id'], user: Prisma.UserUpdateInput) {
   return db.user.update({
     where: {
