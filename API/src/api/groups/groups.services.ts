@@ -1,9 +1,46 @@
-import { Group, Prisma } from '@prisma/client';
+import { Group, Lecturer, Prisma } from '@prisma/client';
 import { db } from '../../db';
+
+export async function getGroups(id: Lecturer['id']) {
+  const groupsInfo = await db.group.findMany({
+    where: {
+      lecturerId: id,
+    },
+    include: {
+      students: {
+        select: {
+          id: true,
+        },
+      },
+      lessons: {
+        select: {
+          id: true,
+        },
+      },
+    },
+  });
+
+  const lecturerGroups = groupsInfo.map((group) => ({
+    groupId: group.id,
+    groupName: group.name,
+    lessonsCount: group.lessons.length,
+    studentCount: group.students.length,
+  }));
+
+  return lecturerGroups;
+}
 
 export function createGroup(group: Prisma.GroupCreateInput) {
   return db.group.create({
     data: group,
+  });
+}
+
+export function findLecturerById(id: Lecturer['id']) {
+  return db.lecturer.findUnique({
+    where: {
+      id,
+    },
   });
 }
 

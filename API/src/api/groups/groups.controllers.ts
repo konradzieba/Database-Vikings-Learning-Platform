@@ -4,6 +4,29 @@ import { ParamsWithId } from 'interfaces/ParamsWithId';
 import MessageResponse from 'interfaces/MessageResponse';
 import * as GroupServices from './groups.services';
 
+export async function getGroups(
+  req: Request<ParamsWithId>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id } = req.params;
+
+    const existingLecturer = await GroupServices.findLecturerById(+id);
+
+    if (!existingLecturer) {
+      res.status(404);
+      throw new Error('Lecturer with this id does not exist.');
+    }
+
+    const groups = await GroupServices.getGroups(+id);
+
+    res.json({ message: 'success', groups: groups });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function createGroup(
   req: Request<{}, MessageResponse, GroupSchemas.GroupInput>,
   res: Response<MessageResponse>,
