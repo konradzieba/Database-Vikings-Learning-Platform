@@ -1,9 +1,39 @@
-import { Answer, Prisma } from '@prisma/client';
+import { Answer, Prisma, Student } from '@prisma/client';
 import { db } from '../../db';
 
 export function createAnswer(answer: Prisma.AnswerCreateInput) {
   return db.answer.create({
     data: answer,
+  });
+}
+
+export async function assignAnswerToStudent(
+  id: Student['id'],
+  answerId: Answer['id']
+) {
+  const student = await db.student.findUnique({
+    where: { id },
+    include: { Answers: { select: { id: true } } },
+  });
+
+  if (!student) {
+    throw new Error(`Student with ID ${id} not found.`);
+  }
+
+  const currentAnswerIds = student.Answers.map((answer) => answer.id);
+
+  if (!currentAnswerIds.includes(answerId)) {
+    currentAnswerIds.push(answerId);
+  }
+
+  await db.student.update({
+    where: { id: id },
+    data: {
+      answersId: {
+        set: currentAnswerIds,
+      },
+    },
+    include: { Answers: { select: { id: true } } },
   });
 }
 

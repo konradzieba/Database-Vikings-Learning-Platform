@@ -28,6 +28,8 @@ export async function createAnswer(
       Student: { connect: { id: studentId } },
     });
 
+    await AnswerServices.assignAnswerToStudent(studentId, answer.id);
+
     res.json({
       message: `Answer id:${answer.id} for task id: ${answer.taskId} by student id ${answer.studentId} created successfully.`,
     });
