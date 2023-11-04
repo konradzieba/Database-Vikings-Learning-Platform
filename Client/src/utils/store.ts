@@ -19,6 +19,7 @@ interface IStudentStoreStore {
 		health: number | null;
 		score: number | null;
 		rank: number | null;
+		isPasswordChanged: boolean | null;
 		// lastLogin: null,
 		studentId: number | null;
 		groupId: number | null;
@@ -27,7 +28,7 @@ interface IStudentStoreStore {
 	setStudentData: (studentData: IStudentStoreStore['studentData']) => void;
 }
 
-export const useUserStore = create<IUserStoreStore>((set) => ({
+export const useUserStore = create<IUserStoreStore>(set => ({
 	role: null,
 	userData: {
 		firstName: null,
@@ -36,21 +37,22 @@ export const useUserStore = create<IUserStoreStore>((set) => ({
 		userId: null,
 	},
 	setRole: (role: UserRole) => set({ role }),
-	setUserData: (userData) => set({ userData }),
+	setUserData: userData => set({ userData }),
 }));
 
-export const useStudentStore = create<IStudentStoreStore>((set) => ({
+export const useStudentStore = create<IStudentStoreStore>(set => ({
 	studentData: {
 		indexNumber: null,
 		health: null,
 		score: null,
 		rank: null,
+		isPasswordChanged: null,
 		// lastLogin: null,
 		studentId: null,
 		groupId: null,
 		answersIds: null,
 	},
-	setStudentData: (studentData) => set({ studentData }),
+	setStudentData: studentData => set({ studentData }),
 }));
 
 interface ILecturerStore {
@@ -61,11 +63,11 @@ interface ILecturerStore {
 	};
 	setLecturerData: (lecturerData: ILecturerStore['lecturerData']) => void;
 }
-export const useLecturerStore = create<ILecturerStore>((set) => ({
+export const useLecturerStore = create<ILecturerStore>(set => ({
 	lecturerData: {
 		lecturerId: null,
 		isAdmin: null,
 		idCheck: null,
 	},
-	setLecturerData: (lecturerData) => set({ lecturerData }),
+	setLecturerData: lecturerData => set({ lecturerData }),
 }));

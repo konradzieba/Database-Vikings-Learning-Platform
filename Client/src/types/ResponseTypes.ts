@@ -25,9 +25,10 @@ const StudentInfoSchema = z.object({
 	score: z.number(),
 	health: z.number().int().min(0).max(3),
 	rank: z.number().int(),
+	isPasswordChanged: z.boolean(),
 	idCheck: z.number(),
 	groupId: z.number(),
-	answersIds: z.array(z.number()),
+	answersId: z.array(z.number()),
 });
 
 const MeResponseSchema = z.object({
