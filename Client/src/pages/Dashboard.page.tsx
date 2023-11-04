@@ -1,38 +1,33 @@
 import AddGroupCard from '@/components/GroupCard/AddGroup.card';
 import GroupCard from '@/components/GroupCard/Group.card';
-import { Center, Flex } from '@mantine/core';
-
-const mockData = [
-	{
-		groupName: 'Grupa - ISI - 4',
-		assignedStudents: 20,
-		assignedLessons: 6,
-	},
-	{
-		groupName: 'Grupa - ISI - 3',
-		assignedStudents: 4,
-		assignedLessons: 2,
-	},
-];
+import { useLecturerStore } from '@/utils/store';
+import { Center, Flex, Loader } from '@mantine/core';
 
 function DashboardPage() {
+	const { groups } = useLecturerStore();
+
 	return (
-		//to consider if leave center of flex, now added to check positioning
-		<Center>
-			<Flex gap='sm' wrap='wrap'>
-				<GroupCard
-					groupName={mockData[0].groupName!}
-					assignedLessons={mockData[0].assignedLessons!}
-					assignedStudents={mockData[0].assignedStudents!}
-				/>
-				<GroupCard
-					groupName={mockData[1].groupName!}
-					assignedLessons={mockData[1].assignedLessons!}
-					assignedStudents={mockData[1].assignedStudents!}
-				/>
-				<AddGroupCard />
-			</Flex>
-		</Center>
+		<>
+			{groups?.length ? (
+				<Center>
+					<Flex gap='sm' wrap='wrap'>
+						{groups?.map((group) => (
+							<GroupCard
+								key={group.groupId}
+								groupName={group.groupName}
+								assignedLessons={group.lessonsCount}
+								assignedStudents={group.studentsCount}
+							/>
+						))}
+						<AddGroupCard />
+					</Flex>
+				</Center>
+			) : (
+				<Center h='25vh'>
+					<Loader />
+				</Center>
+			)}
+		</>
 	);
 }
 

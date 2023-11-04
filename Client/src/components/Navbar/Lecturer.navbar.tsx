@@ -1,8 +1,17 @@
-import { Divider, Flex, Group, HoverCard, rem } from '@mantine/core';
+import {
+	Center,
+	Divider,
+	Flex,
+	Group,
+	HoverCard,
+	Loader,
+	rem,
+} from '@mantine/core';
 import { NavLink, useLocation } from 'react-router-dom';
 import classes from './Navbar.module.css';
 import UserPanel from '../UI/UserPanel';
 import { IconChevronDown } from '@tabler/icons-react';
+import { useLecturerStore } from '@/utils/store';
 
 const mockedUserInfo = {
 	email: 'lecturer@test.com',
@@ -32,6 +41,7 @@ const groupNavLinks = [
 
 function Nav() {
 	const { pathname } = useLocation();
+	const { groups } = useLecturerStore();
 	return (
 		<Group gap='xl'>
 			<Group align='center' gap='sm'>
@@ -52,15 +62,21 @@ function Nav() {
 						</Group>
 					</HoverCard.Target>
 					<HoverCard.Dropdown px='sm'>
-						{['Grupa IV - ISI', 'Grupa II - IO'].map((group, index) => (
-							<NavLink
-								to='/dashboard/group/1/lessons'
-								className={`${classes.link} ${classes.inactiveLink}`}
-								key={index}
-							>
-								{group}
-							</NavLink>
-						))}
+						{groups?.length ? (
+							groups.map((group, index) => (
+								<NavLink
+									to={`/dashboard/group/${group.groupId}/lessons`}
+									className={`${classes.link} ${classes.inactiveLink}`}
+									key={index}
+								>
+									{group.groupName}
+								</NavLink>
+							))
+						) : (
+							<Center miw={rem(60)}>
+								<Loader size='sm' />
+							</Center>
+						)}
 					</HoverCard.Dropdown>
 				</HoverCard>
 			</Group>

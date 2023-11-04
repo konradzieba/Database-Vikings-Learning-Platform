@@ -1,5 +1,10 @@
 import { TLoginRequest, TSendAnswerRequest } from '@/types/RequestTypes';
-import { TLoginResponse, TMeResponse, TMessageResponse } from '@/types/ResponseTypes';
+import {
+	TGetGroupsByLecturerId,
+	TLoginResponse,
+	TMeResponse,
+	TMessageResponse,
+} from '@/types/ResponseTypes';
 import axios from '@/utils/axios';
 
 export const meQueryFn = async () => {
@@ -13,7 +18,10 @@ export const refreshTokenQueryFn = async () => {
 };
 
 export const loginMutationFn = async (loginRequest: TLoginRequest) => {
-	const { data } = await axios.post<TLoginResponse>('/auth/login', loginRequest);
+	const { data } = await axios.post<TLoginResponse>(
+		'/auth/login',
+		loginRequest
+	);
 	return data;
 };
 
@@ -22,12 +30,29 @@ export const logoutMutationFn = async () => {
 	return data;
 };
 
-export const sendAnswerMutationFn = async (sendAnswerRequest: TSendAnswerRequest) => {
-	const { data } = await axios.post<TMessageResponse>('/answers/createAnswer', sendAnswerRequest);
+export const sendAnswerMutationFn = async (
+	sendAnswerRequest: TSendAnswerRequest
+) => {
+	const { data } = await axios.post<TMessageResponse>(
+		'/answers/createAnswer',
+		sendAnswerRequest
+	);
 	return data;
 };
 
-export const changeDefaultPasswordMutationFn = async (newPassword: Pick<TLoginRequest, 'password'>) => {
-	const { data } = await axios.patch<TMessageResponse>('/users/changeDefaultPassword', newPassword);
+export const changeDefaultPasswordMutationFn = async (
+	newPassword: Pick<TLoginRequest, 'password'>
+) => {
+	const { data } = await axios.patch<TMessageResponse>(
+		'/users/changeDefaultPassword',
+		newPassword
+	);
+	return data;
+};
+
+export const getGroupsByLecturerIdQueryFn = async (lecturerId: number) => {
+	const { data } = await axios.get<TGetGroupsByLecturerId>(
+		`/groups/getGroupsByLecturerId/${lecturerId}`
+	);
 	return data;
 };

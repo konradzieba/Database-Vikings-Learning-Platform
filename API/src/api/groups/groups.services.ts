@@ -24,7 +24,7 @@ export async function getGroups(id: Lecturer['id']) {
     groupId: group.id,
     groupName: group.name,
     lessonsCount: group.lessons.length,
-    studentCount: group.students.length,
+    studentsCount: group.students.length,
   }));
 
   return lecturerGroups;

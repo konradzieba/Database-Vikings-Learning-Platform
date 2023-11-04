@@ -1,4 +1,5 @@
 import { UserRole } from '@/types/Enums';
+import { TGetGroupsByLecturerId } from '@/types/ResponseTypes';
 import { create } from 'zustand';
 
 interface IUserStoreStore {
@@ -28,7 +29,7 @@ interface IStudentStoreStore {
 	setStudentData: (studentData: IStudentStoreStore['studentData']) => void;
 }
 
-export const useUserStore = create<IUserStoreStore>(set => ({
+export const useUserStore = create<IUserStoreStore>((set) => ({
 	role: null,
 	userData: {
 		firstName: null,
@@ -37,10 +38,10 @@ export const useUserStore = create<IUserStoreStore>(set => ({
 		userId: null,
 	},
 	setRole: (role: UserRole) => set({ role }),
-	setUserData: userData => set({ userData }),
+	setUserData: (userData) => set({ userData }),
 }));
 
-export const useStudentStore = create<IStudentStoreStore>(set => ({
+export const useStudentStore = create<IStudentStoreStore>((set) => ({
 	studentData: {
 		indexNumber: null,
 		health: null,
@@ -52,7 +53,7 @@ export const useStudentStore = create<IStudentStoreStore>(set => ({
 		groupId: null,
 		answersIds: null,
 	},
-	setStudentData: studentData => set({ studentData }),
+	setStudentData: (studentData) => set({ studentData }),
 }));
 
 interface ILecturerStore {
@@ -61,13 +62,17 @@ interface ILecturerStore {
 		isAdmin: boolean | null;
 		idCheck: number | null;
 	};
+	groups: TGetGroupsByLecturerId['groups'] | null;
 	setLecturerData: (lecturerData: ILecturerStore['lecturerData']) => void;
+	setGroups: (groups: ILecturerStore['groups']) => void;
 }
-export const useLecturerStore = create<ILecturerStore>(set => ({
+export const useLecturerStore = create<ILecturerStore>((set) => ({
 	lecturerData: {
 		lecturerId: null,
 		isAdmin: null,
 		idCheck: null,
 	},
-	setLecturerData: lecturerData => set({ lecturerData }),
+	groups: null,
+	setLecturerData: (lecturerData) => set({ lecturerData }),
+	setGroups: (groups) => set({ groups }),
 }));
