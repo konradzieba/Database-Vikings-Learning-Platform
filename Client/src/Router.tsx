@@ -66,7 +66,7 @@ const router = createBrowserRouter([
 						path: 'lessons',
 						element: <GroupLessonsPage />,
 						children: [
-							{ path: 'lessonDashboard', element: <LessonDashboardPage /> },
+							{ path: 'lessonDashboard/:lessonId', element: <LessonDashboardPage /> },
 							{ path: 'createLesson', element: <CreateLessonPage /> },
 							// { path: 'checkFrequency', element: <CheckFrequencyPage /> },
 						],
