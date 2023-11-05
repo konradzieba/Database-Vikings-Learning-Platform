@@ -27,6 +27,23 @@ export async function getGroups(
   }
 }
 
+export async function getStudentsFromGroup(
+  req: Request<ParamsWithId>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id } = req.params;
+
+    const studentList = await GroupServices.getStudentsFromGroup(+id);
+
+    res.json({ message: 'success', students: studentList });
+  } catch (error) {
+    next(error);
+  }
+}
+
+
 export async function createGroup(
   req: Request<{}, MessageResponse, GroupSchemas.GroupInput>,
   res: Response<MessageResponse>,

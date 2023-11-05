@@ -30,6 +30,50 @@ export async function getGroups(id: Lecturer['id']) {
   return lecturerGroups;
 }
 
+export async function getStudentsFromGroup(id: Group['id']) {
+  const selectedStudentInfo = await db.student.findMany({
+    where: {
+      groupId: id,
+    },
+    select: {
+      id: true,
+      indexNumber: true,
+      score: true,
+      health: true,
+      lastLogin: true,
+      userId: true,
+      groupId: true,
+    },
+  });
+
+  const selectedUserInfo = await db.student.findMany({
+    where: {
+      groupId: id,
+    },
+    include: {
+      User: {
+        select: {
+          firstName: true,
+          lastName: true,
+        },
+      },
+    },
+  });
+
+  const combinedData = selectedStudentInfo.map((student) => {
+    const userInfo = selectedUserInfo.find((info) => info.id === student.id);
+    if (userInfo) {
+      return {
+        ...student,
+        ...userInfo.User,
+      };
+    }
+    return student;
+  });
+
+  return combinedData;
+}
+
 export function createGroup(group: Prisma.GroupCreateInput) {
   return db.group.create({
     data: group,

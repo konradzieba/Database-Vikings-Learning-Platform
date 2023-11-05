@@ -16,6 +16,15 @@ router.get(
   GroupsControllers.getGroups
 );
 
+router.get(
+  '/getStudentsFromGroup/:id',
+  validateRequestAndCheckRole(
+    { params: paramsWithIdSchema },
+    EnumRole.LECTURER
+  ),
+  GroupsControllers.getStudentsFromGroup
+);
+
 router.post(
   '/createGroup',
   validateRequestAndCheckRole(
