@@ -71,7 +71,7 @@ function StudentInfoCard({
 					{index}
 				</Text>
 			</Flex>
-			<Flex direction='column' align='center'>
+			<Flex direction='column' align='center' miw='10%'>
 				<Text>Punkty</Text>
 				<Group className={classes.score} gap={rem(2)} py={rem(4.2)}>
 					<IconCoins />
