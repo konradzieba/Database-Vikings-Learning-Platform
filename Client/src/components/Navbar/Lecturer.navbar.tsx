@@ -1,5 +1,5 @@
 import { Center, Divider, Flex, Group, HoverCard, Loader, rem } from '@mantine/core';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useParams } from 'react-router-dom';
 import classes from './Navbar.module.css';
 import UserPanel from '../UI/UserPanel';
 import { IconChevronDown } from '@tabler/icons-react';
@@ -8,19 +8,20 @@ import { useLecturerStore } from '@/utils/store';
 function Nav() {
 	const { pathname } = useLocation();
 	const { groups } = useLecturerStore();
+	let { id } = useParams();
 
 	const groupNavLinks = [
 		{
 			label: 'Lekcje',
-			link: `/dashboard/group/${pathname.split('/')[3]}/lessons`,
+			link: `/dashboard/group/${id}/lessons`,
 		},
 		{
 			label: 'Studenci',
-			link: `/dashboard/group/${pathname.split('/')[3]}/students`,
+			link: `/dashboard/group/${id}/students`,
 		},
 		{
 			label: 'Ranking',
-			link: `/dashboard/group/${pathname.split('/')[3]}/ranking`,
+			link: `/dashboard/group/${id}/ranking`,
 		},
 	];
 
