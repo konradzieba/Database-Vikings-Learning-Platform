@@ -1,47 +1,29 @@
-import {
-	Center,
-	Divider,
-	Flex,
-	Group,
-	HoverCard,
-	Loader,
-	rem,
-} from '@mantine/core';
+import { Center, Divider, Flex, Group, HoverCard, Loader, rem } from '@mantine/core';
 import { NavLink, useLocation } from 'react-router-dom';
 import classes from './Navbar.module.css';
 import UserPanel from '../UI/UserPanel';
 import { IconChevronDown } from '@tabler/icons-react';
 import { useLecturerStore } from '@/utils/store';
 
-const mockedUserInfo = {
-	email: 'lecturer@test.com',
-};
-
-const navLinks = [
-	{
-		label: 'Grupy',
-		link: '/dashboard',
-	},
-];
-
-const groupNavLinks = [
-	{
-		label: 'Lekcje',
-		link: '/dashboard/group/1/lessons',
-	},
-	{
-		label: 'Studenci',
-		link: '/dashboard/group/1/students',
-	},
-	{
-		label: 'Ranking',
-		link: '/dashboard/group/1/ranking',
-	},
-];
-
 function Nav() {
 	const { pathname } = useLocation();
 	const { groups } = useLecturerStore();
+
+	const groupNavLinks = [
+		{
+			label: 'Lekcje',
+			link: `/dashboard/group/${pathname.split('/')[3]}/lessons`,
+		},
+		{
+			label: 'Studenci',
+			link: `/dashboard/group/${pathname.split('/')[3]}/students`,
+		},
+		{
+			label: 'Ranking',
+			link: `/dashboard/group/${pathname.split('/')[3]}/ranking`,
+		},
+	];
+
 	return (
 		<Group gap='xl'>
 			<Group align='center' gap='sm'>
@@ -49,14 +31,13 @@ function Nav() {
 					<HoverCard.Target>
 						<Group gap={rem(5)} align='center'>
 							<NavLink
-								to={navLinks[0].link}
+								to={'/dashboard'}
 								className={({ isActive }) =>
 									isActive && pathname.endsWith('dashboard')
 										? `${classes.link} ${classes.activeLink}`
 										: `${classes.link} ${classes.inactiveLink}`
-								}
-							>
-								{navLinks[0].label}{' '}
+								}>
+								Grupy
 							</NavLink>
 							<IconChevronDown size='1.5rem' color='var(--font-color)' />
 						</Group>
@@ -67,8 +48,7 @@ function Nav() {
 								<NavLink
 									to={`/dashboard/group/${group.groupId}/lessons`}
 									className={`${classes.link} ${classes.inactiveLink}`}
-									key={index}
-								>
+									key={index}>
 									{group.groupName}
 								</NavLink>
 							))
@@ -83,17 +63,14 @@ function Nav() {
 			{pathname.includes('/dashboard/group/') && (
 				<>
 					<Divider orientation='vertical' />
-					{groupNavLinks.map((link) => {
+					{groupNavLinks.map(link => {
 						return (
 							<NavLink
 								to={link.link}
 								className={({ isActive }) =>
-									isActive
-										? `${classes.link} ${classes.activeLink}`
-										: `${classes.link} ${classes.inactiveLink}`
+									isActive ? `${classes.link} ${classes.activeLink}` : `${classes.link} ${classes.inactiveLink}`
 								}
-								key={link.link}
-							>
+								key={link.link}>
 								{link.label}
 							</NavLink>
 						);

@@ -4,12 +4,13 @@ import { IconListTree, IconUsers } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
 interface GroupCardProps {
+	groupId: number;
 	groupName: string;
 	assignedStudents: number;
 	assignedLessons: number;
 }
 
-function GroupCard({ groupName, assignedStudents, assignedLessons }: GroupCardProps) {
+function GroupCard({ groupId, groupName, assignedStudents, assignedLessons }: GroupCardProps) {
 	const navigate = useNavigate();
 	const studentsMultiple = (studentsNumber: number) => {
 		if (studentsNumber === 1) {
@@ -30,7 +31,7 @@ function GroupCard({ groupName, assignedStudents, assignedLessons }: GroupCardPr
 		}
 	};
 	return (
-		<Box component='a' onClick={() => navigate('group/1/lessons')} tabIndex={1}>
+		<Box component='a' onClick={() => navigate(`group/${groupId}/lessons`)} tabIndex={1}>
 			<Flex direction='column' px='md' py='md' gap='md' className={classes.groupCardWrapper}>
 				<Text fz='md' fw={500}>
 					{groupName}

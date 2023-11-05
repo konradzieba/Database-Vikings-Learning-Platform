@@ -11,9 +11,10 @@ function DashboardPage() {
 			{groups?.length ? (
 				<Center>
 					<Flex gap='sm' wrap='wrap'>
-						{groups?.map((group) => (
+						{groups?.map(group => (
 							<GroupCard
 								key={group.groupId}
+								groupId={group.groupId}
 								groupName={group.groupName}
 								assignedLessons={group.lessonsCount}
 								assignedStudents={group.studentsCount}
