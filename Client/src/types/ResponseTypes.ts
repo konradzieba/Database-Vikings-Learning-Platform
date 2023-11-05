@@ -53,11 +53,27 @@ const GetGroupsByLecturerIdSchema = z.object({
 	),
 });
 
+const GetStudentsFromGroupSchema = z.object({
+	message: z.string(),
+	students: z.array(
+		z.object({
+			id: z.number().int(),
+			indexNumber: z.number().int(),
+			score: z.number().int(),
+			health: z.number().int(),
+			lastLogin: z.string(),
+			userId: z.number().int(),
+			groupId: z.number().int(),
+			firstName: z.string(),
+			lastName: z.string(),
+		})
+	),
+});
+
 export type TMessageResponse = z.infer<typeof MessageResponseSchema>;
 export type TLoginResponse = z.infer<typeof LoginResponseSchema>;
 export type TLecturerInfo = z.infer<typeof LecturerInfoSchema>;
 export type TStudentInfo = z.infer<typeof StudentInfoSchema>;
 export type TMeResponse = z.infer<typeof MeResponseSchema>;
-export type TGetGroupsByLecturerId = z.infer<
-	typeof GetGroupsByLecturerIdSchema
->;
+export type TGetGroupsByLecturerId = z.infer<typeof GetGroupsByLecturerIdSchema>;
+export type TGetStudentsFromGroup = z.infer<typeof GetStudentsFromGroupSchema>;
