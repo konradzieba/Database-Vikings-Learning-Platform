@@ -35,6 +35,13 @@ export async function getStudentsFromGroup(
   try {
     const { id } = req.params;
 
+    const existingGroup = await GroupServices.findGroupById(+id);
+
+    if (!existingGroup) {
+      res.status(404);
+      throw new Error('Group with this id does not exist.');
+    }
+
     const studentList = await GroupServices.getStudentsFromGroup(+id);
 
     res.json({ message: 'success', students: studentList });
@@ -42,7 +49,6 @@ export async function getStudentsFromGroup(
     next(error);
   }
 }
-
 
 export async function createGroup(
   req: Request<{}, MessageResponse, GroupSchemas.GroupInput>,
