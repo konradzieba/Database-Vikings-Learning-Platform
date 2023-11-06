@@ -5,6 +5,7 @@ import {
 	Divider,
 	Group,
 	NumberInput,
+	ScrollArea,
 	Select,
 	Text,
 	Textarea,
@@ -20,7 +21,11 @@ interface PreviewStudentAnswerModalProps {
 	studentAnswer: string;
 }
 
-function PreviewStudentAnswerModal({ context, id, innerProps }: ContextModalProps<PreviewStudentAnswerModalProps>) {
+function PreviewStudentAnswerModal({
+	context,
+	id,
+	innerProps,
+}: ContextModalProps<PreviewStudentAnswerModalProps>) {
 	const handleEvaluateAnswer = () => {
 		context.closeModal(id);
 		modals.closeAll();
@@ -41,9 +46,16 @@ function PreviewStudentAnswerModal({ context, id, innerProps }: ContextModalProp
 				<ThemeIcon variant='transparent' size='lg'>
 					<IconCode />
 				</ThemeIcon>
-				<Box w='90%' px='md' style={{ border: `${rem(1)} solid var(--font-color)` }}>
-					<pre>{innerProps.studentAnswer}</pre>
-				</Box>
+				<ScrollArea
+					w='90%'
+					px='md'
+					offsetScrollbars
+					style={{ border: `${rem(1)} solid var(--font-color)` }}
+				>
+					<pre style={{ wordBreak: 'break-word' }}>
+						{innerProps.studentAnswer}
+					</pre>
+				</ScrollArea>
 			</Group>
 
 			<Divider my='md' />
@@ -59,7 +71,7 @@ function PreviewStudentAnswerModal({ context, id, innerProps }: ContextModalProp
 					w='45%'
 					leftSection={<IconCoins color='var(--score-color)' />}
 					defaultValue={100}
-					step={10}
+					step={5}
 					min={0}
 					max={100}
 					clampBehavior='strict'
@@ -70,7 +82,13 @@ function PreviewStudentAnswerModal({ context, id, innerProps }: ContextModalProp
 			</Group>
 
 			<Center>
-				<Textarea w='90%' my='sm' label='Komentarz do zadania' placeholder='Treść...' rows={5}/>
+				<Textarea
+					w='90%'
+					my='sm'
+					label='Komentarz do zadania'
+					placeholder='Treść komentarza...'
+					rows={5}
+				/>
 			</Center>
 
 			<Group justify='center'>

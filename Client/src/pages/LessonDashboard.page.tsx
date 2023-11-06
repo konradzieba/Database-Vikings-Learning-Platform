@@ -1,8 +1,28 @@
 import StudentAnswerCard from '@/components/StudentAnswerCard/StudentAnswer.card';
 import TaskAnswersStats from '@/components/UI/TaskAnswersStats';
-import { Button, Center, Flex, ScrollArea, Tabs, Title } from '@mantine/core';
+import {
+	Button,
+	Center,
+	Flex,
+	ScrollArea,
+	Tabs,
+	Title,
+	rem,
+} from '@mantine/core';
 import { modals } from '@mantine/modals';
 
+/* data = [
+	tasks: [
+
+	]
+]
+
+// WSZYSCY STUDENCI - A
+// BRAKUJACY STUDENCI - B
+A - B = C -> brakujacy studenci
+
+
+*/
 const mockData = {
 	lessonNumber: 4,
 	tasks: [
@@ -14,7 +34,8 @@ const mockData = {
 					firstName: 'Roman',
 					lastName: 'Romanowski',
 					index: 111111,
-					answer: 'SELECT * FROM db;',
+					answer:
+						'SELECT * FROM db; SELECT * FROM db; SELECT * FROM db; SELECT * FROM db;',
 					sendDate: '2023-10-21T20:00:00.000Z',
 				},
 				{
@@ -195,22 +216,26 @@ function LessonDashboardPage() {
 		});
 	};
 
-	const tasksTabs = mockData.tasks.map(task => {
+	const tasksTabs = mockData.tasks.map((task) => {
 		return (
 			<Tabs.Tab
 				value={`task-${task.taskNumber}`}
-				key={`task-${task.taskNumber}-tab`}>{`Zadanie ${task.taskNumber}`}</Tabs.Tab>
+				key={`task-${task.taskNumber}-tab`}
+			>{`Zadanie ${task.taskNumber}`}</Tabs.Tab>
 		);
 	});
 
-	const tasksPanels = mockData.tasks.map(task => {
+	const tasksPanels = mockData.tasks.map((task) => {
 		return (
-			<Tabs.Panel value={`task-${task.taskNumber}`} key={`task-${task.taskNumber}-panel`}>
+			<Tabs.Panel
+				value={`task-${task.taskNumber}`}
+				key={`task-${task.taskNumber}-panel`}
+			>
 				<Flex direction='column'>
 					<TaskAnswersStats endDate={task.endDate} answers={task.answers} />
-					<ScrollArea h='55vh'>
+					<ScrollArea h={500} type='auto'>
 						<Flex wrap='wrap' gap='xl' mx='lg' mt='md' justify='flex-start'>
-							{task.answers.map(answer => {
+							{task.answers.map((answer) => {
 								return (
 									<StudentAnswerCard
 										firstName={answer.firstName}
@@ -231,7 +256,7 @@ function LessonDashboardPage() {
 
 	return (
 		<>
-			<Center mb='sm'>
+			<Center mb='sm' mt={rem(-60)}>
 				<Title>Lekcja&nbsp;{mockData.lessonNumber}</Title>
 			</Center>
 			<Center>
@@ -240,7 +265,13 @@ function LessonDashboardPage() {
 				</Button>
 			</Center>
 			<Center>
-				<Tabs orientation='vertical' defaultValue='task-1' h='60vh' w='60vw' mt='sm'>
+				<Tabs
+					orientation='vertical'
+					defaultValue='task-1'
+					h='60vh'
+					w='60vw'
+					mt='sm'
+				>
 					<Tabs.List grow>{tasksTabs}</Tabs.List>
 					{tasksPanels}
 				</Tabs>
