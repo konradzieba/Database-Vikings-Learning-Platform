@@ -1,6 +1,7 @@
 import { TLoginRequest, TSendAnswerRequest } from '@/types/RequestTypes';
 import {
 	TGetGroupsByLecturerId,
+	TGetLessonsByGroupId,
 	TGetStudentsFromGroup,
 	TLoginResponse,
 	TMeResponse,
@@ -45,5 +46,10 @@ export const getGroupsByLecturerIdQueryFn = async (lecturerId: number) => {
 
 export const getStudentsFromGroupQueryFn = async (groupId: number) => {
 	const { data } = await axios.get<TGetStudentsFromGroup>(`/groups/getStudentsFromGroup/${groupId}`);
+	return data;
+};
+
+export const getLessonsByGroupIdQueryFn = async (groupId: number) => {
+	const { data } = await axios.get<TGetLessonsByGroupId>(`/lessons/getLessonsByGroupId/${groupId}`);
 	return data;
 };

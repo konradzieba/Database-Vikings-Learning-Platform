@@ -70,6 +70,20 @@ const GetStudentsFromGroupSchema = z.object({
 	),
 });
 
+const GetLessonsByGroupIdSchema = z.object({
+	message: z.string(),
+	lessons: z.array(
+		z.object({
+			id: z.number().int(),
+			number: z.number().int(),
+			image: z.string(),
+			isFrequencyChecked: z.boolean(),
+			taskAmount: z.number().int(),
+			groupId: z.number().int(),
+		})
+	),
+});
+
 export type TMessageResponse = z.infer<typeof MessageResponseSchema>;
 export type TLoginResponse = z.infer<typeof LoginResponseSchema>;
 export type TLecturerInfo = z.infer<typeof LecturerInfoSchema>;
@@ -77,3 +91,4 @@ export type TStudentInfo = z.infer<typeof StudentInfoSchema>;
 export type TMeResponse = z.infer<typeof MeResponseSchema>;
 export type TGetGroupsByLecturerId = z.infer<typeof GetGroupsByLecturerIdSchema>;
 export type TGetStudentsFromGroup = z.infer<typeof GetStudentsFromGroupSchema>;
+export type TGetLessonsByGroupId = z.infer<typeof GetLessonsByGroupIdSchema>;
