@@ -1,12 +1,30 @@
 import { Group, Lesson, Prisma } from '@prisma/client';
 import { db } from '../../db';
 
-export function getLessonsByGroupId(id: Group['id']) {
-  return db.lesson.findMany({
+export async function getLessonsByGroupId(id: Group['id']) {
+  const lessonsInfo = await db.lesson.findMany({
     where: {
       groupId: id,
     },
+    include: {
+      tasks: {
+        select: {
+          id: true,
+        },
+      },
+    },
   });
+
+  const lessonsFromGroup = lessonsInfo.map((lesson) => ({
+    id: lesson.id,
+    number: lesson.number,
+    image: lesson.image,
+    isFrequencyChecked: lesson.isFrequencyChecked,
+    taskAmount: lesson.tasks.length,
+    groupId: lesson.isFrequencyChecked,
+  }));
+
+  return lessonsFromGroup;
 }
 
 export function createLessonByName(lesson: Prisma.LessonCreateInput) {
