@@ -1,6 +1,20 @@
-import { Box, Button, Divider, Flex, Group, NumberInput, ScrollArea, Select, Text, Textarea, rem } from '@mantine/core';
+import {
+	Box,
+	Button,
+	Code,
+	Divider,
+	Flex,
+	Group,
+	NumberInput,
+	ScrollArea,
+	Select,
+	Text,
+	Textarea,
+	rem,
+} from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
 import { IconCoins } from '@tabler/icons-react';
+import { CodeHighlight, CodeHighlightTabs } from '@mantine/code-highlight';
 
 interface PreviewStudentAnswerModalProps {
 	studentFullName: string;
@@ -8,7 +22,11 @@ interface PreviewStudentAnswerModalProps {
 	studentAnswer: string;
 }
 
-function PreviewStudentAnswerModal({ context, id, innerProps }: ContextModalProps<PreviewStudentAnswerModalProps>) {
+function PreviewStudentAnswerModal({
+	context,
+	id,
+	innerProps,
+}: ContextModalProps<PreviewStudentAnswerModalProps>) {
 	const handleEvaluateAnswer = () => {
 		context.closeModal(id);
 		modals.closeAll();
@@ -24,9 +42,20 @@ function PreviewStudentAnswerModal({ context, id, innerProps }: ContextModalProp
 			<Text mb='md'>
 				{innerProps.studentFullName},&nbsp;{innerProps.studentIndex}
 			</Text>
-			<ScrollArea.Autosize  pl='md' mah={250} style={{ border: `${rem(1)} solid var(--font-color)` }}>
-				<pre style={{whiteSpace: 'break-spaces', margin: 0 }}>{innerProps.studentAnswer}</pre>
-			</ScrollArea.Autosize>
+			{/* <ScrollArea.Autosize
+				pl='md'
+				mah={250}
+				style={{ border: `${rem(1)} solid var(--font-color)` }}
+			> */}
+			{/* <pre style={{whiteSpace: 'break-spaces', margin: 0 }}>{innerProps.studentAnswer}</pre> */}
+			<ScrollArea h={250}>
+				<CodeHighlight
+					code={innerProps.studentAnswer}
+					language='sql'
+					withCopyButton={false}
+				/>
+			</ScrollArea>
+			{/* </ScrollArea.Autosize> */}
 
 			<Divider my='md' />
 
@@ -51,7 +80,13 @@ function PreviewStudentAnswerModal({ context, id, innerProps }: ContextModalProp
 				/>
 			</Flex>
 
-			<Textarea w='100%' my='sm' label='Komentarz do zadania' placeholder='Treść komentarza...' rows={5} />
+			<Textarea
+				w='100%'
+				my='sm'
+				label='Komentarz do zadania'
+				placeholder='Treść komentarza...'
+				rows={5}
+			/>
 
 			<Group justify='center'>
 				<Button miw={150} variant='outline' onClick={handleCloseModal}>
