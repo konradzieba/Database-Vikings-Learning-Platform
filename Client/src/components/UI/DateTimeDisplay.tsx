@@ -1,4 +1,4 @@
-import { Group, Stack, StackProps, StyleProp, Text, ThemeIcon, rem } from '@mantine/core';
+import { Divider, Group, Stack, StackProps, StyleProp, Text, ThemeIcon, rem } from '@mantine/core';
 import dayjs from 'dayjs';
 
 interface DateTimeDisplayProps extends StackProps {
@@ -15,10 +15,14 @@ function DateTimeDisplay({ date, title, icon, titleTextAlgin = 'end', ...stackPr
 			<Text fw={500} size='md' ta={titleTextAlgin}>
 				{title}
 			</Text>
-			<Group gap={rem(5)}>
-				<ThemeIcon variant='transparent'>{icon}</ThemeIcon>
-				<Text>{formattedDate}</Text>
-			</Group>
+			{date ? (
+				<Group gap={rem(5)}>
+					<ThemeIcon variant='transparent'>{icon}</ThemeIcon>
+					<Text>{formattedDate}</Text>
+				</Group>
+			) : (
+				<Text ta='center'>&mdash;</Text>
+			)}
 		</Stack>
 	);
 }
