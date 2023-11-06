@@ -1,53 +1,25 @@
-import { Center, Flex } from '@mantine/core';
+import { Center, Flex, Text } from '@mantine/core';
 import lesson1 from '@/assets/lesson1.png';
 import { Carousel } from '@mantine/carousel';
 import LecturerLessonCard from '@/components/LessonCard/LecturerLesson.card';
 import AddLessonCard from '@/components/LessonCard/AddLesson.card';
-import { Outlet, useLocation } from 'react-router-dom';
-
-const carouselSlides = [
-	{
-		lessonNumber: 1,
-		taskAmount: 13,
-		isFrequencyChecked: true,
-		photoLink: lesson1,
-	},
-	{
-		lessonNumber: 2,
-		taskAmount: 0,
-		isFrequencyChecked: false,
-		photoLink: lesson1,
-	},
-	{
-		lessonNumber: 3,
-		taskAmount: 10,
-		isFrequencyChecked: true,
-		photoLink: lesson1,
-	},
-	{
-		lessonNumber: 4,
-		taskAmount: 12,
-		isFrequencyChecked: true,
-		photoLink: lesson1,
-	},
-	{
-		lessonNumber: 5,
-		taskAmount: 4,
-		isFrequencyChecked: false,
-		photoLink: lesson1,
-	},
-];
+import { Outlet, useLocation, useParams } from 'react-router-dom';
+import useGetLessonsByGroupId from '@/hooks/lessons/useGetLessonsByGroupId';
+import FullScreenLoader from '@/components/UI/FullScreenLoader';
 
 function GroupLessonsPage() {
+	let { id } = useParams();
 	const { pathname } = useLocation();
-	const slides = carouselSlides.map((slide) => {
+	const { data: LessonsFromGroup, isPending } = useGetLessonsByGroupId(+id!);
+	const slides = LessonsFromGroup?.lessons.map(slide => {
 		return (
-			<Carousel.Slide key={slide.lessonNumber}>
+			<Carousel.Slide key={slide.number}>
 				<LecturerLessonCard
-					lessonNumber={slide.lessonNumber}
+					id={slide.id}
+					lessonNumber={slide.number}
 					taskAmount={slide.taskAmount}
 					isFrequencyChecked={slide.isFrequencyChecked}
-					photoLink={slide.photoLink}
+					photoLink={slide.image}
 				/>
 			</Carousel.Slide>
 		);
@@ -55,6 +27,54 @@ function GroupLessonsPage() {
 
 	return (
 		<>
+			{pathname.endsWith('/lessons') ? (
+				isPending ? (
+					<FullScreenLoader />
+				) : slides?.length === 0 ? (
+					<Center>
+						<Carousel
+							maw={1175}
+							withIndicators
+							slidesToScroll={1}
+							initialSlide={1}
+							slideSize='33.333333%'
+							slideGap='sm'
+							align='start'
+							draggable>
+							<Carousel.Slide>
+								<AddLessonCard />
+							</Carousel.Slide>
+						</Carousel>
+					</Center>
+				) : (
+					<Center>
+						<Carousel
+							maw={1175}
+							withIndicators
+							slidesToScroll={1}
+							initialSlide={slides?.length! - 2}
+							slideSize='33.333333%'
+							slideGap='sm'
+							align='start'
+							draggable>
+							{slides}
+							<Carousel.Slide>
+								<AddLessonCard />
+							</Carousel.Slide>
+						</Carousel>
+					</Center>
+				)
+			) : (
+				<Outlet />
+			)}
+		</>
+	);
+}
+
+export default GroupLessonsPage;
+
+{
+	/* <>
 			{pathname.endsWith('/lessons') ? (
 				<Center>
 					<Carousel
@@ -65,8 +85,7 @@ function GroupLessonsPage() {
 						slideSize='33.333333%'
 						slideGap='sm'
 						align='start'
-						draggable
-					>
+						draggable>
 						{slides}
 						<Carousel.Slide>
 							<AddLessonCard />
@@ -76,8 +95,5 @@ function GroupLessonsPage() {
 			) : (
 				<Outlet />
 			)}
-		</>
-	);
+		</> */
 }
-
-export default GroupLessonsPage;

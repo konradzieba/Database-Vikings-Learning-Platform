@@ -4,6 +4,7 @@ import { IconChecklist, IconList } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 
 interface LecturerLessonCardProps {
+	id: number;
 	lessonNumber: number;
 	taskAmount: number;
 	isFrequencyChecked: boolean;
@@ -16,7 +17,7 @@ const getTasksPlural = (taskAmount: number) => {
 	if (taskAmount >= 5) return 'zadań';
 };
 
-function LecturerLessonCard({ lessonNumber, taskAmount, isFrequencyChecked, photoLink }: LecturerLessonCardProps) {
+function LecturerLessonCard({ id, lessonNumber, taskAmount, isFrequencyChecked, photoLink }: LecturerLessonCardProps) {
 	const navigate = useNavigate();
 	const isZeroTasks = taskAmount === 0;
 	const frequencyColor = isFrequencyChecked ? 'var(--good-state-color)' : 'var(--bad-state-color)';
@@ -42,7 +43,7 @@ function LecturerLessonCard({ lessonNumber, taskAmount, isFrequencyChecked, phot
 				</Group>
 			</Stack>
 			<Image src={photoLink} mx='auto' w={rem(340)} h={rem(220)} alt={`Lesson number ${lessonNumber} photo`} />
-			<Button maw={200} my='lg' mx='auto' onClick={() => navigate('lessonDashboard/1')}>
+			<Button maw={200} my='lg' mx='auto' onClick={() => navigate(`lessonDashboard/${id}`)}>
 				Przejdź
 			</Button>
 		</Flex>
