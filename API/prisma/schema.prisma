@@ -78,13 +78,14 @@ model Student {
 
 
 model Lesson {
-  id          Int       @id @default(autoincrement())
-  number      Int
-  image       String?
+  id                  Int       @id @default(autoincrement())
+  number              Int
+  image               String?
+  isFrequencyChecked  Boolean   @default(false)
   // relations    
   tasks       Task[]
-  groupId     Int
-  Group       Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId             Int
+  Group       Group            @relation(fields: [groupId], references: [id], onDelete: Cascade)
 }
 
 model Task {
