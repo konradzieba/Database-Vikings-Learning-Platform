@@ -1,19 +1,6 @@
-import {
-	Box,
-	Button,
-	Center,
-	Divider,
-	Group,
-	NumberInput,
-	ScrollArea,
-	Select,
-	Text,
-	Textarea,
-	ThemeIcon,
-	rem,
-} from '@mantine/core';
+import { Box, Button, Divider, Flex, Group, NumberInput, ScrollArea, Select, Text, Textarea, rem } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
-import { IconCode, IconCoins } from '@tabler/icons-react';
+import { IconCoins } from '@tabler/icons-react';
 
 interface PreviewStudentAnswerModalProps {
 	studentFullName: string;
@@ -21,11 +8,7 @@ interface PreviewStudentAnswerModalProps {
 	studentAnswer: string;
 }
 
-function PreviewStudentAnswerModal({
-	context,
-	id,
-	innerProps,
-}: ContextModalProps<PreviewStudentAnswerModalProps>) {
+function PreviewStudentAnswerModal({ context, id, innerProps }: ContextModalProps<PreviewStudentAnswerModalProps>) {
 	const handleEvaluateAnswer = () => {
 		context.closeModal(id);
 		modals.closeAll();
@@ -41,34 +24,21 @@ function PreviewStudentAnswerModal({
 			<Text mb='md'>
 				{innerProps.studentFullName},&nbsp;{innerProps.studentIndex}
 			</Text>
-
-			<Group align='flex-start'>
-				<ThemeIcon variant='transparent' size='lg'>
-					<IconCode />
-				</ThemeIcon>
-				<ScrollArea
-					w='90%'
-					px='md'
-					offsetScrollbars
-					style={{ border: `${rem(1)} solid var(--font-color)` }}
-				>
-					<pre style={{ wordBreak: 'break-word' }}>
-						{innerProps.studentAnswer}
-					</pre>
-				</ScrollArea>
-			</Group>
+			<ScrollArea.Autosize  pl='md' mah={250} style={{ border: `${rem(1)} solid var(--font-color)` }}>
+				<pre style={{whiteSpace: 'break-spaces', margin: 0 }}>{innerProps.studentAnswer}</pre>
+			</ScrollArea.Autosize>
 
 			<Divider my='md' />
 
-			<Group justify='center' mx='md' gap='md'>
+			<Flex justify='space-between' gap='md'>
 				<Select
-					w='45%'
+					w='50%'
 					label='Ocena zadania'
 					placeholder='Ocena zadania...'
 					data={['Poprawnie', 'Niepoprawne', 'Częściowo poprawne']}
 				/>
 				<NumberInput
-					w='45%'
+					w='50%'
 					leftSection={<IconCoins color='var(--score-color)' />}
 					defaultValue={100}
 					step={5}
@@ -79,17 +49,9 @@ function PreviewStudentAnswerModal({
 					label='Ilość punktów'
 					placeholder='Ilość punktów'
 				/>
-			</Group>
+			</Flex>
 
-			<Center>
-				<Textarea
-					w='90%'
-					my='sm'
-					label='Komentarz do zadania'
-					placeholder='Treść komentarza...'
-					rows={5}
-				/>
-			</Center>
+			<Textarea w='100%' my='sm' label='Komentarz do zadania' placeholder='Treść komentarza...' rows={5} />
 
 			<Group justify='center'>
 				<Button miw={150} variant='outline' onClick={handleCloseModal}>
