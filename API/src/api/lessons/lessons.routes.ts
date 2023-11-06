@@ -7,6 +7,15 @@ import { EnumRole } from '../../../typings/token';
 
 const router = Router();
 
+router.get(
+  '/getLessonsByGroupId/:id',
+  validateRequestAndCheckRole(
+    {params: paramsWithIdSchema},
+    EnumRole.LECTURER
+  ),
+  LessonsControllers.getLessonsByGroupId
+)
+
 router.post(
   '/createLesson',
   validateRequestAndCheckRole(

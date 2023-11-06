@@ -4,6 +4,29 @@ import * as LessonServices from './lessons.services';
 import * as LessonSchemas from './lessons.schemas';
 import { ParamsWithId } from '../../interfaces/ParamsWithId';
 
+export async function getLessonsByGroupId(
+  req: Request<ParamsWithId>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id } = req.params;
+
+    const existingGroup = await LessonServices.findGroupById(+id);
+
+    if (!existingGroup) {
+      res.status(404);
+      throw new Error('Group with this id does not exist.');
+    }
+
+    const lessons = await LessonServices.getLessonsByGroupId(+id);
+
+    res.json({ message: 'success', lessons: lessons });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function createLesson(
   req: Request<{}, MessageResponse, LessonSchemas.LessonInput>,
   res: Response<MessageResponse>,
@@ -29,7 +52,6 @@ export async function createLesson(
     next(error);
   }
 }
-
 
 export async function updateLesson(
   req: Request<ParamsWithId, MessageResponse, LessonSchemas.UpdateLessonInput>,
