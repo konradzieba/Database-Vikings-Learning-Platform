@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 export function useGetStudentsFromGroup(groupId: number | null) {
 	const query = useQuery({
 		enabled: !!groupId,
-		queryKey: [`studentsFromGroup${groupId}`, groupId],
+		queryKey: [`studentsFromGroup`, groupId],
 		queryFn: () => getStudentsFromGroupQueryFn(groupId!),
 	});
 
