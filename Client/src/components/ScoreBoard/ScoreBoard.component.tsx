@@ -1,11 +1,4 @@
-import {
-	Table,
-	Text,
-	Group,
-	ThemeIcon,
-	rem,
-	Stack,
-} from '@mantine/core';
+import { Table, Text, Group, ThemeIcon, rem, Stack, NumberFormatter } from '@mantine/core';
 import { IconCoins, IconTrophy } from '@tabler/icons-react';
 
 const data = [
@@ -43,11 +36,7 @@ const data = [
 // search for position of logged student
 const loggedStudentPosition = 3;
 
-const topColors = [
-	'var(--score-color)',
-	'var(--mantine-color-gray-4)',
-	'#9F563A',
-];
+const topColors = ['var(--score-color)', 'var(--mantine-color-gray-4)', '#9F563A'];
 
 interface ScoreBoardProps {
 	type: 'global' | 'local';
@@ -60,22 +49,11 @@ function ScoreBoard({ type }: ScoreBoardProps) {
 		const isTop3 = position < 4;
 		return (
 			<Table.Tr
-				bg={
-					position === loggedStudentPosition
-						? 'var(--mantine-primary-color)'
-						: undefined
-				}
-				key={row.studentName}
-			>
+				bg={position === loggedStudentPosition ? 'var(--mantine-primary-color)' : undefined}
+				key={row.studentName}>
 				<Table.Td>
 					{isTop3 ? (
-						<ThemeIcon
-							variant='transparent'
-							size='md'
-							c={topColors[position - 1]}
-							p={0}
-							m={0}
-						>
+						<ThemeIcon variant='transparent' size='md' c={topColors[position - 1]} p={0} m={0}>
 							<IconTrophy />
 						</ThemeIcon>
 					) : (
@@ -91,7 +69,7 @@ function ScoreBoard({ type }: ScoreBoardProps) {
 						<ThemeIcon variant='transparent' size='sm' c='var(--score-color)'>
 							<IconCoins />
 						</ThemeIcon>
-						{row.score}
+						<NumberFormatter value={row.score} thousandSeparator />
 					</Group>
 				</Table.Td>
 			</Table.Tr>
@@ -117,12 +95,7 @@ function ScoreBoard({ type }: ScoreBoardProps) {
 				<Text ta='center' size='md' fw={500}>
 					Twoja pozycja w rankingu {isGlobal ? 'całego roku' : 'grupy'}:
 				</Text>
-				<Text
-					size={rem(24)}
-					ta='center'
-					c='var(--mantine-primary-color)'
-					fw={700}
-				>
+				<Text size={rem(24)} ta='center' c='var(--mantine-primary-color)' fw={700}>
 					2
 				</Text>
 			</Stack>

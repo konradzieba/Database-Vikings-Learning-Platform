@@ -1,4 +1,4 @@
-import { Flex, Group, Stack, Text, ThemeIcon, rem } from '@mantine/core';
+import { Flex, Group, NumberFormatter, Stack, Text, ThemeIcon, rem } from '@mantine/core';
 import { NavLink } from 'react-router-dom';
 import { IconCoins } from '@tabler/icons-react';
 import UserPanel from '../UI/UserPanel';
@@ -23,17 +23,14 @@ const navLinks = [
 function Nav() {
 	return (
 		<Group gap='xl'>
-			{navLinks.map((link) => {
+			{navLinks.map(link => {
 				return (
 					<NavLink
 						to={link.link}
 						className={({ isActive }) =>
-							isActive
-								? `${classes.link} ${classes.activeLink}`
-								: `${classes.link} ${classes.inactiveLink}`
+							isActive ? `${classes.link} ${classes.activeLink}` : `${classes.link} ${classes.inactiveLink}`
 						}
-						key={link.link}
-					>
+						key={link.link}>
 						{link.label}
 					</NavLink>
 				);
@@ -53,16 +50,10 @@ function Info({ studentInfo }: InfoProps) {
 					Wynik
 				</Text>
 				<Group className={classes.score} gap={rem(2)} py={rem(3.1)}>
-					<ThemeIcon
-						variant='transparent'
-						size={rem(24)}
-						className={classes.score}
-					>
+					<ThemeIcon variant='transparent' size={rem(24)} className={classes.score}>
 						<IconCoins />
 					</ThemeIcon>
-					<Text size='lg' fw={500}>
-						{studentInfo.score}
-					</Text>
+					<NumberFormatter value={studentInfo.score!} thousandSeparator />
 				</Group>
 			</Stack>
 			<Stack align='center' gap={rem(1)}>

@@ -1,4 +1,4 @@
-import { Button, Flex, Group, Menu, Text, rem } from '@mantine/core';
+import { Button, Flex, Group, Menu, NumberFormatter, Text, rem } from '@mantine/core';
 import classes from './StudentInfo.card.module.css';
 import HeartCounter from '../UI/HeartCounter';
 import DateTimeDisplay from '../UI/DateTimeDisplay';
@@ -75,9 +75,7 @@ function StudentInfoCard({
 				<Text>Punkty</Text>
 				<Group className={classes.score} gap={rem(2)} py={rem(4.2)}>
 					<IconCoins />
-					<Text size='lg' fw={500}>
-						{score}
-					</Text>
+					<NumberFormatter value={score} thousandSeparator />
 				</Group>
 			</Flex>
 			<Flex direction='column' align='center' gap={0}>
