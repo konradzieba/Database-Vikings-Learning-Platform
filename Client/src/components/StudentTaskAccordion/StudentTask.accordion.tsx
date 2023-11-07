@@ -5,18 +5,14 @@ import {
 	Divider,
 	Flex,
 	Group,
+	NumberFormatter,
 	Stack,
 	Text,
 	ThemeIcon,
 	rem,
 } from '@mantine/core';
 import classes from './StudentTask.accordion.module.css';
-import {
-	IconBlockquote,
-	IconChevronDown,
-	IconCode,
-	IconCoins,
-} from '@tabler/icons-react';
+import { IconBlockquote, IconChevronDown, IconCode, IconCoins } from '@tabler/icons-react';
 import { AnswerReplyStatusEnum } from '@/types/Enums';
 
 interface TaskInterface {
@@ -69,27 +65,11 @@ function StudentTaskAccordion({ tasks }: StudentTaskAccordionProps) {
 
 	//key i value do zmiany
 	const studentTaskAnswers = tasks.map((task, index) => (
-		<Accordion.Item
-			key={`${task.taskNumber}-${index}`}
-			value={`${task.taskNumber}-${index}`}
-		>
+		<Accordion.Item key={`${task.taskNumber}-${index}`} value={`${task.taskNumber}-${index}`}>
 			<Accordion.Control mih={rem(120)}>
-				<Flex
-					align='center'
-					justify='space-evenly'
-					gap='lg'
-					mx='sm'
-					className={classes.accordionControlWrapper}
-				>
+				<Flex align='center' justify='space-evenly' gap='lg' mx='sm' className={classes.accordionControlWrapper}>
 					<Flex w='80%' align='center'>
-						<ThemeIcon
-							size='lg'
-							maw='10%'
-							radius='sm'
-							my='md'
-							mr='md'
-							className={classes.accordionIconColor}
-						>
+						<ThemeIcon size='lg' maw='10%' radius='sm' my='md' mr='md' className={classes.accordionIconColor}>
 							<Text fw={500}>{task.taskNumber}</Text>
 						</ThemeIcon>
 
@@ -102,8 +82,7 @@ function StudentTaskAccordion({ tasks }: StudentTaskAccordionProps) {
 							size='lg'
 							my='md'
 							color={statusBadgeColor(task.replyStatus)}
-							className={classes.accordionBadge}
-						>
+							className={classes.accordionBadge}>
 							{translateStatus(task.replyStatus)}
 						</Badge>
 						{task.grantedScore && (
@@ -112,18 +91,11 @@ function StudentTaskAccordion({ tasks }: StudentTaskAccordionProps) {
 								align='center'
 								className={classes.grantedScore}
 								gap={rem(5)}
-								py={rem(3.1)}
-							>
-								<ThemeIcon
-									variant='transparent'
-									size={rem(24)}
-									className={classes.grantedScore}
-								>
+								py={rem(3.1)}>
+								<ThemeIcon variant='transparent' size={rem(24)} className={classes.grantedScore}>
 									<IconCoins />
 								</ThemeIcon>
-								<Text size='lg' fw={500}>
-									{900}
-								</Text>
+								<NumberFormatter value={900} thousandSeparator />
 							</Group>
 						)}
 					</Flex>
@@ -140,8 +112,7 @@ function StudentTaskAccordion({ tasks }: StudentTaskAccordionProps) {
 							<pre>{task.solution}</pre>
 						</Box>
 					</Group>
-					{task.replyDesc &&
-					task.replyStatus !== AnswerReplyStatusEnum.Enum.PENDING ? (
+					{task.replyDesc && task.replyStatus !== AnswerReplyStatusEnum.Enum.PENDING ? (
 						<Group>
 							<ThemeIcon variant='transparent' size='lg'>
 								<IconBlockquote />
@@ -159,8 +130,7 @@ function StudentTaskAccordion({ tasks }: StudentTaskAccordionProps) {
 			variant='separated'
 			chevron={<IconChevronDown />}
 			chevronSize={rem(24)}
-			className={classes.accordionTabWrapper}
-		>
+			className={classes.accordionTabWrapper}>
 			{studentTaskAnswers}
 		</Accordion>
 	);
