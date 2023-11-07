@@ -1,7 +1,5 @@
 .taskTabWrapper {
 	background-color: #292929;
 	border-radius: var(--mantine-radius-xs);
-	margin-right: var(--mantine-spacing-sm);
-	margin-bottom: var(--mantine-spacing-sm);
 	cursor: pointer;
 }
