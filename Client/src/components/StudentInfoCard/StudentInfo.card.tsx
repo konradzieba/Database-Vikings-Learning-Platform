@@ -23,6 +23,7 @@ import { useParams } from 'react-router-dom';
 import useGetStudentsFromGroup from '@/hooks/groups/useGetStudentsFromGroup';
 
 interface StudentInfoCardProps {
+	userId: number;
 	studentId: number;
 	firstName: string;
 	lastName: string;
@@ -35,6 +36,7 @@ interface StudentInfoCardProps {
 
 function StudentInfoCard({
 	studentId,
+	userId,
 	firstName,
 	lastName,
 	index,
@@ -67,6 +69,7 @@ function StudentInfoCard({
 			size: 'md',
 			closeOnClickOutside: false,
 			closeOnEscape: false,
+			onClose: () => refetch(),
 			innerProps: {
 				modalBody: '',
 			},
@@ -81,7 +84,9 @@ function StudentInfoCard({
 			closeOnClickOutside: false,
 			closeOnEscape: false,
 			withCloseButton: false,
+			onClose: () => refetch(),
 			innerProps: {
+				userId: userId,
 				modalBody: `Czy na pewno chcesz usunąć studenta, ${firstName} ${lastName}?`,
 			},
 		});

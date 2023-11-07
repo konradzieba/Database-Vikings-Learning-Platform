@@ -40,7 +40,7 @@ router.delete(
   '/deleteUser/:id',
   validateRequestAndCheckRole(
     { params: paramsWithIdSchema },
-    EnumRole.SUPERUSER
+    EnumRole.LECTURER
   ),
   UserController.deleteUser
 );

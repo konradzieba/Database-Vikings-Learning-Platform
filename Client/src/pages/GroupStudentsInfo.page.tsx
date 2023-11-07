@@ -27,6 +27,7 @@ function GroupStudentsInfoPage() {
 					StudentsFromGroup?.students.map((data) => (
 						<StudentInfoCard
 							key={`${data.indexNumber}`}
+							userId={data.userId}
 							studentId={data.id}
 							firstName={data.firstName}
 							lastName={data.lastName}

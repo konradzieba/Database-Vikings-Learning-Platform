@@ -123,3 +123,10 @@ export const changeStudentGroupMutationFn = async (
 	);
 	return data;
 };
+
+export const deleteUserMutationFn = async (userId: number) => {
+	const { data } = await axios.delete<TMessageResponse>(
+		`/users/deleteUser/${userId}`
+	);
+	return data;
+};
