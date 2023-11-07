@@ -33,6 +33,12 @@ router.get(
 );
 
 router.get(
+  '/getTasksByLessonId/:id',
+  validateRequestAndCheckRole({ params: paramsWithIdSchema }, EnumRole.STUDENT),
+  LessonsControllers.getTasksByLessonId
+);
+
+router.get(
   '/getStudentLessonsInfo',
   validateRequestAndCheckRole({}, EnumRole.STUDENT),
   LessonsControllers.getStudentLessonsInfo
