@@ -6,6 +6,8 @@ import {
   ParamsWithId,
   ParamsWithLessonId,
 } from '../../interfaces/ParamsWithId';
+import { ParsedToken } from '../../../typings/token';
+import { group } from 'console';
 
 export async function getLessonsByGroupId(
   req: Request<ParamsWithId>,
@@ -25,6 +27,42 @@ export async function getLessonsByGroupId(
     const lessons = await LessonServices.getLessonsByGroupId(+id);
 
     res.json({ message: 'success', lessons: lessons });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getStudentLessonsInfo(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const parsedToken: ParsedToken = req.user;
+
+    const student = await LessonServices.findStudentById(parsedToken.userId);
+
+    if (!student) {
+      res.status(404);
+      throw new Error('User not found');
+    }
+
+    const group = await LessonServices.findGroupById(student.groupId);
+
+    if (!group) {
+      res.status(404);
+      throw new Error('Group not found');
+    }
+
+    const studentLessonsInfo = await LessonServices.getStudentLessonInfo(
+      student.groupId,
+      student.id
+    );
+
+    res.json({
+      message: 'success',
+      lessons: studentLessonsInfo,
+    });
   } catch (error) {
     next(error);
   }

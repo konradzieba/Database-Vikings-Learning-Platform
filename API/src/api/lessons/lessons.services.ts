@@ -1,4 +1,4 @@
-import { Group, Lesson, Prisma } from '@prisma/client';
+import { Group, Lesson, Prisma, Student, User } from '@prisma/client';
 import { db } from '../../db';
 
 export async function getLessonsByGroupId(id: Group['id']) {
@@ -25,6 +25,54 @@ export async function getLessonsByGroupId(id: Group['id']) {
   }));
 
   return lessonsFromGroup;
+}
+
+export async function getStudentLessonInfo(
+  id: Group['id'],
+  studentId: Student['id']
+) {
+  const lessons = await db.lesson.findMany({
+    where: {
+      groupId: id,
+    },
+    include: {
+      tasks: {
+        select: {
+          id: true,
+        },
+      },
+    },
+  });
+
+  const studentAnswers = await db.answer.findMany({
+    where: {
+      studentId: studentId,
+    },
+    select: {
+      id: true,
+      taskId: true,
+      studentId: true,
+    },
+  });
+
+  const studentLessonResponse = [];
+
+  for (const lesson of lessons) {
+    const tasksDone = studentAnswers.filter((answer) =>
+      lesson.tasks.some((task) => task.id === answer.taskId)
+    ).length;
+
+    studentLessonResponse.push({
+      id: lesson.id,
+      number: lesson.number,
+      image: lesson.image,
+      tasksDone: tasksDone,
+      tasksAmount: lesson.tasks.length,
+      groupId: lesson.groupId,
+    });
+  }
+
+  return studentLessonResponse;
 }
 
 export async function getLessonInfoByGroupAndLessonId(
@@ -141,6 +189,14 @@ export function findLessonById(id: Lesson['id']) {
   return db.lesson.findUnique({
     where: {
       id,
+    },
+  });
+}
+
+export function findStudentById(id: User['id']) {
+  return db.student.findUnique({
+    where: {
+      userId: id,
     },
   });
 }
