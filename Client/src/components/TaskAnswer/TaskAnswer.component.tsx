@@ -92,10 +92,12 @@ function TaskAnswerForm({ taskId, studentId }: TaskAnswerFormProps) {
 }
 
 function TaskAnswer() {
-	const { id } = useParams();
+	const { lessonId, taskId } = useParams();
+	console.log('lessonID', lessonId);
+	console.log('TaskID', taskId);
 
 	const mockData = {
-		taskId: +id!,
+		taskId: +taskId!,
 		lessonNumber: 4,
 		taskNumber: 1,
 		studentId: 13,

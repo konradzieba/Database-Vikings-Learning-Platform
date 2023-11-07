@@ -25,9 +25,9 @@ function LessonTasksPage() {
 						</Stack>
 						<ScrollArea type='auto' h={450} pb='sm' offsetScrollbars='y'>
 							{TasksList?.tasks.map(task => (
-								<Box>
+								<Box key={`${task.id}-Container`}>
 									<TaskTab
-										key={`${task.id}-${task.closeDate}`}
+										key={`${task.id}-Tab`}
 										lessonId={+id!}
 										taskId={task.id}
 										taskNumber={task.number}
