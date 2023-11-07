@@ -28,6 +28,14 @@ body {
 		border-color: var(--mantine-primary-color);
 	}
 }
+.mantine-FileInput-input {
+	color: var(--font-color);
+	border-color: var(--font-color);
+	
+	&:focus-within {
+		border-color: var(--mantine-primary-color);
+	}
+}
 
 .mantine-PasswordInput-innerInput {
 	&::placeholder {

@@ -1,10 +1,17 @@
 import { Button, Flex, ThemeIcon } from '@mantine/core';
 import classes from './Group.card.module.css';
 import { IconPlus } from '@tabler/icons-react';
+import { modals } from '@mantine/modals';
 
 function AddGroupCard() {
 	const handleOpenCreateGroupModal = () => {
-		console.log('Modal to create group opened');
+		modals.openContextModal({
+			modal: 'createGroup',
+			title: 'Stwórz grupę',
+			size: 'md',
+			closeOnClickOutside: false,
+			innerProps: {},
+		});
 	};
 
 	return (
