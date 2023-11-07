@@ -1,4 +1,4 @@
-import { Button, Divider, Flex, Text, rem } from '@mantine/core';
+import { Button, Divider, Flex, Group, Text, rem } from '@mantine/core';
 import dayjs from 'dayjs';
 
 type Answer = {
@@ -15,28 +15,54 @@ interface TaskStatsProps {
 	answers: Answer[];
 }
 
-function TaskAnswersStats({ endDate, answers, amountOfNotAnswered }: TaskStatsProps) {
+function TaskAnswersStats({
+	endDate,
+	answers,
+	amountOfNotAnswered,
+}: TaskStatsProps) {
 	const answersCount = answers.length;
 
 	return (
-		<Flex gap={10} align='center' mx='lg' mt='sm'>
-			<Text mx={rem(18)}>
-				Odpowiedzi&nbsp;
-				<Text span c='var(--mantine-primary-color)'>
-					{answersCount}
+		<Flex gap={10} justify='space-between' align='center' mx='lg' mt='sm'>
+			<Text ml='xs' fw='bold'>
+				Odpowiedzi:&nbsp;
+				<Text fw={700} span c='var(--good-state-color)'>
+					{answersCount || 'Brak'}
 				</Text>
 			</Text>
-			<Divider orientation='vertical' />
-			<Text mx={rem(18)}>
-				Nieprzesłane odpowiedzi&nbsp;
-				<Text span c='var(--bad-state-color)'>
-					{amountOfNotAnswered}
-				</Text>
-			</Text>
-			<Divider orientation='vertical' />
-			<Button c='var(--mantine-primary-color)' fz={rem(16)} variant='transparent' onClick={() => console.log('hejka')}>
-				Szczegóły zadania
-			</Button>
+			<Group gap='sm'>
+				<Button
+					size='xs'
+					c='var(--font-color)'
+					variant='outline'
+					onClick={() => console.log('hejka')}
+				>
+					<Text fz='md' fw='inherit'>
+						Nieprzesłane&nbsp;
+						<Text
+							span
+							fw={700}
+							lts={rem(1)}
+							c={
+								amountOfNotAnswered
+									? 'var(--bad-state-color)'
+									: 'var(--good-state-color)'
+							}
+						>
+							{`(${amountOfNotAnswered})`}
+						</Text>
+					</Text>
+				</Button>
+				<Button
+					size='xs'
+					c='var(--font-color)'
+					fz='md'
+					variant='outline'
+					onClick={() => console.log('hejka')}
+				>
+					Szczegóły zadania
+				</Button>
+			</Group>
 		</Flex>
 	);
 }
