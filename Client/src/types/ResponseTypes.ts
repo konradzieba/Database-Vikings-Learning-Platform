@@ -109,7 +109,7 @@ const GetLessonsByGroupIdSchema = z.object({
 */
 
 const getLessonInfoByGroupAndLessonIdSchema = z.object({
-	message: z.string(),
+	message: z.string().min(1),
 	lessonInfo: z.object({
 		lessonNumber: z.number().int(),
 		tasks: z.array(
@@ -118,19 +118,19 @@ const getLessonInfoByGroupAndLessonIdSchema = z.object({
 				endDate: z.string(),
 				studentsWithoutAnswer: z.array(
 					z.object({
-						indexNumber: z.number().int(),
 						User: z.object({
-							firstName: z.string(),
-							lastName: z.string(),
+							firstName: z.string().min(1),
+							lastName: z.string().min(1),
 						}),
+						indexNumber: z.number().int(),
 					})
 				),
 				answers: z.array(
 					z.object({
-						firstName: z.string(),
-						lastName: z.string(),
+						firstName: z.string().min(1),
+						lastName: z.string().min(1),
 						index: z.number().int(),
-						answer: z.string(),
+						answer: z.string().min(1),
 						sendDate: z.string(),
 					})
 				),
@@ -185,10 +185,16 @@ export type TLoginResponse = z.infer<typeof LoginResponseSchema>;
 export type TLecturerInfo = z.infer<typeof LecturerInfoSchema>;
 export type TStudentInfo = z.infer<typeof StudentInfoSchema>;
 export type TMeResponse = z.infer<typeof MeResponseSchema>;
-export type TGetGroupsByLecturerId = z.infer<typeof GetGroupsByLecturerIdSchema>;
+export type TGetGroupsByLecturerId = z.infer<
+	typeof GetGroupsByLecturerIdSchema
+>;
 export type TGetStudentsFromGroup = z.infer<typeof GetStudentsFromGroupSchema>;
 export type TGetLessonsByGroupId = z.infer<typeof GetLessonsByGroupIdSchema>;
-export type TGetLessonInfoByGroupAndLessonId = z.infer<typeof getLessonInfoByGroupAndLessonIdSchema>;
-export type TGetStudentLessonsInfo = z.infer<typeof getStudentLessonsInfoSchema>;
+export type TGetLessonInfoByGroupAndLessonId = z.infer<
+	typeof getLessonInfoByGroupAndLessonIdSchema
+>;
+export type TGetStudentLessonsInfo = z.infer<
+	typeof getStudentLessonsInfoSchema
+>;
 export type TGetTasksByLessonId = z.infer<typeof getTasksByLessonIdSchema>;
 export type TGetLessonTaskById = z.infer<typeof getLessonTaskByIdSchema>;

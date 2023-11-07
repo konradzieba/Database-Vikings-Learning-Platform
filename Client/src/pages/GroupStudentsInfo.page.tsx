@@ -1,5 +1,4 @@
 import StudentInfoCard from '@/components/StudentInfoCard/StudentInfo.card';
-import FullScreenLoader from '@/components/UI/FullScreenLoader';
 import useGetStudentsFromGroup from '@/hooks/groups/useGetStudentsFromGroup';
 import { useLecturerStore } from '@/utils/store';
 import { Center, Flex, Loader, Text } from '@mantine/core';

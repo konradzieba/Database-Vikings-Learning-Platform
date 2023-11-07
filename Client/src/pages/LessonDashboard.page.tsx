@@ -275,7 +275,11 @@ function LessonDashboardPage() {
 				key={`task-${task.taskNumber}-panel`}
 			>
 				<Flex direction='column'>
-					<TaskAnswersStats endDate={task.endDate} answers={task.answers} />
+					<TaskAnswersStats
+						endDate={task.endDate}
+						answers={task.answers}
+						amountOfNotAnswered={task.studentsWithoutAnswer.length}
+					/>
 					<ScrollArea h={500} type='auto'>
 						<Flex wrap='wrap' gap='xl' mx='lg' mt='md' justify='flex-start'>
 							{task.answers.map((answer) => {

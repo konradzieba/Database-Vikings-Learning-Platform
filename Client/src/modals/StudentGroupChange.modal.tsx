@@ -1,22 +1,47 @@
 import { useState } from 'react';
 import { useLecturerStore } from '@/utils/store';
-import { Button, Flex, Group, Select, Text } from '@mantine/core';
+import {
+	Button,
+	Center,
+	Flex,
+	Group,
+	Loader,
+	Select,
+	Text,
+} from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
-import { useChangeStudentGroupMutation } from '@/hooks/students/useChangeStudentGroup';
+import { useChangeStudentGroupMutation } from '@/hooks/students/useChangeStudentGroupMutation';
 
 function StudentGroupChangeModal({
 	context,
 	id,
 	innerProps,
-}: ContextModalProps<{ modalBody: string }>) {
+}: ContextModalProps<{
+	modalBody: string;
+	studentId: number;
+	groupId: number;
+}>) {
 	const { groups } = useLecturerStore();
-	// const { data, isPending, isSuccess } = useChangeStudentGroupMutation(studentId, groupId);
+	const studentId = innerProps.studentId;
+	const groupId = innerProps.groupId;
 	const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
 
-	const selectGroupData = groups?.map((group) => ({
-		id: group.groupId,
-		label: group.groupName,
-	}));
+	const selectGroupData = groups
+		?.filter((group) => group.groupId !== innerProps.groupId)
+		.map((group) => ({
+			id: group.groupId,
+			label: group.groupName,
+		}));
+
+	const newGroupId = selectGroupData?.find(
+		(group) => group.label === selectedGroup
+	)?.id;
+
+	const {
+		mutate: changeStudentGroup,
+		isPending,
+		isSuccess,
+	} = useChangeStudentGroupMutation(studentId!, newGroupId!);
 
 	const handleCloseModal = () => {
 		context.closeModal(id);
@@ -24,20 +49,36 @@ function StudentGroupChangeModal({
 	};
 
 	const handleChangeStudentGroup = () => {
-		const groupId = selectGroupData?.find(
-			(group) => group.label === selectedGroup
-		)?.id;
-		if (!groupId) return;
-		console.log(groupId);
-		// console.log(object);
-		context.closeModal(id);
-		modals.closeAll();
+		if (!groupId || !studentId) {
+			return;
+		}
+		changeStudentGroup();
 	};
+
+	if (isPending) {
+		return (
+			<Center mih={120}>
+				<Loader />
+			</Center>
+		);
+	}
+	if (isSuccess) {
+		return (
+			<>
+				<Center mih={120}>
+					<Text>Student przeniesiony do grupy {selectedGroup}</Text>
+				</Center>
+				<Button fullWidth onClick={handleCloseModal}>
+					Zamknij
+				</Button>
+			</>
+		);
+	}
 
 	return (
 		<Flex direction='column' gap='sm'>
 			<Text>
-				Obecna grupa{' '}
+				Obecna grupa&nbsp;
 				<Text span fw={500} c='var(--mantine-primary-color)'>
 					{innerProps.modalBody}
 				</Text>

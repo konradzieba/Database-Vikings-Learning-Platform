@@ -116,7 +116,7 @@ export const changeStudentGroupMutationFn = async (
 	groupId: number
 ) => {
 	const { data } = await axios.patch<TMessageResponse>(
-		`/students/changeStudentGroup/${studentId}`,
+		`/groups/changeStudentGroup/${studentId}`,
 		{
 			groupId,
 		}

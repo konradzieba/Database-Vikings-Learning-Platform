@@ -14,7 +14,6 @@ function BlankContent() {
 		setIsLogged(isSuccess);
 	}, [isSuccess]);
 
-	// console.log(userData);
 
 	return (
 		<>
