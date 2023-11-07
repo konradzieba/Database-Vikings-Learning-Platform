@@ -1,7 +1,7 @@
 import { Carousel } from '@mantine/carousel';
 import lesson1 from '@/assets/lesson1.png';
 import StudentLessonCard from '@/components/LessonCard/StudentLesson.card';
-import { Center, Text } from '@mantine/core';
+import { Center, Loader, Text } from '@mantine/core';
 import { useGetStudentLessonsInfo } from '@/hooks/lessons/useGetStudentLessonsInfo';
 import FullScreenLoader from '@/components/UI/FullScreenLoader';
 
@@ -41,7 +41,15 @@ const carouselSlides = [
 export function HomePage() {
 	const { data: StudentLessonsInfo, isPending } = useGetStudentLessonsInfo();
 
-	const slides = StudentLessonsInfo?.lessons.map(slide => {
+	if (isPending) {
+		return (
+			<Center h='25vh'>
+				<Loader />
+			</Center>
+		);
+	}
+
+	const slides = StudentLessonsInfo?.lessons.map((slide) => {
 		return (
 			<Carousel.Slide key={slide.number}>
 				<StudentLessonCard
@@ -54,26 +62,30 @@ export function HomePage() {
 			</Carousel.Slide>
 		);
 	});
+
+	if (!slides?.length) {
+		return (
+			<Center h='25vh'>
+				<Text>Brak lekcji</Text>
+			</Center>
+		);
+	}
+
 	return (
 		<>
-			{isPending ? (
-				<FullScreenLoader />
-			) : slides?.length === 0 ? (
-				<Text>NO LESSONS ADDED YET</Text>
-			) : (
-				<Center>
-					<Carousel
-						maw={1175}
-						withIndicators
-						slidesToScroll={1}
-						slideSize='33.333333%'
-						slideGap='sm'
-						align='start'
-						draggable>
-						{slides}
-					</Carousel>
-				</Center>
-			)}
+			<Center>
+				<Carousel
+					maw={1175}
+					withIndicators
+					slidesToScroll={1}
+					slideSize='33.333333%'
+					slideGap='sm'
+					align='start'
+					draggable
+				>
+					{slides}
+				</Carousel>
+			</Center>
 		</>
 	);
 }

@@ -1,7 +1,5 @@
 import {
-	Box,
 	Button,
-	Code,
 	Divider,
 	Flex,
 	Group,
@@ -10,7 +8,6 @@ import {
 	Select,
 	Text,
 	Textarea,
-	rem,
 } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
 import { IconCoins } from '@tabler/icons-react';
