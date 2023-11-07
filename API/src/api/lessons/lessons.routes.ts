@@ -1,5 +1,9 @@
 import { Router } from 'express';
-import { validateRequestAndCheckRole } from '../../middlewares';
+import {
+  requireUser,
+  validateRequest,
+  validateRequestAndCheckRole,
+} from '../../middlewares';
 import {
   paramsWithIdSchema,
   paramsWithLessonIdSchema,
@@ -26,6 +30,12 @@ router.get(
     EnumRole.LECTURER
   ),
   LessonsControllers.getLessonInfoByGroupAndLessonId
+);
+
+router.get(
+  '/getStudentLessonsInfo',
+  validateRequestAndCheckRole({}, EnumRole.STUDENT),
+  LessonsControllers.getStudentLessonsInfo
 );
 
 router.post(
