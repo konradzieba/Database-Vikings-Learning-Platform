@@ -1,4 +1,5 @@
 import { getStudentsFromGroupQueryFn } from '@/utils/axios-queries';
+import { useLecturerStore } from '@/utils/store';
 import { useQuery } from '@tanstack/react-query';
 
 export function useGetStudentsFromGroup(groupId: number | null) {

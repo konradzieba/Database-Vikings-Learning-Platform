@@ -19,6 +19,8 @@ import {
 	IconUserMinus,
 } from '@tabler/icons-react';
 import { modals } from '@mantine/modals';
+import { useParams } from 'react-router-dom';
+import useGetStudentsFromGroup from '@/hooks/groups/useGetStudentsFromGroup';
 
 interface StudentInfoCardProps {
 	studentId: number;
@@ -41,13 +43,18 @@ function StudentInfoCard({
 	lastLoggedIn,
 	currentGroup,
 }: StudentInfoCardProps) {
+	const { id: groupId } = useParams();
+	const { refetch } = useGetStudentsFromGroup(+groupId!);
 	const handleOpenGroupChangeModal = () => {
 		modals.openContextModal({
 			modal: 'changeStudentGroup',
 			title: 'Zmień grupę studenta',
 			size: 'md',
 			closeOnClickOutside: false,
+			onClose: () => refetch(),
 			innerProps: {
+				studentId,
+				groupId: +groupId!,
 				modalBody: `${currentGroup}`,
 			},
 		});
