@@ -1,16 +1,18 @@
-import { Box, Button, Flex, Text, ThemeIcon } from '@mantine/core';
+import { Box, Flex, Text, ThemeIcon } from '@mantine/core';
 import { IconClockHour4 } from '@tabler/icons-react';
 import classes from './Task.tab.module.css';
 import DateTimeDisplay from '../UI/DateTimeDisplay';
 import { useNavigate } from 'react-router-dom';
 
 interface TaskTabProps {
+	lessonId: number;
+	taskId: number;
 	taskNumber: number;
 	taskQuestion: string;
 	closeDate: string;
 }
 
-function TaskTab({ taskNumber, taskQuestion, closeDate }: TaskTabProps) {
+function TaskTab({ lessonId, taskId, taskNumber, taskQuestion, closeDate }: TaskTabProps) {
 	const navigate = useNavigate();
 	const spliceQuestion = (question: string) => {
 		if (question.length > 251) {
@@ -20,7 +22,7 @@ function TaskTab({ taskNumber, taskQuestion, closeDate }: TaskTabProps) {
 		}
 	};
 	return (
-		<Box component='a' tabIndex={1} onClick={() => navigate('/task/2')}>
+		<Box component='a' tabIndex={1} onClick={() => navigate(`/task/${lessonId}/${taskId}`)}>
 			<Flex gap='lg' align='center' className={classes.taskTabWrapper}>
 				<ThemeIcon size='lg' w='10%' ml='md' radius='sm'>
 					<Text fw={500}>{taskNumber}</Text>

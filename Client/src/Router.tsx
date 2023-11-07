@@ -43,7 +43,7 @@ const router = createBrowserRouter([
 			{ path: 'score-board', element: <ScoreBoardPage /> },
 			{ path: 'my-tasks', element: <MyTasksPage /> },
 			{ path: 'lesson-tasks/:id', element: <LessonTasksPage /> },
-			{ path: 'task/:id', element: <TaskAnswerPage /> },
+			{ path: 'task/:lessonId/:taskId', element: <TaskAnswerPage /> },
 			{ path: 'me', element: <BlankContent /> },
 		],
 	},
