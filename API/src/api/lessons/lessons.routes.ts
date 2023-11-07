@@ -1,6 +1,9 @@
 import { Router } from 'express';
 import { validateRequestAndCheckRole } from '../../middlewares';
-import { paramsWithIdSchema } from '../../interfaces/ParamsWithId';
+import {
+  paramsWithIdSchema,
+  paramsWithLessonIdSchema,
+} from '../../interfaces/ParamsWithId';
 import * as LessonsControllers from '../lessons/lessons.controllers';
 import * as LessonSchemas from './lessons.schemas';
 import { EnumRole } from '../../../typings/token';
@@ -10,11 +13,20 @@ const router = Router();
 router.get(
   '/getLessonsByGroupId/:id',
   validateRequestAndCheckRole(
-    {params: paramsWithIdSchema},
+    { params: paramsWithIdSchema },
     EnumRole.LECTURER
   ),
   LessonsControllers.getLessonsByGroupId
-)
+);
+
+router.get(
+  '/getLessonInfoByGroupAndLessonId/:id/:lessonId',
+  validateRequestAndCheckRole(
+    { params: paramsWithLessonIdSchema },
+    EnumRole.LECTURER
+  ),
+  LessonsControllers.getLessonInfoByGroupAndLessonId
+);
 
 router.post(
   '/createLesson',

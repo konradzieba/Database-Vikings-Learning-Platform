@@ -42,20 +42,14 @@ function PreviewStudentAnswerModal({
 			<Text mb='md'>
 				{innerProps.studentFullName},&nbsp;{innerProps.studentIndex}
 			</Text>
-			{/* <ScrollArea.Autosize
-				pl='md'
-				mah={250}
-				style={{ border: `${rem(1)} solid var(--font-color)` }}
-			> */}
-			{/* <pre style={{whiteSpace: 'break-spaces', margin: 0 }}>{innerProps.studentAnswer}</pre> */}
-			<ScrollArea h={250}>
+
+			<ScrollArea h={250} type='auto' offsetScrollbars>
 				<CodeHighlight
 					code={innerProps.studentAnswer}
 					language='sql'
 					withCopyButton={false}
 				/>
 			</ScrollArea>
-			{/* </ScrollArea.Autosize> */}
 
 			<Divider my='md' />
 
@@ -88,7 +82,7 @@ function PreviewStudentAnswerModal({
 				rows={5}
 			/>
 
-			<Group justify='center'>
+			<Group justify='center' mt='lg'>
 				<Button miw={150} variant='outline' onClick={handleCloseModal}>
 					Anuluj
 				</Button>

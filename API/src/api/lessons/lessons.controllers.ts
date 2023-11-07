@@ -2,7 +2,10 @@ import { NextFunction, Request, Response } from 'express';
 import MessageResponse from 'interfaces/MessageResponse';
 import * as LessonServices from './lessons.services';
 import * as LessonSchemas from './lessons.schemas';
-import { ParamsWithId } from '../../interfaces/ParamsWithId';
+import {
+  ParamsWithId,
+  ParamsWithLessonId,
+} from '../../interfaces/ParamsWithId';
 
 export async function getLessonsByGroupId(
   req: Request<ParamsWithId>,
@@ -22,6 +25,44 @@ export async function getLessonsByGroupId(
     const lessons = await LessonServices.getLessonsByGroupId(+id);
 
     res.json({ message: 'success', lessons: lessons });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getLessonInfoByGroupAndLessonId(
+  req: Request<ParamsWithLessonId>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id: groupId, lessonId } = req.params;
+
+    const existingGroup = await LessonServices.findGroupById(+groupId);
+
+    if (!existingGroup) {
+      res.status(404);
+      throw new Error('Group with this id does not exist.');
+    }
+
+    const existingLesson = await LessonServices.findLessonById(+lessonId);
+
+    if (!existingLesson) {
+      res.status(404);
+      throw new Error('Lesson with this id does not exist.');
+    }
+
+    const lessonInfo = await LessonServices.getLessonInfoByGroupAndLessonId(
+      +groupId,
+      +lessonId
+    );
+
+    if (!lessonInfo) {
+      res.status(404);
+      throw new Error('Lesson with this id does not exist.');
+    }
+
+    res.json({ message: 'success', lessonInfo });
   } catch (error) {
     next(error);
   }

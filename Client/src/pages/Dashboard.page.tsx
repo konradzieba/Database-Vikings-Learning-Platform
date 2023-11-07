@@ -6,28 +6,30 @@ import { Center, Flex, Loader } from '@mantine/core';
 function DashboardPage() {
 	const { groups } = useLecturerStore();
 
+	if (!groups?.length) {
+		return (
+			<Center h='25vh'>
+				<Loader />
+			</Center>
+		);
+	}
+
 	return (
 		<>
-			{groups?.length ? (
-				<Center>
-					<Flex gap='sm' wrap='wrap'>
-						{groups?.map(group => (
-							<GroupCard
-								key={group.groupId}
-								groupId={group.groupId}
-								groupName={group.groupName}
-								assignedLessons={group.lessonsCount}
-								assignedStudents={group.studentsCount}
-							/>
-						))}
-						<AddGroupCard />
-					</Flex>
-				</Center>
-			) : (
-				<Center h='25vh'>
-					<Loader />
-				</Center>
-			)}
+			<Center>
+				<Flex gap='sm' wrap='wrap'>
+					{groups?.map((group) => (
+						<GroupCard
+							key={group.groupId}
+							groupId={group.groupId}
+							groupName={group.groupName}
+							assignedLessons={group.lessonsCount}
+							assignedStudents={group.studentsCount}
+						/>
+					))}
+					<AddGroupCard />
+				</Flex>
+			</Center>
 		</>
 	);
 }

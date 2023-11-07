@@ -1,35 +1,41 @@
 import StudentAnswerCard from '@/components/StudentAnswerCard/StudentAnswer.card';
 import TaskAnswersStats from '@/components/UI/TaskAnswersStats';
+import { useGetLessonInfoByGroupAndLessonIdQueryFn } from '@/hooks/lessons/useGetLessonInfoByGroupAndLessonIdQueryFn';
 import {
 	Button,
 	Center,
 	Flex,
+	Loader,
+	Paper,
 	ScrollArea,
 	Tabs,
+	Text,
 	Title,
 	rem,
 } from '@mantine/core';
 
 import { modals } from '@mantine/modals';
+import { useParams } from 'react-router-dom';
 
-/* data = [
-	tasks: [
-
-	]
-]
-
-// WSZYSCY STUDENCI - A
-// BRAKUJACY STUDENCI - B
-A - B = C -> brakujacy studenci
-
-
-*/
+/*
 const mockData = {
 	lessonNumber: 4,
 	tasks: [
 		{
 			taskNumber: 1,
 			endDate: '2023-10-20T19:26:15.000Z',
+			studentsWithoutAnswer: [
+				{
+					firstName: 'Roman',
+					lastName: 'Romanowski',
+					indexNumber: 123411,
+				},
+				{
+					firstName: 'Johny',
+					lastName: 'Johnowski',
+					indexNumber: 123412,
+				},
+			],
 			answers: [
 				{
 					firstName: 'Roman',
@@ -214,8 +220,33 @@ SELECT * FROM db; SELECT * FROM db; SELECT * FROM db;`,
 		},
 	],
 };
+*/
 
 function LessonDashboardPage() {
+	const { id, lessonId } = useParams();
+	const { data: lessonData, isPending } =
+		useGetLessonInfoByGroupAndLessonIdQueryFn(+id!, +lessonId!);
+
+	if (isPending) {
+		return (
+			<Center h='25vh'>
+				<Loader />
+			</Center>
+		);
+	}
+
+	if (!lessonData?.lessonInfo.tasks.length) {
+		return (
+			<Center h='25vh'>
+				<Paper withBorder p='lg'>
+					<Text size='lg'>
+						TEMPORARY TEXT WHEN THERE IS NO ELEMENT IN ARRAY
+					</Text>
+				</Paper>
+			</Center>
+		);
+	}
+
 	const handleOpenAddTaksModal = () => {
 		modals.openContextModal({
 			modal: 'addTask',
@@ -228,7 +259,7 @@ function LessonDashboardPage() {
 		});
 	};
 
-	const tasksTabs = mockData.tasks.map((task) => {
+	const tasksTabs = lessonData?.lessonInfo.tasks.map((task) => {
 		return (
 			<Tabs.Tab
 				value={`task-${task.taskNumber}`}
@@ -237,7 +268,7 @@ function LessonDashboardPage() {
 		);
 	});
 
-	const tasksPanels = mockData.tasks.map((task) => {
+	const tasksPanels = lessonData?.lessonInfo.tasks.map((task) => {
 		return (
 			<Tabs.Panel
 				value={`task-${task.taskNumber}`}
@@ -269,7 +300,7 @@ function LessonDashboardPage() {
 	return (
 		<>
 			<Center mb='sm' mt={rem(-60)}>
-				<Title>Lekcja&nbsp;{mockData.lessonNumber}</Title>
+				<Title>Lekcja&nbsp;{lessonData?.lessonInfo.lessonNumber}</Title>
 			</Center>
 			<Center>
 				<Button variant='outline' size='xs' onClick={handleOpenAddTaksModal}>

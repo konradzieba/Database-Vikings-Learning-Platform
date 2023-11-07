@@ -11,4 +11,3 @@ export function useGetLessonsByGroupId(groupId: number | null) {
 	return query;
 }
 
-export default useGetLessonsByGroupId;
