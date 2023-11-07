@@ -3,6 +3,7 @@ import * as GroupSchemas from './groups.schemas';
 import { ParamsWithId } from 'interfaces/ParamsWithId';
 import MessageResponse from 'interfaces/MessageResponse';
 import * as GroupServices from './groups.services';
+import * as LessonsServices from '../lessons/lessons.services';
 
 export async function getGroups(
   req: Request<ParamsWithId>,
@@ -72,6 +73,48 @@ export async function createGroup(
 
     res.json({
       message: `Group ${group.name} created successfully.`,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function changeStudentGroup(
+  req: Request<
+    ParamsWithId,
+    MessageResponse,
+    GroupSchemas.ChangeStudentGroupInput
+  >,
+  res: Response<MessageResponse>,
+  next: NextFunction
+) {
+  try {
+    const { id: studentId } = req.params;
+    const { groupId: newGroupId } = req.body;
+
+    const existingGroup = await GroupServices.findGroupById(+newGroupId);
+
+    if (!existingGroup) {
+      res.status(404);
+      throw new Error('Group with this id does not exist.');
+    }
+
+    const existingStudent = await GroupServices.findStudentByStudentId(
+      +studentId
+    );
+
+    if (!existingStudent) {
+      res.status(404);
+      throw new Error('Student with this id does not exist.');
+    }
+
+    const student = await GroupServices.changeStudentGroup(
+      +studentId,
+      newGroupId
+    );
+
+    res.json({
+      message: `Student with ${student.id} moved to group number ${existingGroup.name} successfully.`,
     });
   } catch (error) {
     next(error);

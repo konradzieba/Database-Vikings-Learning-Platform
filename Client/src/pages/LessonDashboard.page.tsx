@@ -227,6 +227,10 @@ function LessonDashboardPage() {
 	const { data: lessonData, isPending } =
 		useGetLessonInfoByGroupAndLessonIdQueryFn(+id!, +lessonId!);
 
+	// console.log(lessonData?.lessonInfo.studentsWithoutAnswer);
+
+	// console.log(lessonData?.lessonInfo.;
+
 	if (isPending) {
 		return (
 			<Center h='25vh'>
@@ -275,7 +279,11 @@ function LessonDashboardPage() {
 				key={`task-${task.taskNumber}-panel`}
 			>
 				<Flex direction='column'>
-					<TaskAnswersStats endDate={task.endDate} answers={task.answers} />
+					<TaskAnswersStats
+						endDate={task.endDate}
+						answers={task.answers}
+						amountOfNotAnswered={3}
+					/>
 					<ScrollArea h={500} type='auto'>
 						<Flex wrap='wrap' gap='xl' mx='lg' mt='md' justify='flex-start'>
 							{task.answers.map((answer) => {

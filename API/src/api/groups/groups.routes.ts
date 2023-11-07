@@ -25,6 +25,15 @@ router.get(
   GroupsControllers.getStudentsFromGroup
 );
 
+router.patch(
+  '/changeStudentGroup/:id',
+  validateRequestAndCheckRole(
+    { body: GroupSchemas.changeStudentGroupInput, params: paramsWithIdSchema },
+    EnumRole.LECTURER
+  ),
+  GroupsControllers.changeStudentGroup
+);
+
 router.post(
   '/createGroup',
   validateRequestAndCheckRole(

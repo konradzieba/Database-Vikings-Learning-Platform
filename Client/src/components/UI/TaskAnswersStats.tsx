@@ -11,14 +11,12 @@ type Answer = {
 
 interface TaskStatsProps {
 	endDate: string;
+	amountOfNotAnswered: number;
 	answers: Answer[];
 }
 
-function TaskAnswersStats({ endDate, answers }: TaskStatsProps) {
+function TaskAnswersStats({ endDate, answers, amountOfNotAnswered }: TaskStatsProps) {
 	const answersCount = answers.length;
-	const repliesSendAfterTimeCount = answers.filter(
-		answer => dayjs(endDate).diff(answer.sendDate, 'minutes') < 0
-	).length;
 
 	return (
 		<Flex gap={10} align='center' mx='lg' mt='sm'>
@@ -30,9 +28,9 @@ function TaskAnswersStats({ endDate, answers }: TaskStatsProps) {
 			</Text>
 			<Divider orientation='vertical' />
 			<Text mx={rem(18)}>
-				Przesłane po czasie&nbsp;
+				Nieprzesłane odpowiedzi&nbsp;
 				<Text span c='var(--bad-state-color)'>
-					{repliesSendAfterTimeCount}
+					{amountOfNotAnswered}
 				</Text>
 			</Text>
 			<Divider orientation='vertical' />

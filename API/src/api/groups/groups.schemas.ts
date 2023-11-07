@@ -12,6 +12,14 @@ export const renameGroupInput = groupSchema.omit({
   lecturerId: true,
 });
 
+export const changeStudentGroupInput = z.object({
+  groupId: z
+    .number({ required_error: 'Group ID is required' })
+    .int('Group ID must be an integer'),
+});
+
 export type GroupInput = z.infer<typeof groupSchema>;
 
 export type RenameGroupInput = z.infer<typeof renameGroupInput>;
+
+export type ChangeStudentGroupInput = z.infer<typeof changeStudentGroupInput>;

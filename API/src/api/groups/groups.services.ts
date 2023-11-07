@@ -1,4 +1,4 @@
-import { Group, Lecturer, Prisma } from '@prisma/client';
+import { Group, Lecturer, Prisma, Student } from '@prisma/client';
 import { db } from '../../db';
 
 export async function getGroups(id: Lecturer['id']) {
@@ -79,6 +79,31 @@ export function createGroup(group: Prisma.GroupCreateInput) {
     data: group,
   });
 }
+
+export function changeStudentGroup(
+  studentId: Student['id'],
+  groupId: Group['id']
+) {
+  return db.student.update({
+    where: {
+      id: studentId,
+    },
+    data: {
+      Group: {
+        connect: {
+          id: groupId,
+        },
+      },
+    },
+  });
+}
+
+export const findStudentByStudentId = (studentId: Student['id']) =>
+  db.student.findUnique({
+    where: {
+      id: studentId,
+    },
+  });
 
 export function findLecturerById(id: Lecturer['id']) {
   return db.lecturer.findUnique({

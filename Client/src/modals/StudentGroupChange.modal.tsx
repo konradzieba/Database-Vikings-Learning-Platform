@@ -27,7 +27,9 @@ function StudentGroupChangeModal({
 		const groupId = selectGroupData?.find(
 			(group) => group.label === selectedGroup
 		)?.id;
-		if (!groupId) return;
+		if (!groupId) {
+			return;
+		}
 		console.log(groupId);
 		// console.log(object);
 		context.closeModal(id);
@@ -37,7 +39,7 @@ function StudentGroupChangeModal({
 	return (
 		<Flex direction='column' gap='sm'>
 			<Text>
-				Obecna grupa{' '}
+				Obecna grupa&nbsp;
 				<Text span fw={500} c='var(--mantine-primary-color)'>
 					{innerProps.modalBody}
 				</Text>
