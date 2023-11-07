@@ -7,7 +7,6 @@ import {
   ParamsWithLessonId,
 } from '../../interfaces/ParamsWithId';
 import { ParsedToken } from '../../../typings/token';
-import { group } from 'console';
 
 export async function getLessonsByGroupId(
   req: Request<ParamsWithId>,

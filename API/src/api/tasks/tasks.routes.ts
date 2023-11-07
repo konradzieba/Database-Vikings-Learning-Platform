@@ -1,11 +1,23 @@
 import { Router } from 'express';
 import { validateRequestAndCheckRole } from '../../middlewares';
 import * as TaskSchemas from './tasks.schemas';
-import { paramsWithIdSchema } from '../../interfaces/ParamsWithId';
+import {
+  paramsWithIdSchema,
+  paramsWithLessonIdSchema,
+} from '../../interfaces/ParamsWithId';
 import * as TasksControllers from '../tasks/tasks.controllers';
 import { EnumRole } from '../../../typings/token';
 
 const router = Router();
+
+router.get(
+  '/getLessonTaskById/:lessonId/:id',
+  validateRequestAndCheckRole(
+    { params: paramsWithLessonIdSchema },
+    EnumRole.STUDENT
+  ),
+  TasksControllers.getLessonTaksById
+);
 
 router.post(
   '/createTask',

@@ -1,8 +1,32 @@
-import { Prisma, Task } from '@prisma/client';
+import { Lesson, Prisma, Task } from '@prisma/client';
 import { db } from '../../db';
+
+export function getLessonTaskById(id: Task['id']) {
+  return db.task.findUnique({
+    where: {
+      id
+    },
+    select : {
+      id: true,
+      number: true,
+      question: true,
+      openDate: true,
+      closeDate: true,
+      lessonId: true,
+    }
+  })
+}
 
 export function findTaskById(id: Task['id']) {
   return db.task.findUnique({
+    where: {
+      id,
+    },
+  });
+}
+
+export function findLessonById(id: Lesson['id']) {
+  return db.lesson.findUnique({
     where: {
       id,
     },
