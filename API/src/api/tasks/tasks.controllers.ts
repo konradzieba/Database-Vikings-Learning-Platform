@@ -1,9 +1,41 @@
 import dayjs from 'dayjs';
 import { Response, Request, NextFunction } from 'express';
 import * as TaskSchemas from './tasks.schemas';
-import { ParamsWithId } from 'interfaces/ParamsWithId';
+import { ParamsWithId, ParamsWithLessonId } from 'interfaces/ParamsWithId';
 import MessageResponse from 'interfaces/MessageResponse';
 import * as TaskServices from './tasks.services';
+
+export async function getLessonTaksById(
+  req: Request<ParamsWithLessonId>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id, lessonId } = req.params;
+
+    const existingLesson = await TaskServices.findLessonById(+lessonId);
+
+    if (!existingLesson) {
+      res.status(404);
+      throw new Error('Lesson with this id does not exist');
+    }
+
+    const existingLessonTask = await TaskServices.getLessonTaskById(+id);
+
+    if (!existingLessonTask) {
+      res.status(404);
+      throw new Error('Task with this id does not exist');
+    }
+
+    res.json({
+      message: 'success',
+      lessonNumber: existingLesson.number,
+      taskInfo: existingLessonTask,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
 
 export async function createTask(
   req: Request<{}, MessageResponse, TaskSchemas.TaskInput>,

@@ -7,6 +7,9 @@ import { IconClockHour1, IconClockHour11, IconCode } from '@tabler/icons-react';
 import DateTimeDisplay from '../UI/DateTimeDisplay';
 import PrimaryButton from '../UI/PrimaryButton';
 import classes from './TaskAnswer.component.module.css';
+import { useGetLessonTaskById } from '@/hooks/tasks/useGetLessonTaskById';
+import FullScreenLoader from '../UI/FullScreenLoader';
+import { useStudentStore } from '@/utils/store';
 
 interface TaskAnswerFormProps {
 	taskId: number;
@@ -92,33 +95,40 @@ function TaskAnswerForm({ taskId, studentId }: TaskAnswerFormProps) {
 }
 
 function TaskAnswer() {
-	const { id } = useParams();
+	const { lessonId, taskId } = useParams();
+	const { studentData } = useStudentStore();
+	const { data: LessonTask, isPending } = useGetLessonTaskById(+lessonId!, +taskId!);
 
-	const mockData = {
-		taskId: +id!,
-		lessonNumber: 4,
-		taskNumber: 1,
-		studentId: 13,
-		taskQuestion: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum is simply dummy text of the printing and typesetting industry. `,
-		openDate: '2023-10-19T19:26:15.000Z',
-		closeDate: '2023-10-26T19:26:15.000Z',
-	};
 
 	return (
-		<Flex px='xl' align='flex-start' justify='space-evenly'>
-			<Stack w='50%' gap={0}>
-				<TaskAnswerHeader
-					taskNumber={mockData.taskNumber}
-					lessonNumber={mockData.lessonNumber}
-					taskQuestion={mockData.taskQuestion}
-				/>
-				<TaskAnswerForm taskId={mockData.taskId} studentId={mockData.studentId} />
-			</Stack>
-			<Group gap='lg' className={classes.taskAnswerDateDisplayGroup}>
-				<DateTimeDisplay title='Data rozpoczęcia' icon={<IconClockHour1 size={20} />} date={mockData.openDate} />
-				<DateTimeDisplay title='Data zakończenia' icon={<IconClockHour11 size={20} />} date={mockData.closeDate} />
-			</Group>
-		</Flex>
+		<>
+			{isPending ? (
+				<FullScreenLoader />
+			) : (
+				<Flex px='xl' align='flex-start' justify='space-evenly'>
+					<Stack w='50%' gap={0}>
+						<TaskAnswerHeader
+							taskNumber={LessonTask?.taskInfo.number!}
+							lessonNumber={LessonTask?.lessonNumber!}
+							taskQuestion={LessonTask?.taskInfo.question!}
+						/>
+						<TaskAnswerForm taskId={LessonTask?.taskInfo.id!} studentId={studentData.studentId!} />
+					</Stack>
+					<Group gap='lg' className={classes.taskAnswerDateDisplayGroup}>
+						<DateTimeDisplay
+							title='Data rozpoczęcia'
+							icon={<IconClockHour1 size={20} />}
+							date={LessonTask?.taskInfo.openDate!}
+						/>
+						<DateTimeDisplay
+							title='Data zakończenia'
+							icon={<IconClockHour11 size={20} />}
+							date={LessonTask?.taskInfo.closeDate!}
+						/>
+					</Group>
+				</Flex>
+			)}
+		</>
 	);
 }
 

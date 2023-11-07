@@ -153,6 +153,33 @@ const getStudentLessonsInfoSchema = z.object({
 	),
 });
 
+const getTasksByLessonIdSchema = z.object({
+	message: z.string(),
+	lessonNumber: z.number().int(),
+	lessonId: z.number().int(),
+	tasks: z.array(
+		z.object({
+			id: z.number().int(),
+			number: z.number().int(),
+			question: z.string(),
+			closeDate: z.string(),
+		})
+	),
+});
+
+const getLessonTaskByIdSchema = z.object({
+	message: z.string(),
+	lessonNumber: z.number().int(),
+	taskInfo: z.object({
+		id: z.number().int(),
+		number: z.number().int(),
+		question: z.string(),
+		openDate: z.string(),
+		closeDate: z.string(),
+		lessonId: z.number().int(),
+	}),
+});
+
 export type TMessageResponse = z.infer<typeof MessageResponseSchema>;
 export type TLoginResponse = z.infer<typeof LoginResponseSchema>;
 export type TLecturerInfo = z.infer<typeof LecturerInfoSchema>;
@@ -163,3 +190,5 @@ export type TGetStudentsFromGroup = z.infer<typeof GetStudentsFromGroupSchema>;
 export type TGetLessonsByGroupId = z.infer<typeof GetLessonsByGroupIdSchema>;
 export type TGetLessonInfoByGroupAndLessonId = z.infer<typeof getLessonInfoByGroupAndLessonIdSchema>;
 export type TGetStudentLessonsInfo = z.infer<typeof getStudentLessonsInfoSchema>;
+export type TGetTasksByLessonId = z.infer<typeof getTasksByLessonIdSchema>;
+export type TGetLessonTaskById = z.infer<typeof getLessonTaskByIdSchema>;

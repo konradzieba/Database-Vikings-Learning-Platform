@@ -27,6 +27,20 @@ export async function getLessonsByGroupId(id: Group['id']) {
   return lessonsFromGroup;
 }
 
+export async function getTasksByLessonId(id: Lesson['id']) {
+  return db.task.findMany({
+    where: {
+      lessonId: id,
+    },
+    select: {
+      id: true,
+      number: true,
+      question: true,
+      closeDate: true
+    },
+  });
+}
+
 export async function getStudentLessonInfo(
   id: Group['id'],
   studentId: Student['id']

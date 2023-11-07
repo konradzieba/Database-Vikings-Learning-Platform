@@ -1,63 +1,46 @@
 import TaskTab from '@/components/TaskTab/Task.tab';
-import { Box, Center, ScrollArea, Stack, Title } from '@mantine/core';
-
-const mockData = {
-	lessonNumber: 1,
-	tasks: [
-		{
-			taskNumber: 1,
-			taskQuestion: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget.`,
-			closeDate: '2023-10-19T19:26:15.000Z',
-		},
-		{
-			taskNumber: 2,
-			taskQuestion: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget.`,
-			closeDate: '2023-10-19T19:26:15.000Z',
-		},
-		{
-			taskNumber: 3,
-			taskQuestion: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget.`,
-			closeDate: '2023-10-19T19:26:15.000Z',
-		},
-		{
-			taskNumber: 4,
-			taskQuestion: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget.`,
-			closeDate: '2023-10-19T19:26:15.000Z',
-		},
-		{
-			taskNumber: 5,
-			taskQuestion: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget.`,
-			closeDate: '2023-10-19T19:26:15.000Z',
-		},
-		{
-			taskNumber: 6,
-			taskQuestion: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec auctor, nisl eget.`,
-			closeDate: '2023-10-19T19:26:15.000Z',
-		},
-	],
-};
+import FullScreenLoader from '@/components/UI/FullScreenLoader';
+import { useGetTasksByLessonId } from '@/hooks/lessons/useGetTasksByLessonId';
+import { Box, Center, ScrollArea, Stack, Text, Title } from '@mantine/core';
+import { useParams } from 'react-router-dom';
 
 function LessonTasksPage() {
+	const { id } = useParams();
+
+	const { data: TasksList, isPending } = useGetTasksByLessonId(+id!);
+
 	return (
-		<Center>
-			<Stack align='center'>
-				<Stack align='center' gap='sm'>
-					<Title order={1}>Lekcja&nbsp;{mockData.lessonNumber}</Title>
-				</Stack>
-				<ScrollArea type='auto' h={450} pb='sm' offsetScrollbars='y' w='50%'>
-					{mockData.tasks.map(task => (
-						<Box>
-							<TaskTab
-								key={`${task.taskNumber}-${task.closeDate}`}
-								taskNumber={task.taskNumber}
-								taskQuestion={task.taskQuestion}
-								closeDate={task.closeDate}
-							/>
-						</Box>
-					))}
-				</ScrollArea>
-			</Stack>
-		</Center>
+		<>
+			{isPending ? (
+				<FullScreenLoader />
+			) : TasksList?.tasks.length === 0 ? (
+				<Center>
+					<Text>NO TASKS ADDED YET</Text>
+				</Center>
+			) : (
+				<Center>
+					<Stack align='center'>
+						<Stack align='center' gap='sm'>
+							<Title order={1}>Lekcja&nbsp;{TasksList?.lessonNumber}</Title>
+						</Stack>
+						<ScrollArea type='auto' h={450} pb='sm' offsetScrollbars='y'>
+							{TasksList?.tasks.map(task => (
+								<Box key={`${task.id}-Container`}>
+									<TaskTab
+										key={`${task.id}-Tab`}
+										lessonId={+id!}
+										taskId={task.id}
+										taskNumber={task.number}
+										taskQuestion={task.question}
+										closeDate={task.closeDate}
+									/>
+								</Box>
+							))}
+						</ScrollArea>
+					</Stack>
+				</Center>
+			)}
+		</>
 	);
 }
 

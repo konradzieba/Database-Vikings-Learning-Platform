@@ -7,7 +7,6 @@ import {
   ParamsWithLessonId,
 } from '../../interfaces/ParamsWithId';
 import { ParsedToken } from '../../../typings/token';
-import { group } from 'console';
 
 export async function getLessonsByGroupId(
   req: Request<ParamsWithId>,
@@ -27,6 +26,34 @@ export async function getLessonsByGroupId(
     const lessons = await LessonServices.getLessonsByGroupId(+id);
 
     res.json({ message: 'success', lessons: lessons });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getTasksByLessonId(
+  req: Request<ParamsWithId>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id } = req.params;
+
+    const existingLesson = await LessonServices.findLessonById(+id);
+
+    if (!existingLesson) {
+      res.status(404);
+      throw new Error('Lesson with this id does not exist.');
+    }
+
+    const tasks = await LessonServices.getTasksByLessonId(+id);
+
+    res.json({
+      message: 'success',
+      lessonNumber: existingLesson.number,
+      lessonId: existingLesson.id,
+      tasks: tasks,
+    });
   } catch (error) {
     next(error);
   }
