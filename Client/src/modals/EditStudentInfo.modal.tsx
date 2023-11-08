@@ -1,6 +1,15 @@
 import { useEffect, useRef } from 'react';
 import { useUpdateStudent } from '@/hooks/users/useUpdateStudent';
-import { Button, Group, NumberInput, Stack, TextInput } from '@mantine/core';
+import {
+	Button,
+	Center,
+	Group,
+	Loader,
+	NumberInput,
+	Stack,
+	Text,
+	TextInput,
+} from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
 import { IconCoins, IconHeartFilled } from '@tabler/icons-react';
 import { useForm, zodResolver } from '@mantine/form';
@@ -52,6 +61,24 @@ function EditStudentInfoModal({
 		form.validate();
 		changeStudentInfo();
 	};
+
+	if (isPending) {
+		return (
+			<Center h={120}>
+				<Loader />
+			</Center>
+		);
+	}
+
+	if (isSuccess) {
+		return (
+			<>
+				<Center h={120}>
+					<Text>Student został zaktualizowany</Text>
+				</Center>
+			</>
+		);
+	}
 
 	return (
 		<form onSubmit={form.onSubmit(handleEditStudent)}>
