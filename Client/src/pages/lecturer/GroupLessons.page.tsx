@@ -36,7 +36,7 @@ function GroupLessonsPage() {
 							maw={1175}
 							withIndicators
 							slidesToScroll={1}
-							initialSlide={1}
+							initialSlide={0}
 							slideSize='33.333333%'
 							slideGap='sm'
 							align='start'
@@ -52,7 +52,7 @@ function GroupLessonsPage() {
 							maw={1175}
 							withIndicators
 							slidesToScroll={1}
-							initialSlide={slides?.length! - 2}
+							initialSlide={0}
 							slideSize='33.333333%'
 							slideGap='sm'
 							align='start'
@@ -72,28 +72,3 @@ function GroupLessonsPage() {
 }
 
 export default GroupLessonsPage;
-
-{
-	/* <>
-			{pathname.endsWith('/lessons') ? (
-				<Center>
-					<Carousel
-						maw={1175}
-						withIndicators
-						slidesToScroll={1}
-						initialSlide={carouselSlides.length - 2}
-						slideSize='33.333333%'
-						slideGap='sm'
-						align='start'
-						draggable>
-						{slides}
-						<Carousel.Slide>
-							<AddLessonCard />
-						</Carousel.Slide>
-					</Carousel>
-				</Center>
-			) : (
-				<Outlet />
-			)}
-		</> */
-}

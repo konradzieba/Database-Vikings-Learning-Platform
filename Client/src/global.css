@@ -84,6 +84,8 @@ body {
 }
 
 .mantine-Carousel-indicator {
+	position: relative;
+	top: 35px;
 	width: rem(12px);
 	height: rem(4px);
 	transition: width 250ms ease;
