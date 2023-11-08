@@ -1,32 +1,24 @@
 import { Center } from '@mantine/core';
-import {
-	createBrowserRouter,
-	Navigate,
-	RouterProvider,
-} from 'react-router-dom';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import LoginForm from './components/Login/Login.form';
 import BlankContent from './components/UI/BlankContent';
 import StudentLayout from './layouts/Student.layout';
-import MyTasksPage from './pages/MyTasks.page';
-import ScoreBoardPage from './pages/ScoreBoard.page';
-import TaskAnswerPage from './pages/TaskAnswer.page';
+import MyTasksPage from './pages/student/MyTasks.page';
+import ScoreBoardPage from './pages/student/ScoreBoard.page';
+import TaskAnswerPage from './pages/student/TaskAnswer.page';
 import LecturerLayout from './layouts/Lecturer.layout';
 import { NotFoundPage } from './pages/404.page';
-import DashboardPage from './pages/Dashboard.page';
+import DashboardPage from './pages/lecturer/Dashboard.page';
 import AuthMiddleware from './utils/Auth.middleware';
-import {
-	lecturerLayoutLoaderFn,
-	loginLoaderFn,
-	studentLayoutLoaderFn,
-} from './utils/middlewares';
-import { HomePage } from './pages/Home.page';
-import LessonTasksPage from './pages/LessonTasks.page';
-import GroupPanelPage from './pages/GroupPanel.page';
-import GroupLessonsPage from './pages/GroupLessons.page';
-import CreateLessonPage from './pages/CreateLesson.page';
+import { lecturerLayoutLoaderFn, loginLoaderFn, studentLayoutLoaderFn } from './utils/middlewares';
+import { HomePage } from './pages/student/Home.page';
+import LessonTasksPage from './pages/student/LessonTasks.page';
+import GroupPanelPage from './pages/lecturer/GroupPanel.page';
+import GroupLessonsPage from './pages/lecturer/GroupLessons.page';
+import CreateLessonPage from './pages/lecturer/CreateLesson.page';
 import CheckFrequencyPage from './pages/CheckFrequency.page';
-import GroupStudentsInfoPage from './pages/GroupStudentsInfo.page';
-import LessonDashboardPage from './pages/LessonDashboard.page';
+import GroupStudentsInfoPage from './pages/lecturer/GroupStudentsInfo.page';
+import LessonDashboardPage from './pages/lecturer/LessonDashboard.page';
 
 const router = createBrowserRouter([
 	{
@@ -89,8 +81,8 @@ const router = createBrowserRouter([
 		element: <LoginForm />,
 	},
 	// { path: '/me', element: <BlankContent /> },
-	// { path: '/not-found', element: <NotFoundPage /> },
-	// { path: '*', element: <Navigate to='/not-found' replace /> },
+	{ path: '/not-found', element: <NotFoundPage /> },
+	{ path: '*', element: <Navigate to='/not-found' replace /> },
 ]);
 
 export function Router() {
