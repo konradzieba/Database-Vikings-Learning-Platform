@@ -45,29 +45,18 @@ function TaskAnswerHeader({ taskNumber, lessonNumber, taskQuestion }: TaskAnswer
 function TaskAnswerForm({ taskId, studentId, isTaskExpired }: TaskAnswerFormProps) {
 	const answerTextareaRef = useRef<HTMLTextAreaElement>(null);
 
-	const sendAnswerMutation = useSendAnswerMutation();
-
-	const sendAnswer = () => {
-		const answer = answerTextareaRef.current?.value;
-
-		if (!answer) {
-			return;
-		}
-
-		sendAnswerMutation.mutate({
-			solution: answer,
-			taskId,
-			studentId,
-		});
-	};
-
 	const openConfirmAnswerModal = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		modals.openConfirmModal({
+		modals.openContextModal({
+			modal: 'sendTaskAnswer',
 			title: 'Potwierdź przesłanie odpowiedzi',
-			children: <Text size='sm'>Czy na pewno chcesz wysłać odpowiedź?</Text>,
-			onConfirm: () => {
-				sendAnswer();
+			size: 'md',
+			closeOnClickOutside: false,
+			innerProps: {
+				answerContent: answerTextareaRef.current?.value,
+				taskId: taskId,
+				studentId: studentId,
+				modalBody: 'Czy na pewno chcesz wysłać odpowiedź?',
 			},
 		});
 	};
