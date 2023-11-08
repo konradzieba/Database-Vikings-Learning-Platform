@@ -40,7 +40,13 @@ function EditStudentInfoModal({
 		mutate: changeStudentInfo,
 		isPending,
 		isSuccess,
-	} = useUpdateStudent(innerProps.studentId!, form.values);
+	} = useUpdateStudent(innerProps.studentId!, {
+		firstName: form.values.firstName,
+		lastName: form.values.lastName,
+		indexNumber: +form.values.indexNumber,
+		score: +form.values.score,
+		health: +form.values.health,
+	});
 
 	const handleEditStudent = () => {
 		form.validate();
