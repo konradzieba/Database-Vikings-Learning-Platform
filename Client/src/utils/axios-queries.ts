@@ -130,3 +130,20 @@ export const deleteUserMutationFn = async (userId: number) => {
 	);
 	return data;
 };
+
+export const updateStudentMutationFn = async (
+	studentId: number,
+	studentInfo: {
+		firstName: string;
+		lastName: string;
+		indexNumber: number;
+		score: number;
+		health: number;
+	}
+) => {
+	const { data } = await axios.patch<TMessageResponse>(
+		`/users/updateStudent/${studentId}`,
+		studentInfo
+	);
+	return data;
+};

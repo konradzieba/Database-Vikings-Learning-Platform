@@ -2,7 +2,14 @@ import { Button, Flex, Group, Menu, Text, rem } from '@mantine/core';
 import classes from './StudentInfo.card.module.css';
 import HeartCounter from '../UI/HeartCounter';
 import DateTimeDisplay from '../UI/DateTimeDisplay';
-import { IconClock, IconCoins, IconDots, IconReplace, IconUserEdit, IconUserMinus } from '@tabler/icons-react';
+import {
+	IconClock,
+	IconCoins,
+	IconDots,
+	IconReplace,
+	IconUserEdit,
+	IconUserMinus,
+} from '@tabler/icons-react';
 import { modals } from '@mantine/modals';
 import { useParams } from 'react-router-dom';
 import useGetStudentsFromGroup from '@/hooks/groups/useGetStudentsFromGroup';
@@ -57,6 +64,12 @@ function StudentInfoCard({
 			closeOnEscape: false,
 			onClose: () => refetch(),
 			innerProps: {
+				studentId,
+				firstName,
+				lastName,
+				indexNumber: +index,
+				score: +score,
+				health: +hearts,
 				modalBody: '',
 			},
 		});
@@ -80,7 +93,14 @@ function StudentInfoCard({
 	};
 
 	return (
-		<Flex align='center' justify='space-between' px='sm' py='sm' miw='50%' className={classes.studentInfoCardContainer}>
+		<Flex
+			align='center'
+			justify='space-between'
+			px='sm'
+			py='sm'
+			miw='50%'
+			className={classes.studentInfoCardContainer}
+		>
 			<Flex direction='column' align='center' miw='25%'>
 				<Text>{`${firstName} ${lastName}`}</Text>
 				<Text fw={500} size='lg' py={rem(4)}>
@@ -101,7 +121,11 @@ function StudentInfoCard({
 				<HeartCounter hearts={hearts} />
 			</Flex>
 			<Flex direction='column'>
-				<DateTimeDisplay date={lastLoggedIn} title='Ostatnie logowanie' icon={<IconClock size='1.3rem' />} />
+				<DateTimeDisplay
+					date={lastLoggedIn}
+					title='Ostatnie logowanie'
+					icon={<IconClock size='1.3rem' />}
+				/>
 			</Flex>
 			<Menu width={200} withArrow shadow='md'>
 				<Menu.Target>
@@ -111,14 +135,24 @@ function StudentInfoCard({
 				</Menu.Target>
 				<Menu.Dropdown>
 					<Menu.Label>Grupa</Menu.Label>
-					<Menu.Item leftSection={<IconReplace size='1.3rem' />} onClick={handleOpenGroupChangeModal}>
+					<Menu.Item
+						leftSection={<IconReplace size='1.3rem' />}
+						onClick={handleOpenGroupChangeModal}
+					>
 						Przenieś
 					</Menu.Item>
 					<Menu.Label>Student</Menu.Label>
-					<Menu.Item leftSection={<IconUserEdit size='1.3rem' />} onClick={handleOpenEditStudentModal}>
+					<Menu.Item
+						leftSection={<IconUserEdit size='1.3rem' />}
+						onClick={handleOpenEditStudentModal}
+					>
 						Edytuj
 					</Menu.Item>
-					<Menu.Item color='red.8' leftSection={<IconUserMinus size='1.3rem' />} onClick={handleOpenDeleteStudentModal}>
+					<Menu.Item
+						color='red.8'
+						leftSection={<IconUserMinus size='1.3rem' />}
+						onClick={handleOpenDeleteStudentModal}
+					>
 						Usuń
 					</Menu.Item>
 				</Menu.Dropdown>
