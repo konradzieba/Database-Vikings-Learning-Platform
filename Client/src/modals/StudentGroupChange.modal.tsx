@@ -1,14 +1,6 @@
 import { useState } from 'react';
 import { useLecturerStore } from '@/utils/store';
-import {
-	Button,
-	Center,
-	Flex,
-	Group,
-	Loader,
-	Select,
-	Text,
-} from '@mantine/core';
+import { Box, Button, Center, Flex, Group, Loader, Select, Text } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
 import { useChangeStudentGroupMutation } from '@/hooks/students/useChangeStudentGroupMutation';
 
@@ -18,6 +10,7 @@ function StudentGroupChangeModal({
 	innerProps,
 }: ContextModalProps<{
 	modalBody: string;
+	fullName: string;
 	studentId: number;
 	groupId: number;
 }>) {
@@ -27,21 +20,15 @@ function StudentGroupChangeModal({
 	const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
 
 	const selectGroupData = groups
-		?.filter((group) => group.groupId !== innerProps.groupId)
-		.map((group) => ({
+		?.filter(group => group.groupId !== innerProps.groupId)
+		.map(group => ({
 			id: group.groupId,
 			label: group.groupName,
 		}));
 
-	const newGroupId = selectGroupData?.find(
-		(group) => group.label === selectedGroup
-	)?.id;
+	const newGroupId = selectGroupData?.find(group => group.label === selectedGroup)?.id;
 
-	const {
-		mutate: changeStudentGroup,
-		isPending,
-		isSuccess,
-	} = useChangeStudentGroupMutation(studentId!, newGroupId!);
+	const { mutate: changeStudentGroup, isPending, isSuccess } = useChangeStudentGroupMutation(studentId!, newGroupId!);
 
 	const handleCloseModal = () => {
 		context.closeModal(id);
@@ -57,7 +44,7 @@ function StudentGroupChangeModal({
 
 	if (isPending) {
 		return (
-			<Center mih={120}>
+			<Center mih={90}>
 				<Loader />
 			</Center>
 		);
@@ -65,9 +52,14 @@ function StudentGroupChangeModal({
 	if (isSuccess) {
 		return (
 			<>
-				<Center mih={120}>
-					<Text>Student przeniesiony do grupy {selectedGroup}</Text>
-				</Center>
+				<Flex align='center' justify='center' mih={90}>
+					<Text>
+						Student {innerProps.fullName} został przeniesiony do grupy&nbsp;
+						<Text span fw={500} c='var(--mantine-primary-color)'>
+							{selectedGroup}
+						</Text>
+					</Text>
+				</Flex>
 				<Button fullWidth onClick={handleCloseModal}>
 					Zamknij
 				</Button>
@@ -87,18 +79,14 @@ function StudentGroupChangeModal({
 				value={selectedGroup}
 				label='Wybierz grupę'
 				placeholder='Grupa...'
-				data={selectGroupData?.map((group) => group.label)}
-				onChange={(value) => setSelectedGroup(value)}
+				data={selectGroupData?.map(group => group.label)}
+				onChange={value => setSelectedGroup(value)}
 			/>
 			<Group justify='center' mt='sm'>
 				<Button miw={150} variant='outline' onClick={handleCloseModal}>
 					Anuluj
 				</Button>
-				<Button
-					miw={150}
-					disabled={!selectedGroup}
-					onClick={handleChangeStudentGroup}
-				>
+				<Button miw={150} disabled={!selectedGroup} onClick={handleChangeStudentGroup}>
 					Przenieś
 				</Button>
 			</Group>

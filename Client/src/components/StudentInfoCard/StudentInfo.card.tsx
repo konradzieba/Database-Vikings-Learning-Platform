@@ -57,6 +57,7 @@ function StudentInfoCard({
 			innerProps: {
 				studentId,
 				groupId: +groupId!,
+				fullName: `${firstName} ${lastName}`,
 				modalBody: `${currentGroup}`,
 			},
 		});
@@ -86,6 +87,7 @@ function StudentInfoCard({
 			withCloseButton: false,
 			onClose: () => refetch(),
 			innerProps: {
+				fullName: `${firstName} ${lastName}`,
 				userId: userId,
 				modalBody: `Czy na pewno chcesz usunąć studenta, ${firstName} ${lastName}?`,
 			},
