@@ -1,4 +1,4 @@
-import { Table, Text, Group, ThemeIcon, rem, Stack, NumberFormatter } from '@mantine/core';
+import { Table, Text, Group, ThemeIcon, rem, Stack } from '@mantine/core';
 import { IconCoins, IconTrophy } from '@tabler/icons-react';
 
 const data = [
@@ -69,7 +69,7 @@ function ScoreBoard({ type }: ScoreBoardProps) {
 						<ThemeIcon variant='transparent' size='sm' c='var(--score-color)'>
 							<IconCoins />
 						</ThemeIcon>
-						<NumberFormatter value={row.score} thousandSeparator />
+						{row.score}
 					</Group>
 				</Table.Td>
 			</Table.Tr>

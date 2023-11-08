@@ -1,6 +1,6 @@
 import cx from 'clsx';
 import { useState } from 'react';
-import { Table, Checkbox, ScrollArea, Group, Text, rem, ThemeIcon, BoxProps, NumberFormatter } from '@mantine/core';
+import { Table, Checkbox, ScrollArea, Group, Text, rem, ThemeIcon, BoxProps } from '@mantine/core';
 import classes from './FrequencyList.component.module.css';
 import { IconCoins } from '@tabler/icons-react';
 
@@ -105,7 +105,9 @@ function FrequencyList({ ...BoxProps }: FrequencyListProps) {
 						<ThemeIcon size='sm' variant='transparent' c='var(--score-color)'>
 							<IconCoins />
 						</ThemeIcon>
-						<NumberFormatter value={item.score} thousandSeparator />
+						<Text size='sm' fw={500}>
+							{item.score}
+						</Text>
 					</Group>
 				</Table.Td>
 				<Table.Td lts={rem(2)} c={hasZeroLifes ? 'var(--bad-state-color)' : undefined}>

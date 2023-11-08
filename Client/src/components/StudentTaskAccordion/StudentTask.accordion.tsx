@@ -5,7 +5,6 @@ import {
 	Divider,
 	Flex,
 	Group,
-	NumberFormatter,
 	Stack,
 	Text,
 	ThemeIcon,
@@ -95,7 +94,9 @@ function StudentTaskAccordion({ tasks }: StudentTaskAccordionProps) {
 								<ThemeIcon variant='transparent' size={rem(24)} className={classes.grantedScore}>
 									<IconCoins />
 								</ThemeIcon>
-								<NumberFormatter value={900} thousandSeparator />
+								<Text size='lg' fw={500}>
+									{900}
+								</Text>
 							</Group>
 						)}
 					</Flex>
