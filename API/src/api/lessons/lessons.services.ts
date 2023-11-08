@@ -1,4 +1,4 @@
-import { Group, Lesson, Prisma, Student, User } from '@prisma/client';
+import { Answer, Group, Lesson, Prisma, Student, User } from '@prisma/client';
 import { db } from '../../db';
 
 export async function getLessonsByGroupId(id: Group['id']) {
@@ -36,7 +36,10 @@ export async function getTasksByLessonId(id: Lesson['id']) {
       id: true,
       number: true,
       question: true,
-      closeDate: true
+      closeDate: true,
+    },
+    orderBy: {
+      id: 'asc',
     },
   });
 }
@@ -203,6 +206,19 @@ export function findLessonById(id: Lesson['id']) {
   return db.lesson.findUnique({
     where: {
       id,
+    },
+  });
+}
+
+export function findCompletedTaskByStudent(ids: Answer['id'][]) {
+  return db.answer.findMany({
+    where: {
+      id: {
+        in: ids,
+      },
+    },
+    select: {
+      taskId: true,
     },
   });
 }

@@ -4,6 +4,8 @@ import * as TaskSchemas from './tasks.schemas';
 import { ParamsWithId, ParamsWithLessonId } from 'interfaces/ParamsWithId';
 import MessageResponse from 'interfaces/MessageResponse';
 import * as TaskServices from './tasks.services';
+import * as LessonServices from '../lessons/lessons.services';
+import { ParsedToken } from '../../../typings/token';
 
 export async function getLessonTaksById(
   req: Request<ParamsWithLessonId>,
@@ -12,6 +14,14 @@ export async function getLessonTaksById(
 ) {
   try {
     const { id, lessonId } = req.params;
+    const parsedToken: ParsedToken = req.user;
+
+    const student = await LessonServices.findStudentById(parsedToken.userId);
+
+    if (!student) {
+      res.status(404);
+      throw new Error('Student with given userId does not exist.');
+    }
 
     const existingLesson = await TaskServices.findLessonById(+lessonId);
 
@@ -31,6 +41,7 @@ export async function getLessonTaksById(
       message: 'success',
       lessonNumber: existingLesson.number,
       taskInfo: existingLessonTask,
+      student: student
     });
   } catch (error) {
     next(error);

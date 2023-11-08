@@ -1,5 +1,5 @@
 import { Box, Flex, Overlay, Text, ThemeIcon } from '@mantine/core';
-import { IconClockHour4, IconLock } from '@tabler/icons-react';
+import { IconCircleCheck, IconClockHour4, IconLock } from '@tabler/icons-react';
 import classes from './Task.tab.module.css';
 import DateTimeDisplay from '../UI/DateTimeDisplay';
 import { useNavigate } from 'react-router-dom';
@@ -11,9 +11,10 @@ interface TaskTabProps {
 	taskNumber: number;
 	taskQuestion: string;
 	closeDate: string;
+	answerSend: boolean;
 }
 
-function TaskTab({ lessonId, taskId, taskNumber, taskQuestion, closeDate }: TaskTabProps) {
+function TaskTab({ lessonId, taskId, taskNumber, taskQuestion, closeDate, answerSend }: TaskTabProps) {
 	const navigate = useNavigate();
 	const spliceQuestion = (question: string) => {
 		if (question.length > 251) {
@@ -22,7 +23,7 @@ function TaskTab({ lessonId, taskId, taskNumber, taskQuestion, closeDate }: Task
 			return question;
 		}
 	};
-	const isTaskExpired = dayjs(dayjs().toDate()).isAfter(closeDate, 'minutes');
+	const isTaskExpired = dayjs(dayjs().toDate()).isAfter(closeDate, 'minutes') && !answerSend;
 
 	return (
 		<Box tabIndex={1} onClick={() => navigate(`/task/${lessonId}/${taskId}`)} pos='relative'>
@@ -32,6 +33,16 @@ function TaskTab({ lessonId, taskId, taskNumber, taskQuestion, closeDate }: Task
 						<IconLock color='var(--mantine-color-dimmed)' size='1.75rem' />
 						<Text c='dimmed' fz='xl' fw={500}>
 							Czas na wysłanie zadania minął
+						</Text>
+					</Flex>
+				</Overlay>
+			)}
+			{answerSend && (
+				<Overlay backgroundOpacity={0.85} style={{ cursor: 'pointer' }}>
+					<Flex h='100%' justify='center' align='center' gap='md'>
+						<IconCircleCheck size='1.75rem' color='var(--good-state-color)' />
+						<Text fz='xl' fw={500} c='var(--good-state-color)'>
+							Zadanie zostało przesłane pomyślnie
 						</Text>
 					</Flex>
 				</Overlay>

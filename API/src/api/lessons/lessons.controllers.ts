@@ -38,6 +38,17 @@ export async function getTasksByLessonId(
 ) {
   try {
     const { id } = req.params;
+    const parsedToken: ParsedToken = req.user;
+
+    const student = await LessonServices.findStudentById(parsedToken.userId);
+
+    if (!student) {
+      res.status(404);
+      throw new Error('Student with given userId does not exist.');
+    }
+
+    const tasksWithStudentAnswers =
+      await LessonServices.findCompletedTaskByStudent(student.answersId);
 
     const existingLesson = await LessonServices.findLessonById(+id);
 
@@ -48,11 +59,20 @@ export async function getTasksByLessonId(
 
     const tasks = await LessonServices.getTasksByLessonId(+id);
 
+    const taskReturn = tasks.map((task) => {
+      const taskId = task.id
+      if (tasksWithStudentAnswers.some(answer => answer.taskId === taskId)) {
+        return { ...task, answerSend: true };
+      } else {
+        return { ...task, answerSend: false };
+      }
+    });
+
     res.json({
       message: 'success',
       lessonNumber: existingLesson.number,
       lessonId: existingLesson.id,
-      tasks: tasks,
+      tasks: taskReturn,
     });
   } catch (error) {
     next(error);
