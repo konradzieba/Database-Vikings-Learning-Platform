@@ -11,6 +11,13 @@ export function findUserById(id: User['id']) {
   });
 }
 
+export const findStudentByStudentId = (studentId: Student['id']) =>
+  db.student.findUnique({
+    where: {
+      id: studentId,
+    },
+  });
+
 export function findUserByEmail(email: string) {
   return db.user.findUnique({
     where: {
@@ -132,7 +139,6 @@ export async function updateStudent(
     throw new Error(`Student with studentId: ${studentId} not found`);
   }
 
-  // update user and student tables with new data
   await db.user.update({
     where: { id: user.id },
     data: {

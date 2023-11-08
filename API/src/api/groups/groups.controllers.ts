@@ -4,6 +4,7 @@ import { ParamsWithId } from 'interfaces/ParamsWithId';
 import MessageResponse from 'interfaces/MessageResponse';
 import * as GroupServices from './groups.services';
 import * as LessonsServices from '../lessons/lessons.services';
+import * as UserServices from '../users/users.services';
 
 export async function getGroups(
   req: Request<ParamsWithId>,
@@ -99,7 +100,7 @@ export async function changeStudentGroup(
       throw new Error('Group with this id does not exist.');
     }
 
-    const existingStudent = await GroupServices.findStudentByStudentId(
+    const existingStudent = await UserServices.findStudentByStudentId(
       +studentId
     );
 

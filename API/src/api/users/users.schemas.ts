@@ -53,10 +53,9 @@ export const updateStudentSchema = z.object({
     .string()
     .trim()
     .min(1, 'Last name can not be empty')
-    .max(100, 'Last name is too long')
-    .optional(),
-  indexNumber: z.number().int().optional(),
-  score: z.number().int().min(0).optional(),
+    .max(100, 'Last name is too long'),
+  indexNumber: z.number().int(),
+  score: z.number().int().min(0),
   health: z.number().int().min(0).max(3),
 });
 

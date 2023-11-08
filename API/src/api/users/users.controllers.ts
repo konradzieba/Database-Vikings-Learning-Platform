@@ -135,7 +135,7 @@ export async function updateStudent(
     const { id: studentId } = req.params;
     const { firstName, lastName, indexNumber, score, health } = req.body;
 
-    const student = await UserServices.findUserById(+studentId);
+    const student = await UserServices.findStudentByStudentId(+studentId);
 
     if (!student) {
       res.status(404);
