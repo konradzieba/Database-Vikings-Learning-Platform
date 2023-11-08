@@ -36,6 +36,18 @@ router.patch(
   UserController.updateUser
 );
 
+router.patch(
+  '/updateStudent/:id',
+  validateRequestAndCheckRole(
+    {
+      params: paramsWithIdSchema,
+      body: UserSchemas.updateStudentSchema,
+    },
+    EnumRole.LECTURER
+  ),
+  UserController.updateStudent
+);
+
 router.delete(
   '/deleteUser/:id',
   validateRequestAndCheckRole(

@@ -3,6 +3,7 @@ import { EnumRole, ParsedToken } from '../../../typings/token';
 import { ParamsWithId } from 'interfaces/ParamsWithId';
 import MessageResponse from 'interfaces/MessageResponse';
 import * as UserServices from './users.services';
+import { UpdateStudentInput, UpdateUserInput } from './users.schemas';
 
 export async function me(req: Request, res: Response, next: NextFunction) {
   try {
@@ -95,7 +96,7 @@ export async function changeDefaultPassword(
 }
 
 export async function updateUser(
-  req: Request<ParamsWithId>,
+  req: Request<ParamsWithId, {}, UpdateUserInput>,
   res: Response<MessageResponse>,
   next: NextFunction
 ) {
@@ -119,6 +120,38 @@ export async function updateUser(
 
     res.json({
       message: `User with id: ${id} was updated successfully.`,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function updateStudent(
+  req: Request<ParamsWithId, {}, UpdateStudentInput>,
+  res: Response<MessageResponse>,
+  next: NextFunction
+) {
+  try {
+    const { id: studentId } = req.params;
+    const { firstName, lastName, indexNumber, score, health } = req.body;
+
+    const student = await UserServices.findUserById(+studentId);
+
+    if (!student) {
+      res.status(404);
+      throw new Error(`User with given id doesn't exists.`);
+    }
+
+    await UserServices.updateStudent(+studentId, {
+      firstName,
+      lastName,
+      indexNumber,
+      score,
+      health,
+    });
+
+    res.json({
+      message: `Student with id: ${studentId} was updated successfully.`,
     });
   } catch (error) {
     next(error);

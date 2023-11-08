@@ -1,6 +1,7 @@
 import * as bcrypt from 'bcrypt';
 import { db } from '../../db';
 import type { User, Prisma, Student } from '@prisma/client';
+import { UpdateStudentInput } from './users.schemas';
 
 export function findUserById(id: User['id']) {
   return db.user.findUnique({
@@ -113,6 +114,41 @@ export function updateUser(id: User['id'], user: Prisma.UserUpdateInput) {
       password: user.password
         ? bcrypt.hashSync(user.password as string, 12)
         : undefined,
+    },
+  });
+}
+
+export async function updateStudent(
+  studentId: Student['id'],
+  data: UpdateStudentInput
+) {
+  const student = await db.student.findUnique({
+    where: { id: studentId },
+  });
+  const user = await db.user.findUnique({
+    where: { id: student?.userId },
+  });
+  if (!student || !user) {
+    throw new Error(`Student with studentId: ${studentId} not found`);
+  }
+
+  // update user and student tables with new data
+  await db.user.update({
+    where: { id: user.id },
+    data: {
+      email: `${
+        data.indexNumber ? data.indexNumber : student.indexNumber
+      }@student.uwm.edu.pl`,
+      firstName: data.firstName,
+      lastName: data.lastName,
+    },
+  });
+  await db.student.update({
+    where: { id: student.id },
+    data: {
+      indexNumber: data.indexNumber,
+      score: data.score,
+      health: data.health,
     },
   });
 }
