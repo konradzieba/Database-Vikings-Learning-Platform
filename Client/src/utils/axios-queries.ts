@@ -147,3 +147,10 @@ export const updateStudentMutationFn = async (
 	);
 	return data;
 };
+
+export const restoreDefaultPasswordMutationFn = async (studentId: number) => {
+	const { data } = await axios.patch<TMessageResponse>(
+		`/users/restoreDefaultPassword/${studentId}`
+	);
+	return data;
+};
