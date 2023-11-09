@@ -2,7 +2,7 @@ import { FormEvent, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { Flex, Group, ScrollArea, Stack, Text, Textarea, ThemeIcon, Title } from '@mantine/core';
 import { modals } from '@mantine/modals';
-import { IconClockHour1, IconClockHour11, IconCode } from '@tabler/icons-react';
+import { IconClockHour1, IconClockHour11, IconCode, IconFloatLeft } from '@tabler/icons-react';
 import DateTimeDisplay from '../UI/DateTimeDisplay';
 import PrimaryButton from '../UI/PrimaryButton';
 import classes from './TaskAnswer.component.module.css';
@@ -36,7 +36,7 @@ function TaskAnswerHeader({ taskNumber, lessonNumber, taskQuestion }: TaskAnswer
 				Lekcja {lessonNumber}
 			</Text>
 			<ScrollArea.Autosize type='auto' mah={280} pb='lg' offsetScrollbars='y'>
-				<Text size='md' py='md' px='md' className={classes.taskAnswerQuestionText}>
+				<Text size='md' py='md' className={classes.taskAnswerQuestionText}>
 					{taskQuestion}
 				</Text>
 			</ScrollArea.Autosize>
@@ -68,11 +68,16 @@ function TaskAnswerForm({ lessonId, taskId, studentId, isTaskExpired, answerDate
 		<form onSubmit={openConfirmAnswerModal}>
 			<Stack gap='sm' pos='relative'>
 				<Group gap='lg' align='flex-start'>
-					<ThemeIcon size='lg' variant='transparent'>
-						<IconCode size={36} />
-					</ThemeIcon>
 					{!solution ? (
 						<Textarea
+							leftSection={
+								<ThemeIcon variant='transparent'>
+									<IconCode />
+								</ThemeIcon>
+							}
+							leftSectionProps={{
+								style: { alignItems: 'flex-start', marginTop: '6px', color: 'var(--mantine-primary-color)' },
+							}}
 							disabled={isTaskExpired}
 							ref={answerTextareaRef}
 							w='100%'
@@ -83,6 +88,14 @@ function TaskAnswerForm({ lessonId, taskId, studentId, isTaskExpired, answerDate
 						/>
 					) : (
 						<Textarea
+							leftSection={
+								<ThemeIcon variant='transparent'>
+									<IconCode />
+								</ThemeIcon>
+							}
+							leftSectionProps={{
+								style: { alignItems: 'flex-start', marginTop: '6px', color: 'var(--mantine-primary-color)' },
+							}}
 							disabled
 							ref={answerTextareaRef}
 							w='100%'
