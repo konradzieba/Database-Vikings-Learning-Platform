@@ -1,5 +1,5 @@
 import z from 'zod';
-import { UserRoleEnum } from './Enums';
+import { AnswerReplyStatusEnum, UserRoleEnum } from './Enums';
 
 const MessageResponseSchema = z.object({
 	message: z.string(),
@@ -178,6 +178,17 @@ const getLessonTaskByIdSchema = z.object({
 		openDate: z.string(),
 		closeDate: z.string(),
 		lessonId: z.number().int(),
+	}),
+	answer: z.object({
+		id: z.number().int(),
+		solution: z.string(),
+		replyStatus: AnswerReplyStatusEnum,
+		sendDate: z.string(),
+		replyDesc: z.string().nullable(),
+		replyDate: z.string().nullable(),
+		grantedScore: z.string().nullable(),
+		taskId: z.number().int(),
+		studentId: z.number().int(),
 	}),
 });
 
