@@ -1,4 +1,4 @@
-import { Center, Divider, Flex, Group, HoverCard, Loader, rem } from '@mantine/core';
+import { Center, Divider, Flex, Group, HoverCard, Loader, Text, rem } from '@mantine/core';
 import { NavLink, useLocation, useParams } from 'react-router-dom';
 import classes from './Navbar.module.css';
 import UserPanel from '../UI/UserPanel';
@@ -88,10 +88,23 @@ interface LecturerNavbarProps {
 	};
 }
 function LecturerNavbar({ lecturerInfo }: LecturerNavbarProps) {
+	const { groups } = useLecturerStore();
+	const { pathname } = useLocation();
+	let { id } = useParams();
 	return (
 		<Flex justify='space-around' gap='xl' py='lg' align='center' mb={rem(60)}>
 			<Nav />
-			<UserPanel email={lecturerInfo.email} className={classes.logoutBtn} />
+			<Flex gap='xs' align='center'>
+				{pathname.includes('/dashboard/group/') && id && groups && (
+					<>
+						<Text c='dimmed' size='lg'>
+							{groups?.find(group => group.groupId === +id!)?.groupName}
+						</Text>
+						<Divider orientation='vertical' />
+					</>
+				)}
+				<UserPanel email={lecturerInfo.email} className={classes.logoutBtn} />
+			</Flex>
 		</Flex>
 	);
 }
