@@ -1,6 +1,16 @@
 import { useEffect, useRef } from 'react';
 import { useUpdateStudent } from '@/hooks/users/useUpdateStudent';
-import { Button, Center, Flex, Group, Loader, NumberInput, Stack, Text, TextInput } from '@mantine/core';
+import {
+	Button,
+	Center,
+	Flex,
+	Group,
+	Loader,
+	NumberInput,
+	Stack,
+	Text,
+	TextInput,
+} from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
 import {
 	IconCircleCheck,
@@ -24,7 +34,11 @@ interface EditStudentInfoModalInnerProps {
 	health: number;
 }
 
-function EditStudentInfoModal({ context, id, innerProps }: ContextModalProps<EditStudentInfoModalInnerProps>) {
+function EditStudentInfoModal({
+	context,
+	id,
+	innerProps,
+}: ContextModalProps<EditStudentInfoModalInnerProps>) {
 	const form = useForm({
 		validate: zodResolver(EditStudentInfoSchema),
 		initialValues: {
@@ -77,7 +91,8 @@ function EditStudentInfoModal({ context, id, innerProps }: ContextModalProps<Edi
 				<Flex direction='column' align='center' gap='md' mb='md'>
 					<IconCircleCheck size='3rem' color='var(--good-state-color)' />
 					<Text>
-						Student {form.getInputProps('firstName').value} {form.getInputProps('lastName').value} został&nbsp;
+						Student {form.getInputProps('firstName').value}{' '}
+						{form.getInputProps('lastName').value} został&nbsp;
 						<Text span fw={500} c='var(--mantine-primary-color)'>
 							zaktualizowany
 						</Text>
@@ -107,14 +122,24 @@ function EditStudentInfoModal({ context, id, innerProps }: ContextModalProps<Edi
 	return (
 		<form onSubmit={form.onSubmit(handleEditStudent)}>
 			<Stack gap='xs'>
-				<TextInput leftSection={<IconTag />} label='Imię' {...form.getInputProps('firstName')} />
-				<TextInput leftSection={<IconTag />} label='Nazwisko' {...form.getInputProps('lastName')} />
+				<TextInput
+					leftSection={<IconTag />}
+					label='Imię'
+					{...form.getInputProps('firstName')}
+				/>
+				<TextInput
+					leftSection={<IconTag />}
+					label='Nazwisko'
+					{...form.getInputProps('lastName')}
+				/>
 				<NumberInput
 					leftSection={<IconHash />}
 					label='Numer indeksu'
 					hideControls
 					allowNegative={false}
 					allowDecimal={false}
+					minLength={6}
+					maxLength={6}
 					description='Zmiana numeru indeksu spowoduje aktualizację adresu e-mail studenta'
 					{...form.getInputProps('indexNumber')}
 				/>
@@ -133,6 +158,7 @@ function EditStudentInfoModal({ context, id, innerProps }: ContextModalProps<Edi
 					leftSectionProps={{ style: { color: 'var(--heart-color)' } }}
 					min={0}
 					max={3}
+					maxLength={1}
 					allowNegative={false}
 					allowDecimal={false}
 					{...form.getInputProps('health')}

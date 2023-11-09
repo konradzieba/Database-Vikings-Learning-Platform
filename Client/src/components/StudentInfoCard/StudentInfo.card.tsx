@@ -6,6 +6,7 @@ import {
 	IconClock,
 	IconCoins,
 	IconDots,
+	IconKey,
 	IconReplace,
 	IconUserEdit,
 	IconUserMinus,
@@ -39,6 +40,22 @@ function StudentInfoCard({
 }: StudentInfoCardProps) {
 	const { id: groupId } = useParams();
 	const { refetch } = useGetStudentsFromGroup(+groupId!);
+
+	const handleOpenRecoverPasswordModal = () => {
+		modals.openContextModal({
+			modal: 'restoreDefaultPassword',
+			title: 'Przywróć domyślne hasło',
+			size: 'md',
+			closeOnClickOutside: false,
+			onClose: () => refetch(),
+			innerProps: {
+				studentId,
+				fullName: `${firstName} ${lastName}`,
+				modalBody: `Czy na pewno chcesz zresetować hasło studentowi ${firstName} ${lastName}?`,
+			},
+		});
+	};
+
 	const handleOpenGroupChangeModal = () => {
 		modals.openContextModal({
 			modal: 'changeStudentGroup',
@@ -87,7 +104,7 @@ function StudentInfoCard({
 			innerProps: {
 				fullName: `${firstName} ${lastName}`,
 				userId: userId,
-				modalBody: `Czy na pewno chcesz usunąć studenta, ${firstName} ${lastName}?`,
+				modalBody: `Czy na pewno chcesz usunąć studenta ${firstName} ${lastName}?`,
 			},
 		});
 	};
@@ -142,6 +159,12 @@ function StudentInfoCard({
 						Przenieś
 					</Menu.Item>
 					<Menu.Label>Student</Menu.Label>
+					<Menu.Item
+						leftSection={<IconKey size='1.3rem' />}
+						onClick={handleOpenRecoverPasswordModal}
+					>
+						Przywróć hasło
+					</Menu.Item>
 					<Menu.Item
 						leftSection={<IconUserEdit size='1.3rem' />}
 						onClick={handleOpenEditStudentModal}

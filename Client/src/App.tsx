@@ -21,18 +21,25 @@ import PreviewStudentAnswerModal from './modals/PreviewStudentAnswer.modal';
 import ChangeDefaultPasswordModal from './modals/ChangeDefaultPassword.modal';
 import CreateGroupModal from './modals/CreateGroup.modal';
 import SendTaskAnswerModal from './modals/SendTaskAnswer.modal';
+import RestoreDefaultPasswordModal from './modals/RestoreDefaultPassword.modal';
+
 
 export default function App() {
 	dayjs.locale('pl');
 	return (
 		<QueryClientProvider client={queryClient}>
 			<DatesProvider settings={{ locale: 'pl' }}>
-				<MantineProvider theme={{ ...theme }} cssVariablesResolver={resolver} defaultColorScheme='dark'>
+				<MantineProvider
+					theme={{ ...theme }}
+					cssVariablesResolver={resolver}
+					defaultColorScheme='dark'
+				>
 					<ModalsProvider
 						modals={{
 							sessionExpired: SessionExpiredModal,
 							addTask: AddTaskModal,
 							changeStudentGroup: StudentGroupChangeModal,
+							restoreDefaultPassword: RestoreDefaultPasswordModal,
 							editStudentInfo: EditStudentInfoModal,
 							deleteStudent: DeleteStudentModal,
 							previewStudentAnswer: PreviewStudentAnswerModal,
@@ -41,7 +48,8 @@ export default function App() {
 							sendTaskAnswer: SendTaskAnswerModal,
 						}}
 						labels={{ confirm: 'Prześlij', cancel: 'Anuluj' }}
-						modalProps={{ overlayProps: { blur: 2 }, yOffset: rem(100) }}>
+						modalProps={{ overlayProps: { blur: 2 }, yOffset: rem(100) }}
+					>
 						<Router />
 					</ModalsProvider>
 				</MantineProvider>

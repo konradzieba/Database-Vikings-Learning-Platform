@@ -1,6 +1,7 @@
 import z from 'zod';
 
-const onlyLettersRegex = /^[a-zA-Z]+$/;
+const onlyLettersRegex =
+	/^[AaĄąBbCcĆćDdEeĘęFfGgHhIiJjKkLlŁłMmNnŃńOoÓóPpRrSsŚśTtUuWwYyZzŹźŻż]+$/;
 
 export const EditStudentInfoSchema = z.object({
 	firstName: z
