@@ -2,6 +2,7 @@ import { useSendAnswerMutation } from '@/hooks/answer/useSendAnswerMutation';
 import { useGetLessonTaskById } from '@/hooks/tasks/useGetLessonTaskById';
 import { Button, Center, Flex, Group, Loader, Text } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
+import { IconCircleCheck, IconCircleX } from '@tabler/icons-react';
 
 function SendTaskAnswerModal({
 	context,
@@ -14,7 +15,7 @@ function SendTaskAnswerModal({
 	modalBody: string;
 	lessonId: number;
 }>) {
-	const { mutate: sendAnswerMutation, isPending, isSuccess } = useSendAnswerMutation();
+	const { mutate: sendAnswerMutation, isPending, isSuccess, isError } = useSendAnswerMutation();
 	const { refetch } = useGetLessonTaskById(innerProps.lessonId, innerProps.taskId);
 
 	const handleSendAnswer = () => {
@@ -46,14 +47,27 @@ function SendTaskAnswerModal({
 	if (isSuccess) {
 		return (
 			<>
-				<Flex align='center' justify='flex-start' mih={90}>
-					<Text>Zadanie zostało przesłane od oceny!</Text>
+				<Flex direction='column' align='center' gap='md' mb='md'>
+					<IconCircleCheck size='3rem' color='var(--good-state-color)' />
+					<Text>Zadanie zostało przesłane do oceny!</Text>
 				</Flex>
 				<Button fullWidth onClick={handleCloseModal}>
 					Zamknij
 				</Button>
 			</>
 		);
+	}
+
+	if (isError) {
+		<>
+			<Flex direction='column' align='center' gap='md' mb='md'>
+				<IconCircleX size='3rem' color='var(--bad-state-color)' />
+				<Text>Wystąpił problem podczas przesyłania zadania.</Text>
+			</Flex>
+			<Button fullWidth onClick={handleCloseModal}>
+				Rozumiem
+			</Button>
+		</>;
 	}
 
 	return (

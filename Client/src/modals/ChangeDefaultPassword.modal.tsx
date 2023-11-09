@@ -3,7 +3,7 @@ import { changeDefaultPasswordSchema } from '@/components/UI/ChangeDefaultPasswo
 import PasswordStrength from '@/components/UI/PasswordStrength';
 import { Button, Stack, Text } from '@mantine/core';
 import { useForm, zodResolver } from '@mantine/form';
-import { ContextModalProps, modals } from '@mantine/modals';
+import { ContextModalProps } from '@mantine/modals';
 import { useChangeDefaultPasswordMutation } from '@/hooks/users/useChangeDefaultPasswordMutation';
 
 function ChangeDefaultPasswordModal({ innerProps }: ContextModalProps<{ modalBody: string }>) {

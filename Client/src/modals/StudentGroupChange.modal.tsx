@@ -3,7 +3,7 @@ import { useLecturerStore } from '@/utils/store';
 import { Box, Button, Center, Flex, Group, Loader, Select, Text } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
 import { useChangeStudentGroupMutation } from '@/hooks/students/useChangeStudentGroupMutation';
-import { IconListDetails } from '@tabler/icons-react';
+import { IconCircleCheck, IconCircleX, IconListDetails } from '@tabler/icons-react';
 
 function StudentGroupChangeModal({
 	context,
@@ -29,7 +29,12 @@ function StudentGroupChangeModal({
 
 	const newGroupId = selectGroupData?.find(group => group.label === selectedGroup)?.id;
 
-	const { mutate: changeStudentGroup, isPending, isSuccess } = useChangeStudentGroupMutation(studentId!, newGroupId!);
+	const {
+		mutate: changeStudentGroup,
+		isPending,
+		isSuccess,
+		isError,
+	} = useChangeStudentGroupMutation(studentId!, newGroupId!);
 
 	const handleCloseModal = () => {
 		context.closeModal(id);
@@ -53,7 +58,8 @@ function StudentGroupChangeModal({
 	if (isSuccess) {
 		return (
 			<>
-				<Flex align='center' justify='center' mih={90}>
+				<Flex direction='column' align='center' gap='md' mb='md'>
+					<IconCircleCheck size='3rem' color='var(--good-state-color)' />
 					<Text>
 						Student {innerProps.fullName} został przeniesiony do grupy&nbsp;
 						<Text span fw={500} c='var(--mantine-primary-color)'>
@@ -66,6 +72,18 @@ function StudentGroupChangeModal({
 				</Button>
 			</>
 		);
+	}
+
+	if (isError) {
+		<>
+			<Flex direction='column' align='center' gap='md' mb='md'>
+				<IconCircleX size='3rem' color='var(--bad-state-color)' />
+				<Text>Wystąpił problem podczas przenoszenia studenta.</Text>
+			</Flex>
+			<Button fullWidth onClick={handleCloseModal}>
+				Rozumiem
+			</Button>
+		</>;
 	}
 
 	return (

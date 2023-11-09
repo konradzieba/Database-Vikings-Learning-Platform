@@ -1,8 +1,16 @@
 import { useEffect, useRef } from 'react';
 import { useUpdateStudent } from '@/hooks/users/useUpdateStudent';
-import { Button, Center, Group, Loader, NumberInput, Stack, Text, TextInput } from '@mantine/core';
+import { Button, Center, Flex, Group, Loader, NumberInput, Stack, Text, TextInput } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
-import { IconCoins, IconHash, IconHeartFilled, IconId, IconTag } from '@tabler/icons-react';
+import {
+	IconCircleCheck,
+	IconCircleX,
+	IconCoins,
+	IconHash,
+	IconHeartFilled,
+	IconId,
+	IconTag,
+} from '@tabler/icons-react';
 import { useForm, zodResolver } from '@mantine/form';
 import { EditStudentInfoSchema } from './EditStudentInfo.schema';
 
@@ -36,6 +44,7 @@ function EditStudentInfoModal({ context, id, innerProps }: ContextModalProps<Edi
 		mutate: changeStudentInfo,
 		isPending,
 		isSuccess,
+		isError,
 	} = useUpdateStudent(innerProps.studentId!, {
 		firstName: form.values.firstName,
 		lastName: form.values.lastName,
@@ -43,6 +52,11 @@ function EditStudentInfoModal({ context, id, innerProps }: ContextModalProps<Edi
 		score: +form.values.score,
 		health: +form.values.health,
 	});
+
+	const handleCloseModal = () => {
+		context.closeModal(id);
+		modals.closeAll();
+	};
 
 	const handleEditStudent = () => {
 		form.validate();
@@ -60,12 +74,35 @@ function EditStudentInfoModal({ context, id, innerProps }: ContextModalProps<Edi
 	if (isSuccess) {
 		return (
 			<>
-				<Center h={120}>
-					<Text>Student został zaktualizowany</Text>
-				</Center>
+				<Flex direction='column' align='center' gap='md' mb='md'>
+					<IconCircleCheck size='3rem' color='var(--good-state-color)' />
+					<Text>
+						Student {form.getInputProps('firstName').value} {form.getInputProps('lastName').value} został&nbsp;
+						<Text span fw={500} c='var(--mantine-primary-color)'>
+							zaktualizowany
+						</Text>
+						.
+					</Text>
+				</Flex>
+				<Button fullWidth onClick={handleCloseModal}>
+					Rozumiem
+				</Button>
 			</>
 		);
 	}
+
+	if (isError)
+		return (
+			<>
+				<Flex direction='column' align='center' gap='md' mb='md'>
+					<IconCircleX size='3rem' color='var(--bad-state-color)' />
+					<Text>Wystąpił problem podczas aktualizowania danych studenta.</Text>
+				</Flex>
+				<Button fullWidth onClick={handleCloseModal}>
+					Rozumiem
+				</Button>
+			</>
+		);
 
 	return (
 		<form onSubmit={form.onSubmit(handleEditStudent)}>
