@@ -3,6 +3,7 @@ import { useLecturerStore } from '@/utils/store';
 import { Box, Button, Center, Flex, Group, Loader, Select, Text } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
 import { useChangeStudentGroupMutation } from '@/hooks/students/useChangeStudentGroupMutation';
+import { IconListDetails } from '@tabler/icons-react';
 
 function StudentGroupChangeModal({
 	context,
@@ -76,6 +77,7 @@ function StudentGroupChangeModal({
 				</Text>
 			</Text>
 			<Select
+				leftSection={<IconListDetails />}
 				value={selectedGroup}
 				label='Wybierz grupę'
 				placeholder='Grupa...'

@@ -1,7 +1,7 @@
 import { Box, Progress, PasswordInput, Group, Text, Center } from '@mantine/core';
 import { UseFormReturnType } from '@mantine/form';
 
-import { IconCheck, IconX } from '@tabler/icons-react';
+import { IconCheck, IconLockOpen, IconX } from '@tabler/icons-react';
 
 function PasswordRequirement({ meets, label }: { meets: boolean; label: string }) {
 	return (
@@ -69,7 +69,7 @@ export function PasswordStrength({ form }: PasswordStrengthProps) {
 
 	return (
 		<Box>
-			<PasswordInput placeholder='Nowe hasło' {...form.getInputProps('password')} />
+			<PasswordInput leftSection={<IconLockOpen />} placeholder='Nowe hasło' {...form.getInputProps('password')} />
 
 			<Group gap={5} grow mt='xs' mb='md'>
 				{bars}

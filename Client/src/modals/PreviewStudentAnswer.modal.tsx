@@ -1,17 +1,7 @@
-import {
-	Button,
-	Divider,
-	Flex,
-	Group,
-	NumberInput,
-	ScrollArea,
-	Select,
-	Text,
-	Textarea,
-} from '@mantine/core';
+import { Button, Divider, Flex, Group, NumberInput, ScrollArea, Select, Text, Textarea } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
-import { IconCoins } from '@tabler/icons-react';
-import { CodeHighlight, CodeHighlightTabs } from '@mantine/code-highlight';
+import { IconBlockquote, IconCoins, IconListDetails } from '@tabler/icons-react';
+import { CodeHighlight } from '@mantine/code-highlight';
 
 interface PreviewStudentAnswerModalProps {
 	studentFullName: string;
@@ -19,11 +9,7 @@ interface PreviewStudentAnswerModalProps {
 	studentAnswer: string;
 }
 
-function PreviewStudentAnswerModal({
-	context,
-	id,
-	innerProps,
-}: ContextModalProps<PreviewStudentAnswerModalProps>) {
+function PreviewStudentAnswerModal({ context, id, innerProps }: ContextModalProps<PreviewStudentAnswerModalProps>) {
 	const handleEvaluateAnswer = () => {
 		context.closeModal(id);
 		modals.closeAll();
@@ -40,18 +26,15 @@ function PreviewStudentAnswerModal({
 				{innerProps.studentFullName},&nbsp;{innerProps.studentIndex}
 			</Text>
 
-			<ScrollArea h={250} type='auto' offsetScrollbars>
-				<CodeHighlight
-					code={innerProps.studentAnswer}
-					language='sql'
-					withCopyButton={false}
-				/>
-			</ScrollArea>
+			<ScrollArea.Autosize mah={250} type='auto' offsetScrollbars>
+				<CodeHighlight code={innerProps.studentAnswer} language='sql' withCopyButton={false} />
+			</ScrollArea.Autosize>
 
 			<Divider my='md' />
 
 			<Flex justify='space-between' gap='md'>
 				<Select
+					leftSection={<IconListDetails />}
 					w='50%'
 					label='Ocena zadania'
 					placeholder='Ocena zadania...'
@@ -72,6 +55,8 @@ function PreviewStudentAnswerModal({
 			</Flex>
 
 			<Textarea
+				leftSection={<IconBlockquote />}
+				leftSectionProps={{ style: { alignItems: 'flex-start', marginTop: '3px' } }}
 				w='100%'
 				my='sm'
 				label='Komentarz do zadania'
