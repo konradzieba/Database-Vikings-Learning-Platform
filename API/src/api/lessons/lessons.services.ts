@@ -210,35 +210,6 @@ export function findLessonById(id: Lesson['id']) {
   });
 }
 
-export function findCompletedTaskByStudent(ids: Answer['id'][]) {
-  return db.answer.findMany({
-    where: {
-      id: {
-        in: ids,
-      },
-    },
-    select: {
-      taskId: true,
-    },
-  });
-}
-
-export function findStudentById(id: User['id']) {
-  return db.student.findUnique({
-    where: {
-      userId: id,
-    },
-  });
-}
-
-export function findGroupById(id: Group['id']) {
-  return db.group.findUnique({
-    where: {
-      id,
-    },
-  });
-}
-
 export function updateLesson(
   id: Lesson['id'],
   lesson: Pick<Prisma.LessonUpdateInput, 'number' | 'image'>

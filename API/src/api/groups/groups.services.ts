@@ -99,15 +99,6 @@ export function changeStudentGroup(
 }
 
 
-
-export function findLecturerById(id: Lecturer['id']) {
-  return db.lecturer.findUnique({
-    where: {
-      id,
-    },
-  });
-}
-
 export function findGroupByName(name: Group['name']) {
   return db.group.findUnique({
     where: {

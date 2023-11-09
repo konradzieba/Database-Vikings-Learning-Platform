@@ -57,6 +57,20 @@ export function findAnswerByTaskIdAndStudentId(
   });
 }
 
+export function findCompletedTaskByStudent(ids: Answer['id'][]) {
+  return db.answer.findMany({
+    where: {
+      id: {
+        in: ids,
+      },
+    },
+    select: {
+      taskId: true,
+    },
+  });
+}
+
+
 export function answerReply(
   id: Answer['id'],
   replyStatus: Answer['replyStatus'],

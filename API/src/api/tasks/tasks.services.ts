@@ -25,13 +25,6 @@ export function findTaskById(id: Task['id']) {
   });
 }
 
-export function findLessonById(id: Lesson['id']) {
-  return db.lesson.findUnique({
-    where: {
-      id,
-    },
-  });
-}
 
 export function createTask(task: Prisma.TaskCreateInput) {
   return db.task.create({

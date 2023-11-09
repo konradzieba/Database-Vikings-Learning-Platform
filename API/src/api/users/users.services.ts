@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt';
 import { db } from '../../db';
-import type { User, Prisma, Student } from '@prisma/client';
+import type { User, Prisma, Student, Lecturer } from '@prisma/client';
 import { UpdateStudentInput } from './users.schemas';
 
 export function findUserById(id: User['id']) {
@@ -26,7 +26,7 @@ export function findUserByEmail(email: string) {
   });
 }
 
-export function findStudentByUserId(userId: number) {
+export function findStudentByUserId(userId: User['id']) {
   return db.student.findUnique({
     where: {
       userId: userId,
@@ -34,6 +34,13 @@ export function findStudentByUserId(userId: number) {
   });
 }
 
+export function findLecturerById(id: Lecturer['id']) {
+  return db.lecturer.findUnique({
+    where: {
+      id,
+    },
+  });
+}
 // export function findStudentGroup(userId: number) {
 //   return db.student.
 // }

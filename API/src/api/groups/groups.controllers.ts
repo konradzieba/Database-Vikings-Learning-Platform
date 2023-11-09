@@ -14,7 +14,7 @@ export async function getGroups(
   try {
     const { id } = req.params;
 
-    const existingLecturer = await GroupServices.findLecturerById(+id);
+    const existingLecturer = await UserServices.findLecturerById(+id);
 
     if (!existingLecturer) {
       res.status(404);

@@ -6,6 +6,7 @@ import MessageResponse from 'interfaces/MessageResponse';
 import * as TaskServices from './tasks.services';
 import * as LessonServices from '../lessons/lessons.services';
 import * as AnswersServices from '../answers/answers.services';
+import * as UserServices from '../users/users.services'
 import { ParsedToken } from '../../../typings/token';
 
 export async function getLessonTaksById(
@@ -17,16 +18,16 @@ export async function getLessonTaksById(
     const { id, lessonId } = req.params;
     const parsedToken: ParsedToken = req.user;
 
-    const student = await LessonServices.findStudentById(parsedToken.userId);
+    const student = await UserServices.findStudentByUserId(parsedToken.userId);
 
     if (!student) {
       res.status(404);
       throw new Error('Student with given userId does not exist.');
     }
     const tasksWithStudentAnswers =
-      await LessonServices.findCompletedTaskByStudent(student.answersId);
+      await AnswersServices.findCompletedTaskByStudent(student.answersId);
 
-    const existingLesson = await TaskServices.findLessonById(+lessonId);
+    const existingLesson = await LessonServices.findLessonById(+lessonId);
 
     if (!existingLesson) {
       res.status(404);

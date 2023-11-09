@@ -2,6 +2,9 @@ import { NextFunction, Request, Response } from 'express';
 import MessageResponse from 'interfaces/MessageResponse';
 import * as LessonServices from './lessons.services';
 import * as LessonSchemas from './lessons.schemas';
+import * as UserServices from '../users/users.services';
+import * as GroupServices from '../groups/groups.services';
+import * as AnswerServices from '../answers/answers.services';
 import {
   ParamsWithId,
   ParamsWithLessonId,
@@ -16,7 +19,7 @@ export async function getLessonsByGroupId(
   try {
     const { id } = req.params;
 
-    const existingGroup = await LessonServices.findGroupById(+id);
+    const existingGroup = await GroupServices.findGroupById(+id);
 
     if (!existingGroup) {
       res.status(404);
@@ -40,7 +43,7 @@ export async function getTasksByLessonId(
     const { id } = req.params;
     const parsedToken: ParsedToken = req.user;
 
-    const student = await LessonServices.findStudentById(parsedToken.userId);
+    const student = await UserServices.findStudentByUserId(parsedToken.userId);
 
     if (!student) {
       res.status(404);
@@ -48,7 +51,7 @@ export async function getTasksByLessonId(
     }
 
     const tasksWithStudentAnswers =
-      await LessonServices.findCompletedTaskByStudent(student.answersId);
+      await AnswerServices.findCompletedTaskByStudent(student.answersId);
 
     const existingLesson = await LessonServices.findLessonById(+id);
 
@@ -60,8 +63,8 @@ export async function getTasksByLessonId(
     const tasks = await LessonServices.getTasksByLessonId(+id);
 
     const taskReturn = tasks.map((task) => {
-      const taskId = task.id
-      if (tasksWithStudentAnswers.some(answer => answer.taskId === taskId)) {
+      const taskId = task.id;
+      if (tasksWithStudentAnswers.some((answer) => answer.taskId === taskId)) {
         return { ...task, answerSend: true };
       } else {
         return { ...task, answerSend: false };
@@ -87,14 +90,14 @@ export async function getStudentLessonsInfo(
   try {
     const parsedToken: ParsedToken = req.user;
 
-    const student = await LessonServices.findStudentById(parsedToken.userId);
+    const student = await UserServices.findStudentByUserId(parsedToken.userId);
 
     if (!student) {
       res.status(404);
       throw new Error('User not found');
     }
 
-    const group = await LessonServices.findGroupById(student.groupId);
+    const group = await GroupServices.findGroupById(student.groupId);
 
     if (!group) {
       res.status(404);
@@ -123,7 +126,7 @@ export async function getLessonInfoByGroupAndLessonId(
   try {
     const { id: groupId, lessonId } = req.params;
 
-    const existingGroup = await LessonServices.findGroupById(+groupId);
+    const existingGroup = await GroupServices.findGroupById(+groupId);
 
     if (!existingGroup) {
       res.status(404);
