@@ -2,6 +2,7 @@ import * as bcrypt from 'bcrypt';
 import { db } from '../../db';
 import type { User, Prisma, Student, Lecturer } from '@prisma/client';
 import { UpdateStudentInput } from './users.schemas';
+import { generatePasswordByCredentials } from '../../utils/generatePassword';
 
 export function findUserById(id: User['id']) {
   return db.user.findUnique({
@@ -162,6 +163,40 @@ export async function updateStudent(
       indexNumber: data.indexNumber,
       score: data.score,
       health: data.health,
+    },
+  });
+}
+
+export async function restoreDefaultPassword(id: Student['id']) {
+  const student = await db.student.findUnique({
+    where: { id },
+  });
+  const user = await db.user.findUnique({
+    where: { id: student?.userId },
+  });
+
+  if (!student || !user) {
+    return null;
+  }
+
+  await db.user.update({
+    where: { id: user.id },
+    data: {
+      password: bcrypt.hashSync(
+        generatePasswordByCredentials(
+          user.firstName,
+          user.lastName,
+          student.indexNumber
+        ),
+        12
+      ),
+    },
+  });
+
+  await db.student.update({
+    where: { id: student.id },
+    data: {
+      isPasswordChanged: false,
     },
   });
 }

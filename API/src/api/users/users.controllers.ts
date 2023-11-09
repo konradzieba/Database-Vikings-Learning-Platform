@@ -158,6 +158,31 @@ export async function updateStudent(
   }
 }
 
+export async function restoreDefaultPassword(
+  req: Request<ParamsWithId>,
+  res: Response<MessageResponse>,
+  next: NextFunction
+) {
+  try {
+    const { id: studentId } = req.params;
+
+    const student = await UserServices.findStudentByStudentId(+studentId);
+
+    if (!student) {
+      res.status(404);
+      throw new Error(`Student with given id doesn't exists.`);
+    }
+
+    await UserServices.restoreDefaultPassword(+studentId);
+
+    res.json({
+      message: `Password for student with indexNumber: ${student.indexNumber} was restored successfully.`,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function deleteUser(
   req: Request<ParamsWithId>,
   res: Response<MessageResponse>,

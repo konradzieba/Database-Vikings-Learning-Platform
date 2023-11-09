@@ -48,6 +48,17 @@ router.patch(
   UserController.updateStudent
 );
 
+router.patch(
+  '/restoreDefaultPassword/:id',
+  validateRequestAndCheckRole(
+    {
+      params: paramsWithIdSchema,
+    },
+    EnumRole.LECTURER
+  ),
+  UserController.restoreDefaultPassword
+);
+
 router.delete(
   '/deleteUser/:id',
   validateRequestAndCheckRole(
