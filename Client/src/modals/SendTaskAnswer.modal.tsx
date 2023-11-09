@@ -1,4 +1,5 @@
 import { useSendAnswerMutation } from '@/hooks/answer/useSendAnswerMutation';
+import { useGetLessonTaskById } from '@/hooks/tasks/useGetLessonTaskById';
 import { Button, Center, Flex, Group, Loader, Text } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
 
@@ -6,8 +7,15 @@ function SendTaskAnswerModal({
 	context,
 	id,
 	innerProps,
-}: ContextModalProps<{ answerContent: string; taskId: number; studentId: number; modalBody: string }>) {
+}: ContextModalProps<{
+	answerContent: string;
+	taskId: number;
+	studentId: number;
+	modalBody: string;
+	lessonId: number;
+}>) {
 	const { mutate: sendAnswerMutation, isPending, isSuccess } = useSendAnswerMutation();
+	const { refetch } = useGetLessonTaskById(innerProps.lessonId, innerProps.taskId);
 
 	const handleSendAnswer = () => {
 		if (!innerProps.answerContent) {
@@ -22,6 +30,7 @@ function SendTaskAnswerModal({
 	};
 
 	const handleCloseModal = () => {
+		refetch();
 		context.closeModal(id);
 		modals.closeAll();
 	};

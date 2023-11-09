@@ -1,5 +1,5 @@
 import z from 'zod';
-import { UserRoleEnum } from './Enums';
+import { AnswerReplyStatusEnum, UserRoleEnum } from './Enums';
 
 const MessageResponseSchema = z.object({
 	message: z.string(),
@@ -163,6 +163,7 @@ const getTasksByLessonIdSchema = z.object({
 			number: z.number().int(),
 			question: z.string(),
 			closeDate: z.string(),
+			answerSend: z.boolean(),
 		})
 	),
 });
@@ -178,6 +179,17 @@ const getLessonTaskByIdSchema = z.object({
 		closeDate: z.string(),
 		lessonId: z.number().int(),
 	}),
+	answer: z.object({
+		id: z.number().int(),
+		solution: z.string(),
+		replyStatus: AnswerReplyStatusEnum,
+		sendDate: z.string(),
+		replyDesc: z.string().nullable(),
+		replyDate: z.string().nullable(),
+		grantedScore: z.string().nullable(),
+		taskId: z.number().int(),
+		studentId: z.number().int(),
+	}),
 });
 
 export type TMessageResponse = z.infer<typeof MessageResponseSchema>;
@@ -185,16 +197,10 @@ export type TLoginResponse = z.infer<typeof LoginResponseSchema>;
 export type TLecturerInfo = z.infer<typeof LecturerInfoSchema>;
 export type TStudentInfo = z.infer<typeof StudentInfoSchema>;
 export type TMeResponse = z.infer<typeof MeResponseSchema>;
-export type TGetGroupsByLecturerId = z.infer<
-	typeof GetGroupsByLecturerIdSchema
->;
+export type TGetGroupsByLecturerId = z.infer<typeof GetGroupsByLecturerIdSchema>;
 export type TGetStudentsFromGroup = z.infer<typeof GetStudentsFromGroupSchema>;
 export type TGetLessonsByGroupId = z.infer<typeof GetLessonsByGroupIdSchema>;
-export type TGetLessonInfoByGroupAndLessonId = z.infer<
-	typeof getLessonInfoByGroupAndLessonIdSchema
->;
-export type TGetStudentLessonsInfo = z.infer<
-	typeof getStudentLessonsInfoSchema
->;
+export type TGetLessonInfoByGroupAndLessonId = z.infer<typeof getLessonInfoByGroupAndLessonIdSchema>;
+export type TGetStudentLessonsInfo = z.infer<typeof getStudentLessonsInfoSchema>;
 export type TGetTasksByLessonId = z.infer<typeof getTasksByLessonIdSchema>;
 export type TGetLessonTaskById = z.infer<typeof getLessonTaskByIdSchema>;

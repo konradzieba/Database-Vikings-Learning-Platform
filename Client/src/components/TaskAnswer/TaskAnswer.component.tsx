@@ -1,7 +1,6 @@
 import { FormEvent, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import { useSendAnswerMutation } from '@/hooks/answer/useSendAnswerMutation';
-import { Flex, Group, Overlay, ScrollArea, Stack, Text, Textarea, ThemeIcon, Title } from '@mantine/core';
+import { Flex, Group, ScrollArea, Stack, Text, Textarea, ThemeIcon, Title } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { IconClockHour1, IconClockHour11, IconCode } from '@tabler/icons-react';
 import DateTimeDisplay from '../UI/DateTimeDisplay';
@@ -13,9 +12,12 @@ import { useStudentStore } from '@/utils/store';
 import dayjs from 'dayjs';
 
 interface TaskAnswerFormProps {
+	lessonId: number;
 	taskId: number;
 	studentId: number;
 	isTaskExpired: boolean;
+	solution: string;
+	answerDate: string;
 }
 
 interface TaskAnswerHeaderProps {
@@ -42,11 +44,11 @@ function TaskAnswerHeader({ taskNumber, lessonNumber, taskQuestion }: TaskAnswer
 	);
 }
 
-function TaskAnswerForm({ taskId, studentId, isTaskExpired }: TaskAnswerFormProps) {
+function TaskAnswerForm({ lessonId, taskId, studentId, isTaskExpired, answerDate, solution }: TaskAnswerFormProps) {
 	const answerTextareaRef = useRef<HTMLTextAreaElement>(null);
-
 	const openConfirmAnswerModal = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
+
 		modals.openContextModal({
 			modal: 'sendTaskAnswer',
 			title: 'Potwierdź przesłanie odpowiedzi',
@@ -56,6 +58,7 @@ function TaskAnswerForm({ taskId, studentId, isTaskExpired }: TaskAnswerFormProp
 				answerContent: answerTextareaRef.current?.value,
 				taskId: taskId,
 				studentId: studentId,
+				lessonId: lessonId,
 				modalBody: 'Czy na pewno chcesz wysłać odpowiedź?',
 			},
 		});
@@ -68,24 +71,45 @@ function TaskAnswerForm({ taskId, studentId, isTaskExpired }: TaskAnswerFormProp
 					<ThemeIcon size='lg' variant='transparent'>
 						<IconCode size={36} />
 					</ThemeIcon>
-					<Textarea
-						disabled={isTaskExpired}
-						ref={answerTextareaRef}
-						w='100%'
-						size='md'
-						rows={8}
-						placeholder='Twoja odpowiedź...'
-						className={classes.taskAnswerTextArea}
-					/>
+					{!solution ? (
+						<Textarea
+							disabled={isTaskExpired}
+							ref={answerTextareaRef}
+							w='100%'
+							size='md'
+							rows={8}
+							placeholder='Twoja odpowiedź...'
+							className={classes.taskAnswerTextArea}
+						/>
+					) : (
+						<Textarea
+							disabled
+							ref={answerTextareaRef}
+							w='100%'
+							size='md'
+							rows={8}
+							placeholder={solution}
+							className={classes.taskAnswerTextArea}
+						/>
+					)}
 				</Group>
-				{isTaskExpired ? (
+				{isTaskExpired && (
 					<Group className={classes.taskAnswerPrimaryButton}>
 						<Text c='dimmed'>Czas na przesłanie zadania się zakończył</Text>
 						<PrimaryButton maw={300} disabled>
 							Prześlij
 						</PrimaryButton>
 					</Group>
-				) : (
+				)}
+				{answerDate && (
+					<Group className={classes.taskAnswerPrimaryButton}>
+						<Text c='dimmed'>Zadanie zostało przesłane</Text>
+						<PrimaryButton maw={300} disabled>
+							Prześlij
+						</PrimaryButton>
+					</Group>
+				)}
+				{!isTaskExpired && !answerDate && (
 					<PrimaryButton type='submit' maw={300} className={classes.taskAnswerPrimaryButton}>
 						Prześlij
 					</PrimaryButton>
@@ -99,7 +123,6 @@ function TaskAnswer() {
 	const { lessonId, taskId } = useParams();
 	const { studentData } = useStudentStore();
 	const { data: LessonTask, isPending } = useGetLessonTaskById(+lessonId!, +taskId!);
-
 	const isTaskExpired = dayjs(dayjs().toDate()).isAfter(LessonTask?.taskInfo.closeDate, 'minutes');
 
 	if (isPending) {
@@ -115,23 +138,37 @@ function TaskAnswer() {
 					taskQuestion={LessonTask?.taskInfo.question!}
 				/>
 				<TaskAnswerForm
+					lessonId={+lessonId!}
 					taskId={LessonTask?.taskInfo.id!}
 					studentId={studentData.studentId!}
 					isTaskExpired={isTaskExpired}
+					answerDate={LessonTask?.answer.sendDate!}
+					solution={LessonTask?.answer.solution!}
 				/>
 			</Stack>
-			<Group gap='lg' className={classes.taskAnswerDateDisplayGroup}>
-				<DateTimeDisplay
-					title='Data rozpoczęcia'
-					icon={<IconClockHour1 size={20} />}
-					date={LessonTask?.taskInfo.openDate!}
-				/>
-				<DateTimeDisplay
-					title='Data zakończenia'
-					icon={<IconClockHour11 size={20} />}
-					date={LessonTask?.taskInfo.closeDate!}
-				/>
-			</Group>
+			<Stack>
+				<Group gap='lg' className={classes.taskAnswerDateDisplayGroup}>
+					<DateTimeDisplay
+						title='Data rozpoczęcia'
+						icon={<IconClockHour1 size={20} />}
+						date={LessonTask?.taskInfo.openDate!}
+					/>
+					<DateTimeDisplay
+						title='Data zakończenia'
+						icon={<IconClockHour11 size={20} />}
+						date={LessonTask?.taskInfo.closeDate!}
+					/>
+				</Group>
+				{LessonTask?.answer.sendDate && (
+					<Group gap='lg' className={classes.taskAnswerDateDisplayGroup} justify='flex-end'>
+						<DateTimeDisplay
+							title='Data przesłania'
+							icon={<IconClockHour1 size={20} />}
+							date={LessonTask.answer.sendDate}
+						/>
+					</Group>
+				)}
+			</Stack>
 		</Flex>
 	);
 }

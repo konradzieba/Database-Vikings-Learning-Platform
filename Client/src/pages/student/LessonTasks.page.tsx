@@ -38,6 +38,7 @@ function LessonTasksPage() {
 								taskNumber={task.number}
 								taskQuestion={task.question}
 								closeDate={task.closeDate}
+								answerSend={task.answerSend}
 							/>
 						))}
 					</Flex>
