@@ -1,15 +1,4 @@
-import {
-	Accordion,
-	Badge,
-	Box,
-	Divider,
-	Flex,
-	Group,
-	Stack,
-	Text,
-	ThemeIcon,
-	rem,
-} from '@mantine/core';
+import { Accordion, Badge, Box, Divider, Flex, Group, Stack, Text, Textarea, ThemeIcon, rem } from '@mantine/core';
 import classes from './StudentTask.accordion.module.css';
 import { IconBlockquote, IconChevronDown, IconCode, IconCoins } from '@tabler/icons-react';
 import { AnswerReplyStatusEnum } from '@/types/Enums';
@@ -105,21 +94,35 @@ function StudentTaskAccordion({ tasks }: StudentTaskAccordionProps) {
 			<Accordion.Panel>
 				<Divider color='#a6a6a6' />
 				<Stack gap='lg' mx='auto'>
-					<Group mt='sm'>
-						<ThemeIcon variant='transparent' size='lg'>
-							<IconCode />
-						</ThemeIcon>
-						<Box w='90%' px='md' className={classes.accordionSolutionContainer}>
-							<pre>{task.solution}</pre>
-						</Box>
-					</Group>
-					{task.replyDesc && task.replyStatus !== AnswerReplyStatusEnum.Enum.PENDING ? (
-						<Group>
-							<ThemeIcon variant='transparent' size='lg'>
-								<IconBlockquote />
+					<Textarea
+						leftSectionProps={{
+							style: { alignItems: 'flex-start', marginTop: '2px', color: 'var(--mantine-primary-color)' },
+						}}
+						rows={3}
+						disabled
+						leftSection={
+							<ThemeIcon variant='transparent'>
+								<IconCode />
 							</ThemeIcon>
-							{task.replyDesc}
-						</Group>
+						}
+						placeholder={task.solution}
+						mt='xs'
+					/>
+					{task.replyDesc && task.replyStatus !== AnswerReplyStatusEnum.Enum.PENDING ? (
+						<Textarea
+							leftSectionProps={{
+								style: { alignItems: 'flex-start', marginTop: '2px', color: 'var(--mantine-primary-color)' },
+							}}
+							rows={3}
+							disabled
+							leftSection={
+								<ThemeIcon variant='transparent'>
+									<IconBlockquote />
+								</ThemeIcon>
+							}
+							placeholder={task.replyDesc}
+							mt='xs'
+						/>
 					) : null}
 				</Stack>
 			</Accordion.Panel>

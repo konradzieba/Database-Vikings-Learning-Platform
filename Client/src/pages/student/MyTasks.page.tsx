@@ -12,7 +12,12 @@ const mockDataPendingAnswers = [
 				taskQuestion: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been torem Ipsum is ng and typesetting i `,
 				replyStatus: 'PENDING',
 				replyDesc: null,
-				solution: 'SELECT * FROM DB; 123',
+				solution: `SELECT * FROM DB; 123 SELECT * FROM DB; 123 SELECT * FROM DB; 123
+SELECT * FROM DB; 123
+SELECT * FROM DB; 123
+SELECT * FROM DB; 123
+SELECT * FROM DB; 123
+SELECT * FROM DB; 123`,
 				grantedScore: null,
 			},
 			{
