@@ -43,6 +43,22 @@ export const updateUserSchema = registerSchema
   })
   .partial();
 
+export const updateStudentSchema = z.object({
+  firstName: z
+    .string()
+    .trim()
+    .min(1, 'First name can not be empty')
+    .max(100, 'First name is too long'),
+  lastName: z
+    .string()
+    .trim()
+    .min(1, 'Last name can not be empty')
+    .max(100, 'Last name is too long'),
+  indexNumber: z.number().int(),
+  score: z.number().int().min(0),
+  health: z.number().int().min(0).max(3),
+});
+
 export const changeDefaultPasswordSchema = z.object({
   password: z
     .string()
@@ -70,3 +86,4 @@ export const changeDefaultPasswordSchema = z.object({
 });
 
 export type UpdateUserInput = z.infer<typeof updateUserSchema>;
+export type UpdateStudentInput = z.infer<typeof updateStudentSchema>;

@@ -98,12 +98,7 @@ export function changeStudentGroup(
   });
 }
 
-export const findStudentByStudentId = (studentId: Student['id']) =>
-  db.student.findUnique({
-    where: {
-      id: studentId,
-    },
-  });
+
 
 export function findLecturerById(id: Lecturer['id']) {
   return db.lecturer.findUnique({
