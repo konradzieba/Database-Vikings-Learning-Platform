@@ -9,7 +9,6 @@ body {
 }
 .mantine-TextInput-input {
 	color: var(--font-color);
-	border-color: var(--font-color);
 
 	&::placeholder {
 		color: var(--placeholder-color);
@@ -22,7 +21,6 @@ body {
 
 .mantine-PasswordInput-input {
 	color: var(--font-color);
-	border-color: var(--font-color);
 
 	&:focus-within {
 		border-color: var(--mantine-primary-color);
@@ -30,7 +28,6 @@ body {
 }
 .mantine-FileInput-input {
 	color: var(--font-color);
-	border-color: var(--font-color);
 	
 	&:focus-within {
 		border-color: var(--mantine-primary-color);
@@ -45,7 +42,6 @@ body {
 
 .mantine-Textarea-input {
 	color: var(--font-color);
-	border-color: var(--font-color);
 
 	&::placeholder {
 		color: var(--placeholder-color);
@@ -85,7 +81,7 @@ body {
 
 .mantine-Carousel-indicator {
 	position: relative;
-	top: 35px;
+	top: 45px;
 	width: rem(12px);
 	height: rem(4px);
 	transition: width 250ms ease;

@@ -15,6 +15,7 @@
 
 .input {
 	background-color: transparent;
+	border-color: var(--font-color);
 }
 
 .inputError {
