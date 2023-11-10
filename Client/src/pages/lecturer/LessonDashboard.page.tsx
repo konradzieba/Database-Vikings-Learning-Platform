@@ -15,6 +15,7 @@ import {
 } from '@mantine/core';
 
 import { modals } from '@mantine/modals';
+import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 /*
@@ -226,6 +227,14 @@ function LessonDashboardPage() {
 	const { id, lessonId } = useParams();
 	const { data: lessonData, isPending } =
 		useGetLessonInfoByGroupAndLessonIdQueryFn(+id!, +lessonId!);
+
+	useMemo(() => {
+		if (lessonData?.lessonInfo.tasks) {
+			lessonData.lessonInfo.tasks.sort((a, b) => {
+				return a.taskNumber - b.taskNumber;
+			});
+		}
+	}, [lessonData]);
 
 	if (isPending) {
 		return (
