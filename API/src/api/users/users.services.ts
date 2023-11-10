@@ -42,6 +42,18 @@ export function findLecturerById(id: Lecturer['id']) {
     },
   });
 }
+
+export async function getStudentDefaultPasswordState(userId: User['id']) {
+  return db.student.findUnique({
+    where: {
+      userId: userId,
+    },
+    select: {
+      isPasswordChanged: true,
+      id: true,
+    },
+  });
+}
 // export function findStudentGroup(userId: number) {
 //   return db.student.
 // }

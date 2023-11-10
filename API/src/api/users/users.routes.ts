@@ -24,6 +24,12 @@ router.patch(
   UserController.changeDefaultPassword
 );
 
+router.get(
+  '/getStudentDefaultPasswordState',
+  requireUser,
+  UserController.getStudentDefaultPasswordState
+);
+
 router.patch(
   '/updateUser/:id',
   validateRequestAndCheckRole(

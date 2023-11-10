@@ -69,6 +69,32 @@ export async function me(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+export async function getStudentDefaultPasswordState(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const parsedToken: ParsedToken = req.user;
+
+    const student = await UserServices.getStudentDefaultPasswordState(
+      parsedToken.userId
+    );
+
+    if (!student) {
+      res.status(404);
+      throw new Error('Student with given userId does not exists');
+    }
+
+    res.json({
+      message: 'success',
+      isDefaultPasswordChanged: student.isPasswordChanged
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function changeDefaultPassword(
   req: Request<ParamsWithId, {}, { password: string }>,
   res: Response<MessageResponse>,
