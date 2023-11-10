@@ -5,6 +5,7 @@ import {
 	TGetLessonTaskById,
 	TGetLessonsByGroupId,
 	TGetStudentLessonsInfo,
+	TGetStudentTasks,
 	TGetStudentsFromGroup,
 	TGetTasksByLessonId,
 	TLoginResponse,
@@ -151,6 +152,13 @@ export const updateStudentMutationFn = async (
 export const restoreDefaultPasswordMutationFn = async (studentId: number) => {
 	const { data } = await axios.patch<TMessageResponse>(
 		`/users/restoreDefaultPassword/${studentId}`
+	);
+	return data;
+};
+
+export const getStudentTasksQueryFn = async (groupId: number) => {
+	const { data } = await axios.get<TGetStudentTasks>(
+		`/tasks/getStudentTasks/${groupId}`
 	);
 	return data;
 };

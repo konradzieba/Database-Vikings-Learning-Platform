@@ -1,164 +1,108 @@
 import StudentTaskAccordion from '@/components/StudentTaskAccordion/StudentTask.accordion';
-import { Center, Flex, ScrollArea, Tabs, Text, Title } from '@mantine/core';
+import useGetStudentTasksQuery from '@/hooks/tasks/useGetStudentTasks';
+import { useStudentStore } from '@/utils/store';
+import {
+	Center,
+	Flex,
+	Loader,
+	ScrollArea,
+	Tabs,
+	Text,
+	Title,
+} from '@mantine/core';
 import { IconArrowBackUpDouble, IconSend } from '@tabler/icons-react';
+import { memo, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
-const mockDataPendingAnswers = [
-	{
-		lessonNumber: 1,
-		tasks: [
-			{
-				taskNumber: 1,
-				taskQuestion: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been torem Ipsum is ng and typesetting i `,
-				replyStatus: 'PENDING',
-				replyDesc: null,
-				solution: `SELECT * FROM DB; 123 SELECT * FROM DB; 123 SELECT * FROM DB; 123
-SELECT * FROM DB; 123
-SELECT * FROM DB; 123
-SELECT * FROM DB; 123
-SELECT * FROM DB; 123
-SELECT * FROM DB; 123`,
-				grantedScore: null,
-			},
-			{
-				taskNumber: 2,
-				taskQuestion: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been torem Ipsum is ng and typesetting i `,
-				replyStatus: 'PENDING',
-				replyDesc: null,
-				solution: 'SELECT * FROM DB; 123',
-				grantedScore: null,
-			},
-		],
-	},
-	{
-		lessonNumber: 3,
-		tasks: [
-			{
-				taskNumber: 1,
-				taskQuestion: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been torem Ipsum is ng and typesetting i `,
-				replyStatus: 'PENDING',
-				replyDesc: null,
-				solution: 'SELECT * FROM DB; 123',
-				grantedScore: null,
-			},
-			{
-				taskNumber: 2,
-				taskQuestion: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been torem Ipsum is ng and typesetting i `,
-				replyStatus: 'PENDING',
-				replyDesc: null,
-				solution: 'SELECT * FROM DB; 123',
-				grantedScore: null,
-			},
-			{
-				taskNumber: 3,
-				taskQuestion: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been torem Ipsum is ng and typesetting i `,
-				replyStatus: 'PENDING',
-				replyDesc: null,
-				solution: 'SELECT * FROM DB; 123',
-				grantedScore: null,
-			},
-		],
-	},
-];
-
-const mockDataRestAnswers = [
-	{
-		lessonNumber: 1,
-		tasks: [
-			{
-				taskNumber: 2,
-				taskQuestion: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been torem Ipsum is ng and typesetting i `,
-				replyStatus: 'CORRECT',
-				replyDesc: 'Fajnie wykonane zdanie',
-				solution: 'SELECT * FROM DB; 123',
-				grantedScore: 100,
-			},
-			{
-				taskNumber: 3,
-				taskQuestion: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been torem Ipsum is ng and typesetting i `,
-				replyStatus: 'INCORRECT',
-				replyDesc: 'Błąd w poleceniu SQL',
-				solution: 'SELECT * FROM DB; 123',
-				grantedScore: 11,
-			},
-		],
-	},
-	{
-		lessonNumber: 2,
-		tasks: [
-			{
-				taskNumber: 1,
-				taskQuestion: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been torem Ipsum is ng and typesetting i `,
-				replyStatus: 'CORRECT',
-				replyDesc: 'Piękna optymalizacja kodu',
-				solution: 'SELECT * FROM DB; 123',
-				grantedScore: 80,
-			},
-			{
-				taskNumber: 2,
-				taskQuestion: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been torem Ipsum is ng and typesetting i `,
-				replyStatus: 'PARTLY_CORRECT',
-				replyDesc: 'Popatrz na to z jakiej tabeli wyciągasz wartości',
-				solution: 'SELECT * FROM DB; 123',
-				grantedScore: 100,
-			},
-			{
-				taskNumber: 3,
-				taskQuestion: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been torem Ipsum is ng and typesetting i `,
-				replyStatus: 'INCORRECT',
-				replyDesc: 'Nie ma takiego zapytania.',
-				solution: 'SELECT * FROM DB; 123',
-				grantedScore: 95,
-			},
-		],
-	},
-];
-
-function SendStudentAnswers() {
-	return (
-		<>
-			{mockDataPendingAnswers.map((answer, index) => (
-				<Flex
-					key={`${answer.lessonNumber}-${index}`}
-					direction='column'
-					align='center'
-					px='sm'
-					mb='xl'
-				>
-					<Title order={2} mb='xs'>
-						Lekcja&nbsp;{answer.lessonNumber}
-					</Title>
-					<StudentTaskAccordion tasks={answer.tasks} />
-				</Flex>
-			))}
-		</>
-	);
+interface AnswersProps {
+	isPending: boolean;
+	tasks:
+		| {
+				lessonNumber: number;
+				tasks: {
+					taskNumber: number;
+					taskQuestion: string;
+					replyStatus: 'PENDING' | 'PARTLY_CORRECT' | 'INCORRECT' | 'CORRECT';
+					replyDesc: string;
+					solution: string;
+					grantedScore: number;
+				}[];
+		  }[]
+		| undefined;
 }
 
-function RestStudentAnswers() {
+const MemoizedStudentAnswers = memo(function StudentAnswers({
+	tasks,
+	isPending,
+}: AnswersProps) {
+	if (isPending)
+		return (
+			<Center h={300}>
+				<Loader />
+			</Center>
+		);
 	return (
 		<>
-			{mockDataRestAnswers.map((answer, index) => (
-				<Flex
-					key={`${answer.lessonNumber}-${index}`}
-					direction='column'
-					align='center'
-					px='sm'
-					mb='xl'
-				>
-					<Title order={2} mb='xs'>
-						Lekcja&nbsp;{answer.lessonNumber}
-					</Title>
-					<StudentTaskAccordion tasks={answer.tasks} />
-				</Flex>
-			))}
+			{tasks?.map(
+				(answer, index) =>
+					answer.tasks.length !== 0 && (
+						<Flex
+							key={`${answer.lessonNumber}-${index}`}
+							direction='column'
+							align='center'
+							px='sm'
+							mb='xl'
+						>
+							<Title order={2} mb='xs'>
+								Lekcja&nbsp;{answer.lessonNumber}
+							</Title>
+							<StudentTaskAccordion tasks={answer.tasks} />
+						</Flex>
+					)
+			)}
 		</>
 	);
-}
+});
 
 function MyTasksPage() {
+	const { studentData } = useStudentStore();
 	const [searchParams, setSearchParams] = useSearchParams();
 	const isReplied = searchParams.get('status') === 'replied';
+
+	const studentGroupId = studentData.groupId;
+
+	const { data: studentTasks, isPending } = useGetStudentTasksQuery(
+		+studentGroupId!
+	);
+
+	useMemo(() => {
+		if (studentTasks?.tasks) {
+			studentTasks.tasks.sort((a, b) => {
+				return a.lessonNumber === b.lessonNumber
+					? a.tasks[0].taskNumber - b.tasks[0].taskNumber
+					: a.lessonNumber - b.lessonNumber;
+			});
+
+			studentTasks.tasks.forEach((lesson) => {
+				lesson.tasks.sort((a, b) => a.taskNumber - b.taskNumber);
+			});
+		}
+	}, [studentTasks]);
+
+	const pendingStudentAnswers = useMemo(() => {
+		return studentTasks?.tasks.map((lesson) => ({
+			lessonNumber: lesson.lessonNumber,
+			tasks: lesson.tasks.filter((task) => task.replyStatus === 'PENDING'),
+		}));
+	}, [studentTasks]);
+
+	const repliedStudentAnswers = useMemo(() => {
+		return studentTasks?.tasks.map((lesson) => ({
+			lessonNumber: lesson.lessonNumber,
+			tasks: lesson.tasks.filter((task) => task.replyStatus !== 'PENDING'),
+		}));
+	}, [studentTasks]);
+
 	return (
 		<Center>
 			<Tabs defaultValue={isReplied ? 'replied' : 'send'} w='50%'>
@@ -189,13 +133,19 @@ function MyTasksPage() {
 
 				<Tabs.Panel value='send'>
 					<ScrollArea type='auto' h={600} pb='sm' offsetScrollbars='y'>
-						<SendStudentAnswers />
+						<MemoizedStudentAnswers
+							tasks={pendingStudentAnswers}
+							isPending={isPending}
+						/>
 					</ScrollArea>
 				</Tabs.Panel>
 
 				<Tabs.Panel value='replied'>
 					<ScrollArea type='auto' h={600} pb='sm' offsetScrollbars='y'>
-						<RestStudentAnswers />
+						<MemoizedStudentAnswers
+							tasks={repliedStudentAnswers}
+							isPending={isPending}
+						/>
 					</ScrollArea>
 				</Tabs.Panel>
 			</Tabs>
