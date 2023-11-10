@@ -4,6 +4,7 @@ import FullScreenLoader from '@/components/UI/FullScreenLoader';
 import { useStudentStore, useUserStore } from '@/utils/store';
 import { modals } from '@mantine/modals';
 import { Outlet } from 'react-router-dom';
+import { useGetStudentDefaultPasswordState } from '@/hooks/students/useGetStudentDefaultPasswordState';
 
 function StudentLayout() {
 	const { userData } = useUserStore();
@@ -17,9 +18,11 @@ function StudentLayout() {
 
 	const isLoading = !!studentNavbarData.email || !!studentNavbarData.score;
 
+	const { data: isPasswordChangedData, isSuccess } = useGetStudentDefaultPasswordState();
+
 	useEffect(() => {
-		if (studentNavbarData.isPasswordChanged !== null) {
-			if (studentNavbarData.isPasswordChanged === false) {
+		if (isSuccess) {
+			if (!isPasswordChangedData.isDefaultPasswordChanged) {
 				modals.openContextModal({
 					modal: 'changeDefaultPassword',
 					title: 'Zmień domyślne hasło',
@@ -34,7 +37,7 @@ function StudentLayout() {
 				});
 			}
 		}
-	}, [studentNavbarData]);
+	}, [isSuccess]);
 
 	return (
 		<>

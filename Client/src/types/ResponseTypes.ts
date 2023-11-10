@@ -192,6 +192,11 @@ const getLessonTaskByIdSchema = z.object({
 	}),
 });
 
+const getStudentDefaultPasswordStateSchema = z.object({
+	message: z.string(),
+	isDefaultPasswordChanged: z.boolean()
+})
+
 export type TMessageResponse = z.infer<typeof MessageResponseSchema>;
 export type TLoginResponse = z.infer<typeof LoginResponseSchema>;
 export type TLecturerInfo = z.infer<typeof LecturerInfoSchema>;
@@ -204,3 +209,4 @@ export type TGetLessonInfoByGroupAndLessonId = z.infer<typeof getLessonInfoByGro
 export type TGetStudentLessonsInfo = z.infer<typeof getStudentLessonsInfoSchema>;
 export type TGetTasksByLessonId = z.infer<typeof getTasksByLessonIdSchema>;
 export type TGetLessonTaskById = z.infer<typeof getLessonTaskByIdSchema>;
+export type TGetStudentDefaultPasswordState = z.infer<typeof getStudentDefaultPasswordStateSchema>
