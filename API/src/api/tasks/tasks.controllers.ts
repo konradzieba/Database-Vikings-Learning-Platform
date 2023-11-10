@@ -1,12 +1,16 @@
 import dayjs from 'dayjs';
 import { Response, Request, NextFunction } from 'express';
 import * as TaskSchemas from './tasks.schemas';
-import { ParamsWithId, ParamsWithLessonId } from 'interfaces/ParamsWithId';
+import {
+  ParamsWithGroupId,
+  ParamsWithId,
+  ParamsWithLessonId,
+} from 'interfaces/ParamsWithId';
 import MessageResponse from 'interfaces/MessageResponse';
 import * as TaskServices from './tasks.services';
 import * as LessonServices from '../lessons/lessons.services';
 import * as AnswersServices from '../answers/answers.services';
-import * as UserServices from '../users/users.services'
+import * as UserServices from '../users/users.services';
 import { ParsedToken } from '../../../typings/token';
 
 export async function getLessonTaksById(
@@ -64,6 +68,36 @@ export async function getLessonTaksById(
         answer: {},
       });
     }
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getStudentTasks(
+  req: Request<
+    ParamsWithGroupId,
+    MessageResponse,
+    TaskSchemas.GetStudentTasksInput
+  >,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const parsedToken: ParsedToken = req.user;
+    const student = await UserServices.findStudentByUserId(parsedToken.userId);
+    const { groupId } = req.params;
+
+    if (!student) {
+      res.status(404);
+      throw new Error('Student with given id does not exist.');
+    }
+
+    const allTasks = await TaskServices.getStudentTasks(student.id, +groupId);
+
+    res.json({
+      message: 'success',
+      tasks: allTasks,
+    });
   } catch (error) {
     next(error);
   }

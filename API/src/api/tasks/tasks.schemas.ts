@@ -30,6 +30,11 @@ export const updateTaskSchema = taskSchema
   })
   .partial();
 
+export const getStudentTasksSchema = z.object({
+  groupId: z.number().int('groupId must be an integer.'),
+});
+
 export type TaskInput = z.infer<typeof taskSchema>;
 
 export type UpdateTaskInput = z.infer<typeof updateTaskSchema>;
+export type GetStudentTasksInput = z.infer<typeof getStudentTasksSchema>;

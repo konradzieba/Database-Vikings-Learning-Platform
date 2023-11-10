@@ -83,9 +83,9 @@ model Lesson {
   image               String?
   isFrequencyChecked  Boolean   @default(false)
   // relations    
-  tasks       Task[]
+  tasks               Task[]
   groupId             Int
-  Group       Group            @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  Group               Group            @relation(fields: [groupId], references: [id], onDelete: Cascade)
 }
 
 model Task {

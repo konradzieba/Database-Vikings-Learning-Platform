@@ -1,7 +1,12 @@
 import { Router } from 'express';
-import { validateRequestAndCheckRole } from '../../middlewares';
+import {
+  requireUser,
+  validateRequest,
+  validateRequestAndCheckRole,
+} from '../../middlewares';
 import * as TaskSchemas from './tasks.schemas';
 import {
+  paramsWithGroupIdSchema,
   paramsWithIdSchema,
   paramsWithLessonIdSchema,
 } from '../../interfaces/ParamsWithId';
@@ -19,12 +24,20 @@ router.get(
   TasksControllers.getLessonTaksById
 );
 
+router.get(
+  '/getStudentTasks/:groupId',
+  validateRequest({ params: paramsWithGroupIdSchema }),
+  requireUser,
+  TasksControllers.getStudentTasks
+);
+
 router.post(
   '/createTask',
   validateRequestAndCheckRole(
     { body: TaskSchemas.taskSchema },
     EnumRole.LECTURER
   ),
+
   TasksControllers.createTask
 );
 
