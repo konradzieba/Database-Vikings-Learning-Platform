@@ -6,6 +6,7 @@ import {
 	TGetLessonsByGroupId,
 	TGetStudentDefaultPasswordState,
 	TGetStudentLessonsInfo,
+	TGetStudentTasks,
 	TGetStudentsFromGroup,
 	TGetTasksByLessonId,
 	TLoginResponse,
@@ -115,5 +116,12 @@ export const restoreDefaultPasswordMutationFn = async (studentId: number) => {
 export const getStudentDefaultPasswordStateQueryFn = async () => {
 	const { data } = await axios.get<TGetStudentDefaultPasswordState>('/users/getStudentDefaultPasswordState');
 
+	return data;
+};
+
+export const getStudentTasksQueryFn = async (groupId: number) => {
+	const { data } = await axios.get<TGetStudentTasks>(
+		`/tasks/getStudentTasks/${groupId}`
+	);
 	return data;
 };
