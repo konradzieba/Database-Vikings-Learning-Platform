@@ -5,6 +5,8 @@ import { IconClock } from '@tabler/icons-react';
 import { modals } from '@mantine/modals';
 
 interface StudentAnswerCardProps {
+	studentId: number;
+	answerId: number;
 	firstName: string;
 	lastName: string;
 	index: number;
@@ -12,7 +14,15 @@ interface StudentAnswerCardProps {
 	sendDate: string;
 }
 
-function StudentAnswerCard({ firstName, lastName, index, answer, sendDate }: StudentAnswerCardProps) {
+function StudentAnswerCard({
+	studentId,
+	answerId,
+	firstName,
+	lastName,
+	index,
+	answer,
+	sendDate,
+}: StudentAnswerCardProps) {
 	const handlePreviewStudentAnswer = () => {
 		modals.openContextModal({
 			modal: 'previewStudentAnswer',
@@ -20,6 +30,8 @@ function StudentAnswerCard({ firstName, lastName, index, answer, sendDate }: Stu
 			size: 'lg',
 			closeOnClickOutside: false,
 			innerProps: {
+				studentId,
+				answerId,
 				studentFullName: `${firstName} ${lastName}`,
 				studentIndex: index,
 				studentAnswer: answer,
@@ -28,7 +40,14 @@ function StudentAnswerCard({ firstName, lastName, index, answer, sendDate }: Stu
 	};
 
 	return (
-		<Flex direction='column' px='md' py='md' gap='md' miw='22%' className={classes.answerCardWrapper}>
+		<Flex
+			direction='column'
+			px='md'
+			py='md'
+			gap='md'
+			miw='22%'
+			className={classes.answerCardWrapper}
+		>
 			<Box>
 				<Text fw={500} fz='lg'>
 					{index}
@@ -37,8 +56,17 @@ function StudentAnswerCard({ firstName, lastName, index, answer, sendDate }: Stu
 					{firstName} {lastName}
 				</Text>
 			</Box>
-			<DateTimeDisplay title='Data zwrócenia' date={sendDate} icon={<IconClock />} titleTextAlgin='start' />
-			<Button miw={150} onClick={handlePreviewStudentAnswer} className={classes.answerCardButton}>
+			<DateTimeDisplay
+				title='Data zwrócenia'
+				date={sendDate}
+				icon={<IconClock />}
+				titleTextAlgin='start'
+			/>
+			<Button
+				miw={150}
+				onClick={handlePreviewStudentAnswer}
+				className={classes.answerCardButton}
+			>
 				Przejdź
 			</Button>
 		</Flex>
