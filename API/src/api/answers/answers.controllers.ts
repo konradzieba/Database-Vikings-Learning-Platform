@@ -45,9 +45,9 @@ export async function answerReply(
 ) {
   try {
     const { replyStatus, replyDate, replyDesc, grantedScore } = req.body;
-    const { id } = req.params;
+    const { id: answerId } = req.params;
 
-    const existingAnswer = await AnswerServices.findAnswerById(+id);
+    const existingAnswer = await AnswerServices.findAnswerById(+answerId);
 
     if (!existingAnswer) {
       res.status(404);
@@ -55,7 +55,7 @@ export async function answerReply(
     }
 
     const answerReply = await AnswerServices.answerReply(
-      +id,
+      +answerId,
       replyStatus,
       replyDesc,
       replyDate,

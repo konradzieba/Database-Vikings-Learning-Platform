@@ -108,6 +108,7 @@ export async function getLessonInfoByGroupAndLessonId(
             include: {
               Student: {
                 select: {
+                  id: true,
                   User: {
                     select: {
                       firstName: true,
@@ -138,11 +139,14 @@ export async function getLessonInfoByGroupAndLessonId(
         task.id
       );
       const answers = task.answers.map((answer) => ({
+        answerId: answer.id,
+        studentId: answer.Student.id,
         firstName: answer.Student.User.firstName,
         lastName: answer.Student.User.lastName,
         index: answer.Student.indexNumber,
         answer: answer.solution,
         sendDate: answer.sendDate.toISOString(),
+        grantedScore: answer.grantedScore,
       }));
       return {
         taskNumber,
