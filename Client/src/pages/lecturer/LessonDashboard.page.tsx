@@ -16,215 +16,12 @@ import {
 
 import { modals } from '@mantine/modals';
 import { useMemo } from 'react';
-import { useParams } from 'react-router-dom';
-
-/*
-const mockData = {
-	lessonNumber: 4,
-	tasks: [
-		{
-			taskNumber: 1,
-			endDate: '2023-10-20T19:26:15.000Z',
-			studentsWithoutAnswer: [
-				{
-					firstName: 'Roman',
-					lastName: 'Romanowski',
-					indexNumber: 123411,
-				},
-				{
-					firstName: 'Johny',
-					lastName: 'Johnowski',
-					indexNumber: 123412,
-				},
-			],
-			answers: [
-				{
-					firstName: 'Roman',
-					lastName: 'Romanowski',
-					index: 111111,
-					answer: `SELECT * FROM db; SELECT * FROM db; SELECT * FROM db; SELECT * FROM db; SELECT * FROM db; SELECT * FROM db;
-SELECT * FROM db; SELECT * FROM db; SELECT * FROM db; SELECT * FROM db;
-SELECT * FROM db; SELECT * FROM db; SELECT * FROM db; SELECT * FROM db;
-SELECT * FROM db; SELECT * FROM db; SELECT * FROM db; SELECT * FROM db;
-SELECT * FROM db; SELECT * FROM db; SELECT * FROM db; SELECT * FROM db;
-SELECT * FROM db; SELECT * FROM db; SELECT * FROM db; SELECT * FROM db;
-SELECT * FROM db; SELECT * FROM db; SELECT * FROM db; SELECT * FROM db;
-SELECT * FROM db; SELECT * FROM db; SELECT * FROM db; SELECT * FROM db;
-SELECT * FROM db; SELECT * FROM db; SELECT * FROM db; SELECT * FROM db;
-SELECT * FROM db; SELECT * FROM db; SELECT * FROM db; SELECT * FROM db;
-SELECT * FROM db; SELECT * FROM db; SELECT * FROM db;
-SELECT * FROM db; SELECT * FROM db; SELECT * FROM db;
-SELECT * FROM db; SELECT * FROM db; SELECT * FROM db;`,
-					sendDate: '2023-10-21T20:00:00.000Z',
-				},
-				{
-					firstName: 'Jan',
-					lastName: 'Janowski',
-					index: 222222,
-					answer: 'SELECT * FROM db;',
-					sendDate: '2023-10-21T13:00:00.000Z',
-				},
-				{
-					firstName: 'Marcin',
-					lastName: 'Marcinowski',
-					index: 333333,
-					answer: 'SELECT * FROM db;',
-					sendDate: '2023-10-21T13:00:00.000Z',
-				},
-				{
-					firstName: 'Tomek',
-					lastName: 'Tomaszewski',
-					index: 444444,
-					answer: 'SELECT * FROM db;',
-					sendDate: '2023-10-21T13:00:00.000Z',
-				},
-				{
-					firstName: 'Mariola',
-					lastName: 'Nowak',
-					index: 555555,
-					answer: 'SELECT * FROM db;',
-					sendDate: '2023-10-21T13:00:00.000Z',
-				},
-				{
-					firstName: 'Hubert',
-					lastName: 'Miły',
-					index: 666666,
-					answer: 'SELECT * FROM db;',
-					sendDate: '2023-10-21T13:00:00.000Z',
-				},
-				{
-					firstName: 'Monika',
-					lastName: 'Kowalska',
-					index: 777777,
-					answer: 'SELECT * FROM db;',
-					sendDate: '2023-10-21T13:00:00.000Z',
-				},
-				{
-					firstName: 'Arkadiusz',
-					lastName: 'Romanowski',
-					index: 888888,
-					answer: 'SELECT * FROM db;',
-					sendDate: '2023-10-21T13:00:00.000Z',
-				},
-				{
-					firstName: 'Marcin',
-					lastName: 'Jankowski',
-					index: 999999,
-					answer: 'SELECT * FROM db;',
-					sendDate: '2023-10-21T13:00:00.000Z',
-				},
-			],
-		},
-		{
-			taskNumber: 2,
-			endDate: '2023-10-19T19:26:15.000Z',
-			answers: [
-				{
-					firstName: 'Roman',
-					lastName: 'Romanowski',
-					index: 666666,
-					answer: 'SELECT * FROM db;',
-					sendDate: '2023-10-19T19:26:15.000Z',
-				},
-			],
-		},
-		{
-			taskNumber: 3,
-			endDate: '2023-10-19T19:26:15.000Z',
-			answers: [
-				{
-					firstName: 'Roman',
-					lastName: 'Romanowski',
-					index: 666666,
-					answer: 'SELECT * FROM db;',
-					sendDate: '2023-10-19T19:26:15.000Z',
-				},
-			],
-		},
-		{
-			taskNumber: 4,
-			endDate: '2023-10-19T19:26:15.000Z',
-			answers: [
-				{
-					firstName: 'Roman',
-					lastName: 'Romanowski',
-					index: 666666,
-					answer: 'SELECT * FROM db;',
-					sendDate: '2023-10-19T19:26:15.000Z',
-				},
-			],
-		},
-		{
-			taskNumber: 5,
-			endDate: '2023-10-19T19:26:15.000Z',
-			answers: [
-				{
-					firstName: 'Roman',
-					lastName: 'Romanowski',
-					index: 666666,
-					answer: 'SELECT * FROM db;',
-					sendDate: '2023-10-19T19:26:15.000Z',
-				},
-			],
-		},
-		{
-			taskNumber: 6,
-			endDate: '2023-10-19T19:26:15.000Z',
-			answers: [
-				{
-					firstName: 'Roman',
-					lastName: 'Romanowski',
-					index: 666666,
-					answer: 'SELECT * FROM db;',
-					sendDate: '2023-10-19T19:26:15.000Z',
-				},
-			],
-		},
-		{
-			taskNumber: 7,
-			endDate: '2023-10-19T19:26:15.000Z',
-			answers: [
-				{
-					firstName: 'Roman',
-					lastName: 'Romanowski',
-					index: 666666,
-					answer: 'SELECT * FROM db;',
-					sendDate: '2023-10-19T19:26:15.000Z',
-				},
-			],
-		},
-		{
-			taskNumber: 8,
-			endDate: '2023-10-19T19:26:15.000Z',
-			answers: [
-				{
-					firstName: 'Roman',
-					lastName: 'Romanowski',
-					index: 666666,
-					answer: 'SELECT * FROM db;',
-					sendDate: '2023-10-19T19:26:15.000Z',
-				},
-			],
-		},
-		{
-			taskNumber: 9,
-			endDate: '2023-10-19T19:26:15.000Z',
-			answers: [
-				{
-					firstName: 'Roman',
-					lastName: 'Romanowski',
-					index: 666666,
-					answer: 'SELECT * FROM db;',
-					sendDate: '2023-10-19T19:26:15.000Z',
-				},
-			],
-		},
-	],
-};
-*/
+import { useParams, useSearchParams } from 'react-router-dom';
 
 function LessonDashboardPage() {
 	const { id, lessonId } = useParams();
+	const [searchParams] = useSearchParams();
+	const isRepliedTabChosen = searchParams.get('status') === 'replied';
 	const { data: lessonData, isPending } =
 		useGetLessonInfoByGroupAndLessonIdQueryFn(+id!, +lessonId!);
 
@@ -291,18 +88,41 @@ function LessonDashboardPage() {
 					/>
 					<ScrollArea h={500} type='auto'>
 						<Flex wrap='wrap' gap='xl' mx='lg' mt='md' justify='flex-start'>
-							{task.answers.map((answer) => {
-								return (
-									<StudentAnswerCard
-										firstName={answer.firstName}
-										lastName={answer.lastName}
-										index={answer.index}
-										answer={answer.answer}
-										sendDate={answer.sendDate}
-										key={`${task.taskNumber}-${answer.index}-answer`}
-									/>
-								);
-							})}
+							{isRepliedTabChosen
+								? task.answers.map((answer) => {
+										if (answer.grantedScore) {
+											return (
+												<StudentAnswerCard
+													key={`${task.taskNumber}-${answer.index}-answer`}
+													studentId={answer.studentId}
+													answerId={answer.answerId}
+													firstName={answer.firstName}
+													lastName={answer.lastName}
+													index={answer.index}
+													answer={answer.answer}
+													sendDate={answer.sendDate}
+												/>
+											);
+										}
+										return null;
+								  })
+								: task.answers.map((answer) => {
+										if (!answer.grantedScore) {
+											return (
+												<StudentAnswerCard
+													key={`${task.taskNumber}-${answer.index}-answer`}
+													studentId={answer.studentId}
+													answerId={answer.answerId}
+													firstName={answer.firstName}
+													lastName={answer.lastName}
+													index={answer.index}
+													answer={answer.answer}
+													sendDate={answer.sendDate}
+												/>
+											);
+										}
+										return null;
+								  })}
 						</Flex>
 					</ScrollArea>
 				</Flex>
