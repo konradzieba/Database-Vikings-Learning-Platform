@@ -22,8 +22,11 @@ function LessonDashboardPage() {
 	const { id, lessonId } = useParams();
 	const [searchParams] = useSearchParams();
 	const isRepliedTabChosen = searchParams.get('status') === 'replied';
-	const { data: lessonData, isPending } =
-		useGetLessonInfoByGroupAndLessonIdQueryFn(+id!, +lessonId!);
+	const {
+		data: lessonData,
+		isPending,
+		refetch: refetchLessonInfo,
+	} = useGetLessonInfoByGroupAndLessonIdQueryFn(+id!, +lessonId!);
 
 	useMemo(() => {
 		if (lessonData?.lessonInfo.tasks) {
@@ -101,6 +104,7 @@ function LessonDashboardPage() {
 													index={answer.index}
 													answer={answer.answer}
 													sendDate={answer.sendDate}
+													refetchLessonInfo={refetchLessonInfo}
 												/>
 											);
 										}
@@ -118,6 +122,7 @@ function LessonDashboardPage() {
 													index={answer.index}
 													answer={answer.answer}
 													sendDate={answer.sendDate}
+													refetchLessonInfo={refetchLessonInfo}
 												/>
 											);
 										}

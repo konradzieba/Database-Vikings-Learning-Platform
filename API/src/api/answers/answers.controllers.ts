@@ -54,7 +54,7 @@ export async function answerReply(
       throw new Error('Answer with this id does not exist.');
     }
 
-    const answerReply = await AnswerServices.answerReply(
+    await AnswerServices.answerReply(
       +answerId,
       replyStatus,
       replyDesc,
@@ -63,7 +63,7 @@ export async function answerReply(
     );
 
     res.json({
-      message: `Answer id:${answerReply.id} for task id:${answerReply.taskId} (student id:${answerReply.studentId}) was updated with ${answerReply.replyStatus} and score: ${grantedScore} successfully.`,
+      message: `Answer id: ${answerId} replied successfully, student score has been increased by ${grantedScore}.`,
     });
   } catch (error) {
     next(error);

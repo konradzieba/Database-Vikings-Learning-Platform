@@ -70,24 +70,47 @@ export function findCompletedTaskByStudent(ids: Answer['id'][]) {
   });
 }
 
-
-export function answerReply(
+export async function answerReply(
   id: Answer['id'],
   replyStatus: Answer['replyStatus'],
-  replyDesc: Answer['replyDesc'] = null,
+  replyDesc: Answer['replyDesc'] | null = null,
   replyDate: Answer['replyDate'],
   grantedScore: Answer['grantedScore']
 ) {
-  return db.answer.update({
-    where: {
-      id,
-    },
+  if (grantedScore === null) {
+    return null;
+  }
+
+  const updatedAnswer = await db.answer.update({
+    where: { id },
     data: {
       replyStatus,
-      replyDate,
       replyDesc: replyDesc || undefined,
+      replyDate,
       grantedScore,
     },
+  });
+
+  if (!updatedAnswer) {
+    throw new Error(`Unable to find the answer with ID ${id}.`);
+  }
+
+  const student = await db.student.findUnique({
+    where: { id: updatedAnswer.studentId },
+    select: { score: true },
+  });
+
+  if (!student) {
+    throw new Error(
+      `The student with ID ${updatedAnswer.studentId} was not found.`
+    );
+  }
+
+  const newScore = student.score + grantedScore;
+
+  await db.student.update({
+    where: { id: updatedAnswer.studentId },
+    data: { score: newScore },
   });
 }
 

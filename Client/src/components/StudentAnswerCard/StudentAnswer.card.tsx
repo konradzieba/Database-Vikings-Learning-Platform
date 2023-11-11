@@ -12,6 +12,7 @@ interface StudentAnswerCardProps {
 	index: number;
 	answer: string;
 	sendDate: string;
+	refetchLessonInfo?: () => void;
 }
 
 function StudentAnswerCard({
@@ -22,6 +23,7 @@ function StudentAnswerCard({
 	index,
 	answer,
 	sendDate,
+	refetchLessonInfo,
 }: StudentAnswerCardProps) {
 	const handlePreviewStudentAnswer = () => {
 		modals.openContextModal({
@@ -29,6 +31,7 @@ function StudentAnswerCard({
 			title: 'Oceń zadanie',
 			size: 'lg',
 			closeOnClickOutside: false,
+			onClose: refetchLessonInfo,
 			innerProps: {
 				studentId,
 				answerId,
