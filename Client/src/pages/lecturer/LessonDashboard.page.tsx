@@ -87,7 +87,7 @@ function LessonDashboardPage() {
 					<TaskAnswersStats
 						endDate={task.endDate}
 						answers={task.answers}
-						amountOfNotAnswered={task.studentsWithoutAnswer.length}
+						notAnsweredList={task.studentsWithoutAnswer}
 					/>
 					<ScrollArea h={500} type='auto'>
 						<Flex wrap='wrap' gap='xl' mx='lg' mt='md' justify='flex-start'>

@@ -22,7 +22,7 @@ import ChangeDefaultPasswordModal from './modals/ChangeDefaultPassword.modal';
 import CreateGroupModal from './modals/CreateGroup.modal';
 import SendTaskAnswerModal from './modals/SendTaskAnswer.modal';
 import RestoreDefaultPasswordModal from './modals/RestoreDefaultPassword.modal';
-
+import NotAnsweredListModal from './modals/NotAnsweredList.modal';
 
 export default function App() {
 	dayjs.locale('pl');
@@ -46,6 +46,7 @@ export default function App() {
 							changeDefaultPassword: ChangeDefaultPasswordModal,
 							createGroup: CreateGroupModal,
 							sendTaskAnswer: SendTaskAnswerModal,
+							notAnsweredList: NotAnsweredListModal,
 						}}
 						labels={{ confirm: 'Prześlij', cancel: 'Anuluj' }}
 						modalProps={{ overlayProps: { blur: 2 }, yOffset: rem(100) }}

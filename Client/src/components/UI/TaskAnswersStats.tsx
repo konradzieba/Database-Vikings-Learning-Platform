@@ -1,4 +1,5 @@
 import { Button, Divider, Flex, Group, Tabs, Text, rem } from '@mantine/core';
+import { modals } from '@mantine/modals';
 import dayjs from 'dayjs';
 import { useSearchParams } from 'react-router-dom';
 
@@ -12,17 +13,37 @@ type Answer = {
 
 interface TaskStatsProps {
 	endDate: string;
-	amountOfNotAnswered: number;
+	notAnsweredList: {
+		User: {
+			firstName: string;
+			lastName: string;
+		};
+		indexNumber: number;
+	}[];
 	answers: Answer[];
 }
 
 function TaskAnswersStats({
 	endDate,
 	answers,
-	amountOfNotAnswered,
+	notAnsweredList,
 }: TaskStatsProps) {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const answersCount = answers.length;
+	const amountOfNotAnswered = notAnsweredList.length;
+
+	const handleOpenNotAnsweredListModal = () => {
+		modals.openContextModal({
+			modal: 'notAnsweredList',
+			title: 'Lista osób, które nie przesłały odpowiedzi',
+			size: 'xl',
+			closeOnClickOutside: false,
+			innerProps: {
+				notAnsweredList,
+				modalBody: '',
+			},
+		});
+	};
 
 	return (
 		<Flex gap={10} justify='space-between' align='center' mx='lg' mt='sm'>
@@ -51,14 +72,13 @@ function TaskAnswersStats({
 						</Text>
 					</Tabs.Tab>
 				</Tabs.List>
-				{/* <Tabs.Panel></Tabs.Panel> */}
 			</Tabs>
 			<Group gap='sm'>
 				<Button
 					size='xs'
 					c='var(--font-color)'
 					variant='outline'
-					onClick={() => console.log('hejka')}
+					onClick={handleOpenNotAnsweredListModal}
 				>
 					<Text fz='md' fw='inherit'>
 						Nieprzesłane&nbsp;
