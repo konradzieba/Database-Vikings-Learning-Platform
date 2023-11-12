@@ -1,5 +1,7 @@
 import { Button, Center, Flex, ScrollArea, Table, Text } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
+import { useState } from 'react';
+import classes from './NotAnsweredList.modal.module.css';
 
 interface NotAnsweredListModalProps {
 	notAnsweredList: {
@@ -16,6 +18,7 @@ function NotAnsweredListModal({
 	id,
 	innerProps,
 }: ContextModalProps<NotAnsweredListModalProps>) {
+	const [scrolled, setScrolled] = useState(false);
 	const { notAnsweredList } = innerProps;
 
 	const handleCloseModal = () => {
@@ -33,11 +36,24 @@ function NotAnsweredListModal({
 		);
 	});
 
+	if (!notAnsweredList.length) {
+		return (
+			<Center h='25vh'>
+				<Text size='lg'>Wszyscy studenci przesłali odpowiedzi</Text>
+			</Center>
+		);
+	}
+
 	return (
 		<>
-			<ScrollArea offsetScrollbars='y'>
-				<Table verticalSpacing='sm' withRowBorders striped withTableBorder>
-					<Table.Thead>
+			<ScrollArea
+				h={300}
+				onScrollPositionChange={({ y }) => setScrolled(y !== 0)}
+			>
+				<Table verticalSpacing='sm' withRowBorders striped>
+					<Table.Thead
+						className={`${classes.header} ${scrolled ? classes.scrolled : ''}`}
+					>
 						<Table.Tr>
 							<Table.Th>Imię</Table.Th>
 							<Table.Th>Nazwisko</Table.Th>
@@ -47,9 +63,6 @@ function NotAnsweredListModal({
 					<Table.Tbody>{rows}</Table.Tbody>
 				</Table>
 			</ScrollArea>
-			<Center mt='lg'>
-				<Button onClick={handleCloseModal}>Zamknij</Button>
-			</Center>
 		</>
 	);
 }
