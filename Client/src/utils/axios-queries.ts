@@ -1,5 +1,9 @@
 import { AnswerReplyStatus } from '@/types/Enums';
-import { TLoginRequest, TSendAnswerRequest } from '@/types/RequestTypes';
+import {
+	TLoginRequest,
+	TSendAnswerRequest,
+	TUpdateTaskInfoRequest,
+} from '@/types/RequestTypes';
 import {
 	TGetGroupsByLecturerId,
 	TGetLessonInfoByGroupAndLessonId,
@@ -155,6 +159,16 @@ export const updateStudentMutationFn = async (
 	const { data } = await axios.patch<TMessageResponse>(
 		`/users/updateStudent/${studentId}`,
 		studentInfo
+	);
+	return data;
+};
+
+export const updateTaskInfoMutationFn = async (
+	taskData: TUpdateTaskInfoRequest
+) => {
+	const { data } = await axios.patch<TMessageResponse>(
+		`/tasks/updateTask/${taskData.taskId}`,
+		taskData.taskInfo
 	);
 	return data;
 };

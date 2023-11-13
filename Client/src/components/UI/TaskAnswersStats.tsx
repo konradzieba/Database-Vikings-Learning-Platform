@@ -1,3 +1,4 @@
+import useGetTaskInfoByIdQuery from '@/hooks/tasks/useGetTaskInfoByIdQuery';
 import { Button, Divider, Flex, Group, Tabs, Text, rem } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import dayjs from 'dayjs';
@@ -33,6 +34,7 @@ function TaskAnswersStats({
 	const [searchParams, setSearchParams] = useSearchParams();
 	const answersCount = answers.length;
 	const amountOfNotAnswered = notAnsweredList.length;
+	const { refetch: refetchTaskInfo } = useGetTaskInfoByIdQuery(taskId);
 
 	const handleOpenNotAnsweredListModal = () => {
 		modals.openContextModal({
@@ -53,6 +55,7 @@ function TaskAnswersStats({
 			title: 'Szczegóły zadania',
 			size: 'xl',
 			closeOnClickOutside: false,
+			onClose: refetchTaskInfo,
 			innerProps: {
 				taskId,
 				modalBody: '',
@@ -61,7 +64,7 @@ function TaskAnswersStats({
 	};
 
 	return (
-		<Flex gap={10} justify='space-between' align='center' mx='lg' mt='sm'>
+		<Flex gap={rem(10)} justify='space-between' align='center' mx='lg' mt='sm'>
 			{/* <Text ml='xs' fw='bold'>
 				Odpowiedzi:&nbsp;
 				<Text fw={700} span c='var(--good-state-color)'>

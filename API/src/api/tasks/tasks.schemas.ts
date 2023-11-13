@@ -21,14 +21,14 @@ export const taskSchema = z.object({
     ),
   isExtra: z.boolean({ required_error: 'Task isExtra must be provided' }),
   lessonId: z.number().int('lessonId must be an integer.'),
+  isMarkdown: z.boolean({ required_error: 'Task isMarkdown must be provided' }),
 });
 
-export const updateTaskSchema = taskSchema
-  .omit({
-    lessonId: true,
-    isExtra: true,
-  })
-  .partial();
+export const updateTaskSchema = taskSchema.pick({
+  question: true,
+  closeDate: true,
+  isMarkdown: true,
+});
 
 export const getStudentTasksSchema = z.object({
   groupId: z.number().int('groupId must be an integer.'),
