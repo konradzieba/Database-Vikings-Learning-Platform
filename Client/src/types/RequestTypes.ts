@@ -17,6 +17,16 @@ const SendAnswerRequestSchema = z.object({
 	studentId: z.number().int(),
 });
 
+const UpdateTaskInfoRequestSchema = z.object({
+	taskId: z.number().int(),
+	taskInfo: z.object({
+		isMarkdown: z.boolean(),
+		question: z.string(),
+		closeDate: z.date(),
+	}),
+});
+
 export type TUserRequest = z.infer<typeof UserRequestSchema>;
 export type TLoginRequest = z.infer<typeof TLoginRequest>;
 export type TSendAnswerRequest = z.infer<typeof SendAnswerRequestSchema>;
+export type TUpdateTaskInfoRequest = z.infer<typeof UpdateTaskInfoRequestSchema>;

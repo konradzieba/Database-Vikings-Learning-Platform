@@ -160,20 +160,26 @@ export async function updateTask(
   next: NextFunction
 ) {
   try {
-    const { id } = req.params;
-    const { number, question, closeDate } = req.body;
+    const { id: taskId } = req.params;
+    const { question, closeDate, isMarkdown } = req.body;
 
-    const existingTask = await TaskServices.findTaskById(+id);
+    console.log('data', {
+      question,
+      closeDate: dayjs(closeDate).toDate(),
+      isMarkdown,
+    });
+
+    const existingTask = await TaskServices.findTaskById(+taskId);
 
     if (!existingTask) {
       res.status(404);
       throw new Error('Task with this id does not exist.');
     }
 
-    const task = await TaskServices.updateTask(+id, {
-      number,
+    const task = await TaskServices.updateTask(+taskId, {
       question,
       closeDate: dayjs(closeDate).toDate(),
+      isMarkdown,
     });
 
     res.json({

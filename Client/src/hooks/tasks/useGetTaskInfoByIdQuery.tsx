@@ -1,7 +1,7 @@
 import { getTaskInfoByIdQueryFn } from '@/utils/axios-queries';
 import { useQuery } from '@tanstack/react-query';
 
-function getTaskInfoByIdQuery(taskId: number) {
+function useGetTaskInfoByIdQuery(taskId: number) {
 	const query = useQuery({
 		enabled: !!taskId,
 		queryKey: ['taskInfo', taskId],
@@ -11,4 +11,4 @@ function getTaskInfoByIdQuery(taskId: number) {
 	return query;
 }
 
-export default getTaskInfoByIdQuery;
+export default useGetTaskInfoByIdQuery;

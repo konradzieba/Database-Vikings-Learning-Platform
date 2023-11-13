@@ -98,7 +98,7 @@ export function createTask(task: Prisma.TaskCreateInput) {
 
 export function updateTask(
   id: Task['id'],
-  task: Pick<Prisma.TaskUpdateInput, 'number' | 'question' | 'closeDate'>
+  task: Pick<Prisma.TaskUpdateInput, 'question' | 'closeDate' | 'isMarkdown'>
 ) {
   return db.task.update({
     where: {
