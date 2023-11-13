@@ -1,11 +1,9 @@
 import { Button, Flex, Group, Stack, Stepper, Title, rem } from '@mantine/core';
-import lesson1 from '@/assets/lesson1.png';
 import { useState } from 'react';
 import { IconCheck, IconChecklist, IconList, IconPhoto } from '@tabler/icons-react';
 import PhotoPicker from '@/components/CreateLesson/PhotoPicker/Photo.picker';
 import FrequencyList from '@/components/FrequencyList/FrequencyList.component';
 import LessonCreated from '@/components/CreateLesson/LessonCreated/LessonCreated.component';
-import test from '@/assets/lessonCreatedImage.png';
 import TasksCardList from '@/components/CreateLesson/TaskCard/TasksCard.list';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,29 +11,13 @@ const data = {
 	lessonNumber: 4,
 	groupName: 'Grupa 2 ISI',
 	taskNumbers: [],
-	avatars: [
-		lesson1,
-		test,
-		lesson1,
-		lesson1,
-		lesson1,
-		lesson1,
-		lesson1,
-		lesson1,
-		lesson1,
-		lesson1,
-		lesson1,
-		lesson1,
-		lesson1,
-		lesson1,
-		lesson1,
-	],
 };
 
 export type TaskProps = {
 	number: number;
 	question: string;
 	closeDate: string;
+	isMarkDown: boolean;
 	isExtra: boolean;
 	lessonId: number;
 };
@@ -79,7 +61,7 @@ function CreateLessonPage() {
 					<TasksCardList tasks={tasks} />
 				</Stepper.Step>
 				<Stepper.Step allowStepSelect={false} label='Wybór grafiki lekcji' icon={<IconPhoto size='1.2rem' />}>
-					<PhotoPicker avatars={data.avatars} />
+					<PhotoPicker lessonImage={lessonImage} setLessonImage={setLessonImage} />
 				</Stepper.Step>
 				<Stepper.Step allowStepSelect={false} label='Sprawdzanie obecności' icon={<IconChecklist size='1.2rem' />}>
 					<Flex align='center' h={rem(550)}>
