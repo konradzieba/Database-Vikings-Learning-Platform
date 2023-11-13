@@ -90,6 +90,7 @@ const getLessonInfoByGroupAndLessonIdSchema = z.object({
 		lessonNumber: z.number().int(),
 		tasks: z.array(
 			z.object({
+				taskId: z.number().int(),
 				taskNumber: z.number().int(),
 				endDate: z.string(),
 				studentsWithoutAnswer: z.array(
@@ -143,6 +144,7 @@ const getTasksByLessonIdSchema = z.object({
 			question: z.string(),
 			closeDate: z.string(),
 			answerSend: z.boolean(),
+			isMarkdown: z.boolean(),
 		})
 	),
 });
@@ -157,6 +159,7 @@ const getLessonTaskByIdSchema = z.object({
 		openDate: z.string(),
 		closeDate: z.string(),
 		lessonId: z.number().int(),
+		isMarkdown: z.boolean(),
 	}),
 	answer: z.object({
 		id: z.number().int(),
@@ -190,6 +193,19 @@ export const getStudentTasksSchema = z.object({
 	),
 });
 
+const getTaskInfoByIdSchema = z.object({
+	message: z.string(),
+	taskInfo: z.object({
+		id: z.number().int(),
+		number: z.number().int(),
+		question: z.string(),
+		openDate: z.string(),
+		closeDate: z.string(),
+		lessonId: z.number().int(),
+		isMarkdown: z.boolean(),
+	}),
+});
+
 const getStudentDefaultPasswordStateSchema = z.object({
 	message: z.string(),
 	isDefaultPasswordChanged: z.boolean(),
@@ -218,3 +234,4 @@ export type TGetStudentTasks = z.infer<typeof getStudentTasksSchema>;
 export type TGetStudentDefaultPasswordState = z.infer<
 	typeof getStudentDefaultPasswordStateSchema
 >;
+export type TGetTaskInfoById = z.infer<typeof getTaskInfoByIdSchema>;

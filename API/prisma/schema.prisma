@@ -95,6 +95,7 @@ model Task {
   openDate    DateTime  @default(now())
   closeDate   DateTime
   isExtra     Boolean   @db.Boolean @default(false)
+  isMarkdown  Boolean   @default(false)
   // relations
   lessonId    Int
   answers     Answer[]

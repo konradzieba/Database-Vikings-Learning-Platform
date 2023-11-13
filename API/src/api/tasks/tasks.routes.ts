@@ -16,6 +16,17 @@ import { EnumRole } from '../../../typings/token';
 const router = Router();
 
 router.get(
+  '/getTaskInfoById/:id',
+  validateRequestAndCheckRole(
+    {
+      params: paramsWithIdSchema,
+    },
+    EnumRole.LECTURER
+  ),
+  TasksControllers.getTaskInfoById
+)
+
+router.get(
   '/getLessonTaskById/:lessonId/:id',
   validateRequestAndCheckRole(
     { params: paramsWithLessonIdSchema },

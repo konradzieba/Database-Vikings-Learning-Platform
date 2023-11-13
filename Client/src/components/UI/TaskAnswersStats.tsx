@@ -12,6 +12,7 @@ type Answer = {
 };
 
 interface TaskStatsProps {
+	taskId: number;
 	endDate: string;
 	notAnsweredList: {
 		User: {
@@ -27,6 +28,7 @@ function TaskAnswersStats({
 	endDate,
 	answers,
 	notAnsweredList,
+	taskId,
 }: TaskStatsProps) {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const answersCount = answers.length;
@@ -40,6 +42,19 @@ function TaskAnswersStats({
 			closeOnClickOutside: false,
 			innerProps: {
 				notAnsweredList,
+				modalBody: '',
+			},
+		});
+	};
+
+	const handleOpenTaskDetailsModal = () => {
+		modals.openContextModal({
+			modal: 'taskDetails',
+			title: 'Szczegóły zadania',
+			size: 'xl',
+			closeOnClickOutside: false,
+			innerProps: {
+				taskId,
 				modalBody: '',
 			},
 		});
@@ -101,7 +116,7 @@ function TaskAnswersStats({
 					c='var(--font-color)'
 					fz='md'
 					variant='outline'
-					onClick={() => console.log('hejka')}
+					onClick={handleOpenTaskDetailsModal}
 				>
 					Szczegóły zadania
 				</Button>

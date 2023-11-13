@@ -13,6 +13,29 @@ import * as AnswersServices from '../answers/answers.services';
 import * as UserServices from '../users/users.services';
 import { ParsedToken } from '../../../typings/token';
 
+export async function getTaskInfoById(
+  req: Request<ParamsWithId>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id: taskId } = req.params;
+
+    const existingTask = await TaskServices.findTaskById(+taskId);
+    if (!existingTask) {
+      res.status(404);
+      throw new Error('Task with this id does not exist.');
+    }
+
+    res.json({
+      message: 'success',
+      taskInfo: existingTask,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function getLessonTaksById(
   req: Request<ParamsWithLessonId>,
   res: Response,

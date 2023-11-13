@@ -23,6 +23,7 @@ import CreateGroupModal from './modals/CreateGroup.modal';
 import SendTaskAnswerModal from './modals/SendTaskAnswer.modal';
 import RestoreDefaultPasswordModal from './modals/RestoreDefaultPassword.modal';
 import NotAnsweredListModal from './modals/NotAnsweredList.modal';
+import TaskDetailsModal from './modals/TaskDetails.modal';
 
 export default function App() {
 	dayjs.locale('pl');
@@ -47,6 +48,7 @@ export default function App() {
 							createGroup: CreateGroupModal,
 							sendTaskAnswer: SendTaskAnswerModal,
 							notAnsweredList: NotAnsweredListModal,
+							taskDetails: TaskDetailsModal,
 						}}
 						labels={{ confirm: 'Prześlij', cancel: 'Anuluj' }}
 						modalProps={{ overlayProps: { blur: 2 }, yOffset: rem(100) }}
