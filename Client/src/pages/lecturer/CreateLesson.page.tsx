@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router-dom';
 const data = {
 	lessonNumber: 4,
 	groupName: 'Grupa 2 ISI',
-	taskNumbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+	taskNumbers: [],
 	avatars: [
 		lesson1,
 		test,
@@ -32,8 +32,29 @@ const data = {
 	],
 };
 
+export type TaskProps = {
+	number: number;
+	question: string;
+	closeDate: string;
+	isExtra: boolean;
+	lessonId: number;
+};
+
 function CreateLessonPage() {
 	const [activeStep, setActiveStep] = useState(0);
+	const [lessonNumber, setLessonNumber] = useState<number | null>(null);
+	const [groupId, setGroupId] = useState<number | null>(null);
+	const [tasks, setTasks] = useState<TaskProps[]>([]);
+	const [lessonImage, setLessonImage] = useState<string | null>(null);
+
+	const handleCreateLesson = () => {
+		console.log('LESSON DATA');
+		console.log('lessonNumber', lessonNumber);
+		console.log('GroupId', groupId);
+		console.log('Tasks', tasks);
+		console.log('LessonImage', lessonImage);
+	};
+
 	const navigate = useNavigate();
 
 	const nextStep = () => {
@@ -55,7 +76,7 @@ function CreateLessonPage() {
 				onStepClick={setActiveStep}
 				completedIcon={<IconCheck size='1.2rem' />}>
 				<Stepper.Step allowStepSelect={false} label='Tworzenie zadań' icon={<IconList size='1.2rem' />}>
-					<TasksCardList tasksNumbers={data.taskNumbers} />
+					<TasksCardList tasks={tasks} />
 				</Stepper.Step>
 				<Stepper.Step allowStepSelect={false} label='Wybór grafiki lekcji' icon={<IconPhoto size='1.2rem' />}>
 					<PhotoPicker avatars={data.avatars} />
@@ -85,7 +106,7 @@ function CreateLessonPage() {
 						<Button miw={150} variant='outline' onClick={prevStep}>
 							Cofnij
 						</Button>
-						<Button miw={150} onClick={nextStep}>
+						<Button miw={150} onClick={isLastStep ? handleCreateLesson : nextStep}>
 							{isLastStep ? 'Stwórz lekcje' : 'Dalej'}
 						</Button>
 					</>
