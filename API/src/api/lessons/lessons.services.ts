@@ -133,6 +133,7 @@ export async function getLessonInfoByGroupAndLessonId(
   const taskList = await Promise.all(
     lesson.tasks.map(async (task) => {
       const taskNumber = task.number;
+      const taskId = task.id;
       const endDate = task.closeDate.toISOString();
       const studentsWithoutAnswer = await findStudentsWithoutAnswer(
         groupId,
@@ -149,6 +150,7 @@ export async function getLessonInfoByGroupAndLessonId(
         grantedScore: answer.grantedScore,
       }));
       return {
+        taskId,
         taskNumber,
         endDate,
         studentsWithoutAnswer,
