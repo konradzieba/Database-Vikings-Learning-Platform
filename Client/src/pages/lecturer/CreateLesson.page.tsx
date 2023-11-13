@@ -1,11 +1,12 @@
 import { Button, Flex, Group, Stack, Stepper, Title, rem } from '@mantine/core';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { IconCheck, IconChecklist, IconList, IconPhoto } from '@tabler/icons-react';
 import PhotoPicker from '@/components/CreateLesson/PhotoPicker/Photo.picker';
 import FrequencyList from '@/components/FrequencyList/FrequencyList.component';
 import LessonCreated from '@/components/CreateLesson/LessonCreated/LessonCreated.component';
 import TasksCardList from '@/components/CreateLesson/TaskCard/TasksCard.list';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useGetLessonsByGroupId } from '@/hooks/lessons/useGetLessonsByGroupId';
 
 const data = {
 	lessonNumber: 4,
@@ -29,6 +30,8 @@ function CreateLessonPage() {
 	const [tasks, setTasks] = useState<TaskProps[]>([]);
 	const [lessonImage, setLessonImage] = useState<string | null>(null);
 
+	const { id } = useParams();
+
 	const handleCreateLesson = () => {
 		console.log('LESSON DATA');
 		console.log('lessonNumber', lessonNumber);
@@ -36,6 +39,15 @@ function CreateLessonPage() {
 		console.log('Tasks', tasks);
 		console.log('LessonImage', lessonImage);
 	};
+
+	const { data: LessonsData, isSuccess } = useGetLessonsByGroupId(+id!);
+
+	useEffect(() => {
+		if (isSuccess) {
+			setGroupId(+id!);
+			setLessonNumber(LessonsData.lessons.length + 1);
+		}
+	}, [isSuccess]);
 
 	const navigate = useNavigate();
 
@@ -58,7 +70,7 @@ function CreateLessonPage() {
 				onStepClick={setActiveStep}
 				completedIcon={<IconCheck size='1.2rem' />}>
 				<Stepper.Step allowStepSelect={false} label='Tworzenie zadań' icon={<IconList size='1.2rem' />}>
-					<TasksCardList tasks={tasks} />
+					<TasksCardList tasks={tasks} setTasks={setTasks} />
 				</Stepper.Step>
 				<Stepper.Step allowStepSelect={false} label='Wybór grafiki lekcji' icon={<IconPhoto size='1.2rem' />}>
 					<PhotoPicker lessonImage={lessonImage} setLessonImage={setLessonImage} />
