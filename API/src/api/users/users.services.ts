@@ -3,6 +3,7 @@ import { db } from '../../db';
 import type { User, Prisma, Student, Lecturer } from '@prisma/client';
 import { UpdateStudentInput } from './users.schemas';
 import { generatePasswordByCredentials } from '../../utils/generatePassword';
+import dayjs from 'dayjs';
 
 export function findUserById(id: User['id']) {
   return db.user.findUnique({
@@ -127,6 +128,17 @@ export async function changeDefaultPassword(id: User['id'], password: string) {
     },
     data: {
       password: bcrypt.hashSync(password, 12),
+    },
+  });
+}
+
+export function updateLastLogin(id: Student['id']) {
+  return db.student.update({
+    where: {
+      id,
+    },
+    data: {
+      lastLogin: dayjs().toDate(),
     },
   });
 }
