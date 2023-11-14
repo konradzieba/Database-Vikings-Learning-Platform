@@ -14,10 +14,15 @@ interface AddTaskModalProps {
 
 function AddTaskModal({ innerProps, context, id }: ContextModalProps<AddTaskModalProps>) {
 	const textAreaRef = useRef<HTMLTextAreaElement>(null);
+	const [isTextAreaError, setIsTextAreaError] = useState(false);
 	const [selectedDate, setSelectedDate] = useState<Date | null>(dayjs().add(7, 'days').endOf('day').toDate());
 	const [textFormat, setTextFormat] = useState<string | null>('Zwykły tekst');
 
 	const handleAddTask = () => {
+		if (textAreaRef.current?.value === '') {
+			setIsTextAreaError(true);
+			return;
+		}
 		innerProps.setTasks(prevState => [
 			...prevState,
 			{
@@ -46,6 +51,8 @@ function AddTaskModal({ innerProps, context, id }: ContextModalProps<AddTaskModa
 			/>
 			<Textarea
 				ref={textAreaRef}
+				error={isTextAreaError ? 'Teść zadania nie może być pusta' : ''}
+				onChange={value => (value.currentTarget.value === '' ? setIsTextAreaError(true) : setIsTextAreaError(false))}
 				leftSection={<IconFloatLeft />}
 				leftSectionProps={{
 					style: { alignItems: 'flex-start', marginTop: '3px' },
@@ -66,7 +73,7 @@ function AddTaskModal({ innerProps, context, id }: ContextModalProps<AddTaskModa
 				defaultValue={dayjs().add(7, 'days').endOf('day').toDate()}
 				w='100%'
 			/>
-			<Button fullWidth mt='md' onClick={handleAddTask}>
+			<Button fullWidth mt='md' onClick={handleAddTask} disabled={isTextAreaError}>
 				Dodaj zadanie
 			</Button>
 		</Stack>

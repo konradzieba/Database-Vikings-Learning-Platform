@@ -4,7 +4,7 @@ import { DateTimePicker } from '@mantine/dates';
 import { ContextModalProps, modals } from '@mantine/modals';
 import { IconCalendar, IconFloatLeft, IconListDetails } from '@tabler/icons-react';
 import dayjs from 'dayjs';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { Dispatch, SetStateAction, useState, useRef } from 'react';
 
 interface AddTaskModalProps {
 	modalBody: string;
@@ -18,11 +18,18 @@ interface AddTaskModalProps {
 }
 
 function ModifyAddedTaskModal({ innerProps, context, id }: ContextModalProps<AddTaskModalProps>) {
+	const textAreaRef = useRef<HTMLTextAreaElement>(null);
+	const [isTextAreaError, setIsTextAreaError] = useState(false);
 	const [questionDetails, setQuestionDetails] = useState<string>(innerProps.question);
 	const [selectedDate, setSelectedDate] = useState<Date | null>(dayjs(innerProps.closeDate).toDate());
 	const [textFormat, setTextFormat] = useState<string | null>(innerProps.isMarkdown ? 'Markdown' : 'Zwykły tekst');
 
 	const handleAddTask = () => {
+		if (textAreaRef.current?.value === '') {
+			setIsTextAreaError(true);
+			return;
+		}
+
 		const taskIndex = innerProps.tasks.findIndex(task => task.number === innerProps.number);
 
 		innerProps.setTasks(prevState => [
@@ -56,8 +63,17 @@ function ModifyAddedTaskModal({ innerProps, context, id }: ContextModalProps<Add
 				data={['Zwykły tekst', 'Markdown']}
 			/>
 			<Textarea
+				ref={textAreaRef}
 				value={questionDetails}
-				onChange={value => setQuestionDetails(value.currentTarget.value)}
+				error={isTextAreaError ? 'Treść zadania nie może być pusta' : ''}
+				onChange={value => {
+					if (value.currentTarget.value === '') {
+						setIsTextAreaError(true);
+					} else {
+						setIsTextAreaError(false);
+					}
+					setQuestionDetails(value.currentTarget.value);
+				}}
 				leftSection={<IconFloatLeft />}
 				leftSectionProps={{
 					style: { alignItems: 'flex-start', marginTop: '3px' },
@@ -81,7 +97,7 @@ function ModifyAddedTaskModal({ innerProps, context, id }: ContextModalProps<Add
 				<Button miw={150} variant='outline' onClick={handleCloseModal}>
 					Anuluj
 				</Button>
-				<Button miw={150} onClick={handleAddTask}>
+				<Button miw={150} onClick={handleAddTask} disabled={isTextAreaError}>
 					Modyfikuj zadanie
 				</Button>
 			</Group>
