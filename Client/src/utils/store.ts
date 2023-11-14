@@ -128,6 +128,7 @@ type CreatedLessonType = {
 	lessonNumber: number;
 	lessonImage: string;
 	groupId: number;
+	isFrequencyChecked: boolean;
 	tasks: TaskType[] | [];
 };
 
