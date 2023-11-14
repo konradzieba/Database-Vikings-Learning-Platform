@@ -1,5 +1,15 @@
-import { Table, Text, Group, ThemeIcon, rem, Stack } from '@mantine/core';
-import { IconCoins, IconTrophy } from '@tabler/icons-react';
+import {
+	Table,
+	Text,
+	Group,
+	ThemeIcon,
+	rem,
+	Stack,
+	Popover,
+	Button,
+} from '@mantine/core';
+import { IconCoins, IconInfoCircle, IconTrophy } from '@tabler/icons-react';
+import { useCallback, useMemo } from 'react';
 
 const topColors = [
 	'var(--score-color)',
@@ -26,6 +36,7 @@ type TScoreBoardData =
 				indexNumber: number;
 				score: number;
 				groupId: number;
+				aggregatedSendTime: number;
 				Group: {
 					name: string;
 				};
@@ -47,7 +58,11 @@ interface ScoreBoardProps {
 	};
 }
 
-function ScoreBoard({ type, studentInfo, scoreBoardData }: ScoreBoardProps) {
+function ScoreBoardStudent({
+	type,
+	studentInfo,
+	scoreBoardData,
+}: ScoreBoardProps) {
 	const { groupId, studentId } = studentInfo;
 	const isGlobal = type === 'global';
 
@@ -55,54 +70,78 @@ function ScoreBoard({ type, studentInfo, scoreBoardData }: ScoreBoardProps) {
 		(row) => row.groupId === groupId
 	);
 
-	const studentPositionIdx = isGlobal
-		? scoreBoardData?.scoreBoard.findIndex((row) => row.id === studentId)
-		: filteredByGroupScoreBoardData?.findIndex((row) => row.id === studentId);
-
-	const studentPosition = studentPositionIdx ? studentPositionIdx + 1 : -1;
-
-	const renderTableRow = (row: TTableRow, index: number) => {
-		const position = index + 1;
-		const isTop3 = position < 4;
-		const background =
-			position === studentPosition ? 'var(--mantine-primary-color)' : undefined;
-
+	const sortedRows = useMemo(() => {
 		return (
-			<Table.Tr key={row.indexNumber} bg={background}>
-				<Table.Td>
-					{isTop3 ? (
-						<ThemeIcon
-							variant='transparent'
-							size='md'
-							c={topColors[position - 1]}
-							p={0}
-							m={0}
-						>
-							<IconTrophy />
-						</ThemeIcon>
-					) : (
-						<Text ml={rem(8)} size='md'>
-							{position}
-						</Text>
-					)}
-				</Table.Td>
-				<Table.Td>{`${row.User.firstName} ${row.User.lastName}`}</Table.Td>
-				{isGlobal && <Table.Td>{row.Group.name}</Table.Td>}
-				<Table.Td>
-					<Group align='center' gap={rem(5)}>
-						<ThemeIcon variant='transparent' size='sm' c='var(--score-color)'>
-							<IconCoins />
-						</ThemeIcon>
-						{row.score}
-					</Group>
-				</Table.Td>
-			</Table.Tr>
+			(isGlobal
+				? scoreBoardData?.scoreBoard
+						.slice()
+						.sort(
+							(a, b) =>
+								b.score - a.score || a.aggregatedSendTime - b.aggregatedSendTime
+						)
+				: filteredByGroupScoreBoardData
+						?.slice()
+						.sort(
+							(a, b) =>
+								b.score - a.score || a.aggregatedSendTime - b.aggregatedSendTime
+						)) || []
 		);
-	};
+	}, [isGlobal, scoreBoardData, filteredByGroupScoreBoardData]);
 
-	const rows = isGlobal
-		? scoreBoardData?.scoreBoard.map(renderTableRow)
-		: filteredByGroupScoreBoardData?.map(renderTableRow);
+	const studentPositionIdx = sortedRows.findIndex(
+		(row) => row.id === studentId
+	);
+
+	const studentPosition =
+		studentPositionIdx != null ? studentPositionIdx + 1 : -1;
+
+	console.log(studentPosition);
+
+	const renderTableRow = useCallback(
+		(row: TTableRow, index: number) => {
+			const position = index + 1;
+			const isTop3 = position < 4;
+			const background =
+				position === studentPosition
+					? 'var(--mantine-primary-color)'
+					: undefined;
+
+			return (
+				<Table.Tr key={row.indexNumber} bg={background}>
+					<Table.Td>
+						{isTop3 ? (
+							<ThemeIcon
+								variant='transparent'
+								size='md'
+								c={topColors[position - 1]}
+								p={0}
+								m={0}
+							>
+								<IconTrophy />
+							</ThemeIcon>
+						) : (
+							<Text ml={rem(8)} size='md'>
+								{position}
+							</Text>
+						)}
+					</Table.Td>
+					<Table.Td>{`${row.User.firstName} ${row.User.lastName}`}</Table.Td>
+					{isGlobal && <Table.Td>{row.Group.name}</Table.Td>}
+					<Table.Td>
+						<Group align='center' gap={rem(5)}>
+							<ThemeIcon variant='transparent' size='sm' c='var(--score-color)'>
+								<IconCoins />
+							</ThemeIcon>
+							{row.score}
+						</Group>
+					</Table.Td>
+				</Table.Tr>
+			);
+		},
+		[studentPosition]
+	);
+
+	const rows = sortedRows.map(renderTableRow);
 
 	return (
 		<Stack>
@@ -123,6 +162,7 @@ function ScoreBoard({ type, studentInfo, scoreBoardData }: ScoreBoardProps) {
 				<Text ta='center' size='md' fw={500}>
 					Twoja pozycja w rankingu {isGlobal ? 'całego roku' : 'grupy'}:
 				</Text>
+
 				<Text
 					size={rem(24)}
 					ta='center'
@@ -131,9 +171,45 @@ function ScoreBoard({ type, studentInfo, scoreBoardData }: ScoreBoardProps) {
 				>
 					{studentPosition === -1 ? 'Brak' : studentPosition}
 				</Text>
+
+				<Popover width={320} position='bottom' withArrow shadow='md'>
+					<Popover.Target>
+						<Button
+							mt='md'
+							size='md'
+							c='dimmed'
+							variant='transparent'
+							td='underline'
+							style={{
+								textUnderlineOffset: rem(5),
+							}}
+						>
+							Kliknij tutaj, aby poznać szczegóły obliczania rankingu
+						</Button>
+					</Popover.Target>
+					<Popover.Dropdown>
+						<Text
+							size='sm'
+							style={{
+								textWrap: 'balance',
+							}}
+						>
+							Najważniejszym kryterium rankingu jest&nbsp;
+							<Text span fw={500} c='var(--mantine-primary-color-lighter)'>
+								ilość zdobytych punktów
+							</Text>
+							. W przypadku, gdy dwóch lub więcej studentów ma taką samą ilość
+							punktów, to o kolejności decyduje{' '}
+							<Text span fw={500} c='var(--mantine-primary-color-lighter)'>
+								zsumowany czas wysłania wszystkich odpowiedzi
+							</Text>
+							.
+						</Text>
+					</Popover.Dropdown>
+				</Popover>
 			</Stack>
 		</Stack>
 	);
 }
 
-export default ScoreBoard;
+export default ScoreBoardStudent;

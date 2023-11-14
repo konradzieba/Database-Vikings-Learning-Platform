@@ -29,6 +29,7 @@ const StudentInfoSchema = z.object({
 	idCheck: z.number(),
 	groupId: z.number(),
 	answersId: z.array(z.number()),
+	aggregatedSendTime: z.number(),
 });
 
 const MeResponseSchema = z.object({
@@ -214,6 +215,7 @@ const getScoreBoardSchema = z.object({
 			indexNumber: z.number().int(),
 			score: z.number().int(),
 			groupId: z.number().int(),
+			aggregatedSendTime: z.number().int(),
 			Group: z.object({
 				name: z.string(),
 			}),

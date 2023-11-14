@@ -50,13 +50,11 @@ const initialStudentStoreValues = {
 		score: null,
 		rank: null,
 		isPasswordChanged: null,
-		// lastLogin: null,
 		studentId: null,
 		groupId: null,
 		answersIds: null,
 	},
 };
-
 
 const initialLecturerStoreValues = {
 	lecturerData: {
@@ -76,7 +74,7 @@ const initialUserStoreValues = {
 	},
 };
 
-export const useUserStore = create<IUserStoreStore>(set => ({
+export const useUserStore = create<IUserStoreStore>((set) => ({
 	role: null,
 	userData: {
 		firstName: null,
@@ -85,34 +83,33 @@ export const useUserStore = create<IUserStoreStore>(set => ({
 		userId: null,
 	},
 	setRole: (role: UserRole) => set({ role }),
-	setUserData: userData => set({ userData }),
+	setUserData: (userData) => set({ userData }),
 	clearUserStoreData: () => set(initialUserStoreValues),
 }));
 
-export const useStudentStore = create<IStudentStoreStore>(set => ({
+export const useStudentStore = create<IStudentStoreStore>((set) => ({
 	studentData: {
 		indexNumber: null,
 		health: null,
 		score: null,
 		rank: null,
 		isPasswordChanged: null,
-		// lastLogin: null,
 		studentId: null,
 		groupId: null,
 		answersIds: null,
 	},
-	setStudentData: studentData => set({ studentData }),
+	setStudentData: (studentData) => set({ studentData }),
 	clearStudentStoreData: () => set(initialStudentStoreValues),
 }));
 
-export const useLecturerStore = create<ILecturerStore>(set => ({
+export const useLecturerStore = create<ILecturerStore>((set) => ({
 	lecturerData: {
 		lecturerId: null,
 		isAdmin: null,
 		idCheck: null,
 	},
 	groups: null,
-	setLecturerData: lecturerData => set({ lecturerData }),
-	setGroups: groups => set({ groups }),
+	setLecturerData: (lecturerData) => set({ lecturerData }),
+	setGroups: (groups) => set({ groups }),
 	clearLecturerStoreData: () => set(initialLecturerStoreValues),
 }));
