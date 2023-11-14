@@ -1,11 +1,31 @@
-import ScoreBoard from '@/components/ScoreBoard/ScoreBoard.component';
-import { Center, Stack, Tabs, Text } from '@mantine/core';
+import ScoreBoardStudent from '@/components/ScoreBoard/ScoreBoardStudent.component';
+import useGetScoreBoardQuery from '@/hooks/users/useGetScoreBoardQuery';
+import { useStudentStore } from '@/utils/store';
+import { Center, Loader, Stack, Tabs, Text } from '@mantine/core';
 import { IconTrophy, IconUsersGroup } from '@tabler/icons-react';
 import { useSearchParams } from 'react-router-dom';
 
 function ScoreBoardPage() {
 	const [searchParams, setSearchParams] = useSearchParams();
+	const { studentData } = useStudentStore();
+	const { data: scoreBoardData, isPending } = useGetScoreBoardQuery();
+	const studentInfo = {
+		studentId: studentData?.studentId,
+		groupId: studentData?.groupId,
+	};
+
+	console.log(scoreBoardData);
+
 	const isGlobal = searchParams.get('type') === 'global';
+
+	if (isPending) {
+		return (
+			<Center h={120}>
+				<Loader />
+			</Center>
+		);
+	}
+
 	return (
 		<Center>
 			<Stack>
@@ -36,11 +56,19 @@ function ScoreBoardPage() {
 					</Tabs.List>
 
 					<Tabs.Panel value='local'>
-						<ScoreBoard type='local' />
+						<ScoreBoardStudent
+							type='local'
+							studentInfo={studentInfo}
+							scoreBoardData={scoreBoardData}
+						/>
 					</Tabs.Panel>
 
 					<Tabs.Panel value='global'>
-						<ScoreBoard type='global' />
+						<ScoreBoardStudent
+							type='global'
+							studentInfo={studentInfo}
+							scoreBoardData={scoreBoardData}
+						/>
 					</Tabs.Panel>
 				</Tabs>
 			</Stack>
