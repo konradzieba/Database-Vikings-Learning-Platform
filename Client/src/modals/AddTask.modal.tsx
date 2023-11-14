@@ -15,16 +15,16 @@ interface AddTaskModalProps {
 function AddTaskModal({ innerProps, context, id }: ContextModalProps<AddTaskModalProps>) {
 	const textAreaRef = useRef<HTMLTextAreaElement>(null);
 	const [selectedDate, setSelectedDate] = useState<Date | null>(dayjs().add(7, 'days').endOf('day').toDate());
+	const [textFormat, setTextFormat] = useState<string | null>('Zwykły tekst');
 
 	const handleAddTask = () => {
-		console.log('data', selectedDate?.toDateString());
 		innerProps.setTasks(prevState => [
 			...prevState,
 			{
 				number: innerProps.tasksLength + 1,
 				question: textAreaRef.current?.value!,
-				closeDate: selectedDate?.toDateString()!,
-				isMarkDown: false,
+				closeDate: selectedDate?.toISOString()!,
+				isMarkdown: textFormat === 'Markdown' ? true : false,
 				isExtra: false,
 			},
 		]);
@@ -36,6 +36,8 @@ function AddTaskModal({ innerProps, context, id }: ContextModalProps<AddTaskModa
 	return (
 		<Stack>
 			<Select
+				value={textFormat}
+				onChange={value => setTextFormat(value)}
 				allowDeselect={false}
 				leftSection={<IconListDetails />}
 				label='Formatowanie tekstu'

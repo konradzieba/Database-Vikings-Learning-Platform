@@ -14,7 +14,16 @@ function TasksCardList({ tasks, setTasks }: TasksCardListProps) {
 		<Flex justify='center' align='center' h={rem(550)}>
 			<SimpleGrid cols={4} spacing='xl'>
 				{tasks.map((task, index) => (
-					<TaskCard key={index} taskNumber={task.number} />
+					<TaskCard
+						key={index}
+						number={task.number}
+						question={task.question}
+						closeDate={task.closeDate}
+						isExtra={task.isExtra}
+						isMarkdown={task.isMarkdown}
+						tasks={tasks}
+						setTasks={setTasks}
+					/>
 				))}
 				<AddTaskCard setTasks={setTasks} tasks={tasks} />
 			</SimpleGrid>
