@@ -124,7 +124,7 @@ type TaskType = {
 	isExtra: boolean;
 };
 
-type CreatedLessonType = {
+export type CreatedLessonType = {
 	lessonNumber: number;
 	lessonImage: string;
 	groupId: number;
