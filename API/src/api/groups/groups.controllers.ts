@@ -6,7 +6,7 @@ import * as GroupServices from './groups.services';
 import * as LessonsServices from '../lessons/lessons.services';
 import * as UserServices from '../users/users.services';
 
-export async function getGroups(
+export async function getGroupsByLecturerId(
   req: Request<ParamsWithId>,
   res: Response,
   next: NextFunction
