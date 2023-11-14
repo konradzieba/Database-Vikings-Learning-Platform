@@ -2,7 +2,7 @@ import { TaskProps } from '@/pages/lecturer/CreateLesson.page';
 import { Button, Group, Select, Stack, Textarea } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { ContextModalProps, modals } from '@mantine/modals';
-import { IconCalendar, IconFloatLeft, IconListDetails } from '@tabler/icons-react';
+import { IconCalendar, IconFloatLeft, IconListDetails, IconTrash } from '@tabler/icons-react';
 import dayjs from 'dayjs';
 import { Dispatch, SetStateAction, useState, useRef } from 'react';
 
@@ -43,6 +43,19 @@ function ModifyAddedTaskModal({ innerProps, context, id }: ContextModalProps<Add
 			},
 			...prevState.slice(taskIndex + 1),
 		]);
+
+		context.closeModal(id);
+		modals.closeAll();
+	};
+
+	const handleDeleteTask = () => {
+		const taskIndex = innerProps.tasks.findIndex(task => task.number === innerProps.number);
+		const updatedTasks = innerProps.tasks.slice();
+		updatedTasks.splice(taskIndex, 1);
+		for (let i = taskIndex; i < updatedTasks.length; i++) {
+			updatedTasks[i].number -= 1;
+		}
+		innerProps.setTasks(updatedTasks);
 
 		context.closeModal(id);
 		modals.closeAll();
@@ -93,13 +106,23 @@ function ModifyAddedTaskModal({ innerProps, context, id }: ContextModalProps<Add
 				maxDate={dayjs().add(5, 'month').endOf('month').toDate()}
 				w='100%'
 			/>
-			<Group mt='md' justify='center'>
-				<Button miw={150} variant='outline' onClick={handleCloseModal}>
-					Anuluj
+			<Group mt='md' justify='space-between'>
+				<Button
+					variant='outline'
+					color='var(--bad-state-color)'
+					miw={150}
+					leftSection={<IconTrash />}
+					onClick={handleDeleteTask}>
+					Usuń
 				</Button>
-				<Button miw={150} onClick={handleAddTask} disabled={isTextAreaError}>
-					Modyfikuj zadanie
-				</Button>
+				<Group justify='center'>
+					<Button miw={150} variant='outline' onClick={handleCloseModal}>
+						Anuluj
+					</Button>
+					<Button miw={150} onClick={handleAddTask} disabled={isTextAreaError}>
+						Modyfikuj zadanie
+					</Button>
+				</Group>
 			</Group>
 		</Stack>
 	);
