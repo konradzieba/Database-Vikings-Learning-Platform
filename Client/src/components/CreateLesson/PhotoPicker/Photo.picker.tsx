@@ -8,11 +8,10 @@ import { useCreateLessonStore } from '@/utils/store';
 import { useParams } from 'react-router-dom';
 
 function PhotoPicker() {
-	const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
 	const { id } = useParams();
 	const { createdLessonsArray, updateLesson } = useCreateLessonStore();
-
 	const lessonFromGroup = createdLessonsArray.find(lesson => lesson.groupId === +id!);
+	const [selectedPhoto, setSelectedPhoto] = useState<string | null>(lessonFromGroup?.lessonImage || null);
 
 	const handleSetLessonImage = (photo: string | null) => {
 		if (photo) {
