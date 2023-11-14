@@ -7,15 +7,16 @@ import { Outlet } from 'react-router-dom';
 
 function LecturerLayout() {
 	const { userData } = useUserStore();
-	const { lecturerData, groups, setGroups } = useLecturerStore();
+	const { lecturerData, setGroups } = useLecturerStore();
 	const lecturerNavbarData = {
+		firstName: userData.firstName,
+		lastName: userData.lastName,
 		email: userData.email,
 	};
 
 	const {
 		data: groupsData,
 		isSuccess,
-		isPending,
 	} = useGetGroupsByLecturerId(lecturerData.lecturerId);
 
 	useEffect(() => {
@@ -31,9 +32,6 @@ function LecturerLayout() {
 			{isLoading ? (
 				<>
 					<LecturerNavbar lecturerInfo={lecturerNavbarData} />
-					{/* <pre>
-						{isPending ? 'Loading...' : JSON.stringify(groups, null, 2)}
-					</pre> */}
 					<Outlet />
 				</>
 			) : (

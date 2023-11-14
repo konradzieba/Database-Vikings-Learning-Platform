@@ -1,4 +1,13 @@
-import { Center, Divider, Flex, Group, HoverCard, Loader, Text, rem } from '@mantine/core';
+import {
+	Center,
+	Divider,
+	Flex,
+	Group,
+	HoverCard,
+	Loader,
+	Text,
+	rem,
+} from '@mantine/core';
 import { NavLink, useLocation, useParams } from 'react-router-dom';
 import classes from './Navbar.module.css';
 import UserPanel from '../UI/UserPanel';
@@ -37,7 +46,8 @@ function Nav() {
 									isActive && pathname.endsWith('dashboard')
 										? `${classes.link} ${classes.activeLink}`
 										: `${classes.link} ${classes.inactiveLink}`
-								}>
+								}
+							>
 								Grupy
 							</NavLink>
 							<IconChevronDown size='1.5rem' color='var(--font-color)' />
@@ -49,7 +59,8 @@ function Nav() {
 								<NavLink
 									to={`/dashboard/group/${group.groupId}/lessons`}
 									className={`${classes.link} ${classes.inactiveLink}`}
-									key={index}>
+									key={index}
+								>
 									{group.groupName}
 								</NavLink>
 							))
@@ -64,14 +75,17 @@ function Nav() {
 			{pathname.includes('/dashboard/group/') && (
 				<>
 					<Divider orientation='vertical' />
-					{groupNavLinks.map(link => {
+					{groupNavLinks.map((link) => {
 						return (
 							<NavLink
 								to={link.link}
 								className={({ isActive }) =>
-									isActive ? `${classes.link} ${classes.activeLink}` : `${classes.link} ${classes.inactiveLink}`
+									isActive
+										? `${classes.link} ${classes.activeLink}`
+										: `${classes.link} ${classes.inactiveLink}`
 								}
-								key={link.link}>
+								key={link.link}
+							>
 								{link.label}
 							</NavLink>
 						);
@@ -84,6 +98,8 @@ function Nav() {
 
 interface LecturerNavbarProps {
 	lecturerInfo: {
+		firstName: string | null;
+		lastName: string | null;
 		email: string | null;
 	};
 }
@@ -97,13 +113,18 @@ function LecturerNavbar({ lecturerInfo }: LecturerNavbarProps) {
 			<Flex gap='xs' align='center'>
 				{pathname.includes('/dashboard/group/') && id && groups && (
 					<>
-						<Text c='dimmed' size='lg'>
-							{groups?.find(group => group.groupId === +id!)?.groupName}
+						<Text c='var(--mantine-primary-color)' fw={500} size='lg'>
+							{groups?.find((group) => group.groupId === +id!)?.groupName}
 						</Text>
 						<Divider orientation='vertical' />
 					</>
 				)}
-				<UserPanel email={lecturerInfo.email} className={classes.logoutBtn} />
+				<UserPanel
+					firstName={lecturerInfo.firstName}
+					lastName={lecturerInfo.lastName}
+					email={lecturerInfo.email}
+					className={classes.logoutBtn}
+				/>
 			</Flex>
 		</Flex>
 	);
