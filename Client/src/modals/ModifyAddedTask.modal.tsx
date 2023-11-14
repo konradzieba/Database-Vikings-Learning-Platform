@@ -1,20 +1,19 @@
-import { TaskProps } from '@/pages/lecturer/CreateLesson.page';
+import { useCreateLessonStore } from '@/utils/store';
 import { Button, Group, Select, Stack, Textarea } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { ContextModalProps, modals } from '@mantine/modals';
 import { IconCalendar, IconFloatLeft, IconListDetails, IconTrash } from '@tabler/icons-react';
 import dayjs from 'dayjs';
-import { Dispatch, SetStateAction, useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 
 interface AddTaskModalProps {
 	modalBody: string;
+	groupId: number;
 	number: number;
 	question: string;
 	closeDate: string;
 	isMarkdown: boolean;
 	isExtra: boolean;
-	tasks: TaskProps[];
-	setTasks: Dispatch<SetStateAction<TaskProps[]>>;
 }
 
 function ModifyAddedTaskModal({ innerProps, context, id }: ContextModalProps<AddTaskModalProps>) {
@@ -24,38 +23,54 @@ function ModifyAddedTaskModal({ innerProps, context, id }: ContextModalProps<Add
 	const [selectedDate, setSelectedDate] = useState<Date | null>(dayjs(innerProps.closeDate).toDate());
 	const [textFormat, setTextFormat] = useState<string | null>(innerProps.isMarkdown ? 'Markdown' : 'Zwykły tekst');
 
+	const { createdLessonsArray, updateLesson } = useCreateLessonStore();
+
+	const lessonFromGroup = createdLessonsArray.find(lesson => lesson.groupId === innerProps.groupId);
+
 	const handleAddTask = () => {
 		if (textAreaRef.current?.value === '') {
 			setIsTextAreaError(true);
 			return;
 		}
 
-		const taskIndex = innerProps.tasks.findIndex(task => task.number === innerProps.number);
-
-		innerProps.setTasks(prevState => [
-			...prevState.slice(0, taskIndex),
-			{
+		const taskIndex = lessonFromGroup?.tasks.findIndex(task => task.number === innerProps.number);
+		if (taskIndex !== -1 && lessonFromGroup) {
+			const updatedTask = {
 				number: innerProps.number,
 				question: questionDetails,
 				closeDate: selectedDate?.toISOString()!,
 				isMarkdown: textFormat === 'Markdown' ? true : false,
-				isExtra: false,
-			},
-			...prevState.slice(taskIndex + 1),
-		]);
+				isExtra: innerProps.isExtra,
+			};
+
+			const updatedTasks = [...lessonFromGroup.tasks];
+			updatedTasks[taskIndex!] = updatedTask;
+
+			const updatedLessonFromGroup = { ...lessonFromGroup, tasks: updatedTasks };
+
+			updateLesson(innerProps.groupId, updatedLessonFromGroup);
+		}
 
 		context.closeModal(id);
 		modals.closeAll();
 	};
 
 	const handleDeleteTask = () => {
-		const taskIndex = innerProps.tasks.findIndex(task => task.number === innerProps.number);
-		const updatedTasks = innerProps.tasks.slice();
-		updatedTasks.splice(taskIndex, 1);
-		for (let i = taskIndex; i < updatedTasks.length; i++) {
-			updatedTasks[i].number -= 1;
+		const taskIndex = lessonFromGroup?.tasks.findIndex(task => task.number === innerProps.number);
+
+		if (taskIndex !== -1 && lessonFromGroup) {
+			const updatedTasks = lessonFromGroup.tasks
+				.filter(task => task.number !== innerProps.number)
+				.map(task => {
+					if (task.number > innerProps.number) {
+						return { ...task, number: task.number - 1 };
+					}
+					return task;
+				});
+
+			const updatedLessonFromGroup = { ...lessonFromGroup, tasks: updatedTasks };
+			updateLesson(innerProps.groupId, updatedLessonFromGroup);
 		}
-		innerProps.setTasks(updatedTasks);
 
 		context.closeModal(id);
 		modals.closeAll();

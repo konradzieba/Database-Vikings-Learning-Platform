@@ -1,15 +1,14 @@
-import { Dispatch, SetStateAction, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Button, Select, Stack, Textarea } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { ContextModalProps, modals } from '@mantine/modals';
 import { IconCalendar, IconFloatLeft, IconListDetails } from '@tabler/icons-react';
 import dayjs from 'dayjs';
-import { TaskProps } from '@/pages/lecturer/CreateLesson.page';
+import { useCreateLessonStore } from '@/utils/store';
 
 interface AddTaskModalProps {
 	modalBody: string;
-	setTasks: Dispatch<SetStateAction<TaskProps[]>>;
-	tasksLength: number;
+	groupId: number;
 }
 
 function AddTaskModal({ innerProps, context, id }: ContextModalProps<AddTaskModalProps>) {
@@ -18,21 +17,32 @@ function AddTaskModal({ innerProps, context, id }: ContextModalProps<AddTaskModa
 	const [selectedDate, setSelectedDate] = useState<Date | null>(dayjs().add(7, 'days').endOf('day').toDate());
 	const [textFormat, setTextFormat] = useState<string | null>('Zwykły tekst');
 
+	const { createdLessonsArray, updateLesson } = useCreateLessonStore();
+
+	const lessonFromGroup = createdLessonsArray.find(lesson => lesson.groupId === innerProps.groupId);
+
 	const handleAddTask = () => {
 		if (textAreaRef.current?.value === '') {
 			setIsTextAreaError(true);
 			return;
 		}
-		innerProps.setTasks(prevState => [
-			...prevState,
-			{
-				number: innerProps.tasksLength + 1,
-				question: textAreaRef.current?.value!,
-				closeDate: selectedDate?.toISOString()!,
-				isMarkdown: textFormat === 'Markdown' ? true : false,
-				isExtra: false,
-			},
-		]);
+
+		if (lessonFromGroup) {
+			const updatedLessonFromGroup = {
+				...lessonFromGroup,
+				tasks: [
+					...lessonFromGroup.tasks,
+					{
+						number: lessonFromGroup.tasks.length + 1,
+						question: textAreaRef.current?.value!,
+						closeDate: selectedDate?.toISOString()!,
+						isMarkdown: textFormat === 'Markdown' ? true : false,
+						isExtra: false,
+					},
+				],
+			};
+			updateLesson(innerProps.groupId, updatedLessonFromGroup);
+		}
 
 		context.closeModal(id);
 		modals.closeAll();

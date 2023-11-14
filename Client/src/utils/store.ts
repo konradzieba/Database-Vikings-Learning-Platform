@@ -57,7 +57,6 @@ const initialStudentStoreValues = {
 	},
 };
 
-
 const initialLecturerStoreValues = {
 	lecturerData: {
 		lecturerId: null,
@@ -115,4 +114,41 @@ export const useLecturerStore = create<ILecturerStore>(set => ({
 	setLecturerData: lecturerData => set({ lecturerData }),
 	setGroups: groups => set({ groups }),
 	clearLecturerStoreData: () => set(initialLecturerStoreValues),
+}));
+
+type TaskType = {
+	number: number;
+	question: string;
+	closeDate: string;
+	isMarkdown: boolean;
+	isExtra: boolean;
+};
+
+type CreatedLessonType = {
+	lessonNumber: number;
+	lessonImage: string;
+	groupId: number;
+	tasks: TaskType[] | [];
+};
+
+interface ICreateLessonStore {
+	createdLessonsArray: CreatedLessonType[];
+	addLesson: (lesson: CreatedLessonType) => void;
+	removeLesson: (groupId: number) => void;
+	updateLesson: (groupId: number, updatedLesson: CreatedLessonType) => void;
+}
+
+export const useCreateLessonStore = create<ICreateLessonStore>(set => ({
+	createdLessonsArray: [],
+	addLesson: lesson => set(state => ({ createdLessonsArray: [...state.createdLessonsArray, lesson] })),
+	removeLesson: groupId =>
+		set(state => ({
+			createdLessonsArray: state.createdLessonsArray.filter(lesson => lesson.groupId !== groupId),
+		})),
+	updateLesson: (groupId, updatedLesson) =>
+		set(state => ({
+			createdLessonsArray: state.createdLessonsArray.map(lesson =>
+				lesson.groupId === groupId ? updatedLesson : lesson
+			),
+		})),
 }));

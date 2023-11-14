@@ -1,9 +1,9 @@
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import { Box, Button, Flex, Text } from '@mantine/core';
 import { IconPencilMinus } from '@tabler/icons-react';
 import classes from './Task.card.module.css';
 import { modals } from '@mantine/modals';
-import { TaskProps } from '@/pages/lecturer/CreateLesson.page';
+import { useParams } from 'react-router-dom';
 
 interface TaskCardProps {
 	number: number;
@@ -11,11 +11,10 @@ interface TaskCardProps {
 	closeDate: string;
 	isMarkdown: boolean;
 	isExtra: boolean;
-	tasks: TaskProps[];
-	setTasks: Dispatch<SetStateAction<TaskProps[]>>;
 }
 
-function TaskCard({ number, question, closeDate, isMarkdown, isExtra, tasks, setTasks }: TaskCardProps) {
+function TaskCard({ number, question, closeDate, isMarkdown, isExtra }: TaskCardProps) {
+	const { id } = useParams();
 	const [isHovered, setIsHovered] = useState(false);
 
 	const handleOpenModifyAddedTaskModal = () => {
@@ -25,13 +24,12 @@ function TaskCard({ number, question, closeDate, isMarkdown, isExtra, tasks, set
 			size: 'xl',
 			innerProps: {
 				modalBody: '',
+				groupId: +id!,
 				number: number,
 				question: question,
 				closeDate: closeDate,
 				isMarkdown: isMarkdown,
 				isExtra: isExtra,
-				tasks: tasks,
-				setTasks: setTasks,
 			},
 		});
 	};

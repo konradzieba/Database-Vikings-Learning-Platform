@@ -1,16 +1,12 @@
-import { Dispatch, SetStateAction } from 'react';
 import { Box, Button, Flex, ThemeIcon } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 import classes from './Task.card.module.css';
 import { modals } from '@mantine/modals';
-import { TaskProps } from '@/pages/lecturer/CreateLesson.page';
+import { useParams } from 'react-router-dom';
 
-interface AddTaskCardProps {
-	tasks: TaskProps[];
-	setTasks: Dispatch<SetStateAction<TaskProps[]>>;
-}
+function AddTaskCard() {
+	const { id } = useParams();
 
-function AddTaskCard({ tasks, setTasks }: AddTaskCardProps) {
 	const handleOpenAddTaksModal = () => {
 		modals.openContextModal({
 			modal: 'addTask',
@@ -19,8 +15,7 @@ function AddTaskCard({ tasks, setTasks }: AddTaskCardProps) {
 			closeOnClickOutside: false,
 			innerProps: {
 				modalBody: '',
-				setTasks: setTasks,
-				tasksLength: tasks.length,
+				groupId: +id!,
 			},
 		});
 	};

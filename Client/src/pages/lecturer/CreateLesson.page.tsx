@@ -8,12 +8,7 @@ import TasksCardList from '@/components/CreateLesson/TaskCard/TasksCard.list';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetLessonsByGroupId } from '@/hooks/lessons/useGetLessonsByGroupId';
 import FullScreenLoader from '@/components/UI/FullScreenLoader';
-
-const data = {
-	lessonNumber: 4,
-	groupName: 'Grupa 2 ISI',
-	taskNumbers: [],
-};
+import { useCreateLessonStore } from '@/utils/store';
 
 export type TaskProps = {
 	number: number;
@@ -25,27 +20,23 @@ export type TaskProps = {
 
 function CreateLessonPage() {
 	const [activeStep, setActiveStep] = useState(0);
-	const [lessonNumber, setLessonNumber] = useState<number | null>(null);
-	const [groupId, setGroupId] = useState<number | null>(null);
-	const [tasks, setTasks] = useState<TaskProps[]>([]);
-	const [lessonImage, setLessonImage] = useState<string | null>(null);
+
+	const { createdLessonsArray, addLesson } = useCreateLessonStore();
 
 	const { id } = useParams();
 
 	const handleCreateLesson = () => {
-		console.log('LESSON DATA');
-		console.log('lessonNumber', lessonNumber);
-		console.log('GroupId', groupId);
-		console.log('Tasks', tasks);
-		console.log('LessonImage', lessonImage);
+		console.log('createdLessonsArray', createdLessonsArray);
 	};
 
 	const { data: LessonsData, isSuccess, isLoading } = useGetLessonsByGroupId(+id!);
 
 	useEffect(() => {
 		if (isSuccess) {
-			setGroupId(+id!);
-			setLessonNumber(LessonsData.lessons.length + 1);
+			const existingLesson = createdLessonsArray.find(lesson => lesson.groupId === +id!);
+			if (!existingLesson) {
+				addLesson({ lessonNumber: LessonsData.lessons.length + 1, groupId: +id!, lessonImage: '', tasks: [] });
+			}
 		}
 	}, [isSuccess]);
 
@@ -74,10 +65,10 @@ function CreateLessonPage() {
 						onStepClick={setActiveStep}
 						completedIcon={<IconCheck size='1.2rem' />}>
 						<Stepper.Step allowStepSelect={false} label='Tworzenie zadań' icon={<IconList size='1.2rem' />}>
-							<TasksCardList tasks={tasks} setTasks={setTasks} />
+							<TasksCardList />
 						</Stepper.Step>
 						<Stepper.Step allowStepSelect={false} label='Wybór grafiki lekcji' icon={<IconPhoto size='1.2rem' />}>
-							<PhotoPicker lessonImage={lessonImage} setLessonImage={setLessonImage} />
+							<PhotoPicker />
 						</Stepper.Step>
 						<Stepper.Step allowStepSelect={false} label='Sprawdzanie obecności' icon={<IconChecklist size='1.2rem' />}>
 							<Flex align='center' h={rem(550)}>
@@ -120,6 +111,7 @@ function CreateLessonPage() {
 							</>
 						)}
 					</Group>
+					<Button onClick={handleCreateLesson}>Test BTN</Button>
 				</Stack>
 			)}
 		</>

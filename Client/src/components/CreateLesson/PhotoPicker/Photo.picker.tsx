@@ -1,16 +1,32 @@
-import { Dispatch, SetStateAction } from 'react';
+import { useState } from 'react';
 import { Avatar, Box, Flex, SimpleGrid, rem } from '@mantine/core';
 import classes from './Photo.picker.module.css';
 import { IconCheck } from '@tabler/icons-react';
 import lesson1 from '@/assets/lesson1.png';
 import test from '@/assets/lessonCreatedImage.png';
+import { useCreateLessonStore } from '@/utils/store';
+import { useParams } from 'react-router-dom';
 
-interface PhotoPickerProps {
-	lessonImage: string | null;
-	setLessonImage: Dispatch<SetStateAction<string | null>>;
-}
+function PhotoPicker() {
+	const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
+	const { id } = useParams();
+	const { createdLessonsArray, updateLesson } = useCreateLessonStore();
 
-function PhotoPicker({ lessonImage, setLessonImage }: PhotoPickerProps) {
+	const lessonFromGroup = createdLessonsArray.find(lesson => lesson.groupId === +id!);
+
+	const handleSetLessonImage = (photo: string | null) => {
+		if (photo) {
+			setSelectedPhoto(photo);
+		}
+		if (lessonFromGroup && photo) {
+			const updatedLessonFromGroup = {
+				...lessonFromGroup,
+				lessonImage: photo,
+			};
+			updateLesson(+id!, updatedLessonFromGroup);
+		}
+	};
+
 	const images = [
 		lesson1,
 		test,
@@ -35,8 +51,8 @@ function PhotoPicker({ lessonImage, setLessonImage }: PhotoPickerProps) {
 					<Box
 						key={image + index}
 						pos='relative'
-						className={image === lessonImage ? classes.lessonSelectedPhotoWrapper : classes.lessonPhotoWrapper}>
-						{image === lessonImage && <IconCheck className={classes.selectedPhotoIcon} size='2.5rem' stroke={3} />}
+						className={image === selectedPhoto ? classes.lessonSelectedPhotoWrapper : classes.lessonPhotoWrapper}>
+						{image === selectedPhoto && <IconCheck className={classes.selectedPhotoIcon} size='2.5rem' stroke={3} />}
 						<Avatar
 							key={image + index}
 							src={image}
@@ -44,11 +60,11 @@ function PhotoPicker({ lessonImage, setLessonImage }: PhotoPickerProps) {
 							size={rem(123)}
 							radius='50%'
 							className={
-								image == lessonImage ? classes.lessonSelectedPhotoContainer : classes.lessonPhotoPickerContainer
+								image == selectedPhoto ? classes.lessonSelectedPhotoContainer : classes.lessonPhotoPickerContainer
 							}
 							component='button'
 							style={{ cursor: 'inherit' }}
-							onClick={() => setLessonImage(image)}
+							onClick={() => handleSetLessonImage(image)}
 						/>
 					</Box>
 				))}
