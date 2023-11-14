@@ -60,20 +60,21 @@ model Group {
 
 
 model Student {
-  id                Int       @id @default(autoincrement())
-  indexNumber       Int       @unique
-  score             Int       @default(0)
-  health            Int       @default(3)
-  rank              Int?      @default(-1)
-  isPasswordChanged Boolean   @default(false)
-  lastLogin         DateTime?
+  id                 Int       @id @default(autoincrement())
+  indexNumber        Int       @unique
+  score              Int       @default(0)
+  health             Int       @default(3)
+  rank               Int?      @default(-1)
+  isPasswordChanged  Boolean   @default(false)
+  aggregatedSendTime Float     @default(0)
+  lastLogin          DateTime?
   // relations
-  userId            Int       @unique
-  groupId           Int       
-  answersId         Int[]
-  Answers           Answer[]
-  User              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Group             Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  userId             Int       @unique
+  groupId            Int       
+  answersId          Int[]
+  Answers            Answer[]
+  User               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Group              Group     @relation(fields: [groupId], references: [id], onDelete: Cascade)
 }
 
 
