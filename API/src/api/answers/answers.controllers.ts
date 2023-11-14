@@ -3,6 +3,8 @@ import MessageResponse from 'interfaces/MessageResponse';
 import { ParamsWithId } from 'interfaces/ParamsWithId';
 import { AnswerInput, AnswerReply, AnswerUpdate } from './answers.schemas';
 import * as AnswerServices from './answers.services';
+import * as UserServices from '../users/users.services';
+import * as TaskServices from '../tasks/tasks.services';
 
 export async function createAnswer(
   req: Request<{}, MessageResponse, AnswerInput>,
@@ -11,6 +13,20 @@ export async function createAnswer(
 ) {
   try {
     const { solution, taskId, studentId } = req.body;
+
+    const student = await UserServices.findStudentByStudentId(studentId);
+
+    if (!student) {
+      res.status(404);
+      throw new Error('Student with given id does not exist.');
+    }
+
+    const task = await TaskServices.findTaskById(taskId);
+
+    if (!task) {
+      res.status(404);
+      throw new Error('Task with given id does not exist.');
+    }
 
     const existingAnswer = await AnswerServices.findAnswerByTaskIdAndStudentId(
       taskId,
@@ -29,6 +45,8 @@ export async function createAnswer(
     });
 
     await AnswerServices.assignAnswerToStudent(studentId, answer.id);
+
+    await UserServices.updateAggregatedSendTime(studentId, task.openDate);
 
     res.json({
       message: `Answer id:${answer.id} for task id: ${answer.taskId} by student id ${answer.studentId} created successfully.`,

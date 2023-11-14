@@ -4,6 +4,8 @@ import type { User, Prisma, Student, Lecturer } from '@prisma/client';
 import { UpdateStudentInput } from './users.schemas';
 import { generatePasswordByCredentials } from '../../utils/generatePassword';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 export function findUserById(id: User['id']) {
   return db.user.findUnique({
@@ -191,6 +193,25 @@ export async function updateStudent(
   });
 }
 
+export function updateAggregatedSendTime(
+  studentId: Student['id'],
+  openDate: Date
+) {
+  const openDateTimezone = dayjs(openDate).format('Z');
+  const currentTime = dayjs().utcOffset(openDateTimezone);
+  const differenceInSeconds = currentTime.diff(dayjs(openDate), 'second');
+
+  console.log('openDate:', openDate);
+  console.log('currentTime:', currentTime.toDate());
+
+  return db.student.update({
+    where: { id: studentId },
+    data: {
+      aggregatedSendTime: differenceInSeconds / 1_000_000,
+    },
+  });
+}
+
 export async function getScoreBoard() {
   const scoreBoard = await db.student.findMany({
     select: {
@@ -201,7 +222,7 @@ export async function getScoreBoard() {
       Group: {
         select: {
           name: true,
-        }
+        },
       },
       User: {
         select: {

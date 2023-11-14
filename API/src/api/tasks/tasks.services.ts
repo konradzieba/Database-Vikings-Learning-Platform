@@ -82,10 +82,10 @@ export async function getStudentTasks(
   return lessonsData;
 }
 
-export function findTaskById(id: Task['id']) {
+export function findTaskById(taskId: Task['id']) {
   return db.task.findUnique({
     where: {
-      id,
+      id: taskId,
     },
   });
 }
