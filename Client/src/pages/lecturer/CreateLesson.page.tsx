@@ -10,14 +10,6 @@ import { useGetLessonsByGroupId } from '@/hooks/lessons/useGetLessonsByGroupId';
 import FullScreenLoader from '@/components/UI/FullScreenLoader';
 import { useCreateLessonStore } from '@/utils/store';
 
-export type TaskProps = {
-	number: number;
-	question: string;
-	closeDate: string;
-	isMarkdown: boolean;
-	isExtra: boolean;
-};
-
 function CreateLessonPage() {
 	const [activeStep, setActiveStep] = useState(0);
 
@@ -27,6 +19,7 @@ function CreateLessonPage() {
 
 	const handleCreateLesson = () => {
 		console.log('createdLessonsArray', createdLessonsArray);
+		nextStep();
 	};
 
 	const { data: LessonsData, isSuccess, isLoading } = useGetLessonsByGroupId(+id!);
@@ -35,7 +28,13 @@ function CreateLessonPage() {
 		if (isSuccess) {
 			const existingLesson = createdLessonsArray.find(lesson => lesson.groupId === +id!);
 			if (!existingLesson) {
-				addLesson({ lessonNumber: LessonsData.lessons.length + 1, groupId: +id!, lessonImage: '', tasks: [] });
+				addLesson({
+					lessonNumber: LessonsData.lessons.length + 1,
+					groupId: +id!,
+					lessonImage: '',
+					isFrequencyChecked: false,
+					tasks: [],
+				});
 			}
 		}
 	}, [isSuccess]);
@@ -48,7 +47,6 @@ function CreateLessonPage() {
 	const prevStep = () => {
 		setActiveStep(current => (current > 0 ? current - 1 : current));
 	};
-	const isLastStep = activeStep === 2;
 
 	return (
 		<>
@@ -85,18 +83,38 @@ function CreateLessonPage() {
 								<Button miw={150} variant='outline' onClick={() => navigate(-1)}>
 									Wróć
 								</Button>
-								<Button miw={150} onClick={nextStep}>
+								<Button
+									miw={150}
+									onClick={nextStep}
+									disabled={
+										createdLessonsArray.find(lesson => lesson.groupId === +id!)?.tasks.length === 0 ? true : false
+									}>
 									Dalej
 								</Button>
 							</>
 						)}
-						{activeStep > 0 && activeStep < 3 && (
+						{activeStep === 1 && (
 							<>
 								<Button miw={150} variant='outline' onClick={prevStep}>
 									Cofnij
 								</Button>
-								<Button miw={150} onClick={isLastStep ? handleCreateLesson : nextStep}>
-									{isLastStep ? 'Stwórz lekcje' : 'Dalej'}
+								<Button
+									miw={150}
+									onClick={nextStep}
+									disabled={
+										createdLessonsArray.find(lesson => lesson.groupId === +id!)?.lessonImage === '' ? true : false
+									}>
+									Dalej
+								</Button>
+							</>
+						)}
+						{activeStep === 2 && (
+							<>
+								<Button miw={150} variant='outline' onClick={prevStep}>
+									Cofnij
+								</Button>
+								<Button miw={150} onClick={handleCreateLesson}>
+									Stwórz lekcje
 								</Button>
 							</>
 						)}
@@ -105,13 +123,12 @@ function CreateLessonPage() {
 								<Button miw={150} onClick={() => console.log('Generowanie pdf')} variant='outline'>
 									Wygeneruj PDF z listą obecności
 								</Button>
-								<Button miw={150} onClick={() => navigate(`/dashboard/group/9/lessons`)}>
+								<Button miw={150} onClick={() => navigate(`/dashboard/group/${id}/lessons`)}>
 									Przejdź do wszystkich lekcji
 								</Button>
 							</>
 						)}
 					</Group>
-					<Button onClick={handleCreateLesson}>Test BTN</Button>
 				</Stack>
 			)}
 		</>
@@ -119,28 +136,3 @@ function CreateLessonPage() {
 }
 
 export default CreateLessonPage;
-
-// {activeStep < 3 ? (
-// 	<>
-
-// 		<Button
-// 			miw={150}
-// 			variant='outline'
-// 			disabled={activeStep == 0}
-// 			onClick={prevStep}
-// 		>
-// 			Cofnij
-// 		</Button>
-// 		<Button miw={150} onClick={nextStep}>
-// 			{isLastStep ? 'Stwórz lekcje' : 'Dalej'}
-// 		</Button>
-// 	</>
-// ) : (
-// 	<>
-// 		{/* Back button only for testing, will be deleted in build */}
-// 		<Button miw={150} variant='outline' onClick={prevStep}>
-// 			Cofnij
-// 		</Button>
-// 		<Button miw={150}>Wróć do lekcji</Button>
-// 	</>
-// )}
