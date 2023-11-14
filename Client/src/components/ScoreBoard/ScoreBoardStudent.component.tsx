@@ -47,8 +47,6 @@ interface ScoreBoardProps {
 	};
 }
 
-// ... (existing imports and code)
-
 function ScoreBoard({ type, studentInfo, scoreBoardData }: ScoreBoardProps) {
 	const { groupId, studentId } = studentInfo;
 	const isGlobal = type === 'global';

@@ -74,10 +74,6 @@ function PreviewStudentAnswerModal({
 		grantedScore: answerReplyForm.values.grantedScore as number,
 	});
 
-	useEffect(() => {
-		console.log(answerReplyForm.values);
-	}, [answerReplyForm.values]);
-
 	const handleReplyAnswer = () => {
 		answerReplyForm.validate();
 		if (!answerReplyForm.values.replyStatus) {

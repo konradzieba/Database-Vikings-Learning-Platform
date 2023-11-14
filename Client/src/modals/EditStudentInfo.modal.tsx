@@ -50,10 +50,6 @@ function EditStudentInfoModal({
 		},
 	});
 
-	useEffect(() => {
-		console.log(form.values);
-	}, [form.values]);
-
 	const {
 		mutate: changeStudentInfo,
 		isPending,

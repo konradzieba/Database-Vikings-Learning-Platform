@@ -163,12 +163,6 @@ export async function updateTask(
     const { id: taskId } = req.params;
     const { question, closeDate, isMarkdown } = req.body;
 
-    console.log('data', {
-      question,
-      closeDate: dayjs(closeDate).toDate(),
-      isMarkdown,
-    });
-
     const existingTask = await TaskServices.findTaskById(+taskId);
 
     if (!existingTask) {

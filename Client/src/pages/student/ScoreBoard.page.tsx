@@ -9,14 +9,11 @@ function ScoreBoardPage() {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const { studentData } = useStudentStore();
 	const { data: scoreBoardData, isPending } = useGetScoreBoardQuery();
+	const isGlobal = searchParams.get('type') === 'global';
 	const studentInfo = {
 		studentId: studentData?.studentId,
 		groupId: studentData?.groupId,
 	};
-
-	console.log(scoreBoardData);
-
-	const isGlobal = searchParams.get('type') === 'global';
 
 	if (isPending) {
 		return (

@@ -25,7 +25,6 @@ export async function me(req: Request, res: Response, next: NextFunction) {
 
     if (user.role === EnumRole.STUDENT) {
       const student = await UserServices.findStudentByUserId(user.id);
-      console.log(student);
 
       if (student) {
         res.json({

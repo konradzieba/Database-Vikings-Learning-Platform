@@ -4,7 +4,6 @@ import { Center, Loader, Select, Stack, Title } from '@mantine/core';
 
 function ScoreBoardLecturerPage() {
 	const { groups } = useLecturerStore();
-	console.log(groups);
 
 	if (groups?.length === 0) {
 		return (
