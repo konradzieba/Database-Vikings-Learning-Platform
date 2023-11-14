@@ -9,6 +9,7 @@ import {
 	TGetLessonInfoByGroupAndLessonId,
 	TGetLessonTaskById,
 	TGetLessonsByGroupId,
+	TGetScoreBoard,
 	TGetStudentDefaultPasswordState,
 	TGetStudentLessonsInfo,
 	TGetStudentTasks,
@@ -123,6 +124,11 @@ export const getLessonTaskByIdQueryFn = async (
 	const { data } = await axios.get<TGetLessonTaskById>(
 		`tasks/getLessonTaskById/${lessonId}/${taskId}`
 	);
+	return data;
+};
+
+export const getScoreBoardQueryFn = async () => {
+	const { data } = await axios.get<TGetScoreBoard>('/users/getScoreBoard');
 	return data;
 };
 

@@ -30,6 +30,8 @@ router.get(
   UserController.getStudentDefaultPasswordState
 );
 
+router.get('/getScoreBoard', requireUser, UserController.getScoreBoard);
+
 router.patch(
   '/updateUser/:id',
   validateRequestAndCheckRole(

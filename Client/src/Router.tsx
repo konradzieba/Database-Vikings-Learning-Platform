@@ -1,5 +1,9 @@
 import { Center } from '@mantine/core';
-import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
+import {
+	createBrowserRouter,
+	Navigate,
+	RouterProvider,
+} from 'react-router-dom';
 import LoginForm from './components/Login/Login.form';
 import BlankContent from './components/UI/BlankContent';
 import StudentLayout from './layouts/Student.layout';
@@ -10,7 +14,11 @@ import LecturerLayout from './layouts/Lecturer.layout';
 import { NotFoundPage } from './pages/404.page';
 import DashboardPage from './pages/lecturer/Dashboard.page';
 import AuthMiddleware from './utils/Auth.middleware';
-import { lecturerLayoutLoaderFn, loginLoaderFn, studentLayoutLoaderFn } from './utils/middlewares';
+import {
+	lecturerLayoutLoaderFn,
+	loginLoaderFn,
+	studentLayoutLoaderFn,
+} from './utils/middlewares';
 import { HomePage } from './pages/student/Home.page';
 import LessonTasksPage from './pages/student/LessonTasks.page';
 import GroupPanelPage from './pages/lecturer/GroupPanel.page';
@@ -19,6 +27,7 @@ import CreateLessonPage from './pages/lecturer/CreateLesson.page';
 import CheckFrequencyPage from './pages/CheckFrequency.page';
 import GroupStudentsInfoPage from './pages/lecturer/GroupStudentsInfo.page';
 import LessonDashboardPage from './pages/lecturer/LessonDashboard.page';
+import ScoreBoardLecturerPage from './pages/lecturer/ScoreBoardLecturer.page';
 
 const router = createBrowserRouter([
 	{
@@ -58,7 +67,10 @@ const router = createBrowserRouter([
 						path: 'lessons',
 						element: <GroupLessonsPage />,
 						children: [
-							{ path: 'lessonDashboard/:lessonId', element: <LessonDashboardPage /> },
+							{
+								path: 'lessonDashboard/:lessonId',
+								element: <LessonDashboardPage />,
+							},
 							{ path: 'createLesson', element: <CreateLessonPage /> },
 							// { path: 'checkFrequency', element: <CheckFrequencyPage /> },
 						],
@@ -69,7 +81,7 @@ const router = createBrowserRouter([
 					},
 					{
 						path: 'ranking',
-						element: <Center>Ranking</Center>,
+						element: <ScoreBoardLecturerPage />,
 					},
 				],
 			},

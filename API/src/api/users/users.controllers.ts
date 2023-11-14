@@ -25,7 +25,6 @@ export async function me(req: Request, res: Response, next: NextFunction) {
 
     if (user.role === EnumRole.STUDENT) {
       const student = await UserServices.findStudentByUserId(user.id);
-      console.log(student);
 
       if (student) {
         res.json({
@@ -69,6 +68,20 @@ export async function me(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+export async function getScoreBoard(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const scoreBoard = await UserServices.getScoreBoard();
+
+    res.json({ message: 'success', scoreBoard: scoreBoard });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function getStudentDefaultPasswordState(
   req: Request,
   res: Response,
@@ -88,7 +101,7 @@ export async function getStudentDefaultPasswordState(
 
     res.json({
       message: 'success',
-      isDefaultPasswordChanged: student.isPasswordChanged
+      isDefaultPasswordChanged: student.isPasswordChanged,
     });
   } catch (error) {
     next(error);

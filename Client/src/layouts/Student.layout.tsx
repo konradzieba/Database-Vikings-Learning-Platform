@@ -10,15 +10,17 @@ function StudentLayout() {
 	const { userData } = useUserStore();
 	const { studentData } = useStudentStore();
 	const studentNavbarData = {
+		firstName: userData.firstName,
+		lastName: userData.lastName,
 		email: userData.email,
 		score: studentData.score,
 		health: studentData.health,
-		isPasswordChanged: studentData.isPasswordChanged,
 	};
 
 	const isLoading = !!studentNavbarData.email || !!studentNavbarData.score;
 
-	const { data: isPasswordChangedData, isSuccess } = useGetStudentDefaultPasswordState();
+	const { data: isPasswordChangedData, isSuccess } =
+		useGetStudentDefaultPasswordState();
 
 	useEffect(() => {
 		if (isSuccess) {

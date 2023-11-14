@@ -191,6 +191,33 @@ export async function updateStudent(
   });
 }
 
+export async function getScoreBoard() {
+  const scoreBoard = await db.student.findMany({
+    select: {
+      id: true,
+      indexNumber: true,
+      score: true,
+      groupId: true,
+      Group: {
+        select: {
+          name: true,
+        }
+      },
+      User: {
+        select: {
+          firstName: true,
+          lastName: true,
+        },
+      },
+    },
+    orderBy: {
+      score: 'desc',
+    },
+  });
+
+  return scoreBoard;
+}
+
 export async function restoreDefaultPassword(id: Student['id']) {
   const student = await db.student.findUnique({
     where: { id },

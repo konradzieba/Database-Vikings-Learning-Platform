@@ -206,6 +206,25 @@ const getTaskInfoByIdSchema = z.object({
 	}),
 });
 
+const getScoreBoardSchema = z.object({
+	message: z.string(),
+	scoreBoard: z.array(
+		z.object({
+			id: z.number().int(),
+			indexNumber: z.number().int(),
+			score: z.number().int(),
+			groupId: z.number().int(),
+			Group: z.object({
+				name: z.string(),
+			}),
+			User: z.object({
+				firstName: z.string(),
+				lastName: z.string(),
+			}),
+		})
+	),
+});
+
 const getStudentDefaultPasswordStateSchema = z.object({
 	message: z.string(),
 	isDefaultPasswordChanged: z.boolean(),
@@ -235,3 +254,4 @@ export type TGetStudentDefaultPasswordState = z.infer<
 	typeof getStudentDefaultPasswordStateSchema
 >;
 export type TGetTaskInfoById = z.infer<typeof getTaskInfoByIdSchema>;
+export type TGetScoreBoard = z.infer<typeof getScoreBoardSchema>;

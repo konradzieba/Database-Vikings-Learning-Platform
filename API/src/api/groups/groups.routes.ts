@@ -13,7 +13,7 @@ router.get(
     { params: paramsWithIdSchema },
     EnumRole.LECTURER
   ),
-  GroupsControllers.getGroups
+  GroupsControllers.getGroupsByLecturerId
 );
 
 router.get(
