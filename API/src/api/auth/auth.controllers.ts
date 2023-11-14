@@ -191,6 +191,15 @@ export async function login(
     const jti = uuidv4();
     const { accessToken, refreshToken } = generateTokens(existingUser, jti);
 
+    if (existingUser.role === EnumRole.STUDENT) {
+      const student = await UserServices.findStudentByUserId(existingUser.id);
+      if (!student) {
+        res.status(401);
+        throw new Error('Invalid login credentials.');
+      }
+      await UserServices.updateLastLogin(student.id);
+    }
+
     await AuthServices.addRefreshTokenToWhitelist({
       jti,
       refreshToken,
