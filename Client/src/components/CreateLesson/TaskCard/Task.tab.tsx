@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useRef, useState } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { Box, Button, Flex, Text } from '@mantine/core';
 import { IconPencilMinus } from '@tabler/icons-react';
 import classes from './Task.card.module.css';
@@ -21,7 +21,7 @@ function TaskCard({ number, question, closeDate, isMarkdown, isExtra, tasks, set
 	const handleOpenModifyAddedTaskModal = () => {
 		modals.openContextModal({
 			modal: 'modifyAddedTask',
-			title: 'Podgląd zadania',
+			title: `Podgląd zadania ${number}`,
 			size: 'xl',
 			innerProps: {
 				modalBody: '',
