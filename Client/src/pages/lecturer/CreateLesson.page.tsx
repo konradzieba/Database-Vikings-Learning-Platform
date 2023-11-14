@@ -9,6 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useGetLessonsByGroupId } from '@/hooks/lessons/useGetLessonsByGroupId';
 import FullScreenLoader from '@/components/UI/FullScreenLoader';
 import { useCreateLessonStore } from '@/utils/store';
+import { modals } from '@mantine/modals';
 
 function CreateLessonPage() {
 	const [activeStep, setActiveStep] = useState(0);
@@ -18,8 +19,18 @@ function CreateLessonPage() {
 	const { id } = useParams();
 
 	const handleCreateLesson = () => {
-		console.log('createdLessonsArray', createdLessonsArray);
-		nextStep();
+		const createdLesson = createdLessonsArray.find(lesson => lesson.groupId === +id!);
+		modals.openContextModal({
+			modal: 'previewCreatedLessonInfo',
+			title: 'Podgląd lekcji',
+			closeOnClickOutside: false,
+			withCloseButton: false,
+			innerProps: {
+				modalBody: '',
+				createdLesson: createdLesson,
+				nextStep: nextStep,
+			},
+		});
 	};
 
 	const { data: LessonsData, isSuccess, isLoading } = useGetLessonsByGroupId(+id!);

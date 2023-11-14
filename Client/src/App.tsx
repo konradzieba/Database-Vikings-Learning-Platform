@@ -25,6 +25,7 @@ import RestoreDefaultPasswordModal from './modals/RestoreDefaultPassword.modal';
 import NotAnsweredListModal from './modals/NotAnsweredList.modal';
 import TaskDetailsModal from './modals/TaskDetails.modal';
 import ModifyAddedTaskModal from './modals/ModifyAddedTask.modal';
+import PreviewCreatedLessonInfoModal from './modals/PreviewCreatedLessonInfo.modal';
 
 export default function App() {
 	dayjs.locale('pl');
@@ -47,6 +48,7 @@ export default function App() {
 							notAnsweredList: NotAnsweredListModal,
 							taskDetails: TaskDetailsModal,
 							modifyAddedTask: ModifyAddedTaskModal,
+							previewCreatedLessonInfo: PreviewCreatedLessonInfoModal,
 						}}
 						labels={{ confirm: 'Prześlij', cancel: 'Anuluj' }}
 						modalProps={{ overlayProps: { blur: 2 }, yOffset: rem(100) }}>
