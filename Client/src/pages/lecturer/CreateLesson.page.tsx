@@ -20,7 +20,6 @@ export type TaskProps = {
 	closeDate: string;
 	isMarkDown: boolean;
 	isExtra: boolean;
-	lessonId: number;
 };
 
 function CreateLessonPage() {

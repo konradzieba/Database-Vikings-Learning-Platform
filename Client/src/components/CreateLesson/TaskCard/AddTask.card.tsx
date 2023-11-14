@@ -25,20 +25,6 @@ function AddTaskCard({ tasks, setTasks }: AddTaskCardProps) {
 		});
 	};
 
-	// const handleTest = () => {
-	// 	setTasks(prevState => [
-	// 		...prevState,
-	// 		{
-	// 			number: 1,
-	// 			question: 'kotek?',
-	// 			closeDate: '01-05-2000',
-	// 			isMarkDown: false,
-	// 			isExtra: false,
-	// 			lessonId: 12,
-	// 		},
-	// 	]);
-	// };
-
 	return (
 		<Box className={classes.addTaskCardContainer}>
 			<Flex justify='center' align='center' h='100%'>
