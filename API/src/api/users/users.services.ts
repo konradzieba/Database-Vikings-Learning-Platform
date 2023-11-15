@@ -201,9 +201,6 @@ export function updateAggregatedSendTime(
   const currentTime = dayjs().utcOffset(openDateTimezone);
   const differenceInSeconds = currentTime.diff(dayjs(openDate), 'second');
 
-  console.log('openDate:', openDate);
-  console.log('currentTime:', currentTime.toDate());
-
   return db.student.update({
     where: { id: studentId },
     data: {
@@ -219,6 +216,7 @@ export async function getScoreBoard() {
       indexNumber: true,
       score: true,
       groupId: true,
+      aggregatedSendTime: true,
       Group: {
         select: {
           name: true,
