@@ -1,5 +1,5 @@
 import { useCreateLessonMutation } from '@/hooks/lessons/useCreateLessonMutation';
-import { CreatedLessonType } from '@/utils/store';
+import { CreatedLessonType, useCreateLessonStore } from '@/utils/store';
 import { Button, Center, Flex, Group, Loader, Text } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
 import { IconCircleCheck, IconCircleX } from '@tabler/icons-react';
@@ -15,7 +15,8 @@ function PreviewCreatedLessonInfoModal({
 	innerProps,
 }: ContextModalProps<PreviewCreatedLessonInfoModalProps>) {
 	const { mutate: createLessonMutation, isError, isPending, isSuccess } = useCreateLessonMutation();
-	//TODO clear lesson after creation, maybe in hook
+	const { removeLesson } = useCreateLessonStore();
+
 	const handleCreateLesson = () => {
 		createLessonMutation({
 			number: innerProps.createdLesson.lessonNumber,
@@ -32,6 +33,7 @@ function PreviewCreatedLessonInfoModal({
 	};
 
 	const handleCloseModalWithFinalStep = () => {
+		removeLesson(innerProps.createdLesson.groupId);
 		innerProps.nextStep();
 		context.closeModal(id);
 		modals.closeAll();
