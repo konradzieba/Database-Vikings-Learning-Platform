@@ -1,8 +1,9 @@
 import { useCreateLessonMutation } from '@/hooks/lessons/useCreateLessonMutation';
 import { CreatedLessonType, useCreateLessonStore } from '@/utils/store';
-import { Button, Center, Flex, Group, Loader, Text } from '@mantine/core';
+import { Button, Center, Collapse, Flex, Group, Image, Loader, Text, rem, AspectRatio } from '@mantine/core';
+import { useDisclosure } from '@mantine/hooks';
 import { ContextModalProps, modals } from '@mantine/modals';
-import { IconCircleCheck, IconCircleX } from '@tabler/icons-react';
+import { IconChevronDown, IconChevronUp, IconCircleCheck, IconCircleX } from '@tabler/icons-react';
 
 interface PreviewCreatedLessonInfoModalProps {
 	createdLesson: CreatedLessonType;
@@ -16,6 +17,7 @@ function PreviewCreatedLessonInfoModal({
 }: ContextModalProps<PreviewCreatedLessonInfoModalProps>) {
 	const { mutate: createLessonMutation, isError, isPending, isSuccess } = useCreateLessonMutation();
 	const { removeLesson } = useCreateLessonStore();
+	const [opened, { toggle }] = useDisclosure(false);
 
 	const handleCreateLesson = () => {
 		createLessonMutation({
@@ -83,9 +85,33 @@ function PreviewCreatedLessonInfoModal({
 
 	return (
 		<>
-			<Text>Ilość zadań: {innerProps.createdLesson.tasks.length}</Text>
-			<Text>Zdjęcie: {innerProps.createdLesson.lessonImage}</Text>
-			<Text>Czy obecność została sprawdzona? {innerProps.createdLesson.isFrequencyChecked}</Text>
+			<Group gap={rem(4)}>
+				<Text>Ilość zadań:</Text>
+				<Text c='var(--mantine-primary-color)'>{innerProps.createdLesson.tasks.length}</Text>
+			</Group>
+			<Button
+				variant='transparent'
+				size='md'
+				c='var(--font-color)'
+				pl={0}
+				onClick={toggle}
+				rightSection={opened ? <IconChevronUp /> : <IconChevronDown />}>
+				Zdjęcie
+			</Button>
+			<Collapse in={opened}>
+				<AspectRatio ratio={1} maw={200}>
+					<Image src={innerProps.createdLesson.lessonImage} />
+				</AspectRatio>
+			</Collapse>
+
+			<Group gap={rem(4)}>
+				<Text>Czy obecność została sprawdzona?&nbsp;</Text>
+				{innerProps.createdLesson.isFrequencyChecked ? (
+					<Text c='var(--mantine-primary-color)'>Tak</Text>
+				) : (
+					<Text c='var(--bad-state-color)'>Nie</Text>
+				)}
+			</Group>
 			<Group justify='center' mt='md'>
 				<Button variant='outline' miw={150} onClick={handleCloseModal}>
 					Anuluj

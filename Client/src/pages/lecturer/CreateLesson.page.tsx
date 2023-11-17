@@ -23,7 +23,7 @@ function CreateLessonPage() {
 		const createdLesson = createdLessonsArray.find(lesson => lesson.groupId === +id!);
 		modals.openContextModal({
 			modal: 'previewCreatedLessonInfo',
-			title: 'Podgląd lekcji',
+			title: `Pogląd stworzonej lekcji nr ${createdLesson?.lessonNumber}`,
 			closeOnClickOutside: false,
 			withCloseButton: false,
 			innerProps: {
