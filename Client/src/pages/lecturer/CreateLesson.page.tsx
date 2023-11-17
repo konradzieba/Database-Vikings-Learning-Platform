@@ -1,4 +1,4 @@
-import { Button, Flex, Group, Stack, Stepper, Title, rem } from '@mantine/core';
+import { Flex, Stack, Stepper, Title, rem } from '@mantine/core';
 import { useState, useEffect } from 'react';
 import { IconCheck, IconChecklist, IconList, IconPhoto } from '@tabler/icons-react';
 import PhotoPicker from '@/components/CreateLesson/PhotoPicker/Photo.picker';
@@ -10,6 +10,7 @@ import { useGetLessonsByGroupId } from '@/hooks/lessons/useGetLessonsByGroupId';
 import FullScreenLoader from '@/components/UI/FullScreenLoader';
 import { useCreateLessonStore } from '@/utils/store';
 import { modals } from '@mantine/modals';
+import StepperButtons from '@/components/UI/StepperButtons';
 
 function CreateLessonPage() {
 	const [activeStep, setActiveStep] = useState(0);
@@ -88,58 +89,14 @@ function CreateLessonPage() {
 							<LessonCreated />
 						</Stepper.Completed>
 					</Stepper>
-					<Group mx='auto'>
-						{activeStep === 0 && (
-							<>
-								<Button miw={150} variant='outline' onClick={() => navigate(-1)}>
-									Wróć
-								</Button>
-								<Button
-									miw={150}
-									onClick={nextStep}
-									disabled={
-										createdLessonsArray.find(lesson => lesson.groupId === +id!)?.tasks.length === 0 ? true : false
-									}>
-									Dalej
-								</Button>
-							</>
-						)}
-						{activeStep === 1 && (
-							<>
-								<Button miw={150} variant='outline' onClick={prevStep}>
-									Cofnij
-								</Button>
-								<Button
-									miw={150}
-									onClick={nextStep}
-									disabled={
-										createdLessonsArray.find(lesson => lesson.groupId === +id!)?.lessonImage === '' ? true : false
-									}>
-									Dalej
-								</Button>
-							</>
-						)}
-						{activeStep === 2 && (
-							<>
-								<Button miw={150} variant='outline' onClick={prevStep}>
-									Cofnij
-								</Button>
-								<Button miw={150} onClick={handleCreateLesson}>
-									Stwórz lekcje
-								</Button>
-							</>
-						)}
-						{activeStep === 3 && (
-							<>
-								<Button miw={150} onClick={() => console.log('Generowanie pdf')} variant='outline'>
-									Wygeneruj PDF z listą obecności
-								</Button>
-								<Button miw={150} onClick={() => navigate(`/dashboard/group/${id}/lessons`)}>
-									Przejdź do wszystkich lekcji
-								</Button>
-							</>
-						)}
-					</Group>
+					<StepperButtons
+						activeStep={activeStep}
+						createdLessonsArray={createdLessonsArray}
+						groupId={+id!}
+						nextStep={nextStep}
+						prevStep={prevStep}
+						handleCreateLesson={handleCreateLesson}
+					/>
 				</Stack>
 			)}
 		</>
