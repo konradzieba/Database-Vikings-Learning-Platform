@@ -20,7 +20,10 @@ function StepperButtons({
 	handleCreateLesson,
 }: StepperButtonsProps) {
 	const navigate = useNavigate();
-
+	const isTaskButtonDisabled =
+		createdLessonsArray.find(lesson => lesson.groupId === +groupId!)?.tasks.length === 0 ? true : false;
+	const isPhotoButtonDisabled =
+		createdLessonsArray.find(lesson => lesson.groupId === +groupId!)?.lessonImage === '' ? true : false;
 	return (
 		<Group mx='auto'>
 			{activeStep === 0 && (
@@ -28,12 +31,7 @@ function StepperButtons({
 					<Button miw={150} variant='outline' onClick={() => navigate(-1)}>
 						Wróć
 					</Button>
-					<Button
-						miw={150}
-						onClick={nextStep}
-						disabled={
-							createdLessonsArray.find(lesson => lesson.groupId === +groupId!)?.tasks.length === 0 ? true : false
-						}>
+					<Button miw={150} onClick={nextStep} disabled={isTaskButtonDisabled}>
 						Dalej
 					</Button>
 				</>
@@ -43,12 +41,7 @@ function StepperButtons({
 					<Button miw={150} variant='outline' onClick={prevStep}>
 						Cofnij
 					</Button>
-					<Button
-						miw={150}
-						onClick={nextStep}
-						disabled={
-							createdLessonsArray.find(lesson => lesson.groupId === +groupId!)?.lessonImage === '' ? true : false
-						}>
+					<Button miw={150} onClick={nextStep} disabled={isPhotoButtonDisabled}>
 						Dalej
 					</Button>
 				</>
