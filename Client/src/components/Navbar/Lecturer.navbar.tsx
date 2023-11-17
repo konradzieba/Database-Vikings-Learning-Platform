@@ -12,7 +12,7 @@ import { NavLink, useLocation, useParams } from 'react-router-dom';
 import classes from './Navbar.module.css';
 import UserPanel from '../UI/UserPanel';
 import { IconChevronDown } from '@tabler/icons-react';
-import { useLecturerStore } from '@/utils/store';
+import { useLecturerStore } from '@/utils/stores/useLecturerStore';
 
 function Nav() {
 	const { pathname } = useLocation();

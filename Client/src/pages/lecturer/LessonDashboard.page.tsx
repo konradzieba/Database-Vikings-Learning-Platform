@@ -1,18 +1,7 @@
 import StudentAnswerCard from '@/components/StudentAnswerCard/StudentAnswer.card';
 import TaskAnswersStats from '@/components/UI/TaskAnswersStats';
 import { useGetLessonInfoByGroupAndLessonIdQueryFn } from '@/hooks/lessons/useGetLessonInfoByGroupAndLessonIdQueryFn';
-import {
-	Button,
-	Center,
-	Flex,
-	Loader,
-	Paper,
-	ScrollArea,
-	Tabs,
-	Text,
-	Title,
-	rem,
-} from '@mantine/core';
+import { Button, Center, Flex, Loader, Paper, ScrollArea, Tabs, Text, Title, rem } from '@mantine/core';
 
 import { modals } from '@mantine/modals';
 import { useMemo } from 'react';
@@ -48,9 +37,7 @@ function LessonDashboardPage() {
 		return (
 			<Center h='25vh'>
 				<Paper withBorder p='lg'>
-					<Text size='lg'>
-						TEMPORARY TEXT WHEN THERE IS NO ELEMENT IN ARRAY
-					</Text>
+					<Text size='lg'>TEMPORARY TEXT WHEN THERE IS NO ELEMENT IN ARRAY</Text>
 				</Paper>
 			</Center>
 		);
@@ -68,21 +55,17 @@ function LessonDashboardPage() {
 		});
 	};
 
-	const tasksTabs = lessonData?.lessonInfo.tasks.map((task) => {
+	const tasksTabs = lessonData?.lessonInfo.tasks.map(task => {
 		return (
 			<Tabs.Tab
 				value={`task-${task.taskNumber}`}
-				key={`task-${task.taskNumber}-tab`}
-			>{`Zadanie ${task.taskNumber}`}</Tabs.Tab>
+				key={`task-${task.taskNumber}-tab`}>{`Zadanie ${task.taskNumber}`}</Tabs.Tab>
 		);
 	});
 
-	const tasksPanels = lessonData?.lessonInfo.tasks.map((task) => {
+	const tasksPanels = lessonData?.lessonInfo.tasks.map(task => {
 		return (
-			<Tabs.Panel
-				value={`task-${task.taskNumber}`}
-				key={`task-${task.taskNumber}-panel`}
-			>
+			<Tabs.Panel value={`task-${task.taskNumber}`} key={`task-${task.taskNumber}-panel`}>
 				<Flex direction='column'>
 					<TaskAnswersStats
 						endDate={task.endDate}
@@ -93,7 +76,7 @@ function LessonDashboardPage() {
 					<ScrollArea h={500} type='auto'>
 						<Flex wrap='wrap' gap='xl' mx='lg' mt='md' justify='flex-start'>
 							{isRepliedTabChosen
-								? task.answers.map((answer) => {
+								? task.answers.map(answer => {
 										if (answer.grantedScore) {
 											return (
 												<StudentAnswerCard
@@ -111,7 +94,7 @@ function LessonDashboardPage() {
 										}
 										return null;
 								  })
-								: task.answers.map((answer) => {
+								: task.answers.map(answer => {
 										if (!answer.grantedScore) {
 											return (
 												<StudentAnswerCard
@@ -147,13 +130,7 @@ function LessonDashboardPage() {
 				</Button>
 			</Center>
 			<Center>
-				<Tabs
-					orientation='vertical'
-					defaultValue='task-1'
-					h='60vh'
-					w='60vw'
-					mt='sm'
-				>
+				<Tabs orientation='vertical' defaultValue='task-1' h='60vh' w='60vw' mt='sm'>
 					<Tabs.List grow>{tasksTabs}</Tabs.List>
 					{tasksPanels}
 				</Tabs>

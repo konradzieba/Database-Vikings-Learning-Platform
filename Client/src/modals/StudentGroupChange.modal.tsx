@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { useLecturerStore } from '@/utils/store';
-import { Box, Button, Center, Flex, Group, Loader, Select, Text } from '@mantine/core';
+import { Button, Center, Flex, Group, Loader, Select, Text } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
 import { useChangeStudentGroupMutation } from '@/hooks/students/useChangeStudentGroupMutation';
 import { IconCircleCheck, IconCircleX, IconListDetails } from '@tabler/icons-react';
+import { useLecturerStore } from '@/utils/stores/useLecturerStore';
 
 function StudentGroupChangeModal({
 	context,

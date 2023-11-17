@@ -1,15 +1,7 @@
 import StudentTaskAccordion from '@/components/StudentTaskAccordion/StudentTask.accordion';
 import useGetStudentTasksQuery from '@/hooks/tasks/useGetStudentTasks';
-import { useStudentStore } from '@/utils/store';
-import {
-	Center,
-	Flex,
-	Loader,
-	ScrollArea,
-	Tabs,
-	Text,
-	Title,
-} from '@mantine/core';
+import { useStudentStore } from '@/utils/stores/useStudentStore';
+import { Center, Flex, Loader, ScrollArea, Tabs, Text, Title } from '@mantine/core';
 import { IconArrowBackUpDouble, IconSend } from '@tabler/icons-react';
 import { memo, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -31,10 +23,7 @@ interface AnswersProps {
 		| undefined;
 }
 
-const MemoizedStudentAnswers = memo(function StudentAnswers({
-	tasks,
-	isPending,
-}: AnswersProps) {
+const MemoizedStudentAnswers = memo(function StudentAnswers({ tasks, isPending }: AnswersProps) {
 	if (isPending)
 		return (
 			<Center h={300}>
@@ -46,13 +35,7 @@ const MemoizedStudentAnswers = memo(function StudentAnswers({
 			{tasks?.map(
 				(answer, index) =>
 					answer.tasks.length !== 0 && (
-						<Flex
-							key={`${answer.lessonNumber}-${index}`}
-							direction='column'
-							align='center'
-							px='sm'
-							mb='xl'
-						>
+						<Flex key={`${answer.lessonNumber}-${index}`} direction='column' align='center' px='sm' mb='xl'>
 							<Title order={2} mb='xs'>
 								Lekcja&nbsp;{answer.lessonNumber}
 							</Title>
@@ -71,9 +54,7 @@ function MyTasksPage() {
 
 	const studentGroupId = studentData.groupId;
 
-	const { data: studentTasks, isPending } = useGetStudentTasksQuery(
-		+studentGroupId!
-	);
+	const { data: studentTasks, isPending } = useGetStudentTasksQuery(+studentGroupId!);
 
 	useMemo(() => {
 		if (studentTasks?.tasks) {
@@ -83,23 +64,23 @@ function MyTasksPage() {
 					: a.lessonNumber - b.lessonNumber;
 			});
 
-			studentTasks.tasks.forEach((lesson) => {
+			studentTasks.tasks.forEach(lesson => {
 				lesson.tasks.sort((a, b) => a.taskNumber - b.taskNumber);
 			});
 		}
 	}, [studentTasks]);
 
 	const pendingStudentAnswers = useMemo(() => {
-		return studentTasks?.tasks.map((lesson) => ({
+		return studentTasks?.tasks.map(lesson => ({
 			lessonNumber: lesson.lessonNumber,
-			tasks: lesson.tasks.filter((task) => task.replyStatus === 'PENDING'),
+			tasks: lesson.tasks.filter(task => task.replyStatus === 'PENDING'),
 		}));
 	}, [studentTasks]);
 
 	const repliedStudentAnswers = useMemo(() => {
-		return studentTasks?.tasks.map((lesson) => ({
+		return studentTasks?.tasks.map(lesson => ({
 			lessonNumber: lesson.lessonNumber,
-			tasks: lesson.tasks.filter((task) => task.replyStatus !== 'PENDING'),
+			tasks: lesson.tasks.filter(task => task.replyStatus !== 'PENDING'),
 		}));
 	}, [studentTasks]);
 
@@ -112,8 +93,7 @@ function MyTasksPage() {
 						value='send'
 						c={isReplied ? undefined : 'var(--mantine-primary-color)'}
 						leftSection={<IconSend size='1.5rem' />}
-						onClick={() => setSearchParams(undefined)}
-					>
+						onClick={() => setSearchParams(undefined)}>
 						<Text c='var(--font-color)' fw={500} fz='md'>
 							Przesłane
 						</Text>
@@ -123,8 +103,7 @@ function MyTasksPage() {
 						value='replied'
 						c={!isReplied ? undefined : 'var(--mantine-primary-color)'}
 						leftSection={<IconArrowBackUpDouble size='1.5rem' />}
-						onClick={() => setSearchParams({ status: 'replied' })}
-					>
+						onClick={() => setSearchParams({ status: 'replied' })}>
 						<Text c='var(--font-color)' fw={500} fz='md'>
 							Zwrócone
 						</Text>
@@ -133,19 +112,13 @@ function MyTasksPage() {
 
 				<Tabs.Panel value='send'>
 					<ScrollArea type='auto' h={600} pb='sm' offsetScrollbars='y'>
-						<MemoizedStudentAnswers
-							tasks={pendingStudentAnswers}
-							isPending={isPending}
-						/>
+						<MemoizedStudentAnswers tasks={pendingStudentAnswers} isPending={isPending} />
 					</ScrollArea>
 				</Tabs.Panel>
 
 				<Tabs.Panel value='replied'>
 					<ScrollArea type='auto' h={600} pb='sm' offsetScrollbars='y'>
-						<MemoizedStudentAnswers
-							tasks={repliedStudentAnswers}
-							isPending={isPending}
-						/>
+						<MemoizedStudentAnswers tasks={repliedStudentAnswers} isPending={isPending} />
 					</ScrollArea>
 				</Tabs.Panel>
 			</Tabs>

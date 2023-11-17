@@ -1,6 +1,6 @@
 import AddGroupCard from '@/components/GroupCard/AddGroup.card';
 import GroupCard from '@/components/GroupCard/Group.card';
-import { useLecturerStore } from '@/utils/store';
+import { useLecturerStore } from '@/utils/stores/useLecturerStore';
 import { Center, Flex, Loader } from '@mantine/core';
 
 function DashboardPage() {
@@ -18,7 +18,7 @@ function DashboardPage() {
 		<>
 			<Center>
 				<Flex gap='sm' wrap='wrap'>
-					{groups?.map((group) => (
+					{groups?.map(group => (
 						<GroupCard
 							key={group.groupId}
 							groupId={group.groupId}

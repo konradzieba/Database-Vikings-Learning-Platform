@@ -1,6 +1,6 @@
 import StudentInfoCard from '@/components/StudentInfoCard/StudentInfo.card';
 import useGetStudentsFromGroup from '@/hooks/groups/useGetStudentsFromGroup';
-import { useLecturerStore } from '@/utils/store';
+import { useLecturerStore } from '@/utils/stores/useLecturerStore';
 import { Center, Flex, Loader, Text } from '@mantine/core';
 import { useParams } from 'react-router-dom';
 

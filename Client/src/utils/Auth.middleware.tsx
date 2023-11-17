@@ -1,11 +1,13 @@
 import { useMeQuery } from '@/hooks/users/useMeQuery';
 import { PropsWithChildren, useEffect, useState } from 'react';
-import { useLecturerStore, useStudentStore, useUserStore } from './store';
 import { AxiosError } from 'axios';
 import client from './axios';
 import { modals } from '@mantine/modals';
 import { useNavigate } from 'react-router-dom';
 import { APIError, MyAxiosRequestConfig } from '@/types/AxiosInterfaces';
+import { useUserStore } from './stores/useUserStore';
+import { useStudentStore } from './stores/useStudentStore';
+import { useLecturerStore } from './stores/useLecturerStore';
 
 function AuthMiddleware({ children }: PropsWithChildren) {
 	const { setRole, setUserData } = useUserStore();

@@ -1,4 +1,4 @@
-import { Button, Center, Flex, ScrollArea, Table, Text } from '@mantine/core';
+import { Center, ScrollArea, Table, Text } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
 import { useState } from 'react';
 import classes from './NotAnsweredList.modal.module.css';

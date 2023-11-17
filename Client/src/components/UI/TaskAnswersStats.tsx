@@ -1,7 +1,6 @@
 import useGetTaskInfoByIdQuery from '@/hooks/tasks/useGetTaskInfoByIdQuery';
-import { Button, Divider, Flex, Group, Tabs, Text, rem } from '@mantine/core';
+import { Button, Flex, Group, Tabs, Text, rem } from '@mantine/core';
 import { modals } from '@mantine/modals';
-import dayjs from 'dayjs';
 import { useSearchParams } from 'react-router-dom';
 
 type Answer = {
@@ -25,12 +24,7 @@ interface TaskStatsProps {
 	answers: Answer[];
 }
 
-function TaskAnswersStats({
-	endDate,
-	answers,
-	notAnsweredList,
-	taskId,
-}: TaskStatsProps) {
+function TaskAnswersStats({ endDate, answers, notAnsweredList, taskId }: TaskStatsProps) {
 	const [searchParams, setSearchParams] = useSearchParams();
 	const answersCount = answers.length;
 	const amountOfNotAnswered = notAnsweredList.length;
@@ -73,18 +67,12 @@ function TaskAnswersStats({
 			</Text> */}
 			<Tabs miw={450} defaultValue='notReplied'>
 				<Tabs.List grow>
-					<Tabs.Tab
-						value='notReplied'
-						onClick={() => setSearchParams(undefined)}
-					>
+					<Tabs.Tab value='notReplied' onClick={() => setSearchParams(undefined)}>
 						<Text fz='md' fw={500}>
 							Do sprawdzenia
 						</Text>
 					</Tabs.Tab>
-					<Tabs.Tab
-						value='replied'
-						onClick={() => setSearchParams({ status: 'replied' })}
-					>
+					<Tabs.Tab value='replied' onClick={() => setSearchParams({ status: 'replied' })}>
 						<Text fz='md' fw={500}>
 							Sprawdzone
 						</Text>
@@ -92,35 +80,19 @@ function TaskAnswersStats({
 				</Tabs.List>
 			</Tabs>
 			<Group gap='sm'>
-				<Button
-					size='xs'
-					c='var(--font-color)'
-					variant='outline'
-					onClick={handleOpenNotAnsweredListModal}
-				>
+				<Button size='xs' c='var(--font-color)' variant='outline' onClick={handleOpenNotAnsweredListModal}>
 					<Text fz='md' fw='inherit'>
 						Nieprzesłane&nbsp;
 						<Text
 							span
 							fw={700}
 							lts={rem(1)}
-							c={
-								amountOfNotAnswered
-									? 'var(--bad-state-color)'
-									: 'var(--good-state-color)'
-							}
-						>
+							c={amountOfNotAnswered ? 'var(--bad-state-color)' : 'var(--good-state-color)'}>
 							{`(${amountOfNotAnswered})`}
 						</Text>
 					</Text>
 				</Button>
-				<Button
-					size='xs'
-					c='var(--font-color)'
-					fz='md'
-					variant='outline'
-					onClick={handleOpenTaskDetailsModal}
-				>
+				<Button size='xs' c='var(--font-color)' fz='md' variant='outline' onClick={handleOpenTaskDetailsModal}>
 					Szczegóły zadania
 				</Button>
 			</Group>

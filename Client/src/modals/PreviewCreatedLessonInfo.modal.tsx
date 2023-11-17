@@ -1,5 +1,6 @@
 import { useCreateLessonMutation } from '@/hooks/lessons/useCreateLessonMutation';
-import { CreatedLessonType, useCreateLessonStore } from '@/utils/store';
+import { CreatedLessonType } from '@/types/StoreTypes';
+import { useCreateLessonStore } from '@/utils/stores/useCreateLessonStore';
 import { Button, Center, Collapse, Flex, Group, Image, Loader, Text, rem, AspectRatio } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { ContextModalProps, modals } from '@mantine/modals';

@@ -4,7 +4,7 @@ import { DateTimePicker } from '@mantine/dates';
 import { ContextModalProps, modals } from '@mantine/modals';
 import { IconCalendar, IconFloatLeft, IconListDetails } from '@tabler/icons-react';
 import dayjs from 'dayjs';
-import { useCreateLessonStore } from '@/utils/store';
+import { useCreateLessonStore } from '@/utils/stores/useCreateLessonStore';
 
 interface AddTaskModalProps {
 	modalBody: string;

@@ -1,5 +1,5 @@
 import { useDeleteUserMutation } from '@/hooks/users/useDeleteUserMutation';
-import { Box, Button, Center, Flex, Group, Loader, Text } from '@mantine/core';
+import { Button, Center, Flex, Group, Loader, Text } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
 import { IconCircleCheck, IconCircleX } from '@tabler/icons-react';
 

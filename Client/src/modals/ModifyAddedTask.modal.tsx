@@ -1,4 +1,4 @@
-import { useCreateLessonStore } from '@/utils/store';
+import { useCreateLessonStore } from '@/utils/stores/useCreateLessonStore';
 import { Button, Group, Select, Stack, Textarea } from '@mantine/core';
 import { DateTimePicker } from '@mantine/dates';
 import { ContextModalProps, modals } from '@mantine/modals';

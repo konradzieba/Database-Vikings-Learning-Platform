@@ -1,4 +1,4 @@
-import { CreatedLessonType } from '@/utils/store';
+import { CreatedLessonType } from '@/types/StoreTypes';
 import { Button, Group } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 

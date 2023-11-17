@@ -2,7 +2,9 @@ import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { logoutMutationFn } from '@/utils/axios-queries';
-import { useLecturerStore, useStudentStore, useUserStore } from '@/utils/store';
+import { useUserStore } from '@/utils/stores/useUserStore';
+import { useStudentStore } from '@/utils/stores/useStudentStore';
+import { useLecturerStore } from '@/utils/stores/useLecturerStore';
 
 export function useLogoutMutation() {
 	const navigate = useNavigate();

@@ -8,7 +8,7 @@ import {
 	Popover,
 	Button,
 } from '@mantine/core';
-import { IconCoins, IconInfoCircle, IconTrophy } from '@tabler/icons-react';
+import { IconCoins, IconTrophy } from '@tabler/icons-react';
 import { useCallback, useMemo } from 'react';
 
 const topColors = [

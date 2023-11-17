@@ -1,7 +1,8 @@
 import LecturerNavbar from '@/components/Navbar/Lecturer.navbar';
 import FullScreenLoader from '@/components/UI/FullScreenLoader';
 import useGetGroupsByLecturerId from '@/hooks/users/useGetGroupsByLecturerId';
-import { useLecturerStore, useUserStore } from '@/utils/store';
+import { useLecturerStore } from '@/utils/stores/useLecturerStore';
+import { useUserStore } from '@/utils/stores/useUserStore';
 import { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 
@@ -14,10 +15,7 @@ function LecturerLayout() {
 		email: userData.email,
 	};
 
-	const {
-		data: groupsData,
-		isSuccess,
-	} = useGetGroupsByLecturerId(lecturerData.lecturerId);
+	const { data: groupsData, isSuccess } = useGetGroupsByLecturerId(lecturerData.lecturerId);
 
 	useEffect(() => {
 		if (isSuccess) {

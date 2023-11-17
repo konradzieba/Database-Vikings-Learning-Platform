@@ -4,7 +4,7 @@ import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { loginMutationFn } from '@/utils/axios-queries';
 import { UserRoleEnum } from '@/types/Enums';
-import { useUserStore } from '@/utils/store';
+import { useUserStore } from '@/utils/stores/useUserStore';
 
 interface LoginMutationProps {
 	form: UseFormReturnType<

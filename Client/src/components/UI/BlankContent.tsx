@@ -1,5 +1,7 @@
 import { useMeQuery } from '@/hooks/users/useMeQuery';
-import { useLecturerStore, useStudentStore, useUserStore } from '@/utils/store';
+import { useLecturerStore } from '@/utils/stores/useLecturerStore';
+import { useStudentStore } from '@/utils/stores/useStudentStore';
+import { useUserStore } from '@/utils/stores/useUserStore';
 import { Button, Loader } from '@mantine/core';
 import { useEffect, useState } from 'react';
 
@@ -14,23 +16,12 @@ function BlankContent() {
 		setIsLogged(isSuccess);
 	}, [isSuccess]);
 
-
 	return (
 		<>
-			{isLoading ? (
-				<Loader size='lg' />
-			) : (
-				<pre>
-					{isLogged ? JSON.stringify(userData, null, 2) : 'Not logged in'}
-				</pre>
-			)}
+			{isLoading ? <Loader size='lg' /> : <pre>{isLogged ? JSON.stringify(userData, null, 2) : 'Not logged in'}</pre>}
 			<Button onClick={() => console.log(role)}>Wyświetl role</Button>
-			<Button onClick={() => console.log(studentData)}>
-				Wyświetl studentStore
-			</Button>
-			<Button onClick={() => console.log(lecturerData)}>
-				Wyświetl lecturerStore
-			</Button>
+			<Button onClick={() => console.log(studentData)}>Wyświetl studentStore</Button>
+			<Button onClick={() => console.log(lecturerData)}>Wyświetl lecturerStore</Button>
 		</>
 	);
 }

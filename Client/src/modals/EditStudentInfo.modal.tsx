@@ -1,26 +1,7 @@
-import { useEffect, useRef } from 'react';
 import { useUpdateStudent } from '@/hooks/users/useUpdateStudent';
-import {
-	Button,
-	Center,
-	Flex,
-	Group,
-	Loader,
-	NumberInput,
-	Stack,
-	Text,
-	TextInput,
-} from '@mantine/core';
+import { Button, Center, Flex, Loader, NumberInput, Stack, Text, TextInput } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
-import {
-	IconCircleCheck,
-	IconCircleX,
-	IconCoins,
-	IconHash,
-	IconHeartFilled,
-	IconId,
-	IconTag,
-} from '@tabler/icons-react';
+import { IconCircleCheck, IconCircleX, IconCoins, IconHash, IconHeartFilled, IconTag } from '@tabler/icons-react';
 import { useForm, zodResolver } from '@mantine/form';
 import { EditStudentInfoSchema } from './EditStudentInfo.schema';
 
@@ -34,11 +15,7 @@ interface EditStudentInfoModalInnerProps {
 	health: number;
 }
 
-function EditStudentInfoModal({
-	context,
-	id,
-	innerProps,
-}: ContextModalProps<EditStudentInfoModalInnerProps>) {
+function EditStudentInfoModal({ context, id, innerProps }: ContextModalProps<EditStudentInfoModalInnerProps>) {
 	const form = useForm({
 		validate: zodResolver(EditStudentInfoSchema),
 		initialValues: {
@@ -87,8 +64,7 @@ function EditStudentInfoModal({
 				<Flex direction='column' align='center' gap='md' mb='md'>
 					<IconCircleCheck size='3rem' color='var(--good-state-color)' />
 					<Text>
-						Student {form.getInputProps('firstName').value}{' '}
-						{form.getInputProps('lastName').value} został&nbsp;
+						Student {form.getInputProps('firstName').value} {form.getInputProps('lastName').value} został&nbsp;
 						<Text span fw={500} c='var(--mantine-primary-color)'>
 							zaktualizowany
 						</Text>
@@ -118,16 +94,8 @@ function EditStudentInfoModal({
 	return (
 		<form onSubmit={form.onSubmit(handleEditStudent)}>
 			<Stack gap='xs'>
-				<TextInput
-					leftSection={<IconTag />}
-					label='Imię'
-					{...form.getInputProps('firstName')}
-				/>
-				<TextInput
-					leftSection={<IconTag />}
-					label='Nazwisko'
-					{...form.getInputProps('lastName')}
-				/>
+				<TextInput leftSection={<IconTag />} label='Imię' {...form.getInputProps('firstName')} />
+				<TextInput leftSection={<IconTag />} label='Nazwisko' {...form.getInputProps('lastName')} />
 				<NumberInput
 					leftSection={<IconHash />}
 					label='Numer indeksu'

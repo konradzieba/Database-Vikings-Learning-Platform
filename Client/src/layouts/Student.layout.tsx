@@ -1,10 +1,11 @@
 import { useEffect } from 'react';
 import StudentNavbar from '@/components/Navbar/Student.navbar';
 import FullScreenLoader from '@/components/UI/FullScreenLoader';
-import { useStudentStore, useUserStore } from '@/utils/store';
 import { modals } from '@mantine/modals';
 import { Outlet } from 'react-router-dom';
 import { useGetStudentDefaultPasswordState } from '@/hooks/students/useGetStudentDefaultPasswordState';
+import { useUserStore } from '@/utils/stores/useUserStore';
+import { useStudentStore } from '@/utils/stores/useStudentStore';
 
 function StudentLayout() {
 	const { userData } = useUserStore();
@@ -19,8 +20,7 @@ function StudentLayout() {
 
 	const isLoading = !!studentNavbarData.email || !!studentNavbarData.score;
 
-	const { data: isPasswordChangedData, isSuccess } =
-		useGetStudentDefaultPasswordState();
+	const { data: isPasswordChangedData, isSuccess } = useGetStudentDefaultPasswordState();
 
 	useEffect(() => {
 		if (isSuccess) {

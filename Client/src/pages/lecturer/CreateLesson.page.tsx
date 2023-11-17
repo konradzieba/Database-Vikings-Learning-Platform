@@ -8,9 +8,9 @@ import TasksCardList from '@/components/CreateLesson/TaskCard/TasksCard.list';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetLessonsByGroupId } from '@/hooks/lessons/useGetLessonsByGroupId';
 import FullScreenLoader from '@/components/UI/FullScreenLoader';
-import { useCreateLessonStore } from '@/utils/store';
 import { modals } from '@mantine/modals';
 import StepperButtons from '@/components/UI/StepperButtons';
+import { useCreateLessonStore } from '@/utils/stores/useCreateLessonStore';
 
 function CreateLessonPage() {
 	const [activeStep, setActiveStep] = useState(0);

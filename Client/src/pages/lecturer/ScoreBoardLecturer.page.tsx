@@ -1,5 +1,5 @@
 import useGetStudentsFromGroup from '@/hooks/groups/useGetStudentsFromGroup';
-import { useLecturerStore } from '@/utils/store';
+import { useLecturerStore } from '@/utils/stores/useLecturerStore';
 import { Center, Loader, Select, Stack, Title } from '@mantine/core';
 
 function ScoreBoardLecturerPage() {
@@ -13,11 +13,9 @@ function ScoreBoardLecturerPage() {
 		);
 	}
 
-	const selectLabels = groups?.map((group) => group.groupName);
+	const selectLabels = groups?.map(group => group.groupName);
 
-	const { data: StudentsFromGroup, isPending } = useGetStudentsFromGroup(
-		groups![0].groupId
-	);
+	const { data: StudentsFromGroup, isPending } = useGetStudentsFromGroup(groups![0].groupId);
 
 	if (isPending) {
 		return (

@@ -2,7 +2,7 @@ import { Flex, SimpleGrid, rem } from '@mantine/core';
 import TaskCard from './Task.card';
 import AddTaskCard from './AddTask.card';
 import { useParams } from 'react-router-dom';
-import { useCreateLessonStore } from '@/utils/store';
+import { useCreateLessonStore } from '@/utils/stores/useCreateLessonStore';
 
 function TasksCardList() {
 	const { id } = useParams();

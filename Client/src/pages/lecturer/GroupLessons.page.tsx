@@ -1,10 +1,9 @@
-import { Center, Flex, Text } from '@mantine/core';
-import lesson1 from '@/assets/lesson1.png';
+import { Center } from '@mantine/core';
 import { Carousel } from '@mantine/carousel';
 import LecturerLessonCard from '@/components/LessonCard/LecturerLesson.card';
 import AddLessonCard from '@/components/LessonCard/AddLesson.card';
 import { Outlet, useLocation, useParams } from 'react-router-dom';
-import {useGetLessonsByGroupId} from '@/hooks/lessons/useGetLessonsByGroupId';
+import { useGetLessonsByGroupId } from '@/hooks/lessons/useGetLessonsByGroupId';
 import FullScreenLoader from '@/components/UI/FullScreenLoader';
 
 function GroupLessonsPage() {

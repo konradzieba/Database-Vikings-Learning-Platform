@@ -1,5 +1,5 @@
 import { getScoreBoardQueryFn } from '@/utils/axios-queries';
-import { useStudentStore } from '@/utils/store';
+import { useStudentStore } from '@/utils/stores/useStudentStore';
 import { useQuery } from '@tanstack/react-query';
 
 function useGetScoreBoardQuery() {

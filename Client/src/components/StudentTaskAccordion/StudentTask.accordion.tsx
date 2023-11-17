@@ -1,4 +1,4 @@
-import { Accordion, Badge, Box, Divider, Flex, Group, Stack, Text, Textarea, ThemeIcon, rem } from '@mantine/core';
+import { Accordion, Badge, Divider, Flex, Group, Stack, Text, Textarea, ThemeIcon, rem } from '@mantine/core';
 import classes from './StudentTask.accordion.module.css';
 import { IconBlockquote, IconChevronDown, IconCode, IconCoins } from '@tabler/icons-react';
 import { AnswerReplyStatusEnum } from '@/types/Enums';

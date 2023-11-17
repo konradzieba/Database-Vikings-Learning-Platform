@@ -7,12 +7,7 @@ interface PrimaryButtonProps extends ButtonProps {
 	type?: 'button' | 'submit' | 'reset';
 }
 
-function PrimaryButton({
-	loading = false,
-	type = 'button',
-	children,
-	...ButtonProps
-}: PrimaryButtonProps) {
+function PrimaryButton({ loading = false, type = 'button', children, ...ButtonProps }: PrimaryButtonProps) {
 	return (
 		<Button type={type} loading={loading} {...ButtonProps}>
 			{loading ? '' : children}

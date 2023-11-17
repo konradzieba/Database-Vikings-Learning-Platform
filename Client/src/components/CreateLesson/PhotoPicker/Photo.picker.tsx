@@ -4,8 +4,9 @@ import classes from './Photo.picker.module.css';
 import { IconCheck } from '@tabler/icons-react';
 import lesson1 from '@/assets/lesson1.png';
 import test from '@/assets/lessonCreatedImage.png';
-import { useCreateLessonStore } from '@/utils/store';
+
 import { useParams } from 'react-router-dom';
+import { useCreateLessonStore } from '@/utils/stores/useCreateLessonStore';
 
 function PhotoPicker() {
 	const { id } = useParams();
