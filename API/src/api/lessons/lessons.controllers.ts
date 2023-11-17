@@ -5,11 +5,13 @@ import * as LessonSchemas from './lessons.schemas';
 import * as UserServices from '../users/users.services';
 import * as GroupServices from '../groups/groups.services';
 import * as AnswerServices from '../answers/answers.services';
+import * as TaskServices from '../tasks/tasks.services';
 import {
   ParamsWithId,
   ParamsWithLessonId,
 } from '../../interfaces/ParamsWithId';
 import { ParsedToken } from '../../../typings/token';
+import dayjs from 'dayjs';
 
 export async function getLessonsByGroupId(
   req: Request<ParamsWithId>,
@@ -162,17 +164,35 @@ export async function createLesson(
   next: NextFunction
 ) {
   try {
-    const { number, image, groupId } = req.body;
+    const { number, image, groupId, isFrequencyChecked, tasks } = req.body;
 
     const lesson = await LessonServices.createLessonByName({
       number,
       image,
+      isFrequencyChecked: isFrequencyChecked || false,
       Group: {
         connect: {
           id: groupId,
         },
       },
     });
+
+    const taskPromises = tasks.map(async (task) => {
+      await TaskServices.createTask({
+        number: task.number,
+        question: task.question,
+        closeDate: dayjs(task.closeDate).toDate(),
+        isExtra: task.isExtra,
+        isMarkdown: task.isMarkdown,
+        Lesson: {
+          connect: {
+            id: lesson.id,
+          },
+        },
+      });
+    });
+
+    await Promise.all(taskPromises);
 
     res.json({
       message: `Lesson ${lesson.number} for groupId ${lesson.groupId} created successfully.`,

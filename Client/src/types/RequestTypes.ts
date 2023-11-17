@@ -26,7 +26,24 @@ const UpdateTaskInfoRequestSchema = z.object({
 	}),
 });
 
+const TCreateLessonRequestSchema = z.object({
+	number: z.number().int(),
+	image: z.string(),
+	groupId: z.number().int(),
+	isFrequencyChecked: z.boolean(),
+	tasks: z.array(
+		z.object({
+			number: z.number().int(),
+			question: z.string(),
+			closeDate: z.string(),
+			isExtra: z.boolean(),
+			isMarkdown: z.boolean(),
+		})
+	),
+});
+
 export type TUserRequest = z.infer<typeof UserRequestSchema>;
 export type TLoginRequest = z.infer<typeof TLoginRequest>;
 export type TSendAnswerRequest = z.infer<typeof SendAnswerRequestSchema>;
 export type TUpdateTaskInfoRequest = z.infer<typeof UpdateTaskInfoRequestSchema>;
+export type TCreateLessonRequest = z.infer<typeof TCreateLessonRequestSchema>;

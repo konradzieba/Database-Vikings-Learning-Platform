@@ -30,6 +30,10 @@ export const updateTaskSchema = taskSchema.pick({
   isMarkdown: true,
 });
 
+export const taskFromArraySchema = taskSchema.omit({
+  lessonId: true,
+});
+
 export const getStudentTasksSchema = z.object({
   groupId: z.number().int('groupId must be an integer.'),
 });

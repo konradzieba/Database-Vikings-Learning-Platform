@@ -1,3 +1,4 @@
+import { taskFromArraySchema } from '../../api/tasks/tasks.schemas';
 import z from 'zod';
 
 export const createLessonSchema = z.object({
@@ -6,11 +7,16 @@ export const createLessonSchema = z.object({
     .int('Lesson number must be integer'),
   image: z.optional(z.string()),
   groupId: z.number().int('groupId must be an integer.'),
+  isFrequencyChecked: z.boolean(),
+  tasks: z.array(taskFromArraySchema),
 });
 
-export const updateLessonSchema = createLessonSchema.omit({
-  groupId: true,
-}).partial();
+export const updateLessonSchema = createLessonSchema
+  .omit({
+    groupId: true,
+    isFrequencyChecked: true,
+  })
+  .partial();
 
 export type LessonInput = z.infer<typeof createLessonSchema>;
 

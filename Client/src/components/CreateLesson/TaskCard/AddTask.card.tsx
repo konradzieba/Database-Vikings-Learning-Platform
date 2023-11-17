@@ -2,8 +2,11 @@ import { Box, Button, Flex, ThemeIcon } from '@mantine/core';
 import { IconPlus } from '@tabler/icons-react';
 import classes from './Task.card.module.css';
 import { modals } from '@mantine/modals';
+import { useParams } from 'react-router-dom';
 
 function AddTaskCard() {
+	const { id } = useParams();
+
 	const handleOpenAddTaksModal = () => {
 		modals.openContextModal({
 			modal: 'addTask',
@@ -12,6 +15,7 @@ function AddTaskCard() {
 			closeOnClickOutside: false,
 			innerProps: {
 				modalBody: '',
+				groupId: +id!,
 			},
 		});
 	};
