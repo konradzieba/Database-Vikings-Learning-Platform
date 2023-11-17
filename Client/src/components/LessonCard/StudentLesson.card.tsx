@@ -1,4 +1,4 @@
-import { Button, Flex, Image, Progress, Stack, Text, rem } from '@mantine/core';
+import { AspectRatio, Button, Flex, Image, Progress, Stack, Text, rem } from '@mantine/core';
 import classes from './Lesson.card.module.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -39,7 +39,9 @@ function StudentLessonCard({ lessonId, lessonNumber, tasksDone, tasksAmount, pho
 					</Progress.Root>
 				)}
 			</Stack>
-			<Image src={photoLink} mx='auto' w={rem(340)} h={rem(220)} alt={`Lesson number ${lessonNumber} photo`} />
+			<AspectRatio ratio={1} mah={rem(320)}>
+				<Image src={photoLink} alt={`Lesson number ${lessonNumber} photo`} />
+			</AspectRatio>
 			<Button maw={200} my='lg' mx='auto' onClick={() => navigate(`/lesson-tasks/${lessonId}`)}>
 				Przejdź
 			</Button>
