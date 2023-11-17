@@ -13,6 +13,9 @@ export async function getLessonsByGroupId(id: Group['id']) {
         },
       },
     },
+    orderBy: {
+      number: 'asc',
+    },
   });
 
   const lessonsFromGroup = lessonsInfo.map((lesson) => ({
