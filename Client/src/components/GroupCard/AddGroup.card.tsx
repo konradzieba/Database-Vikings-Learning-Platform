@@ -8,15 +8,23 @@ function AddGroupCard() {
 		modals.openContextModal({
 			modal: 'createGroup',
 			title: 'Stwórz grupę',
-			size: 'md',
+			size: 'lg',
 			closeOnClickOutside: false,
 			innerProps: {},
 		});
 	};
 
 	return (
-		<Flex justify='center' align='center' className={classes.addGroupCardWrapper}>
-			<Button onClick={handleOpenCreateGroupModal} variant='transparent' className={classes.addGroupCardButton}>
+		<Flex
+			justify='center'
+			align='center'
+			className={classes.addGroupCardWrapper}
+		>
+			<Button
+				onClick={handleOpenCreateGroupModal}
+				variant='transparent'
+				className={classes.addGroupCardButton}
+			>
 				<ThemeIcon variant='light' c='var(--mantine-primary-color)' size='md'>
 					<IconPlus />
 				</ThemeIcon>

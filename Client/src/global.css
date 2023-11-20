@@ -28,7 +28,7 @@ body {
 }
 .mantine-FileInput-input {
 	color: var(--font-color);
-	
+
 	&:focus-within {
 		border-color: var(--mantine-primary-color);
 	}
@@ -97,4 +97,25 @@ body {
 
 .mantine-Menu-dropdown {
 	background-color: var(--primary-bg-color);
+}
+
+.tableHeader {
+	position: sticky;
+	top: 0;
+	background-color: var(--mantine-color-body);
+	transition: box-shadow 150ms ease;
+
+	&::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		border-bottom: rem(1px) solid
+			light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-3));
+	}
+}
+
+.tableScrolled {
+	box-shadow: var(--mantine-shadow-sm);
 }
