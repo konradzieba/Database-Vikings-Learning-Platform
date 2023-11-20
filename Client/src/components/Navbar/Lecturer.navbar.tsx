@@ -1,13 +1,4 @@
-import {
-	Center,
-	Divider,
-	Flex,
-	Group,
-	HoverCard,
-	Loader,
-	Text,
-	rem,
-} from '@mantine/core';
+import { Center, Divider, Flex, Group, HoverCard, Loader, Text, rem } from '@mantine/core';
 import { NavLink, useLocation, useParams } from 'react-router-dom';
 import classes from './Navbar.module.css';
 import UserPanel from '../UI/UserPanel';
@@ -18,6 +9,12 @@ function Nav() {
 	const { pathname } = useLocation();
 	const { groups } = useLecturerStore();
 	let { id } = useParams();
+
+	const relativeGroupLink = (link: string, groupId: number) => {
+		const splitLink = link.split('/');
+
+		return `/${splitLink[1]}/${splitLink[2]}/${groupId}/${splitLink[4]}`;
+	};
 
 	const groupNavLinks = [
 		{
@@ -46,8 +43,7 @@ function Nav() {
 									isActive && pathname.endsWith('dashboard')
 										? `${classes.link} ${classes.activeLink}`
 										: `${classes.link} ${classes.inactiveLink}`
-								}
-							>
+								}>
 								Grupy
 							</NavLink>
 							<IconChevronDown size='1.5rem' color='var(--font-color)' />
@@ -55,15 +51,17 @@ function Nav() {
 					</HoverCard.Target>
 					<HoverCard.Dropdown px='sm'>
 						{groups?.length ? (
-							groups.map((group, index) => (
-								<NavLink
-									to={`/dashboard/group/${group.groupId}/lessons`}
-									className={`${classes.link} ${classes.inactiveLink}`}
-									key={index}
-								>
-									{group.groupName}
-								</NavLink>
-							))
+							groups.map((group, index) => {
+								let link = relativeGroupLink(pathname, group.groupId);
+								return (
+									<NavLink
+										to={link}
+										className={`${classes.link} ${classes.inactiveLink}`}
+										key={index}>
+										{group.groupName}
+									</NavLink>
+								);
+							})
 						) : (
 							<Center miw={rem(60)}>
 								<Loader size='sm' />
@@ -75,17 +73,14 @@ function Nav() {
 			{pathname.includes('/dashboard/group/') && (
 				<>
 					<Divider orientation='vertical' />
-					{groupNavLinks.map((link) => {
+					{groupNavLinks.map(link => {
 						return (
 							<NavLink
 								to={link.link}
 								className={({ isActive }) =>
-									isActive
-										? `${classes.link} ${classes.activeLink}`
-										: `${classes.link} ${classes.inactiveLink}`
+									isActive ? `${classes.link} ${classes.activeLink}` : `${classes.link} ${classes.inactiveLink}`
 								}
-								key={link.link}
-							>
+								key={link.link}>
 								{link.label}
 							</NavLink>
 						);
@@ -114,7 +109,7 @@ function LecturerNavbar({ lecturerInfo }: LecturerNavbarProps) {
 				{pathname.includes('/dashboard/group/') && id && groups && (
 					<>
 						<Text c='var(--mantine-primary-color)' fw={500} size='lg'>
-							{groups?.find((group) => group.groupId === +id!)?.groupName}
+							{groups?.find(group => group.groupId === +id!)?.groupName}
 						</Text>
 						<Divider orientation='vertical' />
 					</>
