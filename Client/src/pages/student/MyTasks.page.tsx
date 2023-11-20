@@ -1,7 +1,7 @@
 import StudentTaskAccordion from '@/components/StudentTaskAccordion/StudentTask.accordion';
 import useGetStudentTasksQuery from '@/hooks/tasks/useGetStudentTasks';
 import { useStudentStore } from '@/utils/stores/useStudentStore';
-import { Center, Flex, Loader, ScrollArea, Tabs, Text, Title } from '@mantine/core';
+import { Center, Flex, Loader, Tabs, Text, Title } from '@mantine/core';
 import { IconArrowBackUpDouble, IconSend } from '@tabler/icons-react';
 import { memo, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
@@ -111,15 +111,11 @@ function MyTasksPage() {
 				</Tabs.List>
 
 				<Tabs.Panel value='send'>
-					<ScrollArea type='auto' h={600} pb='sm' offsetScrollbars='y'>
-						<MemoizedStudentAnswers tasks={pendingStudentAnswers} isPending={isPending} />
-					</ScrollArea>
+					<MemoizedStudentAnswers tasks={pendingStudentAnswers} isPending={isPending} />
 				</Tabs.Panel>
 
 				<Tabs.Panel value='replied'>
-					<ScrollArea type='auto' h={600} pb='sm' offsetScrollbars='y'>
-						<MemoizedStudentAnswers tasks={repliedStudentAnswers} isPending={isPending} />
-					</ScrollArea>
+					<MemoizedStudentAnswers tasks={repliedStudentAnswers} isPending={isPending} />
 				</Tabs.Panel>
 			</Tabs>
 		</Center>

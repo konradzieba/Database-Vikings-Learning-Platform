@@ -1,7 +1,7 @@
 import TaskTab from '@/components/TaskTab/Task.tab';
 import FullScreenLoader from '@/components/UI/FullScreenLoader';
 import { useGetTasksByLessonId } from '@/hooks/lessons/useGetTasksByLessonId';
-import { Center, Flex, ScrollArea, Stack, Text, Title } from '@mantine/core';
+import { Center, Flex, Stack, Text, Title } from '@mantine/core';
 import { useParams } from 'react-router-dom';
 
 function LessonTasksPage() {
@@ -28,21 +28,19 @@ function LessonTasksPage() {
 					<Title order={1}>Lekcja&nbsp;{TasksList?.lessonNumber}</Title>
 				</Stack>
 
-				<ScrollArea type='auto' h={450} w='50%' pb='sm' offsetScrollbars='y'>
-					<Flex direction='column' gap='md' mr='sm'>
-						{TasksList?.tasks.map(task => (
-							<TaskTab
-								key={`${task.id}-Tab`}
-								lessonId={+id!}
-								taskId={task.id}
-								taskNumber={task.number}
-								taskQuestion={task.question}
-								closeDate={task.closeDate}
-								answerSend={task.answerSend}
-							/>
-						))}
-					</Flex>
-				</ScrollArea>
+				<Flex direction='column' gap='md' mr='sm'>
+					{TasksList?.tasks.map(task => (
+						<TaskTab
+							key={`${task.id}-Tab`}
+							lessonId={+id!}
+							taskId={task.id}
+							taskNumber={task.number}
+							taskQuestion={task.question}
+							closeDate={task.closeDate}
+							answerSend={task.answerSend}
+						/>
+					))}
+				</Flex>
 			</Stack>
 		</Center>
 	);
