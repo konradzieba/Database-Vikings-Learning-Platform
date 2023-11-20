@@ -17,7 +17,7 @@ import { useLecturerStore } from '@/utils/stores/useLecturerStore';
 function Nav() {
 	const { pathname } = useLocation();
 	const { groups } = useLecturerStore();
-	let { id } = useParams();
+	const { id } = useParams();
 
 	const groupNavLinks = [
 		{
