@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Avatar, Box, Flex, SimpleGrid, rem } from '@mantine/core';
+import { Avatar, Box, Flex, rem } from '@mantine/core';
 import classes from './Photo.picker.module.css';
 import { IconCheck } from '@tabler/icons-react';
 import lesson1 from '@/assets/lesson1.png';
@@ -45,8 +45,8 @@ function PhotoPicker() {
 		lesson1,
 	];
 	return (
-		<Flex justify='center' align='center' h={rem(550)}>
-			<SimpleGrid cols={images.length > 7 ? 5 : 3} spacing='xl'>
+		<Box h={rem(550)}>
+			<Flex justify='center' align='center' w='80%' mx='auto' mt={rem(43)} wrap='wrap' gap='md'>
 				{images.map((image, index) => (
 					<Box
 						key={image + index}
@@ -68,8 +68,8 @@ function PhotoPicker() {
 						/>
 					</Box>
 				))}
-			</SimpleGrid>
-		</Flex>
+			</Flex>
+		</Box>
 	);
 }
 
