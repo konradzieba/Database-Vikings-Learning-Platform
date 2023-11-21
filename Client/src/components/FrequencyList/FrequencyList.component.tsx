@@ -1,22 +1,34 @@
 import cx from 'clsx';
-import { useState } from 'react';
-import { Table, Checkbox, ScrollArea, Group, Text, rem, ThemeIcon, BoxProps, Flex } from '@mantine/core';
+import { useEffect, useState } from 'react';
+import { Table, Checkbox, Group, Text, rem, ThemeIcon, Flex } from '@mantine/core';
 import classes from './FrequencyList.component.module.css';
 import { IconCoins } from '@tabler/icons-react';
 import useGetStudentsFromGroup from '@/hooks/groups/useGetStudentsFromGroup';
 import { useParams } from 'react-router-dom';
 import FullScreenLoader from '../UI/FullScreenLoader';
+import { useCreateLessonStore } from '@/utils/stores/useCreateLessonStore';
 
 // REMINDER: DATA WILL BE SORTED, LAST NAME WILL BE BEFORE FIRST NAME, ARRAY WILL BE SORTED BY LASTNAME
 
-
 function FrequencyList() {
-	const { id } = useParams();
-	const { data: StudentsFromGroup, isLoading } = useGetStudentsFromGroup(+id!);
-	const [selection, setSelection] = useState<number[] | null>(null);
+	const { id: groupId } = useParams();
+	const { data: StudentsFromGroup, isLoading } = useGetStudentsFromGroup(+groupId!);
+	const { createdLessonsArray, updateLesson } = useCreateLessonStore();
+	const lessonFromGroup = createdLessonsArray.find(lesson => lesson.groupId === +groupId!);
+	const [selection, setSelection] = useState<number[] | null>(lessonFromGroup?.absentStudents || null);
 	const toggleRow = (id: number) => {
 		setSelection(current => (current?.includes(id) ? current.filter(item => item !== id) : [...(current || []), id]));
 	};
+
+	useEffect(() => {
+		if (lessonFromGroup && selection) {
+			const updatedLessonFromGroup = {
+				...lessonFromGroup,
+				absentStudents: selection,
+			};
+			updateLesson(+groupId!, updatedLessonFromGroup);
+		}
+	}, [selection]);
 
 	const rows = StudentsFromGroup?.students.map(item => {
 		const selected = selection?.includes(item.id) || false;
