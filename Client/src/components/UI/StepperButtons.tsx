@@ -9,6 +9,7 @@ interface StepperButtonsProps {
 	nextStep: () => void;
 	prevStep: () => void;
 	handleCreateLesson: () => void;
+	handleCreateLessonWithoutFrequency: () => void;
 }
 
 function StepperButtons({
@@ -18,6 +19,7 @@ function StepperButtons({
 	nextStep,
 	prevStep,
 	handleCreateLesson,
+	handleCreateLessonWithoutFrequency,
 }: StepperButtonsProps) {
 	const navigate = useNavigate();
 	const isTaskButtonDisabled =
@@ -28,7 +30,7 @@ function StepperButtons({
 		<Group mx='auto'>
 			{activeStep === 0 && (
 				<>
-					<Button miw={150} variant='outline' onClick={() => navigate(-1)}>
+					<Button miw={150} variant='outline' color='var(--mantine-primary-color)' onClick={() => navigate(-1)}>
 						Wróć
 					</Button>
 					<Button miw={150} onClick={nextStep} disabled={isTaskButtonDisabled}>
@@ -38,7 +40,7 @@ function StepperButtons({
 			)}
 			{activeStep === 1 && (
 				<>
-					<Button miw={150} variant='outline' onClick={prevStep}>
+					<Button miw={150} variant='outline' color='var(--mantine-primary-color)' onClick={prevStep}>
 						Cofnij
 					</Button>
 					<Button miw={150} onClick={nextStep} disabled={isPhotoButtonDisabled}>
@@ -48,8 +50,11 @@ function StepperButtons({
 			)}
 			{activeStep === 2 && (
 				<>
-					<Button miw={150} variant='outline' onClick={prevStep}>
+					<Button miw={150} variant='outline' color='var(--mantine-primary-color)' onClick={prevStep}>
 						Cofnij
+					</Button>
+					<Button miw={150} variant='outline' onClick={handleCreateLessonWithoutFrequency}>
+						Stwórz lekcję bez sprawdzania obecności
 					</Button>
 					<Button miw={150} onClick={handleCreateLesson}>
 						Stwórz lekcje

@@ -25,6 +25,7 @@ function FrequencyList() {
 			const updatedLessonFromGroup = {
 				...lessonFromGroup,
 				absentStudents: selection,
+				isFrequencyChecked: true,
 			};
 			updateLesson(+groupId!, updatedLessonFromGroup);
 		}

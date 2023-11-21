@@ -15,24 +15,9 @@ import { useCreateLessonStore } from '@/utils/stores/useCreateLessonStore';
 function CreateLessonPage() {
 	const [activeStep, setActiveStep] = useState(0);
 
-	const { createdLessonsArray, addLesson } = useCreateLessonStore();
+	const { createdLessonsArray, addLesson, updateLesson } = useCreateLessonStore();
 
 	const { id } = useParams();
-
-	const handleCreateLesson = () => {
-		const createdLesson = createdLessonsArray.find(lesson => lesson.groupId === +id!);
-		modals.openContextModal({
-			modal: 'previewCreatedLessonInfo',
-			title: `Pogląd stworzonej lekcji nr ${createdLesson?.lessonNumber}`,
-			closeOnClickOutside: false,
-			withCloseButton: false,
-			innerProps: {
-				modalBody: '',
-				createdLesson: createdLesson,
-				nextStep: nextStep,
-			},
-		});
-	};
 
 	const { data: LessonsData, isSuccess, isLoading } = useGetLessonsByGroupId(+id!);
 
@@ -57,6 +42,39 @@ function CreateLessonPage() {
 	};
 	const prevStep = () => {
 		setActiveStep(current => (current > 0 ? current - 1 : current));
+	};
+
+	const handleCreateLesson = () => {
+		const createdLesson = createdLessonsArray.find(lesson => lesson.groupId === +id!);
+		const createdLessonWithFrequency = { ...createdLesson, isFrequencyChecked: true };
+
+		modals.openContextModal({
+			modal: 'previewCreatedLessonInfo',
+			title: `Pogląd stworzonej lekcji nr ${createdLessonWithFrequency.lessonNumber}`,
+			closeOnClickOutside: false,
+			withCloseButton: false,
+			innerProps: {
+				modalBody: '',
+				createdLesson: createdLessonWithFrequency,
+				nextStep: nextStep,
+			},
+		});
+	};
+
+	const handleCreateLessonWithoutFrequency = () => {
+		const createdLesson = createdLessonsArray.find(lesson => lesson.groupId === +id!);
+		const createdLessonWithoutFrequency = { ...createdLesson, isFrequencyChecked: false, absentStudents: [] };
+		modals.openContextModal({
+			modal: 'previewCreatedLessonInfo',
+			title: `Pogląd stworzonej lekcji nr ${createdLessonWithoutFrequency.lessonNumber}`,
+			closeOnClickOutside: false,
+			withCloseButton: false,
+			innerProps: {
+				modalBody: '',
+				createdLesson: createdLessonWithoutFrequency,
+				nextStep: nextStep,
+			},
+		});
 	};
 
 	return (
@@ -95,6 +113,7 @@ function CreateLessonPage() {
 						nextStep={nextStep}
 						prevStep={prevStep}
 						handleCreateLesson={handleCreateLesson}
+						handleCreateLessonWithoutFrequency={handleCreateLessonWithoutFrequency}
 					/>
 				</Stack>
 			)}
