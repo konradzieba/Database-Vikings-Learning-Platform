@@ -5,7 +5,7 @@ import PhotoPicker from '@/components/CreateLesson/PhotoPicker/Photo.picker';
 import FrequencyList from '@/components/FrequencyList/FrequencyList.component';
 import LessonCreated from '@/components/CreateLesson/LessonCreated/LessonCreated.component';
 import TasksCardList from '@/components/CreateLesson/TaskCard/TasksCard.list';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useGetLessonsByGroupId } from '@/hooks/lessons/useGetLessonsByGroupId';
 import FullScreenLoader from '@/components/UI/FullScreenLoader';
 import { modals } from '@mantine/modals';
@@ -46,12 +46,11 @@ function CreateLessonPage() {
 					lessonImage: '',
 					isFrequencyChecked: false,
 					tasks: [],
+					absentStudents: [],
 				});
 			}
 		}
 	}, [isSuccess]);
-
-	const navigate = useNavigate();
 
 	const nextStep = () => {
 		setActiveStep(current => (current < 3 ? current + 1 : current));
