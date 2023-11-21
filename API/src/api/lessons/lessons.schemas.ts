@@ -6,7 +6,8 @@ export const createLessonSchema = z.object({
     .number({ required_error: 'Lesson number must be provided' })
     .int('Lesson number must be integer'),
   image: z.optional(z.string()),
-  groupId: z.number().int('groupId must be an integer.'),
+  groupId: z.number().int('groupId must be an integer.'), 
+  absentStudents: z.array(z.number().int()),
   isFrequencyChecked: z.boolean(),
   tasks: z.array(taskFromArraySchema),
 });
