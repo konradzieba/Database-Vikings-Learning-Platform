@@ -1,4 +1,4 @@
-import { Box, Flex, Overlay, Text, ThemeIcon } from '@mantine/core';
+import { Box, Flex, Overlay, Text, ThemeIcon, rem } from '@mantine/core';
 import { IconCircleCheck, IconClockHour4, IconLock } from '@tabler/icons-react';
 import classes from './Task.tab.module.css';
 import DateTimeDisplay from '../UI/DateTimeDisplay';
@@ -17,8 +17,8 @@ interface TaskTabProps {
 function TaskTab({ lessonId, taskId, taskNumber, taskQuestion, closeDate, answerSend }: TaskTabProps) {
 	const navigate = useNavigate();
 	const spliceQuestion = (question: string) => {
-		if (question.length > 251) {
-			return question.substring(0, 251) + '...';
+		if (question.length > 200) {
+			return question.substring(0, 200) + '...';
 		} else {
 			return question;
 		}
@@ -26,7 +26,7 @@ function TaskTab({ lessonId, taskId, taskNumber, taskQuestion, closeDate, answer
 	const isTaskExpired = dayjs(dayjs().toDate()).isAfter(closeDate, 'minutes') && !answerSend;
 
 	return (
-		<Box tabIndex={1} onClick={() => navigate(`/task/${lessonId}/${taskId}`)} pos='relative'>
+		<Box tabIndex={1} onClick={() => navigate(`/task/${lessonId}/${taskId}`)} pos='relative' w={rem(800)}>
 			{isTaskExpired && (
 				<Overlay backgroundOpacity={0.85} style={{ cursor: 'pointer' }}>
 					<Flex h='100%' justify='center' align='center' gap='md'>
@@ -47,11 +47,11 @@ function TaskTab({ lessonId, taskId, taskNumber, taskQuestion, closeDate, answer
 					</Flex>
 				</Overlay>
 			)}
-			<Flex mih={100} gap='lg' align='center' className={classes.taskTabWrapper}>
+			<Flex mih={131} gap='lg' align='center' className={classes.taskTabWrapper}>
 				<ThemeIcon size='lg' miw='10%' ml='md' radius='sm'>
 					<Text fw={500}>{taskNumber}</Text>
 				</ThemeIcon>
-				<Text my='md' miw='40%'>
+				<Text my='md' w='90%'>
 					{spliceQuestion(taskQuestion)}
 				</Text>
 				<DateTimeDisplay
