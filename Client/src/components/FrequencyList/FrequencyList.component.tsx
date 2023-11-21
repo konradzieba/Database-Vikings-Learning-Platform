@@ -1,6 +1,6 @@
 import cx from 'clsx';
 import { useState } from 'react';
-import { Table, Checkbox, ScrollArea, Group, Text, rem, ThemeIcon, BoxProps, Center, Flex } from '@mantine/core';
+import { Table, Checkbox, ScrollArea, Group, Text, rem, ThemeIcon, BoxProps, Flex } from '@mantine/core';
 import classes from './FrequencyList.component.module.css';
 import { IconCoins } from '@tabler/icons-react';
 import useGetStudentsFromGroup from '@/hooks/groups/useGetStudentsFromGroup';
@@ -9,9 +9,8 @@ import FullScreenLoader from '../UI/FullScreenLoader';
 
 // REMINDER: DATA WILL BE SORTED, LAST NAME WILL BE BEFORE FIRST NAME, ARRAY WILL BE SORTED BY LASTNAME
 
-interface FrequencyListProps extends BoxProps {}
 
-function FrequencyList({ ...BoxProps }: FrequencyListProps) {
+function FrequencyList() {
 	const { id } = useParams();
 	const { data: StudentsFromGroup, isLoading } = useGetStudentsFromGroup(+id!);
 	const [selection, setSelection] = useState<number[] | null>(null);
@@ -58,19 +57,17 @@ function FrequencyList({ ...BoxProps }: FrequencyListProps) {
 					<FullScreenLoader />
 				</Flex>
 			) : (
-				<ScrollArea offsetScrollbars='y' {...BoxProps}>
-					<Table verticalSpacing='sm'>
-						<Table.Thead>
-							<Table.Tr>
-								<Table.Th>Imię i nazwisko</Table.Th>
-								<Table.Th>Wynik</Table.Th>
-								<Table.Th>Życia</Table.Th>
-								<Table.Th>Nieobecność</Table.Th>
-							</Table.Tr>
-						</Table.Thead>
-						<Table.Tbody>{rows}</Table.Tbody>
-					</Table>
-				</ScrollArea>
+				<Table verticalSpacing='sm'>
+					<Table.Thead>
+						<Table.Tr>
+							<Table.Th>Imię i nazwisko</Table.Th>
+							<Table.Th>Wynik</Table.Th>
+							<Table.Th>Życia</Table.Th>
+							<Table.Th>Nieobecność</Table.Th>
+						</Table.Tr>
+					</Table.Thead>
+					<Table.Tbody>{rows}</Table.Tbody>
+				</Table>
 			)}
 		</>
 	);

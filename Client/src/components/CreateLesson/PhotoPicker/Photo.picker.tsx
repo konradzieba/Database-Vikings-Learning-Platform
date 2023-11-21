@@ -45,8 +45,8 @@ function PhotoPicker() {
 		lesson1,
 	];
 	return (
-		<Box h={rem(550)}>
-			<Flex justify='center' align='center' w='80%' mx='auto' mt={rem(43)} wrap='wrap' gap='md'>
+		<Box mih={rem(550)}>
+			<Flex justify='center' align='center' mx='auto' w='80%'  mb='xl' mt={rem(43)} wrap='wrap' gap='md'>
 				{images.map((image, index) => (
 					<Box
 						key={image + index}

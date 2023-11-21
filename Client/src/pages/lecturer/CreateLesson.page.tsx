@@ -81,8 +81,8 @@ function CreateLessonPage() {
 							<PhotoPicker />
 						</Stepper.Step>
 						<Stepper.Step allowStepSelect={false} label='Sprawdzanie obecności' icon={<IconChecklist size='1.2rem' />}>
-							<Flex align='center' h={rem(550)}>
-								<FrequencyList w='100%' h='85%' />
+							<Flex align='flex-start' mih={rem(550)} mt={rem(45)}>
+								<FrequencyList />
 							</Flex>
 						</Stepper.Step>
 						<Stepper.Completed>
