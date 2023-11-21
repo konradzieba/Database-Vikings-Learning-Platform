@@ -62,6 +62,9 @@ export async function getStudentLessonInfo(
         },
       },
     },
+    orderBy: {
+      number: 'asc',
+    },
   });
 
   const studentAnswers = await db.answer.findMany({

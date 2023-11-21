@@ -98,3 +98,10 @@ body {
 .mantine-Menu-dropdown {
 	background-color: var(--primary-bg-color);
 }
+
+.mantine-Carousel-control {
+	background-color: transparent;
+	border-color: transparent;
+	color: var(--font-color);
+	opacity: 1;
+}

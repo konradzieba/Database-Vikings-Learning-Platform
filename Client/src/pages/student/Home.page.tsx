@@ -2,6 +2,7 @@ import { Carousel } from '@mantine/carousel';
 import StudentLessonCard from '@/components/LessonCard/StudentLesson.card';
 import { Center, Loader, Text } from '@mantine/core';
 import { useGetStudentLessonsInfo } from '@/hooks/lessons/useGetStudentLessonsInfo';
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 
 export function HomePage() {
 	const { data: StudentLessonsInfo, isPending } = useGetStudentLessonsInfo();
@@ -46,6 +47,8 @@ export function HomePage() {
 					slideSize='33.333333%'
 					slideGap='sm'
 					align='start'
+					nextControlIcon={<IconChevronRight />}
+					previousControlIcon={<IconChevronLeft />}
 					draggable>
 					{slides}
 				</Carousel>

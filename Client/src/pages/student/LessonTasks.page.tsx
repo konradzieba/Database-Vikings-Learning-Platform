@@ -1,7 +1,7 @@
 import TaskTab from '@/components/TaskTab/Task.tab';
 import FullScreenLoader from '@/components/UI/FullScreenLoader';
 import { useGetTasksByLessonId } from '@/hooks/lessons/useGetTasksByLessonId';
-import { Center, Flex, Stack, Text, Title } from '@mantine/core';
+import { Center, Flex, Stack, Text, Title, rem } from '@mantine/core';
 import { useParams } from 'react-router-dom';
 
 function LessonTasksPage() {

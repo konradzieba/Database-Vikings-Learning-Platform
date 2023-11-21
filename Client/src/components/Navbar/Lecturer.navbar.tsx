@@ -12,7 +12,9 @@ function Nav() {
 
 	const relativeGroupLink = (link: string, groupId: number) => {
 		const splitLink = link.split('/');
-
+		if (!splitLink[2]) {
+			return `/dashboard/group/${groupId}/lessons`;
+		}
 		return `/${splitLink[1]}/${splitLink[2]}/${groupId}/${splitLink[4]}`;
 	};
 
@@ -54,10 +56,7 @@ function Nav() {
 							groups.map((group, index) => {
 								let link = relativeGroupLink(pathname, group.groupId);
 								return (
-									<NavLink
-										to={link}
-										className={`${classes.link} ${classes.inactiveLink}`}
-										key={index}>
+									<NavLink to={link} className={`${classes.link} ${classes.inactiveLink}`} key={index}>
 										{group.groupName}
 									</NavLink>
 								);
