@@ -1,3 +1,4 @@
+import { useGetLessonsByGroupId } from '@/hooks/lessons/useGetLessonsByGroupId';
 import { CreatedLessonType } from '@/types/StoreTypes';
 import { Button, Group } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
@@ -22,6 +23,11 @@ function StepperButtons({
 	handleCreateLessonWithoutFrequency,
 }: StepperButtonsProps) {
 	const navigate = useNavigate();
+	const { refetch: refetchLessons } = useGetLessonsByGroupId(groupId);
+	const handleBackToLessonsDashboard = () => {
+		refetchLessons();
+		navigate(`/dashboard/group/${groupId}/lessons`);
+	};
 	const isTaskButtonDisabled =
 		createdLessonsArray.find(lesson => lesson.groupId === +groupId!)?.tasks.length === 0 ? true : false;
 	const isPhotoButtonDisabled =
@@ -66,7 +72,7 @@ function StepperButtons({
 					<Button miw={150} onClick={() => console.log('Generowanie pdf')} variant='outline'>
 						Wygeneruj PDF z listą obecności
 					</Button>
-					<Button miw={150} onClick={() => navigate(`/dashboard/group/${groupId}/lessons`)}>
+					<Button miw={150} onClick={handleBackToLessonsDashboard}>
 						Przejdź do wszystkich lekcji
 					</Button>
 				</>
