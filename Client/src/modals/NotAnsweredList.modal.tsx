@@ -52,7 +52,7 @@ function NotAnsweredListModal({
 			>
 				<Table verticalSpacing='sm' withRowBorders striped>
 					<Table.Thead
-						className={`${classes.header} ${scrolled ? classes.scrolled : ''}`}
+						className={`tableHeader ${scrolled ? 'tableScrolled' : ''}`}
 					>
 						<Table.Tr>
 							<Table.Th>Imię</Table.Th>

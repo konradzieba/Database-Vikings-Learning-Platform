@@ -34,6 +34,16 @@ export const registerStudentSchema = registerSchema.omit({
   role: true,
 });
 
+export const registerManyStudentsSchema = z.object({
+  lecturerId: z.number({ required_error: 'Lecturer id is required' }),
+  groupName: z.string({ required_error: 'Group name is required' }),
+  studentsToRegister: z.array(
+    registerStudentSchema.omit({
+      groupId: true,
+    })
+  ),
+});
+
 export const registerLecturerSchema = registerSchema.omit({
   role: true,
   indexNumber: true,
@@ -50,6 +60,9 @@ export const registerQuerySchema = z.object({
   refreshTokenInCookie: z.enum(['true', 'false']).default('false'),
 });
 
+export type RegisterManyStudentsInput = z.infer<
+  typeof registerManyStudentsSchema
+>;
 export type RegisterStudentInput = z.infer<typeof registerStudentSchema>;
 export type RegisterLecturerInput = z.infer<typeof registerLecturerSchema>;
 export type RegisterSuperUserInput = z.infer<typeof registerSuperUserSchema>;
