@@ -2,6 +2,7 @@ import StudentInfoCard from '@/components/StudentInfoCard/StudentInfo.card';
 import useGetStudentsFromGroup from '@/hooks/groups/useGetStudentsFromGroup';
 import { useLecturerStore } from '@/utils/stores/useLecturerStore';
 import { Center, Flex, Loader, Text } from '@mantine/core';
+import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 function GroupStudentsInfoPage() {
@@ -9,6 +10,14 @@ function GroupStudentsInfoPage() {
 	const { groups } = useLecturerStore();
 	const currentGroup = groups?.find(group => group.groupId === +id!);
 	const { data: StudentsFromGroup, isPending } = useGetStudentsFromGroup(+id!);
+
+	useMemo(() => {
+		if (StudentsFromGroup?.students) {
+			StudentsFromGroup.students.sort((a, b) => {
+				return a.lastName.localeCompare(b.lastName);
+			});
+		}
+	}, [StudentsFromGroup]);
 
 	if (isPending) {
 		return (

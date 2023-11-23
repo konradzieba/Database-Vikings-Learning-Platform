@@ -1,5 +1,5 @@
 import cx from 'clsx';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Table, Checkbox, Group, Text, rem, ThemeIcon, Flex } from '@mantine/core';
 import classes from './FrequencyList.component.module.css';
 import { IconCoins } from '@tabler/icons-react';
@@ -8,11 +8,18 @@ import { useParams } from 'react-router-dom';
 import FullScreenLoader from '../UI/FullScreenLoader';
 import { useCreateLessonStore } from '@/utils/stores/useCreateLessonStore';
 
-// REMINDER: DATA WILL BE SORTED, LAST NAME WILL BE BEFORE FIRST NAME, ARRAY WILL BE SORTED BY LASTNAME
-
 function FrequencyList() {
 	const { id: groupId } = useParams();
 	const { data: StudentsFromGroup, isLoading } = useGetStudentsFromGroup(+groupId!);
+
+	useMemo(() => {
+		if (StudentsFromGroup?.students) {
+			StudentsFromGroup.students.sort((a, b) => {
+				return a.lastName.localeCompare(b.lastName);
+			});
+		}
+	}, [StudentsFromGroup]);
+
 	const { createdLessonsArray, updateLesson } = useCreateLessonStore();
 	const lessonFromGroup = createdLessonsArray.find(lesson => lesson.groupId === +groupId!);
 	const [selection, setSelection] = useState<number[] | null>(lessonFromGroup?.absentStudents || null);
