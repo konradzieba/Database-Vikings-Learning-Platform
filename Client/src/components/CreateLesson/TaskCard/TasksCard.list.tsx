@@ -1,4 +1,4 @@
-import { Flex, SimpleGrid, rem } from '@mantine/core';
+import { Box, Flex, SimpleGrid, rem } from '@mantine/core';
 import TaskCard from './Task.card';
 import AddTaskCard from './AddTask.card';
 import { useParams } from 'react-router-dom';
@@ -12,8 +12,8 @@ function TasksCardList() {
 	const lessonFromGroup = createdLessonsArray.find(lesson => lesson.groupId === +id!);
 
 	return (
-		<Flex justify='center' align='center' h={rem(550)}>
-			<SimpleGrid cols={4} spacing='xl'>
+		<Box h={rem(550)}>
+			<Flex w='80%' mt={rem(43)} mx='auto' gap='md' align='center' justify='center' wrap='wrap'>
 				{lessonFromGroup?.tasks &&
 					lessonFromGroup.tasks.map((task, index) => (
 						<TaskCard
@@ -26,8 +26,8 @@ function TasksCardList() {
 						/>
 					))}
 				<AddTaskCard />
-			</SimpleGrid>
-		</Flex>
+			</Flex>
+		</Box>
 	);
 }
 

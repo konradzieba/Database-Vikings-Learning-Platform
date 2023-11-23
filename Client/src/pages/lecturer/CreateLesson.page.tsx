@@ -5,7 +5,7 @@ import PhotoPicker from '@/components/CreateLesson/PhotoPicker/Photo.picker';
 import FrequencyList from '@/components/FrequencyList/FrequencyList.component';
 import LessonCreated from '@/components/CreateLesson/LessonCreated/LessonCreated.component';
 import TasksCardList from '@/components/CreateLesson/TaskCard/TasksCard.list';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useGetLessonsByGroupId } from '@/hooks/lessons/useGetLessonsByGroupId';
 import FullScreenLoader from '@/components/UI/FullScreenLoader';
 import { modals } from '@mantine/modals';
@@ -15,24 +15,9 @@ import { useCreateLessonStore } from '@/utils/stores/useCreateLessonStore';
 function CreateLessonPage() {
 	const [activeStep, setActiveStep] = useState(0);
 
-	const { createdLessonsArray, addLesson } = useCreateLessonStore();
+	const { createdLessonsArray, addLesson, updateLesson } = useCreateLessonStore();
 
 	const { id } = useParams();
-
-	const handleCreateLesson = () => {
-		const createdLesson = createdLessonsArray.find(lesson => lesson.groupId === +id!);
-		modals.openContextModal({
-			modal: 'previewCreatedLessonInfo',
-			title: `Pogląd stworzonej lekcji nr ${createdLesson?.lessonNumber}`,
-			closeOnClickOutside: false,
-			withCloseButton: false,
-			innerProps: {
-				modalBody: '',
-				createdLesson: createdLesson,
-				nextStep: nextStep,
-			},
-		});
-	};
 
 	const { data: LessonsData, isSuccess, isLoading } = useGetLessonsByGroupId(+id!);
 
@@ -46,18 +31,50 @@ function CreateLessonPage() {
 					lessonImage: '',
 					isFrequencyChecked: false,
 					tasks: [],
+					absentStudents: [],
 				});
 			}
 		}
 	}, [isSuccess]);
-
-	const navigate = useNavigate();
 
 	const nextStep = () => {
 		setActiveStep(current => (current < 3 ? current + 1 : current));
 	};
 	const prevStep = () => {
 		setActiveStep(current => (current > 0 ? current - 1 : current));
+	};
+
+	const handleCreateLesson = () => {
+		const createdLesson = createdLessonsArray.find(lesson => lesson.groupId === +id!);
+		const createdLessonWithFrequency = { ...createdLesson, isFrequencyChecked: true };
+
+		modals.openContextModal({
+			modal: 'previewCreatedLessonInfo',
+			title: `Pogląd stworzonej lekcji nr ${createdLessonWithFrequency.lessonNumber}`,
+			closeOnClickOutside: false,
+			withCloseButton: false,
+			innerProps: {
+				modalBody: '',
+				createdLesson: createdLessonWithFrequency,
+				nextStep: nextStep,
+			},
+		});
+	};
+
+	const handleCreateLessonWithoutFrequency = () => {
+		const createdLesson = createdLessonsArray.find(lesson => lesson.groupId === +id!);
+		const createdLessonWithoutFrequency = { ...createdLesson, isFrequencyChecked: false, absentStudents: [] };
+		modals.openContextModal({
+			modal: 'previewCreatedLessonInfo',
+			title: `Pogląd stworzonej lekcji nr ${createdLessonWithoutFrequency.lessonNumber}`,
+			closeOnClickOutside: false,
+			withCloseButton: false,
+			innerProps: {
+				modalBody: '',
+				createdLesson: createdLessonWithoutFrequency,
+				nextStep: nextStep,
+			},
+		});
 	};
 
 	return (
@@ -81,8 +98,8 @@ function CreateLessonPage() {
 							<PhotoPicker />
 						</Stepper.Step>
 						<Stepper.Step allowStepSelect={false} label='Sprawdzanie obecności' icon={<IconChecklist size='1.2rem' />}>
-							<Flex align='center' h={rem(550)}>
-								<FrequencyList w='100%' h='85%' />
+							<Flex align='flex-start' mih={rem(550)} mt={rem(45)}>
+								<FrequencyList />
 							</Flex>
 						</Stepper.Step>
 						<Stepper.Completed>
@@ -96,6 +113,7 @@ function CreateLessonPage() {
 						nextStep={nextStep}
 						prevStep={prevStep}
 						handleCreateLesson={handleCreateLesson}
+						handleCreateLessonWithoutFrequency={handleCreateLessonWithoutFrequency}
 					/>
 				</Stack>
 			)}

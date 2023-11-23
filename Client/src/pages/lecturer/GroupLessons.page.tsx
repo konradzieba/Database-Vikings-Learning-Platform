@@ -5,6 +5,7 @@ import AddLessonCard from '@/components/LessonCard/AddLesson.card';
 import { Outlet, useLocation, useParams } from 'react-router-dom';
 import { useGetLessonsByGroupId } from '@/hooks/lessons/useGetLessonsByGroupId';
 import FullScreenLoader from '@/components/UI/FullScreenLoader';
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
 
 function GroupLessonsPage() {
 	let { id } = useParams();
@@ -31,19 +32,7 @@ function GroupLessonsPage() {
 					<FullScreenLoader />
 				) : slides?.length === 0 ? (
 					<Center>
-						<Carousel
-							maw={1175}
-							withIndicators
-							slidesToScroll={1}
-							initialSlide={0}
-							slideSize='33.333333%'
-							slideGap='sm'
-							align='start'
-							draggable>
-							<Carousel.Slide>
-								<AddLessonCard />
-							</Carousel.Slide>
-						</Carousel>
+						<AddLessonCard />
 					</Center>
 				) : (
 					<Center>
@@ -55,6 +44,8 @@ function GroupLessonsPage() {
 							slideSize='33.333333%'
 							slideGap='sm'
 							align='start'
+							nextControlIcon={<IconChevronRight />}
+							previousControlIcon={<IconChevronLeft />}
 							draggable>
 							{slides}
 							<Carousel.Slide>

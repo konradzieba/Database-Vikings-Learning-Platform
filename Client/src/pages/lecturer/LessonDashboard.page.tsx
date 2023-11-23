@@ -1,7 +1,7 @@
 import StudentAnswerCard from '@/components/StudentAnswerCard/StudentAnswer.card';
 import TaskAnswersStats from '@/components/UI/TaskAnswersStats';
 import { useGetLessonInfoByGroupAndLessonIdQueryFn } from '@/hooks/lessons/useGetLessonInfoByGroupAndLessonIdQueryFn';
-import { Button, Center, Flex, Loader, Paper, ScrollArea, Tabs, Text, Title, rem } from '@mantine/core';
+import { Button, Center, Flex, Loader, Paper, Tabs, Text, Title, rem } from '@mantine/core';
 
 import { modals } from '@mantine/modals';
 import { useMemo } from 'react';
@@ -73,47 +73,45 @@ function LessonDashboardPage() {
 						notAnsweredList={task.studentsWithoutAnswer}
 						taskId={task.taskId}
 					/>
-					<ScrollArea h={500} type='auto'>
-						<Flex wrap='wrap' gap='xl' mx='lg' mt='md' justify='flex-start'>
-							{isRepliedTabChosen
-								? task.answers.map(answer => {
-										if (answer.grantedScore) {
-											return (
-												<StudentAnswerCard
-													key={`${task.taskNumber}-${answer.index}-answer`}
-													studentId={answer.studentId}
-													answerId={answer.answerId}
-													firstName={answer.firstName}
-													lastName={answer.lastName}
-													index={answer.index}
-													answer={answer.answer}
-													sendDate={answer.sendDate}
-													refetchLessonInfo={refetchLessonInfo}
-												/>
-											);
-										}
-										return null;
-								  })
-								: task.answers.map(answer => {
-										if (!answer.grantedScore) {
-											return (
-												<StudentAnswerCard
-													key={`${task.taskNumber}-${answer.index}-answer`}
-													studentId={answer.studentId}
-													answerId={answer.answerId}
-													firstName={answer.firstName}
-													lastName={answer.lastName}
-													index={answer.index}
-													answer={answer.answer}
-													sendDate={answer.sendDate}
-													refetchLessonInfo={refetchLessonInfo}
-												/>
-											);
-										}
-										return null;
-								  })}
-						</Flex>
-					</ScrollArea>
+					<Flex wrap='wrap' gap='xl' mx='lg' mt='md' justify='flex-start'>
+						{isRepliedTabChosen
+							? task.answers.map(answer => {
+									if (answer.grantedScore) {
+										return (
+											<StudentAnswerCard
+												key={`${task.taskNumber}-${answer.index}-answer`}
+												studentId={answer.studentId}
+												answerId={answer.answerId}
+												firstName={answer.firstName}
+												lastName={answer.lastName}
+												index={answer.index}
+												answer={answer.answer}
+												sendDate={answer.sendDate}
+												refetchLessonInfo={refetchLessonInfo}
+											/>
+										);
+									}
+									return null;
+							  })
+							: task.answers.map(answer => {
+									if (!answer.grantedScore) {
+										return (
+											<StudentAnswerCard
+												key={`${task.taskNumber}-${answer.index}-answer`}
+												studentId={answer.studentId}
+												answerId={answer.answerId}
+												firstName={answer.firstName}
+												lastName={answer.lastName}
+												index={answer.index}
+												answer={answer.answer}
+												sendDate={answer.sendDate}
+												refetchLessonInfo={refetchLessonInfo}
+											/>
+										);
+									}
+									return null;
+							  })}
+					</Flex>
 				</Flex>
 			</Tabs.Panel>
 		);

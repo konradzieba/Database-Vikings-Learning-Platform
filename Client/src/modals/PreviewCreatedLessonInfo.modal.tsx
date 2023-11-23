@@ -25,8 +25,9 @@ function PreviewCreatedLessonInfoModal({
 			number: innerProps.createdLesson.lessonNumber,
 			image: innerProps.createdLesson.lessonImage,
 			groupId: innerProps.createdLesson.groupId,
-			isFrequencyChecked: innerProps.createdLesson.isFrequencyChecked,
 			tasks: innerProps.createdLesson.tasks,
+			isFrequencyChecked: innerProps.createdLesson.isFrequencyChecked,
+			absentStudents: innerProps.createdLesson.absentStudents,
 		});
 	};
 

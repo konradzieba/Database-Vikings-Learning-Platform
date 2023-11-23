@@ -164,12 +164,20 @@ export async function createLesson(
   next: NextFunction
 ) {
   try {
-    const { number, image, groupId, isFrequencyChecked, tasks } = req.body;
+    const {
+      number,
+      image,
+      groupId,
+      isFrequencyChecked,
+      tasks,
+      absentStudents,
+    } = req.body;
 
     const lesson = await LessonServices.createLessonByName({
       number,
       image,
-      isFrequencyChecked: isFrequencyChecked || false,
+      absentStudents: absentStudents,
+      isFrequencyChecked: isFrequencyChecked,
       Group: {
         connect: {
           id: groupId,

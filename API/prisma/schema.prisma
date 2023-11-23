@@ -82,6 +82,7 @@ model Lesson {
   id                  Int       @id @default(autoincrement())
   number              Int
   image               String?
+  absentStudents      Int[]     @default([])
   isFrequencyChecked  Boolean   @default(false)
   // relations    
   tasks               Task[]

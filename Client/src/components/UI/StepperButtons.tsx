@@ -1,3 +1,4 @@
+import { useGetLessonsByGroupId } from '@/hooks/lessons/useGetLessonsByGroupId';
 import { CreatedLessonType } from '@/types/StoreTypes';
 import { Button, Group } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +10,7 @@ interface StepperButtonsProps {
 	nextStep: () => void;
 	prevStep: () => void;
 	handleCreateLesson: () => void;
+	handleCreateLessonWithoutFrequency: () => void;
 }
 
 function StepperButtons({
@@ -18,8 +20,14 @@ function StepperButtons({
 	nextStep,
 	prevStep,
 	handleCreateLesson,
+	handleCreateLessonWithoutFrequency,
 }: StepperButtonsProps) {
 	const navigate = useNavigate();
+	const { refetch: refetchLessons } = useGetLessonsByGroupId(groupId);
+	const handleBackToLessonsDashboard = () => {
+		refetchLessons();
+		navigate(`/dashboard/group/${groupId}/lessons`);
+	};
 	const isTaskButtonDisabled =
 		createdLessonsArray.find(lesson => lesson.groupId === +groupId!)?.tasks.length === 0 ? true : false;
 	const isPhotoButtonDisabled =
@@ -28,7 +36,7 @@ function StepperButtons({
 		<Group mx='auto'>
 			{activeStep === 0 && (
 				<>
-					<Button miw={150} variant='outline' onClick={() => navigate(-1)}>
+					<Button miw={150} variant='outline' color='var(--mantine-primary-color)' onClick={() => navigate(-1)}>
 						Wróć
 					</Button>
 					<Button miw={150} onClick={nextStep} disabled={isTaskButtonDisabled}>
@@ -38,7 +46,7 @@ function StepperButtons({
 			)}
 			{activeStep === 1 && (
 				<>
-					<Button miw={150} variant='outline' onClick={prevStep}>
+					<Button miw={150} variant='outline' color='var(--mantine-primary-color)' onClick={prevStep}>
 						Cofnij
 					</Button>
 					<Button miw={150} onClick={nextStep} disabled={isPhotoButtonDisabled}>
@@ -48,8 +56,11 @@ function StepperButtons({
 			)}
 			{activeStep === 2 && (
 				<>
-					<Button miw={150} variant='outline' onClick={prevStep}>
+					<Button miw={150} variant='outline' color='var(--mantine-primary-color)' onClick={prevStep}>
 						Cofnij
+					</Button>
+					<Button miw={150} variant='outline' onClick={handleCreateLessonWithoutFrequency}>
+						Stwórz lekcję bez sprawdzania obecności
 					</Button>
 					<Button miw={150} onClick={handleCreateLesson}>
 						Stwórz lekcje
@@ -61,7 +72,7 @@ function StepperButtons({
 					<Button miw={150} onClick={() => console.log('Generowanie pdf')} variant='outline'>
 						Wygeneruj PDF z listą obecności
 					</Button>
-					<Button miw={150} onClick={() => navigate(`/dashboard/group/${groupId}/lessons`)}>
+					<Button miw={150} onClick={handleBackToLessonsDashboard}>
 						Przejdź do wszystkich lekcji
 					</Button>
 				</>

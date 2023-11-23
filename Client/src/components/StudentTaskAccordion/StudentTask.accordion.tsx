@@ -131,6 +131,7 @@ function StudentTaskAccordion({ tasks }: StudentTaskAccordionProps) {
 
 	return (
 		<Accordion
+			w='100%'
 			variant='separated'
 			chevron={<IconChevronDown />}
 			chevronSize={rem(24)}

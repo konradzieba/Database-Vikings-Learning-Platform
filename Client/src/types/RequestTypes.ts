@@ -31,6 +31,7 @@ const TCreateLessonRequestSchema = z.object({
 	image: z.string(),
 	groupId: z.number().int(),
 	isFrequencyChecked: z.boolean(),
+	absentStudents: z.array(z.number().int()),
 	tasks: z.array(
 		z.object({
 			number: z.number().int(),

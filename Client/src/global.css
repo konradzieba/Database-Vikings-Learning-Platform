@@ -99,6 +99,7 @@ body {
 	background-color: var(--primary-bg-color);
 }
 
+
 .tableHeader {
 	position: sticky;
 	top: 0;
@@ -119,3 +120,11 @@ body {
 .tableScrolled {
 	box-shadow: var(--mantine-shadow-sm);
 }
+
+.mantine-Carousel-control {
+	background-color: transparent;
+	border-color: transparent;
+	color: var(--font-color);
+	opacity: 1;
+}
+
