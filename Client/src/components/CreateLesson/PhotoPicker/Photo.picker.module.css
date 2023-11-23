@@ -18,6 +18,12 @@
 	color: var(--mantine-primary-color-lighter);
 }
 
+.lessonPreviousPhotoWrapper {
+	border: rem(5) solid rgba(240, 140, 0, 0.8);
+	border-radius: 50%;
+	cursor: pointer;
+}
+
 .lessonSelectedPhotoWrapper,
 .lessonPhotoWrapper {
 	border: rem(5) solid var(--mantine-primary-color);
