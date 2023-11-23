@@ -24,6 +24,15 @@ router.get(
 );
 
 router.get(
+  '/getPreviousLessonsImages/:id',
+  validateRequestAndCheckRole(
+    { params: paramsWithIdSchema },
+    EnumRole.LECTURER
+  ),
+  LessonsControllers.getPreviousLessonsImages
+);
+
+router.get(
   '/getLessonInfoByGroupAndLessonId/:id/:lessonId',
   validateRequestAndCheckRole(
     { params: paramsWithLessonIdSchema },

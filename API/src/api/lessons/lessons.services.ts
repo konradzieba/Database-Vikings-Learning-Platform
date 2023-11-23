@@ -47,6 +47,17 @@ export async function getTasksByLessonId(id: Lesson['id']) {
   });
 }
 
+export function getPreviousLessonsImages(id: Group['id']) {
+  return db.lesson.findMany({
+    where: {
+      groupId: id,
+    },
+    select: {
+      image: true,
+    },
+  });
+}
+
 export async function getStudentLessonInfo(
   id: Group['id'],
   studentId: Student['id']
