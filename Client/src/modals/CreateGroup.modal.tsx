@@ -1,6 +1,5 @@
-import { Dispatch, useRef, useState } from 'react';
+import { Dispatch, useState } from 'react';
 import {
-	Box,
 	Button,
 	Center,
 	Collapse,
@@ -17,11 +16,14 @@ import {
 } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
 import {
+	IconCheck,
 	IconChevronDown,
 	IconChevronUp,
 	IconFile,
 	IconInfoCircle,
+	IconPencil,
 	IconTag,
+	IconX,
 } from '@tabler/icons-react';
 import Papa, { ParseResult } from 'papaparse';
 import { useLecturerStore } from '@/utils/stores/useLecturerStore';
@@ -73,20 +75,20 @@ const FileInputManual = ({
 };
 
 function CreateGroupModal({ context, id }: ContextModalProps) {
+	const [groupName, setGroupName] = useState('');
 	const [csvData, setCsvData] = useState<CsvData[]>([]);
 	const [scrolled, setScrolled] = useState(false);
 	const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 	const [groupNameError, setGroupNameError] = useState('');
 	const [fileInputError, setFileInputError] = useState('');
 	const [isManualOpen, setManualOpen] = useState(false);
+	const [editingRowIndex, setEditingRowIndex] = useState<string>('');
 	const { lecturerData } = useLecturerStore();
-
-	const groupNameRef = useRef<HTMLInputElement>(null);
 
 	const { mutate, isPending, isError, isSuccess } =
 		useRegisterManyStudentsMutation({
 			lecturerId: lecturerData.lecturerId as number,
-			groupName: groupNameRef.current?.value as string,
+			groupName: groupName,
 			studentsToRegister: csvData.map((row) => ({
 				firstName: row['Imię'],
 				lastName: row['Nazwisko'],
@@ -94,13 +96,86 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 			})),
 		});
 
+	// const handleEditRow = (indexNumber: string) => {
+	// 	const editingRow = csvData.find(
+	// 		(row) => row['Numer indeksu'] === indexNumber
+	// 	);
+
+	// 	if (editingRow) {
+	// 		setNewRowData({
+	// 			firstName: editingRow['Imię'],
+	// 			lastName: editingRow['Nazwisko'],
+	// 			indexNumber: editingRow['Numer indeksu'],
+	// 		});
+	// 		setEditingRowIndex(indexNumber);
+	// 	}
+	// };
+
+	const handleDeleteRow = (indexNumber: string) => {
+		setCsvData((prev) =>
+			prev.filter((row) => row['Numer indeksu'] !== indexNumber)
+		);
+	};
+
 	const rows = csvData.map((row, index) => {
+		const isEditing = editingRowIndex === row['Numer indeksu'];
 		return (
 			<Table.Tr key={row['Numer indeksu']}>
 				<Table.Td>{index + 1}</Table.Td>
-				<Table.Td>{row['Imię']}</Table.Td>
-				<Table.Td>{row['Nazwisko']}</Table.Td>
+				<Table.Td>
+					{isEditing ? (
+						<TextInput
+							value={row['Imię']}
+							onChange={(e) => {
+								row['Imię'] = e.target.value;
+								setCsvData([...csvData]);
+							}}
+						/>
+					) : (
+						row['Imię']
+					)}
+				</Table.Td>
+				<Table.Td>
+					{isEditing ? (
+						<TextInput
+							value={row['Nazwisko']}
+							onChange={(e) => {
+								row['Nazwisko'] = e.target.value;
+								setCsvData([...csvData]);
+							}}
+						/>
+					) : (
+						row['Nazwisko']
+					)}
+				</Table.Td>
 				<Table.Td>{row['Numer indeksu']}</Table.Td>
+				<Table.Td>
+					<Group gap='sm'>
+						{!isEditing ? (
+							<>
+								<IconPencil
+									size='1.4rem'
+									color='var(--mantine-primary-color)'
+									onClick={() => setEditingRowIndex(row['Numer indeksu'])}
+									cursor='pointer'
+								/>
+								<IconX
+									size='1.4rem'
+									color='var(--bad-state-color)'
+									onClick={() => handleDeleteRow(row['Numer indeksu'])}
+									cursor='pointer'
+								/>
+							</>
+						) : (
+							<IconCheck
+								size='1.4rem'
+								color='var(--mantine-primary-color)'
+								cursor='pointer'
+								onClick={() => setEditingRowIndex('')}
+							/>
+						)}
+					</Group>
+				</Table.Td>
 			</Table.Tr>
 		);
 	});
@@ -112,7 +187,7 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 			indexNumber: row['Numer indeksu'],
 		}));
 
-		if (!groupNameRef.current?.value) {
+		if (!groupName) {
 			setGroupNameError('Nazwa grupy jest wymagana');
 			return;
 		}
@@ -125,9 +200,6 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 		mutate();
 
 		console.log('Przetworzone dane:', transformedData);
-
-		context.closeModal(id);
-		modals.closeAll();
 	};
 
 	const handleFileChange = (file: File | null) => {
@@ -155,7 +227,7 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 	if (isPending) {
 		return (
 			<>
-				<Center h={120}>
+				<Center mih={80}>
 					<Loader />
 				</Center>
 			</>
@@ -165,7 +237,7 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 	if (isSuccess) {
 		return (
 			<>
-				<Center h={120}>
+				<Center mih={80}>
 					<Text>Pomyślnie dodano studentów</Text>
 				</Center>
 				<Group justify='center'>
@@ -180,7 +252,7 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 	if (isError) {
 		return (
 			<>
-				<Center h={120}>
+				<Center mih={80}>
 					<Text>Błąd podczas dodawania studentów</Text>
 				</Center>
 				<Group justify='center'>
@@ -200,11 +272,13 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 					placeholder='Nazwa grupy'
 					leftSection={<IconTag size='1.4rem' />}
 					error={groupNameError}
-					onChange={() => setGroupNameError('')}
-					ref={groupNameRef}
+					onChange={(e) => {
+						setGroupName(e.target.value);
+						setGroupNameError('');
+					}}
 				/>
 				<FileInput
-					clearable
+					clearable={true}
 					accept='.csv'
 					label='Lista studentów'
 					placeholder='Kliknij, aby wybrać plik CSV'
@@ -243,32 +317,40 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 						</Button>
 					</Stack>
 				)}
-				<Collapse in={isPreviewOpen}>
-					<ScrollArea
-						h={250}
-						onScrollPositionChange={({ y }) => setScrolled(y !== 0)}
-					>
-						<Table verticalSpacing='sm' withRowBorders striped>
-							<Table.Thead
-								className={`tableHeader ${scrolled ? 'tableScrolled' : ''}`}
-							>
-								<Table.Tr>
-									<Table.Th>Lp.</Table.Th>
-									<Table.Th>Imię</Table.Th>
-									<Table.Th>Nazwisko</Table.Th>
-									<Table.Th>Numer indeksu</Table.Th>
-								</Table.Tr>
-							</Table.Thead>
-							<Table.Tbody>{rows}</Table.Tbody>
-						</Table>
-					</ScrollArea>
-				</Collapse>
+				{csvData.length !== 0 && (
+					<Collapse in={isPreviewOpen}>
+						<ScrollArea
+							h={250}
+							onScrollPositionChange={({ y }) => setScrolled(y !== 0)}
+						>
+							<Table verticalSpacing='sm' withRowBorders striped>
+								<Table.Thead
+									className={`tableHeader ${scrolled ? 'tableScrolled' : ''}`}
+								>
+									<Table.Tr>
+										<Table.Th>Lp.</Table.Th>
+										<Table.Th>Imię</Table.Th>
+										<Table.Th>Nazwisko</Table.Th>
+										<Table.Th>Numer indeksu</Table.Th>
+										<Table.Th>Akcje</Table.Th>
+									</Table.Tr>
+								</Table.Thead>
+								<Table.Tbody>{rows}</Table.Tbody>
+							</Table>
+						</ScrollArea>
+					</Collapse>
+				)}
 			</Stack>
 			<Group justify='center'>
 				<Button variant='outline' miw={150} onClick={handleCloseModal}>
 					Anuluj
 				</Button>
-				<Button miw={150} onClick={handleCreateGroup} loading={isPending}>
+				<Button
+					miw={150}
+					onClick={handleCreateGroup}
+					loading={isPending}
+					disabled={!groupName || csvData.length === 0}
+				>
 					{isPending ? '' : 'Stwórz grupę'}
 				</Button>
 			</Group>

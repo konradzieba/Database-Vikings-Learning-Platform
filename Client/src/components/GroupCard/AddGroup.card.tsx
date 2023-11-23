@@ -8,7 +8,7 @@ function AddGroupCard() {
 		modals.openContextModal({
 			modal: 'createGroup',
 			title: 'Stwórz grupę',
-			size: 'lg',
+			size: 'xl',
 			closeOnClickOutside: false,
 			innerProps: {},
 		});
