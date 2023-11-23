@@ -27,6 +27,7 @@ import CheckFrequencyPage from './pages/CheckFrequency.page';
 import GroupStudentsInfoPage from './pages/lecturer/GroupStudentsInfo.page';
 import LessonDashboardPage from './pages/lecturer/LessonDashboard.page';
 import ScoreBoardLecturerPage from './pages/lecturer/ScoreBoardLecturer.page';
+import StudentPreview from './pages/lecturer/StudentPreview';
 
 const router = createBrowserRouter([
 	{
@@ -57,6 +58,7 @@ const router = createBrowserRouter([
 		),
 		children: [
 			{ index: true, element: <DashboardPage /> },
+			{ path: 'student-preview/:studentId', element: <StudentPreview /> },
 			{ path: 'me', element: <BlankContent /> },
 			{
 				path: 'group/:id',
@@ -91,9 +93,8 @@ const router = createBrowserRouter([
 		loader: loginLoaderFn,
 		element: <LoginForm />,
 	},
-	// { path: '/me', element: <BlankContent /> },
 	{ path: '/not-found', element: <NotFoundPage /> },
-	{ path: '*', element: <Navigate to='/not-found' replace /> },
+	// { path: '*', element: <Navigate to='/not-found' replace /> },
 ]);
 
 export function Router() {
