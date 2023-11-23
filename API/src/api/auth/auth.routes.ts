@@ -11,6 +11,18 @@ import { EnumRole } from '../../../typings/token';
 const router = Router();
 
 router.post(
+  '/registerManyStudents',
+  validateRequestAndCheckRole(
+    {
+      query: AuthSchemas.registerQuerySchema,
+      body: AuthSchemas.registerManyStudentsSchema,
+    },
+    EnumRole.LECTURER
+  ),
+  AuthControllers.registerManyStudents
+);
+
+router.post(
   '/register',
   validateRequest({
     query: AuthSchemas.registerQuerySchema,

@@ -7,6 +7,28 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
+export function findUsersByEmails(emails: string[]) {
+  return db.user.findMany({
+    where: {
+      email: {
+        in: emails,
+      },
+    },
+  });
+}
+
+export function findStudentsByIndexNumbers(
+  indexNumbers: Student['indexNumber'][]
+) {
+  return db.student.findMany({
+    where: {
+      indexNumber: {
+        in: indexNumbers,
+      },
+    },
+  });
+}
+
 export function findUserById(id: User['id']) {
   return db.user.findUnique({
     where: {
@@ -29,6 +51,15 @@ export function findUserByEmail(email: string) {
     },
   });
 }
+
+export const findManyUsersByEmail = (emails: User['email'][]) =>
+  db.user.findMany({
+    where: {
+      email: {
+        in: emails,
+      },
+    },
+  });
 
 export function findStudentByUserId(userId: User['id']) {
   return db.student.findUnique({
@@ -77,6 +108,20 @@ export function findStudentByIndexNumber(indexNumber: Student['indexNumber']) {
   });
 }
 
+export async function createManyUsers(users: Prisma.UserCreateInput[]) {
+  return db.user.createMany({
+    data: users,
+  });
+}
+
+export async function createManyStudents(
+  students: Prisma.StudentCreateManyInput[]
+) {
+  return db.student.createMany({
+    data: students,
+  });
+}
+
 export function createUser(user: Prisma.UserCreateInput) {
   user.password = bcrypt.hashSync(user.password, 12);
   return db.user.create({
@@ -99,6 +144,39 @@ export function createSuperUser(
     data: { ...superUser, isAdmin: true },
   });
 }
+
+// export const createManyStudents = (
+//   lecturerId: Lecturer['id'],
+//   studentsToRegisterData: Prisma.StudentCreateInput[]
+// ) => {
+//   return db.student.createMany({
+//     data: studentsToRegisterData.map((student) => ({
+//       ...student,
+//       User: {
+//         create: {
+//           email: `${
+//             student.indexNumber ? student.indexNumber : ''
+//           }@student.uwm.edu.pl`,
+//           firstName: student.User.create?.firstName,
+//           lastName: student.User.create?.lastName,
+//           password: bcrypt.hashSync(
+//             generatePasswordByCredentials(
+//               student.User.create?.firstName,
+//               student.User.create?.lastName,
+//               student.indexNumber
+//             ),
+//             12
+//           ),
+//         },
+//       },
+//       Lecturer: {
+//         connect: {
+//           id: lecturerId,
+//         },
+//       },
+//     })),
+//   });
+// };
 
 export function createStudent(student: Prisma.StudentCreateInput) {
   return db.student.create({

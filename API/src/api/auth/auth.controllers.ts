@@ -8,7 +8,119 @@ import MessageResponse, { LoginResponse } from 'interfaces/MessageResponse';
 import * as UserServices from '../users/users.services';
 import * as AuthSchemas from './auth.schemas';
 import * as AuthServices from './auth.services';
+import * as GroupServices from '../groups/groups.services';
 import { EnumRole } from '../../../typings/token';
+import { Student } from '@prisma/client';
+
+export async function registerManyStudents(
+  req: Request<
+    {},
+    {},
+    AuthSchemas.RegisterManyStudentsInput,
+    AuthSchemas.RegisterQuerySchema
+  >,
+  res: Response<
+    | MessageResponse
+    | {
+        existingStudents: Student['indexNumber'][];
+      }
+  >,
+  next: NextFunction
+) {
+  try {
+    const { lecturerId, groupName, studentsToRegister } = req.body;
+
+    const existingGroup = await GroupServices.findGroupByName(groupName);
+
+    if (existingGroup) {
+      return res.status(422).json({
+        message: 'Group with given name already exists',
+      });
+    }
+
+    const newGroup = await GroupServices.createGroup({
+      name: groupName,
+      Lecturer: { connect: { id: lecturerId } },
+    });
+
+    const existingUsers = await UserServices.findManyUsersByEmail(
+      studentsToRegister.map(
+        (student) => `${student.indexNumber}@student.uwm.edu.pl`
+      )
+    );
+
+    if (existingUsers.length > 0) {
+      return res.status(422).json({
+        message: 'Some students already exist',
+        existingStudents: existingUsers.map(
+          (student) => +student.email.split('@')[0]
+        ),
+      });
+    }
+
+    const usersToCreate = studentsToRegister.map((student) => ({
+      email: `${student.indexNumber}@student.uwm.edu.pl`.toLowerCase(),
+      password: generatePasswordByCredentials(
+        student.firstName,
+        student.lastName,
+        student.indexNumber
+      ),
+      firstName: student.firstName,
+      lastName: student.lastName,
+    }));
+
+    const createdUsers = await UserServices.createManyUsers(usersToCreate);
+
+    if (createdUsers.count > 0) {
+      const studentsEmails = studentsToRegister.map(
+        (student) => `${student.indexNumber}@student.uwm.edu.pl`
+      );
+
+      const newUsers = await UserServices.findManyUsersByEmail(studentsEmails);
+
+      const studentsToCreate = newUsers.map((user) => ({
+        indexNumber: +user.email.split('@')[0],
+        groupId: newGroup.id,
+        userId: user.id,
+      }));
+
+      const createStudents =
+        await UserServices.createManyStudents(studentsToCreate);
+
+      const createdStudentsCount = createStudents.count;
+
+      if (createdStudentsCount > 0) {
+        const userPromises = newUsers.map(async (user) => {
+          const jti = uuidv4();
+          const { refreshToken } = generateTokens(user, jti);
+
+          await AuthServices.addRefreshTokenToWhitelist({
+            jti,
+            refreshToken,
+            userId: user.id,
+          });
+        });
+
+        await Promise.all(userPromises);
+      } else {
+        return res.status(500).json({
+          message: 'An error occurred while creating students',
+        });
+      }
+    } else {
+      return res.status(500).json({
+        message: 'An error occurred while creating users',
+      });
+    }
+
+    res.json({
+      message: 'Students created successfully.',
+    });
+  } catch (error) {
+    console.error('Error in registerManyStudents:', error);
+    next(error);
+  }
+}
 
 export async function registerStudent(
   req: Request<{}, {}, AuthSchemas.RegisterStudentInput>,
