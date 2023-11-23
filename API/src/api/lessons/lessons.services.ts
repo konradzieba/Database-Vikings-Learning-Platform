@@ -53,6 +53,7 @@ export function getPreviousLessonsImages(id: Group['id']) {
       groupId: id,
     },
     select: {
+      number: true,
       image: true,
     },
   });
