@@ -1,5 +1,5 @@
-import { Image, Container, Title, Text, Button, SimpleGrid, Center, rem } from '@mantine/core';
-import image from '@/assets/lesson1.png';
+import { Image, Container, Title, Text, Button, SimpleGrid} from '@mantine/core';
+import vikingSleeping from '@/assets/vikingSleeping.webp';
 import classes from './404.page.module.css';
 import { useNavigate } from 'react-router-dom';
 
@@ -13,7 +13,7 @@ export function NotFoundPage() {
 	return (
 		<Container className={classes.root}>
 			<SimpleGrid spacing={{ base: 40, sm: 80 }} cols={{ base: 1, sm: 2 }}>
-				<Image src={image} className={classes.mobileImage} />
+				<Image src={vikingSleeping} className={classes.mobileImage} />
 				<div>
 					<Title className={classes.title}>Coś poszło nie tak...</Title>
 					<Text c='dimmed' size='lg'>
@@ -24,7 +24,7 @@ export function NotFoundPage() {
 						Wróć do strony głównej
 					</Button>
 				</div>
-				<Image src={image} className={classes.desktopImage} />
+				<Image src={vikingSleeping} className={classes.desktopImage} />
 			</SimpleGrid>
 		</Container>
 	);
