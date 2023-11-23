@@ -30,6 +30,14 @@ export async function registerManyStudents(
   try {
     const { lecturerId, groupName, studentsToRegister } = req.body;
 
+    const existingLecturer = await UserServices.findLecturerById(lecturerId);
+
+    if (!existingLecturer) {
+      return res.status(422).json({
+        message: 'Lecturer with given id does not exist',
+      });
+    }
+
     const existingGroup = await GroupServices.findGroupByName(groupName);
 
     if (existingGroup) {

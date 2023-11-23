@@ -1,10 +1,10 @@
-import { Button, Flex, Group, Menu, Text, rem } from '@mantine/core';
+import { Anchor, Button, Flex, Group, Menu, Text, rem } from '@mantine/core';
 import classes from './StudentInfo.card.module.css';
 import HeartCounter from '../UI/HeartCounter';
 import DateTimeDisplay from '../UI/DateTimeDisplay';
 import { IconClock, IconCoins, IconDots, IconKey, IconReplace, IconUserEdit, IconUserMinus } from '@tabler/icons-react';
 import { modals } from '@mantine/modals';
-import { useParams } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
 import useGetStudentsFromGroup from '@/hooks/groups/useGetStudentsFromGroup';
 
 interface StudentInfoCardProps {
@@ -104,7 +104,14 @@ function StudentInfoCard({
 	return (
 		<Flex align='center' justify='space-between' px='sm' py='sm' miw='50%' className={classes.studentInfoCardContainer}>
 			<Flex direction='column' align='center' miw='25%'>
-				<Text>{`${firstName} ${lastName}`}</Text>
+				<Anchor
+					component={NavLink}
+					to={`/dashboard/student-preview/${studentId}`}
+					relative='path'
+					target='_blank'
+				>
+					<Text>{`${firstName} ${lastName}`}</Text>
+				</Anchor>
 				<Text fw={500} size='lg' py={rem(4)}>
 					{index}
 				</Text>
