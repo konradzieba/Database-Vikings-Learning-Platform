@@ -17,6 +17,11 @@ const LecturerInfoSchema = z.object({
 	idCheck: z.number(),
 });
 
+const RegisterManyStudentsSchema = z.object({
+	message: z.string(),
+	existingStudents: z.array(z.number()),
+});
+
 const StudentInfoSchema = z.object({
 	firstName: z.string(),
 	lastName: z.string(),
@@ -234,6 +239,7 @@ const getStudentDefaultPasswordStateSchema = z.object({
 
 export type TMessageResponse = z.infer<typeof MessageResponseSchema>;
 export type TLoginResponse = z.infer<typeof LoginResponseSchema>;
+export type TRegisterManyStudents = z.infer<typeof RegisterManyStudentsSchema>;
 export type TLecturerInfo = z.infer<typeof LecturerInfoSchema>;
 export type TStudentInfo = z.infer<typeof StudentInfoSchema>;
 export type TMeResponse = z.infer<typeof MeResponseSchema>;

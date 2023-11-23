@@ -43,8 +43,25 @@ const TCreateLessonRequestSchema = z.object({
 	),
 });
 
+const TRegisterManyStudentsRequestSchema = z.object({
+	lecturerId: z.number().int(),
+	groupName: z.string().min(1),
+	studentsToRegister: z.array(
+		z.object({
+			firstName: z.string().min(1),
+			lastName: z.string().min(1),
+			indexNumber: z.number().int(),
+		})
+	),
+});
+
 export type TUserRequest = z.infer<typeof UserRequestSchema>;
 export type TLoginRequest = z.infer<typeof TLoginRequest>;
 export type TSendAnswerRequest = z.infer<typeof SendAnswerRequestSchema>;
-export type TUpdateTaskInfoRequest = z.infer<typeof UpdateTaskInfoRequestSchema>;
+export type TUpdateTaskInfoRequest = z.infer<
+	typeof UpdateTaskInfoRequestSchema
+>;
 export type TCreateLessonRequest = z.infer<typeof TCreateLessonRequestSchema>;
+export type TRegisterManyStudentsRequest = z.infer<
+	typeof TRegisterManyStudentsRequestSchema
+>;

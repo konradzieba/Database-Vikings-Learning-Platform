@@ -1,10 +1,12 @@
-import { Dispatch, useState } from 'react';
+import { Dispatch, useRef, useState } from 'react';
 import {
 	Box,
 	Button,
+	Center,
 	Collapse,
 	FileInput,
 	Group,
+	Loader,
 	Popover,
 	ScrollArea,
 	Stack,
@@ -22,6 +24,8 @@ import {
 	IconTag,
 } from '@tabler/icons-react';
 import Papa, { ParseResult } from 'papaparse';
+import { useLecturerStore } from '@/utils/stores/useLecturerStore';
+import { useRegisterManyStudentsMutation } from '@/hooks/students/useRegisterManyStudentsMutation';
 
 interface CsvData {
 	[key: string]: string;
@@ -72,8 +76,23 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 	const [csvData, setCsvData] = useState<CsvData[]>([]);
 	const [scrolled, setScrolled] = useState(false);
 	const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+	const [groupNameError, setGroupNameError] = useState('');
 	const [fileInputError, setFileInputError] = useState('');
 	const [isManualOpen, setManualOpen] = useState(false);
+	const { lecturerData } = useLecturerStore();
+
+	const groupNameRef = useRef<HTMLInputElement>(null);
+
+	const { mutate, isPending, isError, isSuccess } =
+		useRegisterManyStudentsMutation({
+			lecturerId: lecturerData.lecturerId as number,
+			groupName: groupNameRef.current?.value as string,
+			studentsToRegister: csvData.map((row) => ({
+				firstName: row['Imię'],
+				lastName: row['Nazwisko'],
+				indexNumber: +row['Numer indeksu'],
+			})),
+		});
 
 	const rows = csvData.map((row, index) => {
 		return (
@@ -92,6 +111,18 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 			lastName: row['Nazwisko'],
 			indexNumber: row['Numer indeksu'],
 		}));
+
+		if (!groupNameRef.current?.value) {
+			setGroupNameError('Nazwa grupy jest wymagana');
+			return;
+		}
+
+		if (csvData.length === 0) {
+			setFileInputError('Plik CSV jest wymagany');
+			return;
+		}
+
+		mutate();
 
 		console.log('Przetworzone dane:', transformedData);
 
@@ -121,6 +152,46 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 		modals.closeAll();
 	};
 
+	if (isPending) {
+		return (
+			<>
+				<Center h={120}>
+					<Loader />
+				</Center>
+			</>
+		);
+	}
+
+	if (isSuccess) {
+		return (
+			<>
+				<Center h={120}>
+					<Text>Pomyślnie dodano studentów</Text>
+				</Center>
+				<Group justify='center'>
+					<Button variant='outline' miw={150} onClick={handleCloseModal}>
+						Zamknij
+					</Button>
+				</Group>
+			</>
+		);
+	}
+
+	if (isError) {
+		return (
+			<>
+				<Center h={120}>
+					<Text>Błąd podczas dodawania studentów</Text>
+				</Center>
+				<Group justify='center'>
+					<Button variant='outline' miw={150} onClick={handleCloseModal}>
+						Zamknij
+					</Button>
+				</Group>
+			</>
+		);
+	}
+
 	return (
 		<>
 			<Stack mb='xl' gap='lg'>
@@ -128,6 +199,9 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 					label='Nazwa grupy'
 					placeholder='Nazwa grupy'
 					leftSection={<IconTag size='1.4rem' />}
+					error={groupNameError}
+					onChange={() => setGroupNameError('')}
+					ref={groupNameRef}
 				/>
 				<FileInput
 					clearable
@@ -194,8 +268,8 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 				<Button variant='outline' miw={150} onClick={handleCloseModal}>
 					Anuluj
 				</Button>
-				<Button miw={150} onClick={handleCreateGroup}>
-					Stwórz
+				<Button miw={150} onClick={handleCreateGroup} loading={isPending}>
+					{isPending ? '' : 'Stwórz grupę'}
 				</Button>
 			</Group>
 		</>

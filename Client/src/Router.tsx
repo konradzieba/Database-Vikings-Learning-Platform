@@ -94,7 +94,7 @@ const router = createBrowserRouter([
 		element: <LoginForm />,
 	},
 	{ path: '/not-found', element: <NotFoundPage /> },
-	// { path: '*', element: <Navigate to='/not-found' replace /> },
+	{ path: '*', element: <Navigate to='/not-found' replace /> },
 ]);
 
 export function Router() {
