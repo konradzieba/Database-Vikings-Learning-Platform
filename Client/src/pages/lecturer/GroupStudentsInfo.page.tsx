@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 function GroupStudentsInfoPage() {
 	let { id } = useParams();
 	const { groups } = useLecturerStore();
-	const currentGroup = groups?.find((group) => group.groupId === +id!);
+	const currentGroup = groups?.find(group => group.groupId === +id!);
 	const { data: StudentsFromGroup, isPending } = useGetStudentsFromGroup(+id!);
 
 	if (isPending) {
@@ -24,7 +24,7 @@ function GroupStudentsInfoPage() {
 				{StudentsFromGroup?.students.length === 0 ? (
 					<Text>TEMPORARY TEXT WHEN THERE IS NO ELEMENT IN ARRAY</Text>
 				) : (
-					StudentsFromGroup?.students.map((data) => (
+					StudentsFromGroup?.students.map(data => (
 						<StudentInfoCard
 							key={`${data.indexNumber}`}
 							userId={data.userId}
