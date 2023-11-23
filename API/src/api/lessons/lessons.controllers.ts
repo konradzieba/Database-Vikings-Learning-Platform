@@ -200,7 +200,11 @@ export async function createLesson(
       });
     });
 
-    await Promise.all(taskPromises);
+    const healthPromises = absentStudents.map(async (student) => {
+      await UserServices.decrementStudentHealth(student);
+    });
+
+    await Promise.all([...taskPromises, ...healthPromises]);
 
     res.json({
       message: `Lesson ${lesson.number} for groupId ${lesson.groupId} created successfully.`,
