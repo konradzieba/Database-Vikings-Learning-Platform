@@ -3,6 +3,22 @@ import { db } from '../../db';
 import { hashToken } from '../../utils/hashToken';
 
 // used when we create a refresh token.
+export function addManyRefreshTokensToWhitelist(
+  refreshTokens: {
+    jti: string;
+    refreshToken: string;
+    userId: User['id'];
+  }[]
+) {
+  return db.refreshToken.createMany({
+    data: refreshTokens.map(({ jti, refreshToken, userId }) => ({
+      id: jti,
+      hashedToken: hashToken(refreshToken),
+      userId,
+    })),
+  });
+}
+
 export function addRefreshTokenToWhitelist({
   jti,
   refreshToken,

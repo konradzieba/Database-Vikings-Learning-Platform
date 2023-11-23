@@ -60,10 +60,13 @@ export async function registerManyStudents(
 
     const usersToCreate = studentsToRegister.map((student) => ({
       email: `${student.indexNumber}@student.uwm.edu.pl`.toLowerCase(),
-      password: generatePasswordByCredentials(
-        student.firstName,
-        student.lastName,
-        student.indexNumber
+      password: bcrypt.hashSync(
+        generatePasswordByCredentials(
+          student.firstName,
+          student.lastName,
+          student.indexNumber
+        ),
+        12
       ),
       firstName: student.firstName,
       lastName: student.lastName,
@@ -90,18 +93,13 @@ export async function registerManyStudents(
       const createdStudentsCount = createStudents.count;
 
       if (createdStudentsCount > 0) {
-        const userPromises = newUsers.map(async (user) => {
-          const jti = uuidv4();
-          const { refreshToken } = generateTokens(user, jti);
+        const refreshTokens = newUsers.map((user) => ({
+          jti: uuidv4(),
+          refreshToken: generateTokens(user, uuidv4()).refreshToken,
+          userId: user.id,
+        }));
 
-          await AuthServices.addRefreshTokenToWhitelist({
-            jti,
-            refreshToken,
-            userId: user.id,
-          });
-        });
-
-        await Promise.all(userPromises);
+        await AuthServices.addManyRefreshTokensToWhitelist(refreshTokens);
       } else {
         return res.status(500).json({
           message: 'An error occurred while creating students',
