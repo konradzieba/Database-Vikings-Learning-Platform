@@ -34,6 +34,7 @@ function CreateLessonPage() {
 					isFrequencyChecked: false,
 					tasks: [],
 					absentStudents: [],
+					absentStudentsCredentials: [],
 				});
 			}
 		}

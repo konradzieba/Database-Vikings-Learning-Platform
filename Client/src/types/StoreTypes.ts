@@ -56,6 +56,7 @@ export type CreatedLessonType = {
 	groupId: number;
 	isFrequencyChecked: boolean;
 	absentStudents: number[] | [];
+	absentStudentsCredentials: string[] | [];
 	tasks: TaskType[] | [];
 };
 
