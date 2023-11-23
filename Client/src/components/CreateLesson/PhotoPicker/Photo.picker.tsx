@@ -3,16 +3,16 @@ import { Avatar, Box, Flex, Stack, Text, rem } from '@mantine/core';
 import classes from './Photo.picker.module.css';
 import { IconCheck } from '@tabler/icons-react';
 import vikingAngry from '@/assets/vikingAngry.webp';
-import vikingConfused from '@/assets/vikingConfused.webp';
+import vikingWithTorch from '@/assets/vikingWithTorch.webp';
 import vikingDamaged from '@/assets/vikingDamaged.webp';
-import vikingHoldingShip from '@/assets/vikingHoldingShip.webp';
+import vikingWithTwoSwords from '@/assets/vikingWithTwoSwords.webp';
 import vikingInLove from '@/assets/vikingInLove.webp';
-import vikingSleeping from '@/assets/vikingSleeping.webp';
+import vikingWithTreasure from '@/assets/vikingWithTreasure.webp';
 import vikingStandingWithSword from '@/assets/vikingStandingWithSword.webp';
 import vikingWithAnvil from '@/assets/vikingWithAnvil.webp';
 import vikingWithBrokenSwordAndShield from '@/assets/vikingWithBrokenSwordAndShield.webp';
 import vikingWithCape from '@/assets/vikingWithCape.webp';
-import vikingWithDrink from '@/assets/vikingWithDrink.webp';
+import vikingZombie from '@/assets/vikingZombie.webp';
 import vikingWithDrinkAndHam from '@/assets/vikingWithDrinkAndHam.webp';
 import vikingWithFish from '@/assets/vikingWithFish.webp';
 import vikingWithGoldenAxe from '@/assets/vikingWithGoldenAxe.webp';
@@ -51,16 +51,16 @@ function PhotoPicker({ previousLessonsImages }: PhotoPickerProps) {
 
 	const images = [
 		vikingAngry,
-		vikingConfused,
+		vikingWithTorch,
 		vikingDamaged,
-		vikingHoldingShip,
+		vikingWithTwoSwords,
 		vikingInLove,
-		vikingSleeping,
+		vikingWithTreasure,
 		vikingStandingWithSword,
 		vikingWithAnvil,
 		vikingWithBrokenSwordAndShield,
 		vikingWithCape,
-		vikingWithDrink,
+		vikingZombie,
 		vikingWithDrinkAndHam,
 		vikingWithFish,
 		vikingWithGoldenAxe,
