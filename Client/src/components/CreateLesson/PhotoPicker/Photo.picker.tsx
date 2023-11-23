@@ -20,7 +20,6 @@ import vikingWithShieldWithArrows from '@/assets/vikingWithShieldWithArrows.webp
 
 import { useParams } from 'react-router-dom';
 import { useCreateLessonStore } from '@/utils/stores/useCreateLessonStore';
-import { useDidUpdate } from '@mantine/hooks';
 
 interface PhotoPickerProps {
 	previousLessonsImages:
@@ -32,7 +31,6 @@ interface PhotoPickerProps {
 }
 
 function PhotoPicker({ previousLessonsImages }: PhotoPickerProps) {
-	// console.log(previousLessonsImages);
 	const { id } = useParams();
 	const { createdLessonsArray, updateLesson } = useCreateLessonStore();
 	const lessonFromGroup = createdLessonsArray.find(lesson => lesson.groupId === +id!);
@@ -74,9 +72,8 @@ function PhotoPicker({ previousLessonsImages }: PhotoPickerProps) {
 			<Flex justify='center' align='center' mx='auto' w='80%' mb='xl' mt={rem(43)} wrap='wrap' gap='md'>
 				{images.map((image, index) => {
 					const usedInPreviousLesson = previousLessonsImages?.find(lesson => lesson.image === image);
-					console.log(usedInPreviousLesson);
 					return (
-						<Stack align='center' gap={rem(5)}>
+						<Stack align='center' gap={rem(5)} key={image + index}>
 							<Box
 								key={image + index}
 								pos='relative'
