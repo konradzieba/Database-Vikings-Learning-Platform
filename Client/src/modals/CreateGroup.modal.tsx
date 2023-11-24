@@ -1,5 +1,6 @@
 import { Dispatch, useState } from 'react';
 import {
+	Anchor,
 	Button,
 	Center,
 	Collapse,
@@ -10,8 +11,10 @@ import {
 	ScrollArea,
 	Stack,
 	Table,
+	Tabs,
 	Text,
 	TextInput,
+	ThemeIcon,
 	rem,
 } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
@@ -75,6 +78,7 @@ const FileInputManual = ({
 };
 
 function CreateGroupModal({ context, id }: ContextModalProps) {
+	const [activeTab, setActiveTab] = useState<string | null>('csv');
 	const [groupName, setGroupName] = useState('');
 	const [csvData, setCsvData] = useState<CsvData[]>([]);
 	const [scrolled, setScrolled] = useState(false);
@@ -95,21 +99,6 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 				indexNumber: +row['Numer indeksu'],
 			})),
 		});
-
-	// const handleEditRow = (indexNumber: string) => {
-	// 	const editingRow = csvData.find(
-	// 		(row) => row['Numer indeksu'] === indexNumber
-	// 	);
-
-	// 	if (editingRow) {
-	// 		setNewRowData({
-	// 			firstName: editingRow['Imię'],
-	// 			lastName: editingRow['Nazwisko'],
-	// 			indexNumber: editingRow['Numer indeksu'],
-	// 		});
-	// 		setEditingRowIndex(indexNumber);
-	// 	}
-	// };
 
 	const handleDeleteRow = (indexNumber: string) => {
 		setCsvData((prev) =>
@@ -265,8 +254,16 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 	}
 
 	return (
-		<>
-			<Stack mb='xl' gap='lg'>
+		<Tabs value={activeTab} onChange={setActiveTab}>
+			<Tabs.List>
+				<Tabs.Tab value='csv' w='50%' fw={500}>
+					Z pliku CSV
+				</Tabs.Tab>
+				<Tabs.Tab value='manual' w='50%' fw={500}>
+					Ręcznie
+				</Tabs.Tab>
+			</Tabs.List>
+			<Stack mb='xl' gap='lg' mt='xs'>
 				<TextInput
 					label='Nazwa grupy'
 					placeholder='Nazwa grupy'
@@ -277,69 +274,75 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 						setGroupNameError('');
 					}}
 				/>
-				<FileInput
-					clearable={true}
-					accept='.csv'
-					label='Lista studentów'
-					placeholder='Kliknij, aby wybrać plik CSV'
-					description='Zapoznaj się z instrukcją po prawej stronie poniższego pola'
-					error={fileInputError}
-					leftSection={<IconFile size='1.4rem' />}
-					rightSection={
-						<FileInputManual
-							isManualOpen={isManualOpen}
-							setManualOpen={setManualOpen}
-						/>
-					}
-					onChange={handleFileChange}
-				/>
-				{csvData.length !== 0 && (
-					<Stack gap='xs'>
-						<Text>
-							Wczytano&nbsp;
-							<Text span fw={500}>
-								{csvData.length}
-							</Text>
-							&nbsp;studentów
-						</Text>
-						<Button
-							variant='outline'
-							leftSection={
-								isPreviewOpen ? (
-									<IconChevronUp size='1.4rem' />
-								) : (
-									<IconChevronDown size='1.4rem' />
-								)
-							}
-							onClick={() => setIsPreviewOpen(!isPreviewOpen)}
-						>
-							{isPreviewOpen ? 'Ukryj podgląd' : 'Podgląd'}
-						</Button>
-					</Stack>
-				)}
-				{csvData.length !== 0 && (
-					<Collapse in={isPreviewOpen}>
-						<ScrollArea
-							h={250}
-							onScrollPositionChange={({ y }) => setScrolled(y !== 0)}
-						>
-							<Table verticalSpacing='sm' withRowBorders striped>
-								<Table.Thead
-									className={`tableHeader ${scrolled ? 'tableScrolled' : ''}`}
-								>
-									<Table.Tr>
-										<Table.Th>Lp.</Table.Th>
-										<Table.Th>Imię</Table.Th>
-										<Table.Th>Nazwisko</Table.Th>
-										<Table.Th>Numer indeksu</Table.Th>
-										<Table.Th>Akcje</Table.Th>
-									</Table.Tr>
-								</Table.Thead>
-								<Table.Tbody>{rows}</Table.Tbody>
-							</Table>
-						</ScrollArea>
-					</Collapse>
-				)}
+				<Tabs.Panel value='csv'>
+					<FileInput
+						accept='.csv'
+						label='Lista studentów'
+						placeholder='Kliknij, aby wybrać plik CSV'
+						description='Zapoznaj się z instrukcją po prawej stronie poniższego pola'
+						error={fileInputError}
+						leftSection={<IconFile size='1.4rem' />}
+						rightSection={
+							<FileInputManual
+								isManualOpen={isManualOpen}
+								setManualOpen={setManualOpen}
+							/>
+						}
+						onChange={handleFileChange}
+					/>
+					{csvData.length !== 0 && (
+						<Stack gap='xs'>
+							<Group justify='space-between' mt={rem(2)}>
+								<Text>
+									Wczytano&nbsp;
+									<Text span fw={500}>
+										{csvData.length}
+									</Text>
+									&nbsp;studentów
+								</Text>
+							</Group>
+							<Button
+								variant='outline'
+								leftSection={
+									isPreviewOpen ? (
+										<IconChevronUp size='1.4rem' />
+									) : (
+										<IconChevronDown size='1.4rem' />
+									)
+								}
+								onClick={() => {
+									setIsPreviewOpen(!isPreviewOpen);
+									setEditingRowIndex('');
+								}}
+							>
+								{isPreviewOpen ? 'Ukryj podgląd' : 'Podgląd'}
+							</Button>
+						</Stack>
+					)}
+					{csvData.length !== 0 && (
+						<Collapse in={isPreviewOpen}>
+							<ScrollArea
+								h={250}
+								onScrollPositionChange={({ y }) => setScrolled(y !== 0)}
+							>
+								<Table verticalSpacing='sm' withRowBorders striped>
+									<Table.Thead
+										className={`tableHeader ${scrolled ? 'tableScrolled' : ''}`}
+									>
+										<Table.Tr>
+											<Table.Th>Lp.</Table.Th>
+											<Table.Th>Imię</Table.Th>
+											<Table.Th>Nazwisko</Table.Th>
+											<Table.Th>Numer indeksu</Table.Th>
+											<Table.Th>Akcje</Table.Th>
+										</Table.Tr>
+									</Table.Thead>
+									<Table.Tbody>{rows}</Table.Tbody>
+								</Table>
+							</ScrollArea>
+						</Collapse>
+					)}
+				</Tabs.Panel>
 			</Stack>
 			<Group justify='center'>
 				<Button variant='outline' miw={150} onClick={handleCloseModal}>
@@ -354,7 +357,7 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 					{isPending ? '' : 'Stwórz grupę'}
 				</Button>
 			</Group>
-		</>
+		</Tabs>
 	);
 }
 
