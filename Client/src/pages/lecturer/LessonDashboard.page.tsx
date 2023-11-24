@@ -1,4 +1,5 @@
 import StudentAnswerCard from '@/components/StudentAnswerCard/StudentAnswer.card';
+import DataNotFound from '@/components/UI/DataNotFound';
 import TaskAnswersStats from '@/components/UI/TaskAnswersStats';
 import { useGetLessonInfoByGroupAndLessonIdQueryFn } from '@/hooks/lessons/useGetLessonInfoByGroupAndLessonIdQueryFn';
 import { Button, Center, Flex, Loader, Paper, Tabs, Text, Title, rem } from '@mantine/core';
@@ -34,13 +35,7 @@ function LessonDashboardPage() {
 	}
 
 	if (!lessonData?.lessonInfo.tasks.length) {
-		return (
-			<Center h='25vh'>
-				<Paper withBorder p='lg'>
-					<Text size='lg'>TEMPORARY TEXT WHEN THERE IS NO ELEMENT IN ARRAY</Text>
-				</Paper>
-			</Center>
-		);
+		return <DataNotFound />;
 	}
 
 	const handleOpenAddTaksModal = () => {

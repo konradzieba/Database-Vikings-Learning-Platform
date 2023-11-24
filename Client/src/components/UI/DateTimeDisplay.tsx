@@ -16,12 +16,12 @@ function DateTimeDisplay({ date, title, icon, titleTextAlgin = 'end', ...stackPr
 				{title}
 			</Text>
 			{date ? (
-				<Group gap={rem(5)}>
+				<Group gap={rem(5)} justify='flex-end'>
 					<ThemeIcon variant='transparent'>{icon}</ThemeIcon>
 					<Text>{formattedDate}</Text>
 				</Group>
 			) : (
-				<Text ta='center'>&mdash;</Text>
+				<Text >&mdash;&mdash;&mdash;</Text>
 			)}
 		</Stack>
 	);

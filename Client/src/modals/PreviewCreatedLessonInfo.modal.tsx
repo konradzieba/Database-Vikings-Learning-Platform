@@ -1,7 +1,7 @@
 import { useCreateLessonMutation } from '@/hooks/lessons/useCreateLessonMutation';
 import { CreatedLessonType } from '@/types/StoreTypes';
 import { useCreateLessonStore } from '@/utils/stores/useCreateLessonStore';
-import { Button, Center, Collapse, Flex, Group, Image, Loader, Text, rem, AspectRatio } from '@mantine/core';
+import { Button, Center, Collapse, Flex, Group, Image, Loader, Text, rem, AspectRatio, Badge } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { ContextModalProps, modals } from '@mantine/modals';
 import { IconChevronDown, IconChevronUp, IconCircleCheck, IconCircleX } from '@tabler/icons-react';
@@ -18,7 +18,8 @@ function PreviewCreatedLessonInfoModal({
 }: ContextModalProps<PreviewCreatedLessonInfoModalProps>) {
 	const { mutate: createLessonMutation, isError, isPending, isSuccess } = useCreateLessonMutation();
 	const { removeLesson } = useCreateLessonStore();
-	const [opened, { toggle }] = useDisclosure(false);
+	const [openedPhotoPreview, { toggle: togglePhotoPreview }] = useDisclosure(false);
+	const [openedAbsentStudentsPreview, { toggle: toggleAbsentStudentsPreview }] = useDisclosure(false);
 
 	const handleCreateLesson = () => {
 		createLessonMutation({
@@ -96,12 +97,12 @@ function PreviewCreatedLessonInfoModal({
 				size='md'
 				c='var(--font-color)'
 				pl={0}
-				onClick={toggle}
-				rightSection={opened ? <IconChevronUp /> : <IconChevronDown />}>
+				onClick={togglePhotoPreview}
+				rightSection={openedPhotoPreview ? <IconChevronUp /> : <IconChevronDown />}>
 				Zdjęcie
 			</Button>
-			<Collapse in={opened}>
-				<AspectRatio ratio={1} maw={200}>
+			<Collapse in={openedPhotoPreview}>
+				<AspectRatio ratio={1} maw={200} mx='auto'>
 					<Image src={innerProps.createdLesson.lessonImage} />
 				</AspectRatio>
 			</Collapse>
@@ -114,6 +115,30 @@ function PreviewCreatedLessonInfoModal({
 					<Text c='var(--bad-state-color)'>Nie</Text>
 				)}
 			</Group>
+
+			{innerProps.createdLesson.isFrequencyChecked && innerProps.createdLesson.absentStudentsCredentials.length > 0 && (
+				<>
+					<Button
+						variant='transparent'
+						size='md'
+						c='var(--font-color)'
+						pl={0}
+						onClick={toggleAbsentStudentsPreview}
+						rightSection={openedAbsentStudentsPreview ? <IconChevronUp /> : <IconChevronDown />}>
+						Nieobecni studenci
+					</Button>
+					<Collapse in={openedAbsentStudentsPreview}>
+						<Flex gap='sm'>
+							{innerProps.createdLesson.absentStudentsCredentials.map(student => (
+								<Badge color='gray' size='lg' key={student}>
+									{student}
+								</Badge>
+							))}
+						</Flex>
+					</Collapse>
+				</>
+			)}
+
 			<Group justify='center' mt='md'>
 				<Button variant='outline' miw={150} onClick={handleCloseModal}>
 					Anuluj

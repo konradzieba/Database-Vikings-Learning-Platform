@@ -237,29 +237,27 @@ const getStudentDefaultPasswordStateSchema = z.object({
 	isDefaultPasswordChanged: z.boolean(),
 });
 
+const getPreviousLessonsImagesSchema = z.object({
+	message: z.string(),
+	previousLessonsImages: z.array(z.object({ number: z.number().int(), image: z.string() })),
+});
+
 export type TMessageResponse = z.infer<typeof MessageResponseSchema>;
 export type TLoginResponse = z.infer<typeof LoginResponseSchema>;
 export type TRegisterManyStudents = z.infer<typeof RegisterManyStudentsSchema>;
 export type TLecturerInfo = z.infer<typeof LecturerInfoSchema>;
 export type TStudentInfo = z.infer<typeof StudentInfoSchema>;
 export type TMeResponse = z.infer<typeof MeResponseSchema>;
-export type TGetGroupsByLecturerId = z.infer<
-	typeof GetGroupsByLecturerIdSchema
->;
+export type TGetGroupsByLecturerId = z.infer<typeof GetGroupsByLecturerIdSchema>;
 export type TGetStudentsFromGroup = z.infer<typeof GetStudentsFromGroupSchema>;
 export type TGetLessonsByGroupId = z.infer<typeof GetLessonsByGroupIdSchema>;
-export type TGetLessonInfoByGroupAndLessonId = z.infer<
-	typeof getLessonInfoByGroupAndLessonIdSchema
->;
-export type TGetStudentLessonsInfo = z.infer<
-	typeof getStudentLessonsInfoSchema
->;
+export type TGetLessonInfoByGroupAndLessonId = z.infer<typeof getLessonInfoByGroupAndLessonIdSchema>;
+export type TGetStudentLessonsInfo = z.infer<typeof getStudentLessonsInfoSchema>;
 export type TGetTasksByLessonId = z.infer<typeof getTasksByLessonIdSchema>;
 export type TGetLessonTaskById = z.infer<typeof getLessonTaskByIdSchema>;
 
 export type TGetStudentTasks = z.infer<typeof getStudentTasksSchema>;
-export type TGetStudentDefaultPasswordState = z.infer<
-	typeof getStudentDefaultPasswordStateSchema
->;
+export type TGetStudentDefaultPasswordState = z.infer<typeof getStudentDefaultPasswordStateSchema>;
 export type TGetTaskInfoById = z.infer<typeof getTaskInfoByIdSchema>;
 export type TGetScoreBoard = z.infer<typeof getScoreBoardSchema>;
+export type TGetPreviousLessonsImages = z.infer<typeof getPreviousLessonsImagesSchema>;

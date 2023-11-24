@@ -1,5 +1,5 @@
 import cx from 'clsx';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Table, Checkbox, Group, Text, rem, ThemeIcon, Flex } from '@mantine/core';
 import classes from './FrequencyList.component.module.css';
 import { IconCoins } from '@tabler/icons-react';
@@ -8,23 +8,41 @@ import { useParams } from 'react-router-dom';
 import FullScreenLoader from '../UI/FullScreenLoader';
 import { useCreateLessonStore } from '@/utils/stores/useCreateLessonStore';
 
-// REMINDER: DATA WILL BE SORTED, LAST NAME WILL BE BEFORE FIRST NAME, ARRAY WILL BE SORTED BY LASTNAME
-
 function FrequencyList() {
 	const { id: groupId } = useParams();
 	const { data: StudentsFromGroup, isLoading } = useGetStudentsFromGroup(+groupId!);
+
+	useMemo(() => {
+		if (StudentsFromGroup?.students) {
+			StudentsFromGroup.students.sort((a, b) => {
+				return a.lastName.localeCompare(b.lastName);
+			});
+		}
+	}, [StudentsFromGroup]);
+
 	const { createdLessonsArray, updateLesson } = useCreateLessonStore();
 	const lessonFromGroup = createdLessonsArray.find(lesson => lesson.groupId === +groupId!);
 	const [selection, setSelection] = useState<number[] | null>(lessonFromGroup?.absentStudents || null);
+	const [selectedStudentCredentials, setSelectedStudentCredentials] = useState<string[] | null>(
+		lessonFromGroup?.absentStudentsCredentials || null
+	);
+
 	const toggleRow = (id: number) => {
 		setSelection(current => (current?.includes(id) ? current.filter(item => item !== id) : [...(current || []), id]));
 	};
 
+	const toggleCredentials = (credentials: string) => {
+		setSelectedStudentCredentials(current =>
+			current?.includes(credentials) ? current.filter(item => item !== credentials) : [...(current || []), credentials]
+		);
+	};
+
 	useEffect(() => {
-		if (lessonFromGroup && selection) {
+		if (lessonFromGroup && selection && selectedStudentCredentials) {
 			const updatedLessonFromGroup = {
 				...lessonFromGroup,
 				absentStudents: selection,
+				absentStudentsCredentials: selectedStudentCredentials,
 				isFrequencyChecked: true,
 			};
 			updateLesson(+groupId!, updatedLessonFromGroup);
@@ -57,7 +75,13 @@ function FrequencyList() {
 					<Text size='sm' fw={500}>{`${item.health}/3`}</Text>
 				</Table.Td>
 				<Table.Td>
-					<Checkbox checked={selected} onChange={() => toggleRow(item.id)} />
+					<Checkbox
+						checked={selected}
+						onChange={() => {
+							toggleRow(item.id);
+							toggleCredentials(`${item.firstName} ${item.lastName}`);
+						}}
+					/>
 				</Table.Td>
 			</Table.Tr>
 		);

@@ -11,6 +11,7 @@ import {
 	TGetLessonInfoByGroupAndLessonId,
 	TGetLessonTaskById,
 	TGetLessonsByGroupId,
+	TGetPreviousLessonsImages,
 	TGetScoreBoard,
 	TGetStudentDefaultPasswordState,
 	TGetStudentLessonsInfo,
@@ -230,6 +231,11 @@ export const createLessonMutationFn = async (
 		createLessonRequest
 	);
 
+	return data;
+};
+
+export const getPreviousLessonsImagesQueryFn = async (groupId: number) => {
+	const { data } = await axios.get<TGetPreviousLessonsImages>(`/lessons/getPreviousLessonsImages/${groupId}`);
 	return data;
 };
 

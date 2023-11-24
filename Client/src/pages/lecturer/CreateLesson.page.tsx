@@ -11,6 +11,7 @@ import FullScreenLoader from '@/components/UI/FullScreenLoader';
 import { modals } from '@mantine/modals';
 import StepperButtons from '@/components/UI/StepperButtons';
 import { useCreateLessonStore } from '@/utils/stores/useCreateLessonStore';
+import { useGetPreviousLessonsImagesMutation } from '@/hooks/lessons/useGetPreviousLessonsImagesMutation';
 
 function CreateLessonPage() {
 	const [activeStep, setActiveStep] = useState(0);
@@ -20,6 +21,7 @@ function CreateLessonPage() {
 	const { id } = useParams();
 
 	const { data: LessonsData, isSuccess, isLoading } = useGetLessonsByGroupId(+id!);
+	const { data: PreviousLessonsImages } = useGetPreviousLessonsImagesMutation(+id!);
 
 	useEffect(() => {
 		if (isSuccess) {
@@ -32,6 +34,7 @@ function CreateLessonPage() {
 					isFrequencyChecked: false,
 					tasks: [],
 					absentStudents: [],
+					absentStudentsCredentials: [],
 				});
 			}
 		}
@@ -95,7 +98,7 @@ function CreateLessonPage() {
 							<TasksCardList />
 						</Stepper.Step>
 						<Stepper.Step allowStepSelect={false} label='Wybór grafiki lekcji' icon={<IconPhoto size='1.2rem' />}>
-							<PhotoPicker />
+							<PhotoPicker previousLessonsImages={PreviousLessonsImages?.previousLessonsImages} />
 						</Stepper.Step>
 						<Stepper.Step allowStepSelect={false} label='Sprawdzanie obecności' icon={<IconChecklist size='1.2rem' />}>
 							<Flex align='flex-start' mih={rem(550)} mt={rem(45)}>

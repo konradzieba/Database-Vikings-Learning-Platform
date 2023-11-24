@@ -36,6 +36,33 @@ export async function getLessonsByGroupId(
   }
 }
 
+export async function getPreviousLessonsImages(
+  req: Request<ParamsWithId>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id } = req.params;
+    const existingGroup = await GroupServices.findGroupById(+id);
+
+    if (!existingGroup) {
+      res.status(404);
+      throw new Error('Group with this id does not exist.');
+    }
+
+    const previousLessonsImages = await LessonServices.getPreviousLessonsImages(
+      +id
+    );
+
+    res.json({
+      message: 'success',
+      previousLessonsImages: previousLessonsImages,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function getTasksByLessonId(
   req: Request<ParamsWithId>,
   res: Response,
@@ -200,7 +227,11 @@ export async function createLesson(
       });
     });
 
-    await Promise.all(taskPromises);
+    const healthPromises = absentStudents.map(async (student) => {
+      await UserServices.decrementStudentHealth(student);
+    });
+
+    await Promise.all([...taskPromises, ...healthPromises]);
 
     res.json({
       message: `Lesson ${lesson.number} for groupId ${lesson.groupId} created successfully.`,

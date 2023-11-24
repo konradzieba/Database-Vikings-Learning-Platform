@@ -17,6 +17,28 @@ export function findUsersByEmails(emails: string[]) {
   });
 }
 
+export async function decrementStudentHealth(id: Student['id']) {
+  const currentHealth = await db.student.findUnique({
+    where: { id },
+    select: { health: true },
+  });
+
+  if (currentHealth?.health && currentHealth.health > 0) {
+    return db.student.update({
+      where: {
+        id,
+      },
+      data: {
+        health: {
+          decrement: 1,
+        },
+      },
+    });
+  } else {
+    return Promise.resolve({});
+  }
+}
+
 export function findStudentsByIndexNumbers(
   indexNumbers: Student['indexNumber'][]
 ) {
