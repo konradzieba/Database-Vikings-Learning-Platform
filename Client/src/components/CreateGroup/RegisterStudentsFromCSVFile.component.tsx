@@ -32,13 +32,7 @@ const FileInputManual = ({
 	setManualOpen: Dispatch<React.SetStateAction<boolean>>;
 }) => {
 	return (
-		<Popover
-			width={310}
-			position='bottom'
-			withArrow
-			shadow='md'
-			opened={isManualOpen}
-		>
+		<Popover width={310} position='bottom' withArrow shadow='md' opened={isManualOpen}>
 			<Popover.Target>
 				<IconInfoCircle
 					size='1.4rem'
@@ -53,12 +47,10 @@ const FileInputManual = ({
 					<Text span fw={700}>
 						Imię, Nazwisko, Numer indeksu
 					</Text>
-					. Delimiter zostanie wykryty automatycznie. Plik musi być kodowany w
-					UTF-8. Puste linie zostaną pominięte (warto sprawdzić podgląd przed
-					tworzeniem czy wszystko zostało wczytane poprawnie). Sczególną uwagę
-					należy zwrócić na pliki CSV wygenerowane z pliku XLS (Excel). W takim
-					przypadku należy wybrać opcję Zapisz jako i wybrać format CSV UTF-8
-					(rozdzielany średnikiem) lub opcję z zakładki obok.
+					. Delimiter zostanie wykryty automatycznie. Plik musi być kodowany w UTF-8. Puste linie zostaną pominięte
+					(warto sprawdzić podgląd przed tworzeniem czy wszystko zostało wczytane poprawnie). Szczególną uwagę należy
+					zwrócić na pliki CSV wygenerowane z pliku XLS (Excel). W takim przypadku należy wybrać opcję Zapisz jako i
+					wybrać format CSV UTF-8 (rozdzielany średnikiem) lub opcję z zakładki obok.
 				</Text>
 			</Popover.Dropdown>
 		</Popover>
@@ -85,9 +77,7 @@ function RegisterStudentsFromCSVFile({
 	const [editingRowIndex, setEditingRowIndex] = useState<string>('');
 
 	const handleDeleteRow = (indexNumber: string) => {
-		setCsvData((prev) =>
-			prev.filter((row) => row['Numer indeksu'] !== indexNumber)
-		);
+		setCsvData(prev => prev.filter(row => row['Numer indeksu'] !== indexNumber));
 	};
 
 	const handleFileChange = (file: File | null) => {
@@ -100,9 +90,7 @@ function RegisterStudentsFromCSVFile({
 				setCsvData(result.data);
 			},
 			error: () => {
-				setFileInputError(
-					'Wystąpił błąd podczas przetwarzania pliku. Sprawdź czy plik jest zgodny z instrukcją.'
-				);
+				setFileInputError('Wystąpił błąd podczas przetwarzania pliku. Sprawdź czy plik jest zgodny z instrukcją.');
 			},
 		});
 	};
@@ -116,7 +104,7 @@ function RegisterStudentsFromCSVFile({
 					{isEditing ? (
 						<TextInput
 							value={row['Imię']}
-							onChange={(e) => {
+							onChange={e => {
 								row['Imię'] = e.target.value;
 								setCsvData([...csvData]);
 							}}
@@ -129,7 +117,7 @@ function RegisterStudentsFromCSVFile({
 					{isEditing ? (
 						<TextInput
 							value={row['Nazwisko']}
-							onChange={(e) => {
+							onChange={e => {
 								row['Nazwisko'] = e.target.value;
 								setCsvData([...csvData]);
 							}}
@@ -179,12 +167,7 @@ function RegisterStudentsFromCSVFile({
 				description='Zapoznaj się z instrukcją po prawej stronie poniższego pola'
 				error={fileInputError}
 				leftSection={<IconFile size='1.4rem' />}
-				rightSection={
-					<FileInputManual
-						isManualOpen={isManualOpen}
-						setManualOpen={setManualOpen}
-					/>
-				}
+				rightSection={<FileInputManual isManualOpen={isManualOpen} setManualOpen={setManualOpen} />}
 				onChange={handleFileChange}
 			/>
 			{csvData.length !== 0 && (
@@ -200,32 +183,20 @@ function RegisterStudentsFromCSVFile({
 					</Group>
 					<Button
 						variant='outline'
-						leftSection={
-							isPreviewOpen ? (
-								<IconChevronUp size='1.4rem' />
-							) : (
-								<IconChevronDown size='1.4rem' />
-							)
-						}
+						leftSection={isPreviewOpen ? <IconChevronUp size='1.4rem' /> : <IconChevronDown size='1.4rem' />}
 						onClick={() => {
 							setIsPreviewOpen(!isPreviewOpen);
 							setEditingRowIndex('');
-						}}
-					>
+						}}>
 						{isPreviewOpen ? 'Ukryj podgląd' : 'Podgląd'}
 					</Button>
 				</Stack>
 			)}
 			{csvData.length !== 0 && (
 				<Collapse in={isPreviewOpen}>
-					<ScrollArea
-						h={250}
-						onScrollPositionChange={({ y }) => setScrolled(y !== 0)}
-					>
+					<ScrollArea h={250} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
 						<Table verticalSpacing='sm' withRowBorders striped>
-							<Table.Thead
-								className={`tableHeader ${scrolled ? 'tableScrolled' : ''}`}
-							>
+							<Table.Thead className={`tableHeader ${scrolled ? 'tableScrolled' : ''}`}>
 								<Table.Tr>
 									<Table.Th>Lp.</Table.Th>
 									<Table.Th>Imię</Table.Th>

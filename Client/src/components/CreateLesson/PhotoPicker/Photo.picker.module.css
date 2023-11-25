@@ -4,6 +4,10 @@
 	cursor: inherit;
 }
 
+.lessonPhotoPickerContainer {
+	cursor: inherit;
+}
+
 .lessonSelectedPhotoContainer {
 	opacity: 0.35;
 	filter: blur(1.5px);

@@ -27,3 +27,7 @@
 		opacity: 1;
 	}
 }
+
+.menuWrapper {
+	align-self: flex-end;
+}

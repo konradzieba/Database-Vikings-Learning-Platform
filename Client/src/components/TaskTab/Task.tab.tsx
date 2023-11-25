@@ -29,7 +29,7 @@ function TaskTab({ lessonId, taskId, taskNumber, taskQuestion, closeDate, answer
 	return (
 		<Box tabIndex={1} onClick={() => navigate(`/task/${lessonId}/${taskId}`)} pos='relative' w={rem(800)}>
 			{isTaskExpired && (
-				<Overlay backgroundOpacity={0.85} style={{ cursor: 'pointer' }}>
+				<Overlay backgroundOpacity={0.85} className={classes.overlayContainer}>
 					<Flex h='100%' justify='center' align='center' gap='md'>
 						<IconLock color='var(--mantine-color-dimmed)' size='1.75rem' />
 						<Text c='dimmed' fz='xl' fw={500}>
@@ -39,7 +39,7 @@ function TaskTab({ lessonId, taskId, taskNumber, taskQuestion, closeDate, answer
 				</Overlay>
 			)}
 			{answerSend && (
-				<Overlay backgroundOpacity={0.85} style={{ cursor: 'pointer' }}>
+				<Overlay backgroundOpacity={0.85} className={classes.overlayContainer}>
 					<Flex h='100%' justify='center' align='center' gap='md'>
 						<IconCircleCheck size='1.75rem' color='var(--good-state-color)' />
 						<Text fz='xl' fw={500} c='var(--good-state-color)'>

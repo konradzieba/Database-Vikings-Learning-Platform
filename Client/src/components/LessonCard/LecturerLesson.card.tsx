@@ -37,7 +37,7 @@ function LecturerLessonCard({ id, lessonNumber, taskAmount, isFrequencyChecked, 
 	const frequencyColor = isFrequencyChecked ? 'var(--good-state-color)' : 'var(--bad-state-color)';
 	return (
 		<Flex direction='column' miw={380} px='xs' pt='xs' pb='xl' className={classes.lessonCardWrapper}>
-			<Box component={Menu} mr={rem(5)} style={{ alignSelf: 'flex-end' }}>
+			<Box component={Menu} mr={rem(5)} className={classes.menuWrapper}>
 				<Menu.Target>
 					<ActionIcon variant='transparent' c='var(--mantine-primary-color)'>
 						<IconDots />

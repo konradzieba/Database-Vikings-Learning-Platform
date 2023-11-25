@@ -97,7 +97,6 @@ function PhotoPicker({ previousLessonsImages }: PhotoPickerProps) {
 										image == selectedPhoto ? classes.lessonSelectedPhotoContainer : classes.lessonPhotoPickerContainer
 									}
 									component='button'
-									style={{ cursor: 'inherit' }}
 									onClick={() => handleSetLessonImage(image)}
 								/>
 							</Box>
