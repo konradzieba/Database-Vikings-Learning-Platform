@@ -73,12 +73,15 @@ const router = createBrowserRouter([
 								element: <LessonDashboardPage />,
 							},
 							{ path: 'createLesson', element: <CreateLessonPage /> },
-							// { path: 'checkFrequency', element: <CheckFrequencyPage /> },
 						],
 					},
 					{
 						path: 'students',
 						element: <GroupStudentsInfoPage />,
+					},
+					{
+						path: 'check-frequency',
+						element: <CheckFrequencyPage />,
 					},
 					{
 						path: 'ranking',
