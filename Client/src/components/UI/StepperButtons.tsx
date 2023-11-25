@@ -1,4 +1,3 @@
-import { useGetLessonsByGroupId } from '@/hooks/lessons/useGetLessonsByGroupId';
 import { CreatedLessonType } from '@/types/StoreTypes';
 import { Button, Group } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
@@ -23,9 +22,7 @@ function StepperButtons({
 	handleCreateLessonWithoutFrequency,
 }: StepperButtonsProps) {
 	const navigate = useNavigate();
-	const { refetch: refetchLessons } = useGetLessonsByGroupId(groupId);
 	const handleBackToLessonsDashboard = () => {
-		refetchLessons();
 		navigate(`/dashboard/group/${groupId}/lessons`);
 	};
 	const isTaskButtonDisabled =
