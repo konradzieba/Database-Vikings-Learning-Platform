@@ -1,7 +1,6 @@
 import { TRegisterManyStudentsRequest } from '@/types/RequestTypes';
 import { registerManyStudentsMutationFn } from '@/utils/axios-queries';
-import { useLecturerStore } from '@/utils/stores/useLecturerStore';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
 export function useRegisterManyStudentsMutation(
 	mutationData: TRegisterManyStudentsRequest
