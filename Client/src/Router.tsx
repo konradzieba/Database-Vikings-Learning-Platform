@@ -69,10 +69,10 @@ const router = createBrowserRouter([
 						element: <GroupLessonsPage />,
 						children: [
 							{
-								path: 'lessonDashboard/:lessonId',
+								path: 'lesson-dashboard/:lessonId',
 								element: <LessonDashboardPage />,
 							},
-							{ path: 'createLesson', element: <CreateLessonPage /> },
+							{ path: 'create-lesson', element: <CreateLessonPage /> },
 						],
 					},
 					{

@@ -16,7 +16,7 @@ function AddLessonCard() {
 			align='center'
 			justify='center'
 			className={classes.lessonCardWrapper}>
-			<Button onClick={() => navigate('createLesson')} variant='transparent' className={classes.addLessonCardButton}>
+			<Button onClick={() => navigate('create-lesson')} variant='transparent' className={classes.addLessonCardButton}>
 				<ThemeIcon variant='light' c='var(--mantine-primary-color)' size='md'>
 					<IconPlus />
 				</ThemeIcon>
