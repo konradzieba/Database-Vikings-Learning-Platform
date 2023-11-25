@@ -21,7 +21,12 @@ function DateTimeDisplay({ date, title, icon, titleTextAlgin = 'end', ...stackPr
 					<Text>{formattedDate}</Text>
 				</Group>
 			) : (
-				<Text >&mdash;&mdash;&mdash;</Text>
+				<Group gap={rem(5)} justify='flex-end'>
+					<ThemeIcon variant='transparent' c='dimmed'>
+						{icon}
+					</ThemeIcon>
+					<Text c='dimmed'>Brak informacji</Text>
+				</Group>
 			)}
 		</Stack>
 	);
