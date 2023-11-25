@@ -12,9 +12,10 @@ interface TaskTabProps {
 	taskQuestion: string;
 	closeDate: string;
 	answerSend: boolean;
+	isMarkdown: boolean;
 }
 
-function TaskTab({ lessonId, taskId, taskNumber, taskQuestion, closeDate, answerSend }: TaskTabProps) {
+function TaskTab({ lessonId, taskId, taskNumber, taskQuestion, closeDate, answerSend, isMarkdown }: TaskTabProps) {
 	const navigate = useNavigate();
 	const spliceQuestion = (question: string) => {
 		if (question.length > 200) {
@@ -52,7 +53,11 @@ function TaskTab({ lessonId, taskId, taskNumber, taskQuestion, closeDate, answer
 					<Text fw={500}>{taskNumber}</Text>
 				</ThemeIcon>
 				<Text my='md' w='90%'>
-					{spliceQuestion(taskQuestion)}
+					{isMarkdown
+						? spliceQuestion(
+								'Treść zdania jest w formacie Markdown, by zobaczyć pełną treść przejdź do podglądu zadania.'
+						  )
+						: spliceQuestion(taskQuestion)}
 				</Text>
 				<DateTimeDisplay
 					date={closeDate}

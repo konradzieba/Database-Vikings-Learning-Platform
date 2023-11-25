@@ -40,6 +40,7 @@ export async function getTasksByLessonId(id: Lesson['id']) {
       number: true,
       question: true,
       closeDate: true,
+      isMarkdown: true,
     },
     orderBy: {
       id: 'asc',

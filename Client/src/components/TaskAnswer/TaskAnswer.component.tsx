@@ -9,6 +9,7 @@ import classes from './TaskAnswer.component.module.css';
 import { useGetLessonTaskById } from '@/hooks/tasks/useGetLessonTaskById';
 import FullScreenLoader from '../UI/FullScreenLoader';
 import dayjs from 'dayjs';
+import Markdown from 'react-markdown';
 import { useStudentStore } from '@/utils/stores/useStudentStore';
 
 interface TaskAnswerFormProps {
@@ -24,9 +25,10 @@ interface TaskAnswerHeaderProps {
 	taskNumber: number;
 	lessonNumber: number;
 	taskQuestion: string;
+	isMarkdown: boolean;
 }
 
-function TaskAnswerHeader({ taskNumber, lessonNumber, taskQuestion }: TaskAnswerHeaderProps) {
+function TaskAnswerHeader({ taskNumber, lessonNumber, taskQuestion, isMarkdown }: TaskAnswerHeaderProps) {
 	return (
 		<>
 			<Title fw={700} py={0} order={2}>
@@ -36,9 +38,13 @@ function TaskAnswerHeader({ taskNumber, lessonNumber, taskQuestion }: TaskAnswer
 				Lekcja {lessonNumber}
 			</Text>
 			<ScrollArea.Autosize type='auto' mah={280} pb='lg' offsetScrollbars='y'>
-				<Text size='md' py='md' className={classes.taskAnswerQuestionText}>
-					{taskQuestion}
-				</Text>
+				{isMarkdown ? (
+					<Markdown>{taskQuestion}</Markdown>
+				) : (
+					<Text size='md' py='md' className={classes.taskAnswerQuestionText}>
+						{taskQuestion}
+					</Text>
+				)}
 			</ScrollArea.Autosize>
 		</>
 	);
@@ -137,7 +143,6 @@ function TaskAnswer() {
 	const { studentData } = useStudentStore();
 	const { data: LessonTask, isPending } = useGetLessonTaskById(+lessonId!, +taskId!);
 	const isTaskExpired = dayjs(dayjs().toDate()).isAfter(LessonTask?.taskInfo.closeDate, 'minutes');
-
 	if (isPending) {
 		return <FullScreenLoader />;
 	}
@@ -146,6 +151,7 @@ function TaskAnswer() {
 		<Flex px='xl' align='flex-start' justify='space-evenly'>
 			<Stack w='50%' gap={0}>
 				<TaskAnswerHeader
+					isMarkdown={LessonTask?.taskInfo.isMarkdown!}
 					taskNumber={LessonTask?.taskInfo.number!}
 					lessonNumber={LessonTask?.lessonNumber!}
 					taskQuestion={LessonTask?.taskInfo.question!}

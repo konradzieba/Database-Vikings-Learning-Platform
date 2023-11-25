@@ -2,7 +2,7 @@ import StudentAnswerCard from '@/components/StudentAnswerCard/StudentAnswer.card
 import DataNotFound from '@/components/UI/DataNotFound';
 import TaskAnswersStats from '@/components/UI/TaskAnswersStats';
 import { useGetLessonInfoByGroupAndLessonIdQueryFn } from '@/hooks/lessons/useGetLessonInfoByGroupAndLessonIdQueryFn';
-import { Button, Center, Flex, Loader, Paper, Tabs, Text, Title, rem } from '@mantine/core';
+import { Button, Center, Flex, Loader, Tabs, Title, rem } from '@mantine/core';
 
 import { modals } from '@mantine/modals';
 import { useMemo } from 'react';
@@ -35,7 +35,7 @@ function LessonDashboardPage() {
 	}
 
 	if (!lessonData?.lessonInfo.tasks.length) {
-		return <DataNotFound />;
+		return <DataNotFound firstLineText='Lista zadań' secondLineText='jest pusta' />;
 	}
 
 	const handleOpenAddTaksModal = () => {

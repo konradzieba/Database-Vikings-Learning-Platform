@@ -13,6 +13,7 @@ export function getLessonTaskById(id: Task['id']) {
       openDate: true,
       closeDate: true,
       lessonId: true,
+      isMarkdown: true,
     },
   });
 }

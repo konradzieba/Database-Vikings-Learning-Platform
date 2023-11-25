@@ -32,7 +32,7 @@ function GroupStudentsInfoPage() {
 		<>
 			<Flex direction='column' align='center' justify='center' gap='md'>
 				{StudentsFromGroup?.students.length === 0 ? (
-					<DataNotFound />
+					<DataNotFound firstLineText='Lista studentów' secondLineText='jest pusta' />
 				) : (
 					StudentsFromGroup?.students.map(data => (
 						<StudentInfoCard

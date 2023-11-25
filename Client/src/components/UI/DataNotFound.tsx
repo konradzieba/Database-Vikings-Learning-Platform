@@ -2,7 +2,12 @@ import { Center, Flex, Image, Stack, Text, rem } from '@mantine/core';
 import vikingConfused from '@/assets/vikingConfused.webp';
 import classes from './DataNotFound.module.css';
 
-function DataNotFound() {
+interface DataNotFoundProps {
+	firstLineText: string;
+	secondLineText: string;
+}
+
+function DataNotFound({ firstLineText, secondLineText }: DataNotFoundProps) {
 	return (
 		<Flex justify='center' align='center' h={rem(550)}>
 			<Image src={vikingConfused} alt='happy viking holding beer' />
@@ -12,10 +17,10 @@ function DataNotFound() {
 						Ups..
 					</Text>
 					<Text fz={rem(50)} fw={500} className={classes.infoText}>
-						Nie udało się
+						{firstLineText}
 					</Text>
 					<Text fz={rem(50)} fw={500} className={classes.infoText}>
-						znaleźć informacji.
+						{secondLineText}.
 					</Text>
 				</Stack>
 			</Center>
