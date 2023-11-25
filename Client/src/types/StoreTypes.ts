@@ -36,9 +36,7 @@ export interface ILecturerStore {
 		isAdmin: boolean | null;
 		idCheck: number | null;
 	};
-	groups: TGetGroupsByLecturerId['groups'] | null;
 	setLecturerData: (lecturerData: ILecturerStore['lecturerData']) => void;
-	setGroups: (groups: ILecturerStore['groups']) => void;
 	clearLecturerStoreData: () => void;
 }
 

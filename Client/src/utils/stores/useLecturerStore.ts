@@ -7,7 +7,6 @@ const initialLecturerStoreValues = {
 		isAdmin: null,
 		idCheck: null,
 	},
-	groups: null,
 };
 
 export const useLecturerStore = create<ILecturerStore>(set => ({
@@ -16,8 +15,6 @@ export const useLecturerStore = create<ILecturerStore>(set => ({
 		isAdmin: null,
 		idCheck: null,
 	},
-	groups: null,
 	setLecturerData: lecturerData => set({ lecturerData }),
-	setGroups: groups => set({ groups }),
 	clearLecturerStoreData: () => set(initialLecturerStoreValues),
 }));

@@ -1,16 +1,17 @@
 import StudentInfoCard from '@/components/StudentInfoCard/StudentInfo.card';
 import DataNotFound from '@/components/UI/DataNotFound';
 import useGetStudentsFromGroup from '@/hooks/groups/useGetStudentsFromGroup';
+import useGetGroupsByLecturerId from '@/hooks/users/useGetGroupsByLecturerId';
 import { useLecturerStore } from '@/utils/stores/useLecturerStore';
-import { Center, Flex, Loader, Text } from '@mantine/core';
+import { Center, Flex, Loader } from '@mantine/core';
 import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 function GroupStudentsInfoPage() {
 	let { id } = useParams();
-	const { groups } = useLecturerStore();
-	const currentGroup = groups?.find(group => group.groupId === +id!);
-	const { data: StudentsFromGroup, isPending } = useGetStudentsFromGroup(+id!);
+	const { lecturerData } = useLecturerStore();
+	const { data: groupsData, isPending: isGetGroupsDataPending } = useGetGroupsByLecturerId(lecturerData.lecturerId);
+	const { data: StudentsFromGroup, isPending: isGetStudentsFromGroupPending } = useGetStudentsFromGroup(+id!);
 
 	useMemo(() => {
 		if (StudentsFromGroup?.students) {
@@ -20,13 +21,15 @@ function GroupStudentsInfoPage() {
 		}
 	}, [StudentsFromGroup]);
 
-	if (isPending) {
+	if (isGetGroupsDataPending || isGetStudentsFromGroupPending) {
 		return (
 			<Center h='25vh'>
 				<Loader />
 			</Center>
 		);
 	}
+
+	const currentGroup = groupsData?.groups.find(group => group.groupId === +id!);
 
 	return (
 		<>
@@ -46,6 +49,7 @@ function GroupStudentsInfoPage() {
 							hearts={data.health}
 							lastLoggedIn={data.lastLogin}
 							currentGroup={currentGroup?.groupName!}
+							groups={groupsData?.groups!}
 						/>
 					))
 				)}

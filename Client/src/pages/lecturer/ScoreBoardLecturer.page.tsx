@@ -1,11 +1,13 @@
 import useGetStudentsFromGroup from '@/hooks/groups/useGetStudentsFromGroup';
+import useGetGroupsByLecturerId from '@/hooks/users/useGetGroupsByLecturerId';
 import { useLecturerStore } from '@/utils/stores/useLecturerStore';
 import { Center, Loader, Select, Stack, Title } from '@mantine/core';
 
 function ScoreBoardLecturerPage() {
-	const { groups } = useLecturerStore();
+	const { lecturerData } = useLecturerStore();
+	const { data: groupsData } = useGetGroupsByLecturerId(lecturerData.lecturerId);
 
-	if (groups?.length === 0) {
+	if (groupsData?.groups.length === 0) {
 		return (
 			<Center h='25vh'>
 				<Title>Nie posiadasz żadnych grup</Title>
@@ -13,9 +15,9 @@ function ScoreBoardLecturerPage() {
 		);
 	}
 
-	const selectLabels = groups?.map(group => group.groupName);
+	const selectLabels = groupsData?.groups?.map(group => group.groupName);
 
-	const { data: StudentsFromGroup, isPending } = useGetStudentsFromGroup(groups![0].groupId);
+	const { data: StudentsFromGroup, isPending } = useGetStudentsFromGroup(groupsData?.groups[0].groupId!);
 
 	if (isPending) {
 		return (

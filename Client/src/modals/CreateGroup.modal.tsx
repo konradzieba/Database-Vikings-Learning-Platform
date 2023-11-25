@@ -1,19 +1,11 @@
 import { useState } from 'react';
-import {
-	Button,
-	Center,
-	Group,
-	Loader,
-	Stack,
-	Tabs,
-	Text,
-	TextInput,
-} from '@mantine/core';
+import { Button, Center, Group, Loader, Stack, Tabs, Text, TextInput } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
 import { IconTag } from '@tabler/icons-react';
 import { useLecturerStore } from '@/utils/stores/useLecturerStore';
 import { useRegisterManyStudentsMutation } from '@/hooks/students/useRegisterManyStudentsMutation';
 import RegisterStudentsFromCSVFile from '@/components/CreateGroup/RegisterStudentsFromCSVFile.component';
+import useGetGroupsByLecturerId from '@/hooks/users/useGetGroupsByLecturerId';
 
 export interface CsvData {
 	[key: string]: string;
@@ -27,20 +19,20 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 	const [fileInputError, setFileInputError] = useState('');
 
 	const { lecturerData } = useLecturerStore();
+	const { refetch: refetchGroupsData } = useGetGroupsByLecturerId(lecturerData.lecturerId);
 
-	const { mutate, isPending, isError, isSuccess } =
-		useRegisterManyStudentsMutation({
-			lecturerId: lecturerData.lecturerId as number,
-			groupName: groupName,
-			studentsToRegister: csvData.map((row) => ({
-				firstName: row['Imię'],
-				lastName: row['Nazwisko'],
-				indexNumber: +row['Numer indeksu'],
-			})),
-		});
+	const { mutate, isPending, isError, isSuccess } = useRegisterManyStudentsMutation({
+		lecturerId: lecturerData.lecturerId as number,
+		groupName: groupName,
+		studentsToRegister: csvData.map(row => ({
+			firstName: row['Imię'],
+			lastName: row['Nazwisko'],
+			indexNumber: +row['Numer indeksu'],
+		})),
+	});
 
 	const handleCreateGroup = () => {
-		const transformedData = csvData.map((row) => ({
+		const transformedData = csvData.map(row => ({
 			firstName: row['Imię'],
 			lastName: row['Nazwisko'],
 			indexNumber: row['Numer indeksu'],
@@ -77,6 +69,7 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 	}
 
 	if (isSuccess) {
+		refetchGroupsData();
 		return (
 			<>
 				<Center mih={80}>
@@ -122,7 +115,7 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 					placeholder='Nazwa grupy'
 					leftSection={<IconTag size='1.4rem' />}
 					error={groupNameError}
-					onChange={(e) => {
+					onChange={e => {
 						setGroupName(e.target.value);
 						setGroupNameError('');
 					}}
@@ -141,12 +134,7 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 				<Button variant='outline' miw={150} onClick={handleCloseModal}>
 					Anuluj
 				</Button>
-				<Button
-					miw={150}
-					onClick={handleCreateGroup}
-					loading={isPending}
-					disabled={!groupName || csvData.length === 0}
-				>
+				<Button miw={150} onClick={handleCreateGroup} loading={isPending} disabled={!groupName || csvData.length === 0}>
 					{isPending ? '' : 'Stwórz grupę'}
 				</Button>
 			</Group>

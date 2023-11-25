@@ -1,4 +1,4 @@
-import { Box, Flex, SimpleGrid, rem } from '@mantine/core';
+import { Box, Flex, rem } from '@mantine/core';
 import TaskCard from './Task.card';
 import AddTaskCard from './AddTask.card';
 import { useParams } from 'react-router-dom';

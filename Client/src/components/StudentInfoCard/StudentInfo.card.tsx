@@ -17,6 +17,12 @@ interface StudentInfoCardProps {
 	hearts: number;
 	lastLoggedIn: string;
 	currentGroup: string;
+	groups: {
+		groupId: number;
+		groupName: string;
+		lessonsCount: number;
+		studentsCount: number;
+	}[];
 }
 
 function StudentInfoCard({
@@ -29,6 +35,7 @@ function StudentInfoCard({
 	hearts,
 	lastLoggedIn,
 	currentGroup,
+	groups,
 }: StudentInfoCardProps) {
 	const { id: groupId } = useParams();
 	const { refetch } = useGetStudentsFromGroup(+groupId!);
@@ -60,6 +67,7 @@ function StudentInfoCard({
 				groupId: +groupId!,
 				fullName: `${firstName} ${lastName}`,
 				modalBody: `${currentGroup}`,
+				groups: groups,
 			},
 		});
 	};
@@ -104,12 +112,7 @@ function StudentInfoCard({
 	return (
 		<Flex align='center' justify='space-between' px='sm' py='sm' miw='50%' className={classes.studentInfoCardContainer}>
 			<Flex direction='column' align='center' miw='25%'>
-				<Anchor
-					component={NavLink}
-					to={`/dashboard/student-preview/${studentId}`}
-					relative='path'
-					target='_blank'
-				>
+				<Anchor component={NavLink} to={`/dashboard/student-preview/${studentId}`} relative='path' target='_blank'>
 					<Text>{`${firstName} ${lastName}`}</Text>
 				</Anchor>
 				<Text fw={500} size='lg' py={rem(4)}>

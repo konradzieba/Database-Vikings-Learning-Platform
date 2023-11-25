@@ -3,7 +3,6 @@ import { Button, Center, Flex, Group, Loader, Select, Text } from '@mantine/core
 import { ContextModalProps, modals } from '@mantine/modals';
 import { useChangeStudentGroupMutation } from '@/hooks/students/useChangeStudentGroupMutation';
 import { IconCircleCheck, IconCircleX, IconListDetails } from '@tabler/icons-react';
-import { useLecturerStore } from '@/utils/stores/useLecturerStore';
 
 function StudentGroupChangeModal({
 	context,
@@ -14,13 +13,18 @@ function StudentGroupChangeModal({
 	fullName: string;
 	studentId: number;
 	groupId: number;
+	groups: {
+		groupId: number;
+		groupName: string;
+		lessonsCount: number;
+		studentsCount: number;
+	}[];
 }>) {
-	const { groups } = useLecturerStore();
 	const studentId = innerProps.studentId;
 	const groupId = innerProps.groupId;
 	const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
 
-	const selectGroupData = groups
+	const selectGroupData = innerProps.groups
 		?.filter(group => group.groupId !== innerProps.groupId)
 		.map(group => ({
 			id: group.groupId,

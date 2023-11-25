@@ -4,10 +4,20 @@ import classes from './Navbar.module.css';
 import UserPanel from '../UI/UserPanel';
 import { IconChevronDown } from '@tabler/icons-react';
 import { useLecturerStore } from '@/utils/stores/useLecturerStore';
+import useGetGroupsByLecturerId from '@/hooks/users/useGetGroupsByLecturerId';
 
-function Nav() {
+interface LecturerNavProps {
+	groups: {
+		groupId: number;
+		groupName: string;
+		lessonsCount: number;
+		studentsCount: number;
+	}[];
+	isPending: boolean;
+}
+
+function Nav({ groups, isPending }: LecturerNavProps) {
 	const { pathname } = useLocation();
-	const { groups } = useLecturerStore();
 	const { id } = useParams();
 
 	const relativeGroupLink = (link: string, groupId: number) => {
@@ -52,7 +62,11 @@ function Nav() {
 						</Group>
 					</HoverCard.Target>
 					<HoverCard.Dropdown px='sm'>
-						{groups?.length ? (
+						{isPending ? (
+							<Center miw={rem(60)}>
+								<Loader size='sm' />
+							</Center>
+						) : (
 							groups.map((group, index) => {
 								let link = relativeGroupLink(pathname, group.groupId);
 								return (
@@ -61,10 +75,6 @@ function Nav() {
 									</NavLink>
 								);
 							})
-						) : (
-							<Center miw={rem(60)}>
-								<Loader size='sm' />
-							</Center>
 						)}
 					</HoverCard.Dropdown>
 				</HoverCard>
@@ -98,17 +108,20 @@ interface LecturerNavbarProps {
 	};
 }
 function LecturerNavbar({ lecturerInfo }: LecturerNavbarProps) {
-	const { groups } = useLecturerStore();
+	const { lecturerData } = useLecturerStore();
 	const { pathname } = useLocation();
 	let { id } = useParams();
+
+	const { data: groupsData, isPending } = useGetGroupsByLecturerId(lecturerData.lecturerId);
+
 	return (
 		<Flex justify='space-around' gap='xl' py='lg' align='center' mb={rem(60)}>
-			<Nav />
+			<Nav groups={groupsData?.groups!} isPending={isPending} />
 			<Flex gap='xs' align='center'>
-				{pathname.includes('/dashboard/group/') && id && groups && (
+				{pathname.includes('/dashboard/group/') && id && groupsData?.groups && (
 					<>
 						<Text c='var(--mantine-primary-color)' fw={500} size='lg'>
-							{groups?.find(group => group.groupId === +id!)?.groupName}
+							{groupsData?.groups.find(group => group.groupId === +id!)?.groupName}
 						</Text>
 						<Divider orientation='vertical' />
 					</>

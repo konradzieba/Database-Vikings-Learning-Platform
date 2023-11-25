@@ -1,6 +1,5 @@
 import {
 	Box,
-	Button,
 	PasswordInput,
 	Stack,
 	Text,

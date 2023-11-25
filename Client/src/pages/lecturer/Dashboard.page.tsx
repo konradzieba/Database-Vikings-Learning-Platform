@@ -1,12 +1,15 @@
 import AddGroupCard from '@/components/GroupCard/AddGroup.card';
 import GroupCard from '@/components/GroupCard/Group.card';
+import useGetGroupsByLecturerId from '@/hooks/users/useGetGroupsByLecturerId';
 import { useLecturerStore } from '@/utils/stores/useLecturerStore';
 import { Center, Flex, Loader } from '@mantine/core';
 
 function DashboardPage() {
-	const { groups } = useLecturerStore();
+	const { lecturerData } = useLecturerStore();
 
-	if (!groups?.length) {
+	const { data: groupsData, isPending } = useGetGroupsByLecturerId(lecturerData.lecturerId);
+
+	if (isPending) {
 		return (
 			<Center h='25vh'>
 				<Loader />
@@ -18,7 +21,7 @@ function DashboardPage() {
 		<>
 			<Center>
 				<Flex gap='sm' wrap='wrap'>
-					{groups?.map(group => (
+					{groupsData?.groups?.map(group => (
 						<GroupCard
 							key={group.groupId}
 							groupId={group.groupId}

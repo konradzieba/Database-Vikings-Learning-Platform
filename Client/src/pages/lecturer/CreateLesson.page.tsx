@@ -16,7 +16,7 @@ import { useGetPreviousLessonsImagesMutation } from '@/hooks/lessons/useGetPrevi
 function CreateLessonPage() {
 	const [activeStep, setActiveStep] = useState(0);
 
-	const { createdLessonsArray, addLesson, updateLesson } = useCreateLessonStore();
+	const { createdLessonsArray, addLesson } = useCreateLessonStore();
 
 	const { id } = useParams();
 
