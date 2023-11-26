@@ -11,6 +11,7 @@ import {
 	TGetLessonInfoByGroupAndLessonId,
 	TGetLessonTaskById,
 	TGetLessonsByGroupId,
+	TGetPreDeleteLessonInfo,
 	TGetPreviousLessonsImages,
 	TGetScoreBoard,
 	TGetStudentDefaultPasswordState,
@@ -250,6 +251,20 @@ export const getPreviousLessonsImagesQueryFn = async (groupId: number) => {
 // 	);
 // 	return data;
 // };
+
+export const deleteTaskMutationFn = async (taskId: number) => {
+	const { data } = await axios.delete<TMessageResponse>(
+		`/tasks/deleteTask/${taskId}`
+	);
+	return data;
+};
+
+export const getPreDeleteLessonInfoQueryFn = async (lessonId: number) => {
+	const { data } = await axios.get<TGetPreDeleteLessonInfo>(
+		`/lessons/getPreDeleteLessonInfo/${lessonId}`
+	);
+	return data;
+}
 
 export const deleteLessonMutationFn = async (lessonId: number) => {
 	const { data } = await axios.delete<TMessageResponse>(
