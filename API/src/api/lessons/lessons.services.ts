@@ -311,7 +311,10 @@ export async function getPreDeleteLessonInfo(id: Lesson['id']) {
   const formattedLessonInfo = {
     lessonNumber: lessonInfo.number,
     taskAmount: lessonInfo.tasks.length,
-    sendAnswersAmount: studentsWithAnswers.length,
+    sendAnswersAmount: lessonInfo.tasks.reduce(
+      (acc, task) => acc + task.answers.length,
+      0
+    ),
     studentsWithAnswers,
   };
 
