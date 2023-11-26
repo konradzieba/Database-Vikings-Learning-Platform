@@ -18,6 +18,8 @@ interface AnswersProps {
 					replyDesc: string;
 					solution: string;
 					grantedScore: number;
+					sendDate: string;
+					replyDate: string;
 				}[];
 		  }[]
 		| undefined;

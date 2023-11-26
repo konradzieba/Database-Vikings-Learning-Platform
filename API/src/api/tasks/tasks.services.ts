@@ -72,6 +72,8 @@ export async function getStudentTasks(
             replyDesc: correspondingAnswer?.replyDesc,
             solution: correspondingAnswer?.solution,
             grantedScore: correspondingAnswer?.grantedScore,
+            sendDate: correspondingAnswer?.sendDate,
+            replyDate: correspondingAnswer?.replyDate,
           };
         })
         .filter(

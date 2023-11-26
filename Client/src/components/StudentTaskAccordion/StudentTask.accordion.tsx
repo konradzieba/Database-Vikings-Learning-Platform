@@ -1,7 +1,8 @@
 import { Accordion, Badge, Divider, Flex, Group, Stack, Text, Textarea, ThemeIcon, rem } from '@mantine/core';
 import classes from './StudentTask.accordion.module.css';
-import { IconBlockquote, IconChevronDown, IconCode, IconCoins } from '@tabler/icons-react';
+import { IconBlockquote, IconChevronDown, IconClock, IconCode, IconCoins } from '@tabler/icons-react';
 import { AnswerReplyStatusEnum } from '@/types/Enums';
+import DateTimeDisplay from '../UI/DateTimeDisplay';
 
 interface TaskInterface {
 	taskNumber: number;
@@ -10,6 +11,8 @@ interface TaskInterface {
 	replyDesc: string | null;
 	solution: string;
 	grantedScore: number | null;
+	sendDate: string;
+	replyDate: string | null;
 }
 
 interface StudentTaskAccordionProps {
@@ -51,7 +54,6 @@ function StudentTaskAccordion({ tasks }: StudentTaskAccordionProps) {
 		}
 	};
 
-	//key i value do zmiany
 	const studentTaskAnswers = tasks.map((task, index) => (
 		<Accordion.Item key={`${task.taskNumber}-${index}`} value={`${task.taskNumber}-${index}`}>
 			<Accordion.Control mih={rem(120)}>
@@ -94,22 +96,9 @@ function StudentTaskAccordion({ tasks }: StudentTaskAccordionProps) {
 			<Accordion.Panel>
 				<Divider color='#a6a6a6' />
 				<Stack gap='lg' mx='auto'>
-					<Textarea
-						leftSectionProps={{
-							style: { alignItems: 'flex-start', marginTop: '2px', color: 'var(--mantine-primary-color)' },
-						}}
-						rows={3}
-						disabled
-						leftSection={
-							<ThemeIcon variant='transparent'>
-								<IconCode />
-							</ThemeIcon>
-						}
-						placeholder={task.solution}
-						mt='xs'
-					/>
-					{task.replyDesc && task.replyStatus !== AnswerReplyStatusEnum.Enum.PENDING ? (
+					<Group>
 						<Textarea
+							style={{ flexGrow: '1' }}
 							leftSectionProps={{
 								style: { alignItems: 'flex-start', marginTop: '2px', color: 'var(--mantine-primary-color)' },
 							}}
@@ -117,12 +106,33 @@ function StudentTaskAccordion({ tasks }: StudentTaskAccordionProps) {
 							disabled
 							leftSection={
 								<ThemeIcon variant='transparent'>
-									<IconBlockquote />
+									<IconCode />
 								</ThemeIcon>
 							}
-							placeholder={task.replyDesc}
+							placeholder={task.solution}
 							mt='xs'
 						/>
+						<DateTimeDisplay date={task.sendDate} title='Data przesłania' icon={<IconClock />} />
+					</Group>
+					{task.replyDesc && task.replyDate && task.replyStatus !== AnswerReplyStatusEnum.Enum.PENDING ? (
+						<Group>
+							<Textarea
+								style={{ flexGrow: '1' }}
+								leftSectionProps={{
+									style: { alignItems: 'flex-start', marginTop: '2px', color: 'var(--mantine-primary-color)' },
+								}}
+								rows={3}
+								disabled
+								leftSection={
+									<ThemeIcon variant='transparent'>
+										<IconBlockquote />
+									</ThemeIcon>
+								}
+								placeholder={task.replyDesc}
+								mt='xs'
+							/>
+							<DateTimeDisplay date={task.replyDate} title='Data zwrócenia' icon={<IconClock />} />
+						</Group>
 					) : null}
 				</Stack>
 			</Accordion.Panel>

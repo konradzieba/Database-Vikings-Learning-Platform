@@ -193,6 +193,8 @@ export const getStudentTasksSchema = z.object({
 					replyDesc: z.string(),
 					solution: z.string(),
 					grantedScore: z.number(),
+					sendDate: z.string(),
+					replyDate: z.string(),
 				})
 			),
 		})
