@@ -10,7 +10,12 @@ interface GroupCardProps {
 	assignedLessons: number;
 }
 
-function GroupCard({ groupId, groupName, assignedStudents, assignedLessons }: GroupCardProps) {
+function GroupCard({
+	groupId,
+	groupName,
+	assignedStudents,
+	assignedLessons,
+}: GroupCardProps) {
 	const navigate = useNavigate();
 	const studentsMultiple = (studentsNumber: number) => {
 		if (studentsNumber === 1) {
@@ -31,8 +36,18 @@ function GroupCard({ groupId, groupName, assignedStudents, assignedLessons }: Gr
 		}
 	};
 	return (
-		<Box component='a' onClick={() => navigate(`group/${groupId}/lessons`)} tabIndex={1}>
-			<Flex direction='column' px='md' py='md' gap='md' className={classes.groupCardWrapper}>
+		<Box
+			component='a'
+			onClick={() => navigate(`group/${groupId}`)}
+			tabIndex={1}
+		>
+			<Flex
+				direction='column'
+				px='md'
+				py='md'
+				gap='md'
+				className={classes.groupCardWrapper}
+			>
 				<Text fz='md' fw={500}>
 					{groupName}
 				</Text>

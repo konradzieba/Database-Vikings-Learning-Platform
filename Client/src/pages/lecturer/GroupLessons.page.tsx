@@ -11,7 +11,7 @@ function GroupLessonsPage() {
 	let { id } = useParams();
 	const { pathname } = useLocation();
 	const { data: LessonsFromGroup, isPending } = useGetLessonsByGroupId(+id!);
-	const slides = LessonsFromGroup?.lessons.map(slide => {
+	const slides = LessonsFromGroup?.lessons.map((slide) => {
 		return (
 			<Carousel.Slide key={slide.number}>
 				<LecturerLessonCard
@@ -27,35 +27,32 @@ function GroupLessonsPage() {
 
 	return (
 		<>
-			{pathname.endsWith('/lessons') ? (
-				isPending ? (
-					<FullScreenLoader />
-				) : slides?.length === 0 ? (
-					<Center>
-						<AddLessonCard />
-					</Center>
-				) : (
-					<Center>
-						<Carousel
-							maw={1175}
-							withIndicators
-							slidesToScroll={1}
-							initialSlide={0}
-							slideSize='33.333333%'
-							slideGap='sm'
-							align='start'
-							nextControlIcon={<IconChevronRight />}
-							previousControlIcon={<IconChevronLeft />}
-							draggable>
-							{slides}
-							<Carousel.Slide>
-								<AddLessonCard />
-							</Carousel.Slide>
-						</Carousel>
-					</Center>
-				)
+			{isPending ? (
+				<FullScreenLoader />
+			) : slides?.length === 0 ? (
+				<Center>
+					<AddLessonCard />
+				</Center>
 			) : (
-				<Outlet />
+				<Center>
+					<Carousel
+						maw={1175}
+						withIndicators
+						slidesToScroll={1}
+						initialSlide={0}
+						slideSize='33.333333%'
+						slideGap='sm'
+						align='start'
+						nextControlIcon={<IconChevronRight />}
+						previousControlIcon={<IconChevronLeft />}
+						draggable
+					>
+						{slides}
+						<Carousel.Slide>
+							<AddLessonCard />
+						</Carousel.Slide>
+					</Carousel>
+				</Center>
 			)}
 		</>
 	);

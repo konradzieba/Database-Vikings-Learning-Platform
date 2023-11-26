@@ -61,31 +61,34 @@ const router = createBrowserRouter([
 			{ path: 'student-preview/:studentId', element: <StudentPreview /> },
 			{ path: 'me', element: <BlankContent /> },
 			{
-				path: 'group/:id',
+				path: 'group',
 				element: <GroupPanelPage />,
 				children: [
 					{
-						path: 'lessons',
-						element: <GroupLessonsPage />,
+						path: ':id',
 						children: [
+							{
+								index: true,
+								element: <GroupLessonsPage />,
+							},
 							{
 								path: 'lesson-dashboard/:lessonId',
 								element: <LessonDashboardPage />,
 							},
 							{ path: 'create-lesson', element: <CreateLessonPage /> },
+							{
+								path: 'students',
+								element: <GroupStudentsInfoPage />,
+							},
+							{
+								path: 'check-frequency',
+								element: <CheckFrequencyPage />,
+							},
+							{
+								path: 'ranking',
+								element: <ScoreBoardLecturerPage />,
+							},
 						],
-					},
-					{
-						path: 'students',
-						element: <GroupStudentsInfoPage />,
-					},
-					{
-						path: 'check-frequency',
-						element: <CheckFrequencyPage />,
-					},
-					{
-						path: 'ranking',
-						element: <ScoreBoardLecturerPage />,
 					},
 				],
 			},
@@ -97,7 +100,7 @@ const router = createBrowserRouter([
 		element: <LoginForm />,
 	},
 	{ path: '/not-found', element: <NotFoundPage /> },
-	{ path: '*', element: <Navigate to='/not-found' replace /> },
+	// { path: '*', element: <Navigate to='/not-found' replace /> },
 ]);
 
 export function Router() {
