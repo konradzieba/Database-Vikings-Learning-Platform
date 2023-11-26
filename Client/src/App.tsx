@@ -26,13 +26,18 @@ import NotAnsweredListModal from './modals/NotAnsweredList.modal';
 import TaskDetailsModal from './modals/TaskDetails.modal';
 import ModifyAddedTaskModal from './modals/ModifyAddedTask.modal';
 import PreviewCreatedLessonInfoModal from './modals/PreviewCreatedLessonInfo.modal';
+import DeleteLessonModal from './modals/DeleteLesson.modal';
 
 export default function App() {
 	dayjs.locale('pl');
 	return (
 		<QueryClientProvider client={queryClient}>
 			<DatesProvider settings={{ locale: 'pl' }}>
-				<MantineProvider theme={{ ...theme }} cssVariablesResolver={resolver} defaultColorScheme='dark'>
+				<MantineProvider
+					theme={{ ...theme }}
+					cssVariablesResolver={resolver}
+					defaultColorScheme='dark'
+				>
 					<ModalsProvider
 						modals={{
 							sessionExpired: SessionExpiredModal,
@@ -49,9 +54,11 @@ export default function App() {
 							taskDetails: TaskDetailsModal,
 							modifyAddedTask: ModifyAddedTaskModal,
 							previewCreatedLessonInfo: PreviewCreatedLessonInfoModal,
+							deleteLesson: DeleteLessonModal,
 						}}
 						labels={{ confirm: 'Prześlij', cancel: 'Anuluj' }}
-						modalProps={{ overlayProps: { blur: 2 }, yOffset: rem(100) }}>
+						modalProps={{ overlayProps: { blur: 2 }, yOffset: rem(100) }}
+					>
 						<Router />
 					</ModalsProvider>
 				</MantineProvider>

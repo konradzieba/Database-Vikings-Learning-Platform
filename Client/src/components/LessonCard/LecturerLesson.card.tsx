@@ -21,6 +21,7 @@ import {
 	IconTrash,
 } from '@tabler/icons-react';
 import { Link } from 'react-router-dom';
+import { modals } from '@mantine/modals';
 
 interface LecturerLessonCardProps {
 	id: number;
@@ -34,6 +35,18 @@ const getTasksPlural = (taskAmount: number) => {
 	if (taskAmount === 1) return 'zadanie';
 	if (taskAmount > 1 && taskAmount < 5) return 'zadania';
 	if (taskAmount >= 5) return 'zadań';
+};
+
+const handleOpenDeleteLessonModal = (lessonId: number) => {
+	modals.openContextModal({
+		modal: 'deleteLesson',
+		title: 'Usuwanie lekcji',
+		size: 'lg',
+		// onClose: () => refetch(),
+		innerProps: {
+			lessonId,
+		},
+	});
 };
 
 function LecturerLessonCard({
@@ -79,6 +92,7 @@ function LecturerLessonCard({
 						variant=''
 						c='var(--bad-state-color)'
 						leftSection={<IconTrash size='1.25rem' />}
+						onClick={() => handleOpenDeleteLessonModal(id)}
 					>
 						Usuń lekcję
 					</Menu.Item>

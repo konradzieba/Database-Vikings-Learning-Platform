@@ -34,7 +34,6 @@ function Nav({ groups, isPending }: LecturerNavProps) {
 		() => (link: string, groupId: number) => {
 			const splitLink = link.split('/');
 			if (!splitLink[4]) {
-				console.log('hejak');
 				return `/dashboard/group/${groupId}`;
 			}
 			return `/${splitLink[1]}/${splitLink[2]}/${groupId}/${splitLink[4]}`;
