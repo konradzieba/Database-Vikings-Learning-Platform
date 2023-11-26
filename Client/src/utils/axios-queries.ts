@@ -235,7 +235,9 @@ export const createLessonMutationFn = async (
 };
 
 export const getPreviousLessonsImagesQueryFn = async (groupId: number) => {
-	const { data } = await axios.get<TGetPreviousLessonsImages>(`/lessons/getPreviousLessonsImages/${groupId}`);
+	const { data } = await axios.get<TGetPreviousLessonsImages>(
+		`/lessons/getPreviousLessonsImages/${groupId}`
+	);
 	return data;
 };
 
@@ -248,6 +250,13 @@ export const getPreviousLessonsImagesQueryFn = async (groupId: number) => {
 // 	);
 // 	return data;
 // };
+
+export const deleteLessonMutationFn = async (lessonId: number) => {
+	const { data } = await axios.delete<TMessageResponse>(
+		`/lessons/deleteLesson/${lessonId}`
+	);
+	return data;
+};
 
 export const registerManyStudentsMutationFn = async (
 	registerManyStudentsRequest: TRegisterManyStudentsRequest
