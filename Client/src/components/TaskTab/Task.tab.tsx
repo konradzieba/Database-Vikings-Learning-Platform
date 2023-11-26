@@ -15,7 +15,15 @@ interface TaskTabProps {
 	isMarkdown: boolean;
 }
 
-function TaskTab({ lessonId, taskId, taskNumber, taskQuestion, closeDate, answerSend, isMarkdown }: TaskTabProps) {
+function TaskTab({
+	lessonId,
+	taskId,
+	taskNumber,
+	taskQuestion,
+	closeDate,
+	answerSend,
+	isMarkdown,
+}: TaskTabProps) {
 	const navigate = useNavigate();
 	const spliceQuestion = (question: string) => {
 		if (question.length > 200) {
@@ -24,10 +32,16 @@ function TaskTab({ lessonId, taskId, taskNumber, taskQuestion, closeDate, answer
 			return question;
 		}
 	};
-	const isTaskExpired = dayjs(dayjs().toDate()).isAfter(closeDate, 'minutes') && !answerSend;
+	const isTaskExpired =
+		dayjs(dayjs().toDate()).isAfter(closeDate, 'minutes') && !answerSend;
 
 	return (
-		<Box tabIndex={1} onClick={() => navigate(`/task/${lessonId}/${taskId}`)} pos='relative' w={rem(800)}>
+		<Box
+			tabIndex={1}
+			onClick={() => navigate(`/task/${lessonId}/${taskId}`)}
+			pos='relative'
+			w={rem(800)}
+		>
 			{isTaskExpired && (
 				<Overlay backgroundOpacity={0.85} className={classes.overlayContainer}>
 					<Flex h='100%' justify='center' align='center' gap='md'>
@@ -48,7 +62,12 @@ function TaskTab({ lessonId, taskId, taskNumber, taskQuestion, closeDate, answer
 					</Flex>
 				</Overlay>
 			)}
-			<Flex mih={131} gap='lg' align='center' className={classes.taskTabWrapper}>
+			<Flex
+				mih={131}
+				gap='lg'
+				align='center'
+				className={classes.taskTabWrapper}
+			>
 				<ThemeIcon size='lg' miw='10%' ml='md' radius='sm'>
 					<Text fw={500}>{taskNumber}</Text>
 				</ThemeIcon>

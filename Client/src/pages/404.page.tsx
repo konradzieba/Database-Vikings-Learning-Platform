@@ -1,15 +1,16 @@
-import { Image, Container, Title, Text, Button, SimpleGrid} from '@mantine/core';
+import {
+	Image,
+	Container,
+	Title,
+	Text,
+	Button,
+	SimpleGrid,
+} from '@mantine/core';
 import vikingSleeping from '@/assets/vikingSleeping.webp';
 import classes from './404.page.module.css';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export function NotFoundPage() {
-	const navigate = useNavigate();
-
-	const handleClick = () => {
-		navigate('/');
-	};
-
 	return (
 		<Container className={classes.root}>
 			<SimpleGrid spacing={{ base: 40, sm: 80 }} cols={{ base: 1, sm: 2 }}>
@@ -17,10 +18,18 @@ export function NotFoundPage() {
 				<div>
 					<Title className={classes.title}>Coś poszło nie tak...</Title>
 					<Text c='dimmed' size='lg'>
-						Strona, której szukasz nie istnieje. Upewnij się, że wprowadziłeś poprawny adres URL. Jeśli uważasz, że
-						problem stoi po stronie aplikacji zgłoś go prowadzącemu.
+						Strona, której szukasz nie istnieje. Upewnij się, że wprowadziłeś
+						poprawny adres URL. Jeśli uważasz, że problem stoi po stronie
+						aplikacji zgłoś go prowadzącemu.
 					</Text>
-					<Button variant='outline' size='md' mt='xl' className={classes.control} onClick={handleClick}>
+					<Button
+						component={Link}
+						to='/'
+						variant='outline'
+						size='md'
+						mt='xl'
+						className={classes.control}
+					>
 						Wróć do strony głównej
 					</Button>
 				</div>

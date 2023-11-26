@@ -1,7 +1,7 @@
 import { Box, Flex, Group, Text, ThemeIcon } from '@mantine/core';
-import classes from './Group.card.module.css';
 import { IconListTree, IconUsers } from '@tabler/icons-react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import classes from './Group.card.module.css';
 
 interface GroupCardProps {
 	groupId: number;
@@ -16,7 +16,6 @@ function GroupCard({
 	assignedStudents,
 	assignedLessons,
 }: GroupCardProps) {
-	const navigate = useNavigate();
 	const studentsMultiple = (studentsNumber: number) => {
 		if (studentsNumber === 1) {
 			return `${studentsNumber} student`;
@@ -37,9 +36,10 @@ function GroupCard({
 	};
 	return (
 		<Box
-			component='a'
-			onClick={() => navigate(`group/${groupId}`)}
+			component={Link}
+			to={`/dashboard/group/${groupId}`}
 			tabIndex={1}
+			className={classes.cardLink}
 		>
 			<Flex
 				direction='column'

@@ -2,14 +2,13 @@ import { Center } from '@mantine/core';
 import { Carousel } from '@mantine/carousel';
 import LecturerLessonCard from '@/components/LessonCard/LecturerLesson.card';
 import AddLessonCard from '@/components/LessonCard/AddLesson.card';
-import { Outlet, useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useGetLessonsByGroupId } from '@/hooks/lessons/useGetLessonsByGroupId';
-import FullScreenLoader from '@/components/UI/FullScreenLoader';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import FullScreenLoader from '@/components/UI/FullScreenLoader';
 
 function GroupLessonsPage() {
-	let { id } = useParams();
-	const { pathname } = useLocation();
+	const { id } = useParams();
 	const { data: LessonsFromGroup, isPending } = useGetLessonsByGroupId(+id!);
 	const slides = LessonsFromGroup?.lessons.map((slide) => {
 		return (
