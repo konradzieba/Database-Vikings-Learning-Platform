@@ -247,6 +247,77 @@ export function updateLesson(
   });
 }
 
+export async function getPreDeleteLessonInfo(id: Lesson['id']) {
+  const lessonInfo = await db.lesson.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      number: true,
+      groupId: true,
+      tasks: {
+        select: {
+          id: true,
+          answers: {
+            select: {
+              id: true,
+              Student: {
+                select: {
+                  id: true,
+                  User: {
+                    select: {
+                      firstName: true,
+                      lastName: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!lessonInfo) {
+    return null;
+  }
+
+  const studentsWithAnswersSet = new Set<string>();
+  const studentsWithAnswers: {
+    studentId: Student['id'];
+    firstName: User['firstName'];
+    lastName: User['lastName'];
+  }[] = [];
+
+  lessonInfo.tasks.forEach((task) => {
+    task.answers.forEach((answer) => {
+      const studentId = answer.Student.id;
+      const firstName = answer.Student.User.firstName;
+      const lastName = answer.Student.User.lastName;
+      const key = `${studentId}_${firstName}_${lastName}`;
+
+      if (!studentsWithAnswersSet.has(key)) {
+        studentsWithAnswersSet.add(key);
+        studentsWithAnswers.push({
+          studentId,
+          firstName,
+          lastName,
+        });
+      }
+    });
+  });
+
+  const formattedLessonInfo = {
+    lessonNumber: lessonInfo.number,
+    taskAmount: lessonInfo.tasks.length,
+    sendAnswersAmount: studentsWithAnswers.length,
+    studentsWithAnswers,
+  };
+
+  return formattedLessonInfo;
+}
+
 export function deleteLesson(id: Lesson['id']) {
   return db.lesson.delete({
     where: {

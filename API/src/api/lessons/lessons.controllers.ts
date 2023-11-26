@@ -270,6 +270,29 @@ export async function updateLesson(
   }
 }
 
+export async function getPreDeleteLessonInfo(
+  req: Request<ParamsWithId>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id: lessonId } = req.params;
+
+    const existingLesson = await LessonServices.findLessonById(+lessonId);
+
+    if (!existingLesson) {
+      res.status(404);
+      throw new Error('Lesson with this lessonId does not exist.');
+    }
+
+    const lessonInfo = await LessonServices.getPreDeleteLessonInfo(+lessonId);
+
+    res.json({ message: 'success', lessonInfo });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function deleteLesson(
   req: Request<ParamsWithId, MessageResponse>,
   res: Response<MessageResponse>,
@@ -285,10 +308,10 @@ export async function deleteLesson(
       throw new Error('Lesson with this id does not exist.');
     }
 
-    const lesson = await LessonServices.deleteLesson(+id);
+    const lessonInfo = await LessonServices.deleteLesson(+id);
 
     res.json({
-      message: `Lesson with ${lesson.id}, number ${lesson.number} deleted successfully.`,
+      message: `Lesson with ${lessonInfo.id}, number ${lessonInfo.number} deleted successfully.`,
     });
   } catch (error) {
     next(error);

@@ -74,6 +74,15 @@ router.patch(
   LessonsControllers.updateLesson
 );
 
+router.get(
+  '/getPreDeleteLessonInfo/:id',
+  validateRequestAndCheckRole(
+    { params: paramsWithIdSchema },
+    EnumRole.LECTURER
+  ),
+  LessonsControllers.getPreDeleteLessonInfo
+);
+
 router.delete(
   '/deleteLesson/:id',
   validateRequestAndCheckRole(
