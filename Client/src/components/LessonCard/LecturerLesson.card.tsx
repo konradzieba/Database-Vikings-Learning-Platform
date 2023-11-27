@@ -21,7 +21,7 @@ import {
 	IconPencil,
 	IconTrash,
 } from '@tabler/icons-react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { modals } from '@mantine/modals';
 
 interface LecturerLessonCardProps {
@@ -44,6 +44,7 @@ const handleOpenReorderLessonModal = (groupId: number) => {
 		title: 'Zmiana kolejność lekcji',
 		size: 'xl',
 		// fullScreen: true,
+		
 		innerProps: {
 			groupId,
 		},
@@ -68,6 +69,7 @@ function LecturerLessonCard({
 	isFrequencyChecked,
 	photoLink,
 }: LecturerLessonCardProps) {
+	const { id: groupId } = useParams();
 	const isZeroTasks = taskAmount === 0;
 	const frequencyColor = isFrequencyChecked
 		? 'var(--good-state-color)'
@@ -100,7 +102,7 @@ function LecturerLessonCard({
 					<Menu.Item
 						leftSection={<IconMenuOrder size='1.25rem' />}
 						onClick={() => {
-							handleOpenReorderLessonModal(id);
+							handleOpenReorderLessonModal(+groupId!);
 						}}
 					>
 						Zmień kolejność

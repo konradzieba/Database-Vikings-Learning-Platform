@@ -1,79 +1,151 @@
+import React, { useState } from 'react';
 import { ContextModalProps } from '@mantine/modals';
 import { useListState } from '@mantine/hooks';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
-import { Box, Text } from '@mantine/core';
+import {
+	Avatar,
+	Box,
+	Button,
+	Center,
+	Group,
+	Loader,
+	Text,
+} from '@mantine/core';
 import classes from './ReorderLesson.modal.module.css';
 import cx from 'clsx';
-
-const data = [
-	{ position: 6, mass: 12.011, symbol: 'C', name: 'Carbon' },
-	{ position: 7, mass: 14.007, symbol: 'N', name: 'Nitrogen' },
-	{ position: 39, mass: 88.906, symbol: 'Y', name: 'Yttrium' },
-	{ position: 56, mass: 137.33, symbol: 'Ba', name: 'Barium' },
-	{ position: 58, mass: 140.12, symbol: 'Ce', name: 'Cerium' },
-];
+import { useGetLessonsByGroupId } from '@/hooks/lessons/useGetLessonsByGroupId';
 
 interface ReorderLessonsModalInnerProps {
 	groupId: number;
 }
+
+interface LessonOrder {
+	lessonId: number;
+	newLessonNumber: number;
+	oldLessonNumber: number;
+}
+
 function ReorderLessonsModal({
 	context,
 	id,
 	innerProps,
 }: ContextModalProps<ReorderLessonsModalInnerProps>) {
-	const [state, handlers] = useListState(data);
+	const {
+		data: lessonsData,
+		isPending,
+		isError,
+	} = useGetLessonsByGroupId(innerProps.groupId);
 
-	const items = state.map((item, index) => (
-		<Draggable key={item.symbol} index={index} draggableId={item.symbol}>
-			{(provided, snapshot) => {
-				return (
-					<Box
-						className={cx(classes.item, {
-							[classes.itemDragging]: snapshot.isDragging,
-						})}
-						{...provided.draggableProps}
-						{...provided.dragHandleProps}
-						style={{
-							...provided.draggableProps.style,
-							top: 'auto',
-							left: 'auto',
-						}}
-						ref={provided.innerRef}
-					>
-						<Text className={classes.symbol}>{item.symbol}</Text>
-						<Box>
-							<Text>{item.name}</Text>
-							<Text c='dimmed' size='sm'>
-								Position: {item.position} • Mass: {item.mass}
-							</Text>
+	const [state, handlers] = useListState(lessonsData?.lessons || []);
+	const [newOrder, setNewOrder] = useState<number[]>(
+		state.map((lesson) => lesson.id)
+	);
+
+	const handleReorderLessons = () => {
+		const lessonOrders: LessonOrder[] = newOrder.map((lessonId, index) => {
+			const item = state.find((lesson) => lesson.id === lessonId);
+
+			return {
+				lessonId: lessonId,
+				newLessonNumber: index + 1,
+				oldLessonNumber: item ? item.number : 0,
+			};
+		});
+
+		console.log('Reorder lessons', lessonOrders);
+	};
+
+	const handleResetOrder = () => {
+		setNewOrder(state.map((lesson) => lesson.id));
+	};
+
+	const onDragEnd = ({ destination, source }: any) => {
+		if (!destination) {
+			return;
+		}
+
+		const reorderedIds = [...newOrder];
+		const movedId = reorderedIds.splice(source.index, 1)[0];
+		reorderedIds.splice(destination.index, 0, movedId);
+
+		setNewOrder(reorderedIds);
+	};
+
+	const items = newOrder.map((lessonId, index) => {
+		const item = state.find((lesson) => lesson.id === lessonId);
+
+		if (!item) {
+			return null;
+		}
+
+		return (
+			<Draggable key={item.id} index={index} draggableId={`${item.id}`}>
+				{(provided, snapshot) => {
+					return (
+						<Box
+							className={cx(classes.item, {
+								[classes.itemDragging]: snapshot.isDragging,
+							})}
+							{...provided.draggableProps}
+							{...provided.dragHandleProps}
+							style={{
+								...provided.draggableProps.style,
+								top: 'auto',
+								left: 'auto',
+							}}
+							ref={provided.innerRef}
+						>
+							<Avatar
+								src={item.image}
+								size={50}
+								radius='50%'
+								className={classes.symbol}
+							/>
+							<Box ml='sm'>
+								<Text fw={500}>Nowy numer lekcji: {index + 1}</Text>
+								<Text size='sm'>Pierwotny numer lekcji: {item.number}</Text>
+							</Box>
 						</Box>
-					</Box>
-				);
-			}}
-		</Draggable>
-	));
+					);
+				}}
+			</Draggable>
+		);
+	});
+
+	if (isPending) {
+		return (
+			<Center h={80}>
+				<Loader />
+			</Center>
+		);
+	}
+	if (isError) {
+		return (
+			<Center h={80}>
+				<Text>Wystąpił błąd podczas pobierania danych</Text>
+			</Center>
+		);
+	}
 
 	return (
-		<DragDropContext
-			onDragEnd={({ destination, source }) =>
-				handlers.reorder({ from: source.index, to: destination?.index || 0 })
-			}
-		>
+		<DragDropContext onDragEnd={onDragEnd}>
 			<Text mb='sm'>Dostosuj kafelki według kolejności wyświetlania:</Text>
 			<Droppable droppableId='dnd-list' direction='vertical'>
 				{(provided) => (
-					<div
-						{...provided.droppableProps}
-						ref={provided.innerRef}
-						style={{
-							overflowX: 'unset',
-						}}
-					>
+					<div {...provided.droppableProps} ref={provided.innerRef}>
 						{items}
 						{provided.placeholder}
 					</div>
 				)}
 			</Droppable>
+			<Group justify='center' mt='md'>
+				<Button variant='outline' onClick={handleResetOrder}>
+					Resetuj
+				</Button>
+				<Button onClick={handleReorderLessons} style={{ marginRight: '8px' }}>
+					Zmień kolejność
+				</Button>
+			</Group>
 		</DragDropContext>
 	);
 }
