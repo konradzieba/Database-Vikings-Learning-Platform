@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 export function useGetLessonsByGroupId(groupId: number | null) {
 	const query = useQuery({
 		enabled: !!groupId,
-		queryKey: [groupId],
+		queryKey: ['lessonsByGroup',groupId],
 		queryFn: () => getLessonsByGroupIdQueryFn(groupId!),
 	});
 

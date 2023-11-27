@@ -13,7 +13,14 @@ import {
 	rem,
 } from '@mantine/core';
 import classes from './Lesson.card.module.css';
-import { IconChecklist, IconDots, IconList, IconPencil, IconTrash } from '@tabler/icons-react';
+import {
+	IconChecklist,
+	IconDots,
+	IconList,
+	IconMenuOrder,
+	IconPencil,
+	IconTrash,
+} from '@tabler/icons-react';
 import { Link, useParams } from 'react-router-dom';
 import { modals } from '@mantine/modals';
 
@@ -31,19 +38,37 @@ const getTasksPlural = (taskAmount: number) => {
 	if (taskAmount >= 5) return 'zadań';
 };
 
+const handleOpenReorderLessonModal = (groupId: number) => {
+	modals.openContextModal({
+		modal: 'reorderLessons',
+		title: 'Zmiana kolejność lekcji',
+		size: 'xl',
+		// fullScreen: true,
+		
+		innerProps: {
+			groupId,
+		},
+	});
+};
+
 const handleOpenDeleteLessonModal = (lessonId: number) => {
 	modals.openContextModal({
 		modal: 'deleteLesson',
 		title: 'Usuwanie lekcji',
 		size: 'lg',
-		// onClose: () => refetch(),
 		innerProps: {
 			lessonId,
 		},
 	});
 };
 
-function LecturerLessonCard({ id, lessonNumber, taskAmount, isFrequencyChecked, photoLink }: LecturerLessonCardProps) {
+function LecturerLessonCard({
+	id,
+	lessonNumber,
+	taskAmount,
+	isFrequencyChecked,
+	photoLink,
+}: LecturerLessonCardProps) {
 	const { id: groupId } = useParams();
 	const isZeroTasks = taskAmount === 0;
 	const frequencyColor = isFrequencyChecked ? 'var(--good-state-color)' : 'var(--bad-state-color)';
@@ -64,7 +89,14 @@ function LecturerLessonCard({ id, lessonNumber, taskAmount, isFrequencyChecked, 
 						{isFrequencyChecked ? 'Koryguj frekwencję' : 'Sprawdź frekwencję'}
 					</Menu.Item>
 					<Menu.Divider />
-					<Menu.Item leftSection={<IconPencil size='1.25rem' />}>Edytuj lekcję</Menu.Item>
+					<Menu.Item
+						leftSection={<IconMenuOrder size='1.25rem' />}
+						onClick={() => {
+							handleOpenReorderLessonModal(+groupId!);
+						}}
+					>
+						Zmień kolejność
+					</Menu.Item>
 					<Menu.Item
 						variant=''
 						c='var(--bad-state-color)'
