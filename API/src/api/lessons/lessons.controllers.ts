@@ -63,6 +63,33 @@ export async function getPreviousLessonsImages(
   }
 }
 
+export async function getAbsentStudents(
+  req: Request<ParamsWithId>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id } = req.params;
+
+    const existingLesson = LessonServices.findLessonById(+id!);
+
+    if (!existingLesson) {
+      res.status(404);
+      throw new Error('Lesson with given ID does not exist.');
+    }
+
+    const absentStudents = await LessonServices.getAbsentStudents(+id!);
+
+    res.json({
+      id: absentStudents?.id,
+      number: absentStudents?.number,
+      absentStudents: absentStudents?.absentStudents,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function getTasksByLessonId(
   req: Request<ParamsWithId>,
   res: Response,

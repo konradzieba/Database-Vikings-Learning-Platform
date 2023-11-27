@@ -24,6 +24,15 @@ router.get(
 );
 
 router.get(
+  '/getAbsentStudents/:id',
+  validateRequestAndCheckRole(
+    { params: paramsWithIdSchema },
+    EnumRole.LECTURER
+  ),
+  LessonsControllers.getAbsentStudents
+);
+
+router.get(
   '/getPreviousLessonsImages/:id',
   validateRequestAndCheckRole(
     { params: paramsWithIdSchema },
