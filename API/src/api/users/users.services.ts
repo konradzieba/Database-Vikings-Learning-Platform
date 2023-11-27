@@ -308,6 +308,53 @@ export function updateAggregatedSendTime(
     },
   });
 }
+type UpdateStudentDuringLessonInput = {
+  studentId: Student['id'];
+  isStudentAbsent: boolean;
+  grantedScore: Student['score'];
+  aggregatedSendTime: Student['aggregatedSendTime'];
+}[];
+
+export function updateStudentDuringLessonDelete(
+  studentData: UpdateStudentDuringLessonInput
+) {
+  return db.student.updateMany({
+    where: {
+      OR: studentData.map((student) => ({
+        id: student.studentId,
+      })),
+    },
+    data: {
+      score: {
+        decrement: studentData.reduce((acc, curr) => {
+          if (curr.grantedScore) {
+            return acc + curr.grantedScore;
+          } else {
+            return acc;
+          }
+        }, 0),
+      },
+      aggregatedSendTime: {
+        decrement: studentData.reduce((acc, curr) => {
+          if (curr.aggregatedSendTime) {
+            return acc + curr.aggregatedSendTime;
+          } else {
+            return acc;
+          }
+        }, 0),
+      },
+      health: {
+        increment: studentData.reduce((acc, curr) => {
+          if (curr.isStudentAbsent) {
+            return acc + 1;
+          } else {
+            return acc;
+          }
+        }, 0),
+      },
+    },
+  });
+};
 
 export async function getScoreBoard() {
   const scoreBoard = await db.student.findMany({

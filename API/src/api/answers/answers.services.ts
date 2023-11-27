@@ -37,6 +37,16 @@ export async function assignAnswerToStudent(
   });
 }
 
+export function findAnswerByTaskIds(taskIds: Answer['taskId'][]) {
+  return db.answer.findMany({
+    where: {
+      taskId: {
+        in: taskIds,
+      },
+    },
+  });
+}
+
 export function findAnswerById(id: Answer['id']) {
   return db.answer.findUnique({
     where: {

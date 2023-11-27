@@ -111,6 +111,14 @@ export function updateTask(
   });
 }
 
+export function deleteTasksByLessonId(lessonId: Lesson['id']) {
+  return db.task.deleteMany({
+    where: {
+      lessonId,
+    },
+  });
+}
+
 export function deleteTask(id: Task['id']) {
   return db.task.delete({
     where: {

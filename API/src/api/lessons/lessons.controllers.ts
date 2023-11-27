@@ -299,16 +299,72 @@ export async function deleteLesson(
   next: NextFunction
 ) {
   try {
-    const { id } = req.params;
+    const { id: lessonId } = req.params;
 
-    const existingLesson = await LessonServices.findLessonById(+id);
+    const existingLesson = await LessonServices.findLessonById(+lessonId);
 
     if (!existingLesson) {
       res.status(404);
       throw new Error('Lesson with this id does not exist.');
     }
 
-    const lessonInfo = await LessonServices.deleteLesson(+id);
+    const tasks = await LessonServices.getTasksByLessonId(+lessonId);
+
+    const answers = await AnswerServices.findAnswerByTaskIds(
+      tasks.map((task) => task.id)
+    );
+
+    const assignedStudents = await GroupServices.getStudentsFromGroup(
+      existingLesson.groupId
+    );
+
+    const assignedStudentsIds = assignedStudents.map((student) => student.id);
+
+    const studentsWithAnswersInfo = assignedStudentsIds.map((studentId) => {
+      const studentAnswers = answers.filter(
+        (answer) => answer.studentId === studentId
+      );
+
+      const studentAnswersIds = studentAnswers.map((answer) => answer.id);
+      const taskAssignedToAnswers = tasks.filter((task) =>
+        studentAnswersIds.includes(task.id)
+      );
+
+      return {
+        studentId,
+        isStudentAbsent: existingLesson.absentStudents.includes(studentId),
+        grantedScore: studentAnswers.reduce((acc, curr) => {
+          if (curr.grantedScore) {
+            return acc + curr.grantedScore;
+          } else {
+            return acc;
+          }
+        }, 0),
+        aggregatedSendTime: studentAnswers.reduce((acc, curr) => {
+          const assignedTask = taskAssignedToAnswers.find(
+            (task) => task.id === curr.taskId
+          );
+          const openDateTimezone = dayjs(assignedTask?.openDate);
+          const closeDateTimezone = dayjs(curr.sendDate);
+          const differenceInSeconds = openDateTimezone.diff(
+            closeDateTimezone,
+            'second'
+          );
+          const calculatedDifference = Number(
+            (differenceInSeconds / 1_000_000).toFixed(6)
+          );
+          if (curr.sendDate) {
+            return acc + calculatedDifference;
+          } else {
+            return acc;
+          }
+        }, 0),
+      };
+    });
+
+    await UserServices.updateStudentDuringLessonDelete(studentsWithAnswersInfo);
+    await TaskServices.deleteTasksByLessonId(existingLesson.id);
+    const lessonInfo = await LessonServices.deleteLesson(existingLesson.id);
 
     res.json({
       message: `Lesson with ${lessonInfo.id}, number ${lessonInfo.number} deleted successfully.`,
