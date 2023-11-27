@@ -17,6 +17,7 @@ import {
 	IconChecklist,
 	IconDots,
 	IconList,
+	IconMenuOrder,
 	IconPencil,
 	IconTrash,
 } from '@tabler/icons-react';
@@ -37,12 +38,23 @@ const getTasksPlural = (taskAmount: number) => {
 	if (taskAmount >= 5) return 'zadań';
 };
 
+const handleOpenReorderLessonModal = (groupId: number) => {
+	modals.openContextModal({
+		modal: 'reorderLessons',
+		title: 'Zmiana kolejność lekcji',
+		size: 'xl',
+		// fullScreen: true,
+		innerProps: {
+			groupId,
+		},
+	});
+};
+
 const handleOpenDeleteLessonModal = (lessonId: number) => {
 	modals.openContextModal({
 		modal: 'deleteLesson',
 		title: 'Usuwanie lekcji',
 		size: 'lg',
-		// onClose: () => refetch(),
 		innerProps: {
 			lessonId,
 		},
@@ -85,8 +97,13 @@ function LecturerLessonCard({
 						{isFrequencyChecked ? 'Koryguj frekwencję' : 'Sprawdź frekwencję'}
 					</Menu.Item>
 					<Menu.Divider />
-					<Menu.Item leftSection={<IconPencil size='1.25rem' />}>
-						Edytuj lekcję
+					<Menu.Item
+						leftSection={<IconMenuOrder size='1.25rem' />}
+						onClick={() => {
+							handleOpenReorderLessonModal(id);
+						}}
+					>
+						Zmień kolejność
 					</Menu.Item>
 					<Menu.Item
 						variant=''

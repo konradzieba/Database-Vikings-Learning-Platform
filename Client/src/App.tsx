@@ -27,6 +27,7 @@ import TaskDetailsModal from './modals/TaskDetails.modal';
 import ModifyAddedTaskModal from './modals/ModifyAddedTask.modal';
 import PreviewCreatedLessonInfoModal from './modals/PreviewCreatedLessonInfo.modal';
 import DeleteLessonModal from './modals/DeleteLesson.modal';
+import ReorderLessonsModal from './modals/ReorderLessons/ReorderLessons.modal';
 
 export default function App() {
 	dayjs.locale('pl');
@@ -55,6 +56,7 @@ export default function App() {
 							modifyAddedTask: ModifyAddedTaskModal,
 							previewCreatedLessonInfo: PreviewCreatedLessonInfoModal,
 							deleteLesson: DeleteLessonModal,
+							reorderLessons: ReorderLessonsModal,
 						}}
 						labels={{ confirm: 'Prześlij', cancel: 'Anuluj' }}
 						modalProps={{ overlayProps: { blur: 2 }, yOffset: rem(100) }}
