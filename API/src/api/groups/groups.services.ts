@@ -80,6 +80,14 @@ export function createGroup(group: Prisma.GroupCreateInput) {
   });
 }
 
+export const findLessonsByGroupId = (groupId: Group['id']) => {
+  return db.lesson.findMany({
+    where: {
+      groupId,
+    },
+  });
+};
+
 export function changeStudentGroup(
   studentId: Student['id'],
   groupId: Group['id']
@@ -97,7 +105,6 @@ export function changeStudentGroup(
     },
   });
 }
-
 
 export function findGroupByName(name: Group['name']) {
   return db.group.findUnique({
