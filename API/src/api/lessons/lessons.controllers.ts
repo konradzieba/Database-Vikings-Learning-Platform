@@ -366,6 +366,28 @@ export async function deleteLesson(
     await TaskServices.deleteTasksByLessonId(existingLesson.id);
     const lessonInfo = await LessonServices.deleteLesson(existingLesson.id);
 
+    const allLessons = await GroupServices.findLessonsByGroupId(
+      existingLesson.groupId
+    ).then((lessons) => lessons.sort((a, b) => a.number - b.number));
+
+    const lessonsWithNewOrder = allLessons
+      .map((lesson, index) => {
+        if (lesson.number === index + 1) return lesson;
+        return {
+          ...lesson,
+          number: index + 1,
+        };
+      })
+      .map((lesson) => ({
+        id: lesson.id,
+        number: lesson.number,
+      }));
+
+    await LessonServices.updateLessonsOrder(
+      lessonsWithNewOrder,
+      existingLesson.groupId
+    );
+
     res.json({
       message: `Lesson with ${lessonInfo.id}, number ${lessonInfo.number} deleted successfully.`,
     });

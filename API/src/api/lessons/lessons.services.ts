@@ -248,6 +248,27 @@ export function updateLesson(
   });
 }
 
+export function updateLessonsOrder(
+  lessons: {
+    id: Lesson['id'];
+    number: Lesson['number'];
+  }[],
+  groupId: Group['id']
+) {
+  const promises = lessons.map((lesson) => {
+    return db.lesson.update({
+      where: {
+        id: lesson.id,
+      },
+      data: {
+        number: lesson.number,
+      },
+    });
+  });
+
+  return Promise.all(promises);
+}
+
 export async function getPreDeleteLessonInfo(id: Lesson['id']) {
   const lessonInfo = await db.lesson.findUnique({
     where: {
