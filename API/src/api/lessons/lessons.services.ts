@@ -253,7 +253,6 @@ export function updateLessonsOrder(
     id: Lesson['id'];
     number: Lesson['number'];
   }[],
-  groupId: Group['id']
 ) {
   const promises = lessons.map((lesson) => {
     return db.lesson.update({

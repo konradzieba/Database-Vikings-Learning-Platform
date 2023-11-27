@@ -383,10 +383,7 @@ export async function deleteLesson(
         number: lesson.number,
       }));
 
-    await LessonServices.updateLessonsOrder(
-      lessonsWithNewOrder,
-      existingLesson.groupId
-    );
+    await LessonServices.updateLessonsOrder(lessonsWithNewOrder);
 
     res.json({
       message: `Lesson with ${lessonInfo.id}, number ${lessonInfo.number} deleted successfully.`,
