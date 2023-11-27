@@ -81,7 +81,7 @@ const router = createBrowserRouter([
 								element: <GroupStudentsInfoPage />,
 							},
 							{
-								path: 'check-frequency',
+								path: 'check-frequency/:lessonId',
 								element: <CheckFrequencyPage />,
 							},
 							{

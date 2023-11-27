@@ -1,5 +1,5 @@
 import FrequencyList from '@/components/FrequencyList/FrequencyList.component';
-import { Button, Center, Group, Stack, Title } from '@mantine/core';
+import { Button, Center, Flex, Group, Stack, Title } from '@mantine/core';
 
 function CheckFrequencyPage() {
 	const handleCheckFrequency = () => {
@@ -12,7 +12,7 @@ function CheckFrequencyPage() {
 
 	return (
 		<Center>
-			<Stack>
+			<Stack w='50%'>
 				<Stack align='center'>
 					<Title>Obecność</Title>
 					<Title order={2}>Lekcja&nbsp;4</Title>
