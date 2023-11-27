@@ -23,8 +23,7 @@ import {
 	IconCircleX,
 	IconUser,
 } from '@tabler/icons-react';
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 const getTasksPlural = (taskAmount: number) => {
 	if (taskAmount === 1) return 'zadanie';

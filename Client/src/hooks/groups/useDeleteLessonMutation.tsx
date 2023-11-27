@@ -7,7 +7,7 @@ export function useDeleteLessonMutation(lessonId: number) {
 		mutationFn: () => deleteLessonMutationFn(lessonId),
 		onSuccess: () => {
 			queryClient.invalidateQueries({
-				queryKey: ['groups'],
+				queryKey: ['lessonsByGroup'],
 			});
 		},
 	});
