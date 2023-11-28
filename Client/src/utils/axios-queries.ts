@@ -3,6 +3,7 @@ import {
 	TCreateLessonRequest,
 	TLoginRequest,
 	TRegisterManyStudentsRequest,
+	TReorderLessonRequest,
 	TSendAnswerRequest,
 	TUpdateTaskInfoRequest,
 } from '@/types/RequestTypes';
@@ -210,6 +211,13 @@ export const registerManyStudentsMutationFn = async (registerManyStudentsRequest
 
 export const getAbsentStudentsQueryFn = async (lessonId: number) => {
 	const { data } = await axios.get<TGetAbsentStudents>(`/lessons/getAbsentStudents/${lessonId}`);
+	return data;
+};
 
+export const reorderLessonsMutationFn = async (groupId: number, newLessonsOrder: TReorderLessonRequest) => {
+	console.log(newLessonsOrder);
+	const { data } = await axios.patch<TMessageResponse>(`/lessons/reorderLessons/${groupId}`, {
+		newLessonsOrder,
+	});
 	return data;
 };

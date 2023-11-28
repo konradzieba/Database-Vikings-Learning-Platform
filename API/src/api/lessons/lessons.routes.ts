@@ -5,6 +5,7 @@ import {
   validateRequestAndCheckRole,
 } from '../../middlewares';
 import {
+  paramsWithGroupIdSchema,
   paramsWithIdSchema,
   paramsWithLessonIdSchema,
 } from '../../interfaces/ParamsWithId';
@@ -69,6 +70,18 @@ router.post(
     EnumRole.LECTURER
   ),
   LessonsControllers.createLesson
+);
+
+router.patch(
+  '/reorderLessons/:groupId',
+  validateRequestAndCheckRole(
+    {
+      params: paramsWithGroupIdSchema,
+      body: LessonSchemas.reorderLessonSchema,
+    },
+    EnumRole.LECTURER
+  ),
+  LessonsControllers.reorderLessons
 );
 
 router.patch(

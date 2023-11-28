@@ -354,7 +354,7 @@ export function updateStudentDuringLessonDelete(
       },
     },
   });
-};
+}
 
 export async function getScoreBoard() {
   const scoreBoard = await db.student.findMany({
@@ -422,6 +422,16 @@ export function deleteUser(id: User['id']) {
   return db.user.delete({
     where: {
       id,
+    },
+  });
+}
+
+export function deleteManyUsers(userIds: User['id'][]) {
+  return db.user.deleteMany({
+    where: {
+      id: {
+        in: userIds,
+      },
     },
   });
 }

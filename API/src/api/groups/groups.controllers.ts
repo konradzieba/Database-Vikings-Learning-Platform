@@ -5,6 +5,7 @@ import MessageResponse from 'interfaces/MessageResponse';
 import * as GroupServices from './groups.services';
 import * as LessonsServices from '../lessons/lessons.services';
 import * as UserServices from '../users/users.services';
+import { db } from '../../db';
 
 export async function getGroupsByLecturerId(
   req: Request<ParamsWithId>,
@@ -156,21 +157,30 @@ export async function deleteGroup(
   next: NextFunction
 ) {
   try {
-    const { id } = req.params;
+    const { id: groupId } = req.params;
 
-    const existingGroup = await GroupServices.findGroupById(+id);
+    const existingGroup = await GroupServices.findGroupById(+groupId);
 
     if (!existingGroup) {
       res.status(404);
       throw new Error('Group with this id does not exist.');
     }
 
-    const group = await GroupServices.deleteGroup(+id);
+    const assignedUserIds = (
+      await GroupServices.getStudentsFromGroup(+groupId)
+    ).map((student) => student.id);
+
+    await db.$transaction([
+      GroupServices.deleteGroup(+groupId),
+      UserServices.deleteManyUsers(assignedUserIds),
+    ]);
 
     res.json({
-      message: `Group with ${group.id}, number ${group.name} deleted successfully.`,
+      message: `Group with ${existingGroup.id}, number ${existingGroup.name} deleted successfully.`,
     });
   } catch (error) {
     next(error);
+  } finally {
+    await db.$disconnect();
   }
 }
