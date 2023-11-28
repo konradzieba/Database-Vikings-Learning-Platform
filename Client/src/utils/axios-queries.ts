@@ -297,3 +297,16 @@ export const reorderLessonsMutationFn = async (
 	);
 	return data;
 };
+
+export const renameGroupMutationFn = async (
+	groupId: number,
+	newName: string
+) => {
+	const { data } = await axios.patch<TMessageResponse>(
+		`/groups/renameGroup/${groupId}`,
+		{
+			name: newName,
+		}
+	);
+	return data;
+};
