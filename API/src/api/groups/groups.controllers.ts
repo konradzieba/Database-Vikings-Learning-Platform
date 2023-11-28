@@ -130,7 +130,7 @@ export async function renameGroup(
 ) {
   try {
     const { id } = req.params;
-    const { name } = req.body;
+    const { name: newName } = req.body;
 
     const existingGroup = await GroupServices.findGroupById(+id);
 
@@ -140,7 +140,7 @@ export async function renameGroup(
     }
 
     const group = await GroupServices.renameGroup(+id, {
-      name,
+      name: newName,
     });
 
     res.json({

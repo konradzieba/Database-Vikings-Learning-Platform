@@ -1,4 +1,4 @@
-import { useDeleteLessonMutation } from '@/hooks/groups/useDeleteLessonMutation';
+import { useDeleteLessonMutation } from '@/hooks/lessons/useDeleteLessonMutation';
 import { useGetPreDeleteLessonInfoQuery } from '@/hooks/lessons/useGetPreDeleteLessonInfoQuery';
 import { useMeQuery } from '@/hooks/users/useMeQuery';
 import {
