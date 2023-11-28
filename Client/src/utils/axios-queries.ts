@@ -3,6 +3,7 @@ import {
 	TCreateLessonRequest,
 	TLoginRequest,
 	TRegisterManyStudentsRequest,
+	TReorderLessonRequest,
 	TSendAnswerRequest,
 	TUpdateTaskInfoRequest,
 } from '@/types/RequestTypes';
@@ -264,7 +265,7 @@ export const getPreDeleteLessonInfoQueryFn = async (lessonId: number) => {
 		`/lessons/getPreDeleteLessonInfo/${lessonId}`
 	);
 	return data;
-}
+};
 
 export const deleteLessonMutationFn = async (lessonId: number) => {
 	const { data } = await axios.delete<TMessageResponse>(
@@ -279,6 +280,20 @@ export const registerManyStudentsMutationFn = async (
 	const { data } = await axios.post<TMessageResponse | TRegisterManyStudents>(
 		'/auth/registerManyStudents',
 		registerManyStudentsRequest
+	);
+	return data;
+};
+
+export const reorderLessonsMutationFn = async (
+	groupId: number,
+	newLessonsOrder: TReorderLessonRequest
+) => {
+	console.log(newLessonsOrder);
+	const { data } = await axios.patch<TMessageResponse>(
+		`/lessons/reorderLessons/${groupId}`,
+		{
+			newLessonsOrder,
+		}
 	);
 	return data;
 };
