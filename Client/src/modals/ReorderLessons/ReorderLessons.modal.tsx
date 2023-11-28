@@ -14,6 +14,7 @@ import {
 import classes from './ReorderLesson.modal.module.css';
 import cx from 'clsx';
 import { useGetLessonsByGroupId } from '@/hooks/lessons/useGetLessonsByGroupId';
+import { useReorderLessonsMutation } from '@/hooks/lessons/useReorderLessonsMutation';
 
 interface ReorderLessonsModalInnerProps {
 	groupId: number;
@@ -22,7 +23,6 @@ interface ReorderLessonsModalInnerProps {
 interface LessonOrder {
 	lessonId: number;
 	newLessonNumber: number;
-	oldLessonNumber: number;
 }
 
 function ReorderLessonsModal({
@@ -32,26 +32,40 @@ function ReorderLessonsModal({
 }: ContextModalProps<ReorderLessonsModalInnerProps>) {
 	const {
 		data: lessonsData,
-		isPending,
-		isError,
+		isPending: isFetching,
+		isError: isFetchingError,
 	} = useGetLessonsByGroupId(innerProps.groupId);
 
-	const [state, handlers] = useListState(lessonsData?.lessons || []);
+	const state = lessonsData?.lessons || [];
 	const [newOrder, setNewOrder] = useState<number[]>(
 		state.map((lesson) => lesson.id)
 	);
 
+	const lessonOrders: LessonOrder[] = newOrder.map((lessonId, index) => {
+		const item = state.find((lesson) => lesson.id === lessonId);
+		return {
+			lessonId: lessonId,
+			newLessonNumber: index + 1,
+		};
+	});
+
+	const formattedLessonOrders = lessonOrders.map((lessonOrder) => {
+		return {
+			lessonId: lessonOrder.lessonId,
+			newLessonNumber: lessonOrder.newLessonNumber,
+		};
+	});
+
+	const {
+		mutate: reorderLessons,
+		isPending: isMutationLoading,
+		isSuccess: isMutationSuccess,
+		isError: isMutationError,
+	} = useReorderLessonsMutation(innerProps.groupId, formattedLessonOrders);
+
 	const handleReorderLessons = () => {
-		const lessonOrders: LessonOrder[] = newOrder.map((lessonId, index) => {
-			const item = state.find((lesson) => lesson.id === lessonId);
-
-			return {
-				lessonId: lessonId,
-				newLessonNumber: index + 1,
-				oldLessonNumber: item ? item.number : 0,
-			};
-		});
-
+		if (!lessonsData || newOrder.length === 0) return;
+		reorderLessons();
 		console.log('Reorder lessons', lessonOrders);
 	};
 
@@ -112,37 +126,56 @@ function ReorderLessonsModal({
 		);
 	});
 
-	if (isPending) {
+	if (isFetching || isMutationLoading) {
 		return (
 			<Center h={80}>
 				<Loader />
 			</Center>
 		);
 	}
-	if (isError) {
+	if (isFetchingError || isMutationError) {
 		return (
 			<Center h={80}>
-				<Text>Wystąpił błąd podczas pobierania danych</Text>
+				<Text>
+					Wystąpił błąd podczas{' '}
+					{isFetchingError ? 'pobierania danych' : 'zmiany kolejności'}
+				</Text>
 			</Center>
 		);
 	}
 
+	if (isMutationSuccess) {
+		return (
+			<>
+				<Center h={80}>
+					<Text>Zmieniono kolejność lekcji</Text>
+				</Center>
+				<Button fullWidth onClick={() => context.closeModal(id)}>
+					Zamknij
+				</Button>
+			</>
+		);
+	}
 	return (
 		<DragDropContext onDragEnd={onDragEnd}>
 			<Text mb='sm'>Dostosuj kafelki według kolejności wyświetlania:</Text>
 			<Droppable droppableId='dnd-list' direction='vertical'>
 				{(provided) => (
-					<div {...provided.droppableProps} ref={provided.innerRef}>
+					<Box {...provided.droppableProps} ref={provided.innerRef}>
 						{items}
 						{provided.placeholder}
-					</div>
+					</Box>
 				)}
 			</Droppable>
 			<Group justify='center' mt='md'>
-				<Button variant='outline' onClick={handleResetOrder}>
+				<Button variant='outline' onClick={handleResetOrder} miw={150}>
 					Resetuj
 				</Button>
-				<Button onClick={handleReorderLessons} style={{ marginRight: '8px' }}>
+				<Button
+					onClick={handleReorderLessons}
+					miw={150}
+					disabled={newOrder.length === 0}
+				>
 					Zmień kolejność
 				</Button>
 			</Group>
