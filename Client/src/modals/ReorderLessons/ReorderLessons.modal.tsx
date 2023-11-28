@@ -66,7 +66,6 @@ function ReorderLessonsModal({
 	const handleReorderLessons = () => {
 		if (!lessonsData || newOrder.length === 0) return;
 		reorderLessons();
-		console.log('Reorder lessons', lessonOrders);
 	};
 
 	const handleResetOrder = () => {

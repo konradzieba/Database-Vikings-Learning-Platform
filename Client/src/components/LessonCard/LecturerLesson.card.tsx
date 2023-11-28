@@ -43,8 +43,6 @@ const handleOpenReorderLessonModal = (groupId: number) => {
 		modal: 'reorderLessons',
 		title: 'Zmiana kolejność lekcji',
 		size: 'xl',
-		// fullScreen: true,
-		
 		innerProps: {
 			groupId,
 		},

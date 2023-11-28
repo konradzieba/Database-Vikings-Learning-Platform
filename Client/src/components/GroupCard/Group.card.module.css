@@ -1,6 +1,14 @@
 .cardLink {
 	text-decoration: none;
 	color: inherit;
+	&:focus {
+		outline-color: var(--mantine-primary-color);
+	}
+}
+
+.menuWrapper {
+	z-index: 2;
+	align-self: flex-end;
 }
 
 .groupCardWrapper {
@@ -8,7 +16,6 @@
 	height: 250px;
 	background-color: var(--primary-bg-color-lighter);
 	border-radius: var(--mantine-radius-xs);
-	cursor: pointer;
 }
 
 .addGroupCardWrapper {
