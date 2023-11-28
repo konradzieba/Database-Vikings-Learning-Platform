@@ -1,7 +1,7 @@
 import CorrectFrequencyList from '@/components/FrequencyList/CorrectFrequencyList.component';
 import useGetStudentsFromGroup from '@/hooks/groups/useGetStudentsFromGroup';
 import { useGetAbsentStudentsQuery } from '@/hooks/lessons/useGetAbsentStudentsQuery';
-import { Button, Center, Group, Stack, Title } from '@mantine/core';
+import { Center, Stack, Title } from '@mantine/core';
 import { useParams } from 'react-router-dom';
 import { useMemo } from 'react';
 import FullScreenLoader from '@/components/UI/FullScreenLoader';

@@ -3,7 +3,6 @@ import { useState } from 'react';
 import cx from 'clsx';
 import classes from './FrequencyList.component.module.css';
 import { IconCoins } from '@tabler/icons-react';
-import FullScreenLoader from '../UI/FullScreenLoader';
 import { modals } from '@mantine/modals';
 import { useParams } from 'react-router-dom';
 
@@ -31,22 +30,41 @@ function CorrectFrequencyList({
 	const { lessonId } = useParams();
 
 	const studentCredentialsFromQuery = studentsFromGroup
-		.filter(student => absentStudentsList.includes(student.id))
-		.map(student => `${student.firstName} ${student.lastName}`);
+		.filter(student => absentStudentsList?.includes(student.id))
+		.map(student => {
+			return {
+				id: student.id,
+				name: `${student.firstName} ${student.lastName}`,
+			};
+		});
 
-	console.log(studentCredentialsFromQuery);
+	const [selection, setSelection] = useState<number[] | null>(absentStudentsList || []);
 
-	const [selection, setSelection] = useState<number[]>(absentStudentsList || []);
-	
-	const [selectedStudentCredentials, setSelectedStudentCredentials] = useState<string[]>(
-		studentCredentialsFromQuery || []
-	);
+	const [selectedStudentCredentials, setSelectedStudentCredentials] = useState<
+		| {
+				id: number;
+				name: string;
+		  }[]
+	>(studentCredentialsFromQuery || []);
+
 	const toggleRow = (id: number) => {
-		setSelection(current => (current.includes(id) ? current.filter(item => item !== id) : [...(current || []), id]));
+		setSelection(current => (current?.includes(id) ? current.filter(item => item !== id) : [...(current || []), id]));
+	};
+
+	const toggleCredentials = (credentials: { id: number; name: string }) => {
+		const timestamp = Date.now(); // Get the current timestamp
+
+		setSelectedStudentCredentials(current =>
+			current?.some(item => item.id === credentials.id && item.name === credentials.name)
+				? current.map(item =>
+						item.id === credentials.id && item.name === credentials.name ? { ...item, lastChange: timestamp } : item
+				  )
+				: [...(current || []), { ...credentials, lastChange: timestamp }]
+		);
 	};
 
 	const rows = studentsFromGroup.map(item => {
-		const selected = selection.includes(item.id) || false;
+		const selected = selection?.includes(item.id) || false;
 		const hasZeroLives = item.health === 0;
 		return (
 			<Table.Tr key={item.id} className={cx({ [classes.rowSelected]: selected })}>
@@ -75,7 +93,10 @@ function CorrectFrequencyList({
 						checked={selected}
 						onChange={() => {
 							toggleRow(item.id);
-							// toggleCredentials(`${item.firstName} ${item.lastName}`);
+							toggleCredentials({
+								id: item.id,
+								name: `${item.firstName} ${item.lastName}`,
+							});
 						}}
 					/>
 				</Table.Td>
@@ -86,7 +107,7 @@ function CorrectFrequencyList({
 	const handleOpenCorrectFrequencyModal = () => {
 		modals.openContextModal({
 			modal: 'correctFrequency',
-			title: isFrequencyChecked ? 'Popraw obecności' : 'Spraw obecności',
+			title: isFrequencyChecked ? 'Popraw obecności' : 'Sprawdź obecności',
 			size: 'lg',
 			closeOnClickOutside: false,
 			innerProps: {
@@ -95,6 +116,7 @@ function CorrectFrequencyList({
 				newStudentListIds: selection,
 				oldStudentListIds: absentStudentsList,
 				isFrequencyChecked: isFrequencyChecked,
+				selectedStudentCredentials: selectedStudentCredentials,
 			},
 		});
 	};
