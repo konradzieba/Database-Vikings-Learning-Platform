@@ -28,6 +28,7 @@ import ModifyAddedTaskModal from './modals/ModifyAddedTask.modal';
 import PreviewCreatedLessonInfoModal from './modals/PreviewCreatedLessonInfo.modal';
 import DeleteLessonModal from './modals/DeleteLesson.modal';
 import ReorderLessonsModal from './modals/ReorderLessons/ReorderLessons.modal';
+import RenameGroupModal from './modals/RenameGroup.modal';
 
 export default function App() {
 	dayjs.locale('pl');
@@ -57,6 +58,8 @@ export default function App() {
 							previewCreatedLessonInfo: PreviewCreatedLessonInfoModal,
 							deleteLesson: DeleteLessonModal,
 							reorderLessons: ReorderLessonsModal,
+							renameGroup: RenameGroupModal,
+							// deleteGroup: DeleteGroupModal,
 						}}
 						labels={{ confirm: 'Prześlij', cancel: 'Anuluj' }}
 						modalProps={{ overlayProps: { blur: 2 }, yOffset: rem(100) }}

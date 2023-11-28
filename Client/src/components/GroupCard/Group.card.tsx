@@ -19,6 +19,18 @@ import {
 import { Link } from 'react-router-dom';
 import classes from './Group.card.module.css';
 import clsx from 'clsx';
+import { openContextModal } from '@mantine/modals';
+
+const lessonsMultiple = (lessonsNumber: number) => {
+	if (lessonsNumber === 1) {
+		return 'lekcja';
+	}
+	if (lessonsNumber < 5 && lessonsNumber > 1) {
+		return 'lekcje';
+	} else {
+		return 'lekcji';
+	}
+};
 
 interface GroupCardProps {
 	groupId: number;
@@ -41,16 +53,18 @@ function GroupCard({
 		}
 	};
 
-	const lessonsMultiple = (lessonsNumber: number) => {
-		if (lessonsNumber === 1) {
-			return 'lekcja';
-		}
-		if (lessonsNumber < 5 && lessonsNumber > 1) {
-			return 'lekcje';
-		} else {
-			return 'lekcji';
-		}
+	const handleOpenRenameGroupModal = () => {
+		openContextModal({
+			modal: 'renameGroup',
+			title: 'Zmiana nazwy grupy',
+			size: 'lg',
+			innerProps: {
+				groupName,
+				groupId,
+			},
+		});
 	};
+
 	return (
 		<Flex
 			direction='column'
@@ -65,9 +79,8 @@ function GroupCard({
 				</Menu.Target>
 				<Menu.Dropdown>
 					<Menu.Item
-						component={Link}
-						to={`../check-frequency`}
 						leftSection={<IconPencil size='1.25rem' />}
+						onClick={handleOpenRenameGroupModal}
 					>
 						Zmień nazwę
 					</Menu.Item>
