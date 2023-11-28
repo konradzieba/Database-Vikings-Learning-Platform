@@ -4,6 +4,8 @@ import cx from 'clsx';
 import classes from './FrequencyList.component.module.css';
 import { IconCoins } from '@tabler/icons-react';
 import FullScreenLoader from '../UI/FullScreenLoader';
+import { modals } from '@mantine/modals';
+import { useParams } from 'react-router-dom';
 
 interface CorrectFrequencyListProps {
 	studentsFromGroup: {
@@ -26,11 +28,19 @@ function CorrectFrequencyList({
 	absentStudentsList,
 	isFrequencyChecked,
 }: CorrectFrequencyListProps) {
-	if (!studentsFromGroup) {
-		return <FullScreenLoader />;
-	}
+	const { lessonId } = useParams();
+
+	const studentCredentialsFromQuery = studentsFromGroup
+		.filter(student => absentStudentsList.includes(student.id))
+		.map(student => `${student.firstName} ${student.lastName}`);
+
+	console.log(studentCredentialsFromQuery);
 
 	const [selection, setSelection] = useState<number[]>(absentStudentsList || []);
+	
+	const [selectedStudentCredentials, setSelectedStudentCredentials] = useState<string[]>(
+		studentCredentialsFromQuery || []
+	);
 	const toggleRow = (id: number) => {
 		setSelection(current => (current.includes(id) ? current.filter(item => item !== id) : [...(current || []), id]));
 	};
@@ -73,6 +83,22 @@ function CorrectFrequencyList({
 		);
 	});
 
+	const handleOpenCorrectFrequencyModal = () => {
+		modals.openContextModal({
+			modal: 'correctFrequency',
+			title: isFrequencyChecked ? 'Popraw obecności' : 'Spraw obecności',
+			size: 'lg',
+			closeOnClickOutside: false,
+			innerProps: {
+				modalBody: '',
+				lessonId: +lessonId!,
+				newStudentListIds: selection,
+				oldStudentListIds: absentStudentsList,
+				isFrequencyChecked: isFrequencyChecked,
+			},
+		});
+	};
+
 	return (
 		<Stack gap='xl'>
 			<Table verticalSpacing='sm'>
@@ -87,7 +113,7 @@ function CorrectFrequencyList({
 				<Table.Tbody>{rows}</Table.Tbody>
 			</Table>
 
-			<Button mx='auto' miw={150} onClick={() => console.log(selection)}>
+			<Button mx='auto' miw={150} onClick={handleOpenCorrectFrequencyModal}>
 				{isFrequencyChecked ? 'Skoryguj' : 'Sprawdź'}
 			</Button>
 		</Stack>

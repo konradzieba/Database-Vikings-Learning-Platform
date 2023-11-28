@@ -30,12 +30,15 @@ function CheckFrequencyPage() {
 							<Title>Obecność</Title>
 							<Title order={2}>Lekcja&nbsp;{AbsentStudents?.number}</Title>
 						</Stack>
-
-						<CorrectFrequencyList
-							isFrequencyChecked={AbsentStudents?.isFrequencyChecked!}
-							studentsFromGroup={StudentsFromGroup?.students!}
-							absentStudentsList={AbsentStudents?.absentStudents!}
-						/>
+						{StudentsFromGroup?.students ? (
+							<CorrectFrequencyList
+								isFrequencyChecked={AbsentStudents?.isFrequencyChecked!}
+								studentsFromGroup={StudentsFromGroup?.students!}
+								absentStudentsList={AbsentStudents?.absentStudents!}
+							/>
+						) : (
+							<FullScreenLoader />
+						)}
 					</Stack>
 				</Center>
 			)}
