@@ -7,6 +7,7 @@ import * as GroupServices from '../groups/groups.services';
 import * as AnswerServices from '../answers/answers.services';
 import * as TaskServices from '../tasks/tasks.services';
 import {
+  ParamsWithGroupId,
   ParamsWithId,
   ParamsWithLessonId,
 } from '../../interfaces/ParamsWithId';
@@ -288,6 +289,46 @@ export async function getPreDeleteLessonInfo(
     const lessonInfo = await LessonServices.getPreDeleteLessonInfo(+lessonId);
 
     res.json({ message: 'success', lessonInfo });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function reorderLessons(
+  req: Request<
+    ParamsWithGroupId,
+    MessageResponse,
+    LessonSchemas.ReorderLessonInput
+  >,
+  res: Response<MessageResponse>,
+  next: NextFunction
+) {
+  try {
+    const { groupId } = req.params;
+    const { newLessonsOrder } = req.body;
+
+    if (newLessonsOrder.length === 0) {
+      res.status(400);
+      throw new Error('New lessons order cannot be empty.');
+    }
+
+    const existingGroup = await GroupServices.findGroupById(+groupId);
+
+    if (!existingGroup) {
+      res.status(404);
+      throw new Error('Group with this id does not exist.');
+    }
+
+    const formattedLessonsOrder = newLessonsOrder.map((lesson) => ({
+      id: lesson.lessonId,
+      number: lesson.newLessonNumber,
+    }));
+
+    await LessonServices.updateLessonsOrder(formattedLessonsOrder);
+
+    res.json({
+      message: `Lessons for groupId ${groupId} reordered successfully.`,
+    });
   } catch (error) {
     next(error);
   }
