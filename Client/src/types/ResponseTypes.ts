@@ -264,6 +264,7 @@ const getAbsentStudentsSchema = z.object({
 	id: z.number().int(),
 	number: z.number().int(),
 	absentStudents: z.array(z.number().int()),
+	isFrequencyChecked: z.boolean(),
 });
 
 export type TMessageResponse = z.infer<typeof MessageResponseSchema>;

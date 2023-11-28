@@ -10,6 +10,7 @@ export function getAbsentStudents(id: Lesson['id']) {
       id: true,
       number: true,
       absentStudents: true,
+      isFrequencyChecked: true
     },
   });
 }

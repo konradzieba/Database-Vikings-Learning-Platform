@@ -84,6 +84,7 @@ export async function getAbsentStudents(
       id: absentStudents?.id,
       number: absentStudents?.number,
       absentStudents: absentStudents?.absentStudents,
+      isFrequencyChecked: absentStudents?.isFrequencyChecked,
     });
   } catch (error) {
     next(error);

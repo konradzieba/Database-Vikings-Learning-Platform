@@ -8,8 +8,8 @@ import FullScreenLoader from '@/components/UI/FullScreenLoader';
 
 function CheckFrequencyPage() {
 	const { id: groupId, lessonId } = useParams();
-	const { data: StudentsFromGroup } = useGetStudentsFromGroup(+groupId!);
-	const { data: AbsentStudents } = useGetAbsentStudentsQuery(+lessonId!);
+	const { data: StudentsFromGroup, isLoading: isStudentsFromGroupDataLoading } = useGetStudentsFromGroup(+groupId!);
+	const { data: AbsentStudents, isLoading: isAbsentStudentsDataLoading } = useGetAbsentStudentsQuery(+lessonId!);
 
 	useMemo(() => {
 		if (StudentsFromGroup?.students) {
@@ -19,17 +19,9 @@ function CheckFrequencyPage() {
 		}
 	}, [StudentsFromGroup]);
 
-	const handleCheckFrequency = () => {
-		console.log('Sprawdzenie obecności bez generowania pdf');
-	};
-
-	const handleCheckFrequencyAndGeneratePDF = () => {
-		console.log('Sprawdzenie obecności i wygenerowanie PDF');
-	};
-
 	return (
 		<>
-			{!AbsentStudents ? (
+			{isAbsentStudentsDataLoading && isStudentsFromGroupDataLoading ? (
 				<FullScreenLoader />
 			) : (
 				<Center>
@@ -40,16 +32,10 @@ function CheckFrequencyPage() {
 						</Stack>
 
 						<CorrectFrequencyList
+							isFrequencyChecked={AbsentStudents?.isFrequencyChecked!}
 							studentsFromGroup={StudentsFromGroup?.students!}
 							absentStudentsList={AbsentStudents?.absentStudents!}
 						/>
-
-						<Group justify='center'>
-							<Button variant='outline' onClick={handleCheckFrequencyAndGeneratePDF}>
-								Potwierdź zmiany i wygeneruj PDF
-							</Button>
-							<Button onClick={handleCheckFrequency}>Potwierdź zmiany</Button>
-						</Group>
 					</Stack>
 				</Center>
 			)}

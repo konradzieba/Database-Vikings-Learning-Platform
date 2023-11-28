@@ -1,4 +1,4 @@
-import { Checkbox, Group, Table, Text, ThemeIcon, rem } from '@mantine/core';
+import { Button, Checkbox, Group, Stack, Table, Text, ThemeIcon, rem } from '@mantine/core';
 import { useState } from 'react';
 import cx from 'clsx';
 import classes from './FrequencyList.component.module.css';
@@ -18,9 +18,14 @@ interface CorrectFrequencyListProps {
 		userId: number;
 	}[];
 	absentStudentsList: number[];
+	isFrequencyChecked: boolean;
 }
 
-function CorrectFrequencyList({ studentsFromGroup, absentStudentsList }: CorrectFrequencyListProps) {
+function CorrectFrequencyList({
+	studentsFromGroup,
+	absentStudentsList,
+	isFrequencyChecked,
+}: CorrectFrequencyListProps) {
 	if (!studentsFromGroup) {
 		return <FullScreenLoader />;
 	}
@@ -69,18 +74,23 @@ function CorrectFrequencyList({ studentsFromGroup, absentStudentsList }: Correct
 	});
 
 	return (
-		<Table verticalSpacing='sm'>
-			<Table.Thead>
-				<Table.Tr>
-					<Table.Th>Imię i nazwisko</Table.Th>
-					<Table.Th>Wynik</Table.Th>
-					<Table.Th>Życia</Table.Th>
-					<Table.Th>Nieobecność</Table.Th>
-				</Table.Tr>
-			</Table.Thead>
+		<Stack gap='xl'>
+			<Table verticalSpacing='sm'>
+				<Table.Thead>
+					<Table.Tr>
+						<Table.Th>Imię i nazwisko</Table.Th>
+						<Table.Th>Wynik</Table.Th>
+						<Table.Th>Życia</Table.Th>
+						<Table.Th>Nieobecność</Table.Th>
+					</Table.Tr>
+				</Table.Thead>
+				<Table.Tbody>{rows}</Table.Tbody>
+			</Table>
 
-			<Table.Tbody>{rows}</Table.Tbody>
-		</Table>
+			<Button mx='auto' miw={150} onClick={() => console.log(selection)}>
+				{isFrequencyChecked ? 'Skoryguj' : 'Sprawdź'}
+			</Button>
+		</Stack>
 	);
 }
 export default CorrectFrequencyList;
