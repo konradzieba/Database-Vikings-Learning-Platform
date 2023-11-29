@@ -16,7 +16,7 @@ function DashboardPage() {
 		if (groupsData?.groups) {
 			return groupsData.groups.sort((a, b) => a.groupId - b.groupId);
 		}
-	}, [groupsData]);
+	}, [groupsData?.groups]);
 
 	if (isPending) {
 		return (

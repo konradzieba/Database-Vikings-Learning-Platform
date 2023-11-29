@@ -149,6 +149,12 @@ function LecturerNavbar({ lecturerInfo }: LecturerNavbarProps) {
 		lecturerData.lecturerId
 	);
 
+	useMemo(() => {
+		if (groupsData?.groups) {
+			groupsData.groups.sort((a, b) => a.groupId - b.groupId);
+		}
+	}, [groupsData?.groups]);
+
 	const isGroupPath = useMemo(
 		() => pathname.includes('/dashboard/group/'),
 		[pathname]
