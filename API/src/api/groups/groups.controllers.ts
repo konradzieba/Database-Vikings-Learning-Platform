@@ -53,6 +53,38 @@ export async function getStudentsFromGroup(
   }
 }
 
+export async function getPreDeleteGroupInfo(
+  req: Request<ParamsWithId>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id: groupId } = req.params;
+
+    const existingGroup = await GroupServices.findGroupById(+groupId);
+
+    if (!existingGroup) {
+      res.status(404);
+      throw new Error('Group with this id does not exist.');
+    }
+
+    const lessonsAmount = (await LessonsServices.getLessonsByGroupId(+groupId))
+      .length;
+
+    const assignedStudentsAmount = (
+      await GroupServices.getStudentsFromGroup(+groupId)
+    ).length;
+
+    res.json({
+      message: 'success',
+      lessonsAmount,
+      assignedStudentsAmount,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function createGroup(
   req: Request<{}, MessageResponse, GroupSchemas.GroupInput>,
   res: Response<MessageResponse>,

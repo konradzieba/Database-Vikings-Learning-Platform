@@ -14,6 +14,7 @@ import {
 	TGetLessonInfoByGroupAndLessonId,
 	TGetLessonTaskById,
 	TGetLessonsByGroupId,
+	TGetPreDeleteGroupInfo,
 	TGetPreDeleteLessonInfo,
 	TGetPreviousLessonsImages,
 	TGetScoreBoard,
@@ -286,6 +287,13 @@ export const renameGroupMutationFn = async (
 		{
 			name: newName,
 		}
+	);
+	return data;
+};
+
+export const getPreDeleteGroupInfoQueryFn = async (groupId: number) => {
+	const { data } = await axios.get<TGetPreDeleteGroupInfo>(
+		`/groups/getPreDeleteGroupInfo/${groupId}`
 	);
 	return data;
 };

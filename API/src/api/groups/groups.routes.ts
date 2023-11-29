@@ -25,6 +25,15 @@ router.get(
   GroupsControllers.getStudentsFromGroup
 );
 
+router.get(
+  '/getPreDeleteGroupInfo/:id',
+  validateRequestAndCheckRole(
+    { params: paramsWithIdSchema },
+    EnumRole.LECTURER
+  ),
+  GroupsControllers.getPreDeleteGroupInfo
+);
+
 router.patch(
   '/changeStudentGroup/:id',
   validateRequestAndCheckRole(

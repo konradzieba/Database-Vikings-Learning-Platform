@@ -246,6 +246,15 @@ const getPreviousLessonsImagesSchema = z.object({
 	),
 });
 
+const getPreDeleteGroupInfoSchema = z.object({
+	message: z.string(),
+	groupInfo: z.object({
+		groupName: z.string(),
+		lessonsAmount: z.number().int(),
+		studentsAmount: z.number().int(),
+	}),
+});
+
 const getPreDeleteLessonInfoSchema = z.object({
 	message: z.string(),
 	lessonInfo: z.object({
@@ -290,6 +299,9 @@ export type TGetTaskInfoById = z.infer<typeof getTaskInfoByIdSchema>;
 export type TGetScoreBoard = z.infer<typeof getScoreBoardSchema>;
 export type TGetPreviousLessonsImages = z.infer<
 	typeof getPreviousLessonsImagesSchema
+>;
+export type TGetPreDeleteGroupInfo = z.infer<
+	typeof getPreDeleteGroupInfoSchema
 >;
 export type TGetPreDeleteLessonInfo = z.infer<
 	typeof getPreDeleteLessonInfoSchema
