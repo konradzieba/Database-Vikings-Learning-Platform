@@ -1,6 +1,7 @@
-import { Badge, Box, Button, Divider, Group, Stack, Text } from '@mantine/core';
+import { useCorrectLessonFrequencyMutation } from '@/hooks/lessons/useCorrectLessonFrequencyMutation';
+import { Badge, Button, Center, Divider, Group, Loader, Stack, Text, rem } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
-import { IconArrowNarrowRight } from '@tabler/icons-react';
+import { IconArrowNarrowRight, IconCircleCheck, IconCircleX } from '@tabler/icons-react';
 
 interface CorrectFrequencyListProps {
 	modalBody: string;
@@ -15,7 +16,25 @@ interface CorrectFrequencyListProps {
 }
 
 function CorrectFrequencyModal({ innerProps, context, id }: ContextModalProps<CorrectFrequencyListProps>) {
+	const {
+		mutate: correctLessonFrequency,
+		isPending,
+		isSuccess,
+		isError,
+	} = useCorrectLessonFrequencyMutation(innerProps.lessonId, innerProps.newStudentListIds);
+
+	console.log('isPending?', isPending);
+	console.log('isSuccess?', isSuccess);
+	console.log('isError?', isError);
+
+	function areArraysEqual(arr1: number[], arr2: number[]): boolean {
+		return arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
+	}
+	
+	const areEqual = areArraysEqual(innerProps.oldStudentListIds, innerProps.newStudentListIds);
+
 	const handleCorrectFrequency = () => {
+		correctLessonFrequency();
 		context.closeModal(id);
 		modals.closeAll();
 	};
@@ -24,10 +43,39 @@ function CorrectFrequencyModal({ innerProps, context, id }: ContextModalProps<Co
 		context.closeModal(id);
 		modals.closeAll();
 	};
-	function areArraysEqual(arr1: number[], arr2: number[]): boolean {
-		return arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
+
+	if (isPending) {
+		return (
+			<Center mih={rem(200)}>
+				<Loader />
+			</Center>
+		);
 	}
-	const areEqual = areArraysEqual(innerProps.oldStudentListIds, innerProps.newStudentListIds);
+
+	if (isSuccess) {
+		return (
+			<Stack mx='md' align='center'>
+				<IconCircleCheck size='3rem' color='var(--good-state-color)' />
+				<Text>Lista obecności została zaktualizowana pomyślnie.</Text>
+				<Button miw={150} mx='auto' onClick={handleCloseModal}>
+					Rozumiem
+				</Button>
+			</Stack>
+		);
+	}
+
+	if (isError) {
+		return (
+			<Stack mx='md' align='center'>
+				<IconCircleX size='3rem' color='var(--bad-state-color)' />
+				<Text>Wystąpił problem podczas aktualizowania listy obecności.</Text>
+				<Button miw={150} mx='auto' onClick={handleCloseModal}>
+					Rozumiem
+				</Button>
+			</Stack>
+		);
+	}
+
 	return (
 		<>
 			{innerProps.isFrequencyChecked ? (
@@ -38,7 +86,7 @@ function CorrectFrequencyModal({ innerProps, context, id }: ContextModalProps<Co
 						Również działa to drugą stroną jeśli zmienimy status z obecnego na nieobecnego.
 					</Text>
 					<Divider />
-					<Text c={!areEqual ? '' : 'dimmed'} fs={!areEqual ? '' : 'italic'}>
+					<Text c={!areEqual ? '' : 'dimmed'} fs={!areEqual ? '' : 'italic'} ta={!areEqual ? 'left' : 'center'}>
 						{!areEqual ? 'Zmienione statusy' : 'Nie wprowadzono zmian'}
 					</Text>
 					{innerProps.selectedStudentCredentials.map(student => {
@@ -79,7 +127,8 @@ function CorrectFrequencyModal({ innerProps, context, id }: ContextModalProps<Co
 					<Divider />
 					<Text
 						c={innerProps.newStudentListIds.length === 0 ? 'dimmed' : ''}
-						fs={innerProps.newStudentListIds.length === 0 ? 'italic' : ''}>
+						fs={innerProps.newStudentListIds.length === 0 ? 'italic' : ''}
+						ta={innerProps.newStudentListIds.length === 0 ? 'center' : 'left'}>
 						{innerProps.newStudentListIds.length > 0 ? 'Nieobecni studenci' : 'Brak nieobecnych studentów'}
 					</Text>
 					<Group>

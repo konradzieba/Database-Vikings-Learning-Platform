@@ -214,6 +214,80 @@ export async function getLessonInfoByGroupAndLessonId(
   }
 }
 
+export async function correctLessonFrequency(
+  req: Request<
+    ParamsWithId,
+    MessageResponse,
+    LessonSchemas.CorrectLessonFrequencyInput
+  >,
+  res: Response<MessageResponse>,
+  next: NextFunction
+) {
+  try {
+    const { id } = req.params;
+    const { newStudentFrequencyList } = req.body;
+
+    const existingLesson = await LessonServices.findLessonById(+id);
+
+    if (!existingLesson) {
+      res.status(404);
+      throw new Error('Lesson with given ID does not exist.');
+    }
+
+    const studentsToIncrementLife = existingLesson.absentStudents
+      .map((studentId) => {
+        if (!newStudentFrequencyList.includes(studentId)) {
+          return studentId;
+        } else {
+          return null;
+        }
+      })
+      .filter((studentId) => studentId !== null);
+
+    const studentsToDecrementLife = newStudentFrequencyList
+      .map((studentId) => {
+        if (!existingLesson.absentStudents.includes(studentId)) {
+          return studentId;
+        } else {
+          return null;
+        }
+      })
+      .filter((studentId) => studentId !== null);
+
+    const incrementStudentHealthPromises = studentsToIncrementLife.map(
+      async (studentId) => {
+        if (studentId) {
+          await UserServices.incrementStudentHealth(studentId);
+        }
+      }
+    );
+
+    const decrementStudentHealthPromises = studentsToDecrementLife.map(
+      async (studentId) => {
+        if (studentId) {
+          await UserServices.decrementStudentHealth(studentId);
+        }
+      }
+    );
+
+    await Promise.all([
+      ...incrementStudentHealthPromises,
+      ...decrementStudentHealthPromises,
+    ]);
+
+    await LessonServices.updateLessonAbsentStudentList(
+      existingLesson.id,
+      newStudentFrequencyList
+    );
+
+    res.json({
+      message: `Frequency for lesson ${existingLesson.number} with id: ${existingLesson.id} was updated successfully.`,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function createLesson(
   req: Request<{}, MessageResponse, LessonSchemas.LessonInput>,
   res: Response<MessageResponse>,

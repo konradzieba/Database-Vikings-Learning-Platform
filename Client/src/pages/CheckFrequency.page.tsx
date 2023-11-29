@@ -21,7 +21,7 @@ function CheckFrequencyPage() {
 
 	return (
 		<>
-			{isAbsentStudentsDataLoading && isStudentsFromGroupDataLoading ? (
+			{isAbsentStudentsDataLoading || isStudentsFromGroupDataLoading ? (
 				<FullScreenLoader />
 			) : (
 				<Center>

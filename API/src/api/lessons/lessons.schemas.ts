@@ -28,6 +28,13 @@ export const reorderLessonSchema = z.object({
   ),
 });
 
+export const correctLessonFrequencySchema = z.object({
+  newStudentFrequencyList: z.array(z.number().int()),
+});
+
 export type LessonInput = z.infer<typeof createLessonSchema>;
 export type UpdateLessonInput = z.infer<typeof updateLessonSchema>;
 export type ReorderLessonInput = z.infer<typeof reorderLessonSchema>;
+export type CorrectLessonFrequencyInput = z.infer<
+  typeof correctLessonFrequencySchema
+>;

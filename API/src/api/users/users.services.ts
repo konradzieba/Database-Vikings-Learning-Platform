@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt';
 import { db } from '../../db';
-import type { User, Prisma, Student, Lecturer } from '@prisma/client';
+import type { User, Prisma, Student, Lecturer, Lesson } from '@prisma/client';
 import { UpdateStudentInput } from './users.schemas';
 import { generatePasswordByCredentials } from '../../utils/generatePassword';
 import dayjs from 'dayjs';
@@ -31,6 +31,28 @@ export async function decrementStudentHealth(id: Student['id']) {
       data: {
         health: {
           decrement: 1,
+        },
+      },
+    });
+  } else {
+    return Promise.resolve({});
+  }
+}
+
+export async function incrementStudentHealth(id: Student['id']) {
+  const currentHealth = await db.student.findUnique({
+    where: { id },
+    select: { health: true },
+  });
+
+  if (currentHealth?.health && currentHealth.health < 3) {
+    return db.student.update({
+      where: {
+        id,
+      },
+      data: {
+        health: {
+          increment: 1,
         },
       },
     });

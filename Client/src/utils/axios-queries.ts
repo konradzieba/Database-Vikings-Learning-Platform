@@ -222,15 +222,16 @@ export const reorderLessonsMutationFn = async (groupId: number, newLessonsOrder:
 	return data;
 };
 
-export const renameGroupMutationFn = async (
-	groupId: number,
-	newName: string
-) => {
-	const { data } = await axios.patch<TMessageResponse>(
-		`/groups/renameGroup/${groupId}`,
-		{
-			name: newName,
-		}
-	);
+export const renameGroupMutationFn = async (groupId: number, newName: string) => {
+	const { data } = await axios.patch<TMessageResponse>(`/groups/renameGroup/${groupId}`, {
+		name: newName,
+	});
+	return data;
+};
+
+export const correctLessonFrequencyListMutationFn = async (lessonId: number, newAbsentStudentList: number[]) => {
+	const { data } = await axios.patch<TMessageResponse>(`/lessons/correctLessonFrequency/${lessonId}`, {
+		newStudentFrequencyList: newAbsentStudentList,
+	});
 	return data;
 };

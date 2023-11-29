@@ -10,7 +10,7 @@ export function getAbsentStudents(id: Lesson['id']) {
       id: true,
       number: true,
       absentStudents: true,
-      isFrequencyChecked: true
+      isFrequencyChecked: true,
     },
   });
 }
@@ -197,6 +197,21 @@ export async function getLessonInfoByGroupAndLessonId(
     lessonNumber,
     tasks: taskList,
   };
+}
+
+export function updateLessonAbsentStudentList(
+  id: Lesson['id'],
+  absentStudents: Lesson['absentStudents']
+) {
+  return db.lesson.update({
+    where: {
+      id,
+    },
+    data: {
+      absentStudents: absentStudents,
+      isFrequencyChecked: true,
+    },
+  });
 }
 
 async function findStudentsWithoutAnswer(groupId: number, taskId: number) {

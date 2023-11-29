@@ -85,6 +85,18 @@ router.patch(
 );
 
 router.patch(
+  '/correctLessonFrequency/:id',
+  validateRequestAndCheckRole(
+    {
+      params: paramsWithIdSchema,
+      body: LessonSchemas.correctLessonFrequencySchema,
+    },
+    EnumRole.LECTURER
+  ),
+  LessonsControllers.correctLessonFrequency
+);
+
+router.patch(
   '/updateLesson/:id',
   validateRequestAndCheckRole(
     {
