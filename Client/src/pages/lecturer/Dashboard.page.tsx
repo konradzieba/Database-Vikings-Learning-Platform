@@ -3,11 +3,20 @@ import GroupCard from '@/components/GroupCard/Group.card';
 import useGetGroupsByLecturerId from '@/hooks/users/useGetGroupsByLecturerId';
 import { useLecturerStore } from '@/utils/stores/useLecturerStore';
 import { Center, Flex, Loader } from '@mantine/core';
+import { useMemo } from 'react';
 
 function DashboardPage() {
 	const { lecturerData } = useLecturerStore();
 
-	const { data: groupsData, isPending } = useGetGroupsByLecturerId(lecturerData.lecturerId);
+	const { data: groupsData, isPending } = useGetGroupsByLecturerId(
+		lecturerData.lecturerId
+	);
+
+	const sortedGroups = useMemo(() => {
+		if (groupsData?.groups) {
+			return groupsData.groups.sort((a, b) => a.groupId - b.groupId);
+		}
+	}, [groupsData]);
 
 	if (isPending) {
 		return (
@@ -21,7 +30,7 @@ function DashboardPage() {
 		<>
 			<Center>
 				<Flex gap='sm' wrap='wrap'>
-					{groupsData?.groups?.map(group => (
+					{sortedGroups?.map((group) => (
 						<GroupCard
 							key={group.groupId}
 							groupId={group.groupId}
