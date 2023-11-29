@@ -4,7 +4,9 @@ import {
 	TLoginRequest,
 	TRegisterManyStudentsRequest,
 	TReorderLessonRequest,
+	TReplyAnswerRequest,
 	TSendAnswerRequest,
+	TUpdateStudentRequest,
 	TUpdateTaskInfoRequest,
 } from '@/types/RequestTypes';
 import {
@@ -160,13 +162,7 @@ export const deleteUserMutationFn = async (userId: number) => {
 
 export const updateStudentMutationFn = async (
 	studentId: number,
-	studentInfo: {
-		firstName: string;
-		lastName: string;
-		indexNumber: number;
-		score: number;
-		health: number;
-	}
+	studentInfo: TUpdateStudentRequest
 ) => {
 	const { data } = await axios.patch<TMessageResponse>(
 		`/users/updateStudent/${studentId}`,
@@ -207,16 +203,9 @@ export const getStudentTasksQueryFn = async (groupId: number) => {
 	return data;
 };
 
-export type TReply = {
-	replyStatus: AnswerReplyStatus;
-	replyDesc: string;
-	replyDate: Date;
-	grantedScore: number;
-};
-
 export const replyAnswerMutationFn = async (
 	answerId: number,
-	reply: TReply
+	reply: TReplyAnswerRequest
 ) => {
 	const { data } = await axios.patch<TMessageResponse>(
 		`/answers/answerReply/${answerId}`,
@@ -242,16 +231,6 @@ export const getPreviousLessonsImagesQueryFn = async (groupId: number) => {
 	);
 	return data;
 };
-
-// export const sendAnswerMutationFn = async (
-// 	sendAnswerRequest: TSendAnswerRequest
-// ) => {
-// 	const { data } = await axios.post<TMessageResponse>(
-// 		'/answers/createAnswer',
-// 		sendAnswerRequest
-// 	);
-// 	return data;
-// };
 
 export const deleteTaskMutationFn = async (taskId: number) => {
 	const { data } = await axios.delete<TMessageResponse>(
@@ -307,6 +286,13 @@ export const renameGroupMutationFn = async (
 		{
 			name: newName,
 		}
+	);
+	return data;
+};
+
+export const deleteGroupMutationFn = async (groupId: number) => {
+	const { data } = await axios.delete<TMessageResponse>(
+		`/groups/deleteGroup/${groupId}`
 	);
 	return data;
 };
