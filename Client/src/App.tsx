@@ -12,23 +12,8 @@ import { Router } from './Router';
 import queryClient from './utils/query-client';
 import dayjs from 'dayjs';
 import { DatesProvider } from '@mantine/dates';
-import SessionExpiredModal from './modals/SessionExpire.modal';
-import AddTaskModal from './modals/AddTask.modal';
-import StudentGroupChangeModal from './modals/StudentGroupChange.modal';
-import EditStudentInfoModal from './modals/EditStudentInfo.modal';
-import DeleteStudentModal from './modals/DeleteStudent.modal';
-import PreviewStudentAnswerModal from './modals/PreviewStudentAnswer.modal';
-import ChangeDefaultPasswordModal from './modals/ChangeDefaultPassword.modal';
-import CreateGroupModal from './modals/CreateGroup.modal';
-import SendTaskAnswerModal from './modals/SendTaskAnswer.modal';
-import RestoreDefaultPasswordModal from './modals/RestoreDefaultPassword.modal';
-import NotAnsweredListModal from './modals/NotAnsweredList.modal';
-import TaskDetailsModal from './modals/TaskDetails.modal';
-import ModifyAddedTaskModal from './modals/ModifyAddedTask.modal';
-import PreviewCreatedLessonInfoModal from './modals/PreviewCreatedLessonInfo.modal';
-import DeleteLessonModal from './modals/DeleteLesson.modal';
-import ReorderLessonsModal from './modals/ReorderLessons/ReorderLessons.modal';
-import CorrectFrequencyModal from './modals/CorrectFrequency.modal';
+import modals from './utils/modals';
+
 
 export default function App() {
 	dayjs.locale('pl');
@@ -37,25 +22,7 @@ export default function App() {
 			<DatesProvider settings={{ locale: 'pl' }}>
 				<MantineProvider theme={{ ...theme }} cssVariablesResolver={resolver} defaultColorScheme='dark'>
 					<ModalsProvider
-						modals={{
-							sessionExpired: SessionExpiredModal,
-							addTask: AddTaskModal,
-							changeStudentGroup: StudentGroupChangeModal,
-							restoreDefaultPassword: RestoreDefaultPasswordModal,
-							editStudentInfo: EditStudentInfoModal,
-							deleteStudent: DeleteStudentModal,
-							previewStudentAnswer: PreviewStudentAnswerModal,
-							changeDefaultPassword: ChangeDefaultPasswordModal,
-							createGroup: CreateGroupModal,
-							sendTaskAnswer: SendTaskAnswerModal,
-							notAnsweredList: NotAnsweredListModal,
-							taskDetails: TaskDetailsModal,
-							modifyAddedTask: ModifyAddedTaskModal,
-							previewCreatedLessonInfo: PreviewCreatedLessonInfoModal,
-							deleteLesson: DeleteLessonModal,
-							reorderLessons: ReorderLessonsModal,
-							correctFrequency: CorrectFrequencyModal,
-						}}
+						modals={modals}
 						labels={{ confirm: 'Prześlij', cancel: 'Anuluj' }}
 						modalProps={{ overlayProps: { blur: 2 }, yOffset: rem(100) }}>
 						<Router />

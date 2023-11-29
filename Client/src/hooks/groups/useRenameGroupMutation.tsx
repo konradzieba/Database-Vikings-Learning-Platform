@@ -1,5 +1,5 @@
-import { renameGroupMutationFn } from "@/utils/axios-queries";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { renameGroupMutationFn } from '@/utils/axios-queries';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export function useRenameGroupMutation(groupId: number, newGroupName: string) {
 	const queryClient = useQueryClient();
@@ -9,6 +9,9 @@ export function useRenameGroupMutation(groupId: number, newGroupName: string) {
 			queryClient.invalidateQueries({
 				queryKey: ['groups'],
 			});
+		},
+		onError: (error) => {
+			console.error(error);
 		},
 	});
 

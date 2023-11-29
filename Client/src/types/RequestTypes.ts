@@ -26,6 +26,13 @@ const UpdateTaskInfoRequestSchema = z.object({
 	}),
 });
 
+const TReplyAnswerRequestSchema = z.object({
+	studentId: z.number().int(),
+	taskId: z.number().int(),
+	replyStatus: z.string(),
+	replyDesc: z.string(),
+});
+
 const TCreateLessonRequestSchema = z.object({
 	number: z.number().int(),
 	image: z.string(),
@@ -62,11 +69,21 @@ const TReorderLessonRequestSchema = z.array(
 	})
 );
 
+const TUpdateStudentRequestSchema = z.object({
+	firstName: z.string().min(1),
+	lastName: z.string().min(1),
+	indexNumber: z.number().int(),
+	score: z.number().int(),
+	health: z.number().int(),
+});
 
 export type TUserRequest = z.infer<typeof UserRequestSchema>;
 export type TLoginRequest = z.infer<typeof TLoginRequest>;
 export type TSendAnswerRequest = z.infer<typeof SendAnswerRequestSchema>;
+
 export type TUpdateTaskInfoRequest = z.infer<typeof UpdateTaskInfoRequestSchema>;
+export type TUpdateStudentRequest = z.infer<typeof TUpdateStudentRequestSchema>;
+export type TReplyAnswerRequest = z.infer<typeof TReplyAnswerRequestSchema>;
 export type TCreateLessonRequest = z.infer<typeof TCreateLessonRequestSchema>;
 export type TRegisterManyStudentsRequest = z.infer<typeof TRegisterManyStudentsRequestSchema>;
 export type TReorderLessonRequest = z.infer<typeof TReorderLessonRequestSchema>;
