@@ -21,7 +21,7 @@ import classes from './Group.card.module.css';
 import clsx from 'clsx';
 import { openContextModal } from '@mantine/modals';
 
-const lessonsMultiple = (lessonsNumber: number) => {
+export const getLessonPlural = (lessonsNumber: number) => {
 	if (lessonsNumber === 1) {
 		return 'lekcja';
 	}
@@ -65,6 +65,18 @@ function GroupCard({
 		});
 	};
 
+	const handleOpenDeleteGroupModal = () => {
+		openContextModal({
+			modal: 'deleteGroup',
+			title: 'Usuwanie grupy',
+			size: 'lg',
+			innerProps: {
+				groupName,
+				groupId,
+			},
+		});
+	};
+
 	return (
 		<Flex
 			direction='column'
@@ -90,6 +102,7 @@ function GroupCard({
 						variant=''
 						c='var(--bad-state-color)'
 						leftSection={<IconTrash size='1.25rem' />}
+						onClick={handleOpenDeleteGroupModal}
 					>
 						Usuń grupę
 					</Menu.Item>
@@ -128,7 +141,7 @@ function GroupCard({
 							<Text span fw={500}>
 								{assignedLessons}&nbsp;
 							</Text>
-							{lessonsMultiple(assignedLessons)}
+							{getLessonPlural(assignedLessons)}
 						</Text>
 					</Group>
 				</Flex>

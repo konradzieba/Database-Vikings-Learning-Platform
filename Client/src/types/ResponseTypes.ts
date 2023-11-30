@@ -249,9 +249,8 @@ const getPreviousLessonsImagesSchema = z.object({
 const getPreDeleteGroupInfoSchema = z.object({
 	message: z.string(),
 	groupInfo: z.object({
-		groupName: z.string(),
 		lessonsAmount: z.number().int(),
-		studentsAmount: z.number().int(),
+		assignedStudentsAmount: z.number().int(),
 	}),
 });
 
