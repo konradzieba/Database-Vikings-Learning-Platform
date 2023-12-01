@@ -41,7 +41,11 @@ function Nav({ groups, isPending }: LecturerNavProps) {
 
 	const getLinkClassName = useMemo(
 		() => (isActive: boolean, link: string) => {
-			if (isActive && pathname.endsWith(link)) {
+			if (
+				(isActive && pathname.endsWith(link)) ||
+				(isActive && pathname.includes('check-frequency')) ||
+				(isActive && pathname.includes('lesson-dashboard'))
+			) {
 				return `${classes.link} ${classes.activeLink}`;
 			}
 			return `${classes.link} ${classes.inactiveLink}`;
