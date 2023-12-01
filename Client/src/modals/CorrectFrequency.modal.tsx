@@ -23,9 +23,6 @@ function CorrectFrequencyModal({ innerProps, context, id }: ContextModalProps<Co
 		isError,
 	} = useCorrectLessonFrequencyMutation(innerProps.lessonId, innerProps.newStudentListIds);
 
-	console.log('isPending?', isPending);
-	console.log('isSuccess?', isSuccess);
-	console.log('isError?', isError);
 
 	function areArraysEqual(arr1: number[], arr2: number[]): boolean {
 		return arr1.length === arr2.length && arr1.every((value, index) => value === arr2[index]);
@@ -35,8 +32,6 @@ function CorrectFrequencyModal({ innerProps, context, id }: ContextModalProps<Co
 
 	const handleCorrectFrequency = () => {
 		correctLessonFrequency();
-		context.closeModal(id);
-		modals.closeAll();
 	};
 
 	const handleCloseModal = () => {

@@ -234,46 +234,31 @@ export async function correctLessonFrequency(
       throw new Error('Lesson with given ID does not exist.');
     }
 
-    const studentsToIncrementLife = existingLesson.absentStudents
-      .map((studentId) => {
-        if (!newStudentFrequencyList.includes(studentId)) {
-          return studentId;
-        } else {
-          return null;
-        }
-      })
-      .filter((studentId) => studentId !== null);
+    const studentsToIncrementLife = existingLesson.absentStudents.filter(
+      (studentId) => !newStudentFrequencyList.includes(studentId)
+    );
 
-    const studentsToDecrementLife = newStudentFrequencyList
-      .map((studentId) => {
-        if (!existingLesson.absentStudents.includes(studentId)) {
-          return studentId;
-        } else {
-          return null;
-        }
-      })
-      .filter((studentId) => studentId !== null);
+    const studentsToDecrementLife = newStudentFrequencyList.filter(
+      (studentId) => !existingLesson.absentStudents.includes(studentId)
+    );
 
     const incrementStudentHealthPromises = studentsToIncrementLife.map(
-      async (studentId) => {
-        if (studentId) {
-          await UserServices.incrementStudentHealth(studentId);
-        }
-      }
+      async (studentId) => await UserServices.incrementStudentHealth(studentId)
     );
 
     const decrementStudentHealthPromises = studentsToDecrementLife.map(
-      async (studentId) => {
-        if (studentId) {
-          await UserServices.decrementStudentHealth(studentId);
-        }
-      }
+      async (studentId) => await UserServices.decrementStudentHealth(studentId)
     );
 
-    await Promise.all([
-      ...incrementStudentHealthPromises,
-      ...decrementStudentHealthPromises,
-    ]);
+    if (
+      incrementStudentHealthPromises.length > 0 ||
+      decrementStudentHealthPromises.length > 0
+    ) {
+      await Promise.all([
+        ...incrementStudentHealthPromises,
+        ...decrementStudentHealthPromises,
+      ]);
+    }
 
     await LessonServices.updateLessonAbsentStudentList(
       existingLesson.id,
