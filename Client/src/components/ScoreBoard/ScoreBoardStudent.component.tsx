@@ -132,7 +132,7 @@ function ScoreBoardStudent({
 							<ThemeIcon variant='transparent' size='sm' c='var(--score-color)'>
 								<IconCoins />
 							</ThemeIcon>
-							{row.score}
+							<Text size='sm'>{row.score}</Text>
 						</Group>
 					</Table.Td>
 				</Table.Tr>

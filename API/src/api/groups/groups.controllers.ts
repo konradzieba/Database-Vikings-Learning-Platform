@@ -77,8 +77,10 @@ export async function getPreDeleteGroupInfo(
 
     res.json({
       message: 'success',
-      lessonsAmount,
-      assignedStudentsAmount,
+      groupInfo: {
+        lessonsAmount,
+        assignedStudentsAmount,
+      },
     });
   } catch (error) {
     next(error);

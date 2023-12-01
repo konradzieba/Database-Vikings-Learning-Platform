@@ -1,34 +1,30 @@
-import { useDeleteLessonMutation } from '@/hooks/lessons/useDeleteLessonMutation';
-import { useGetPreDeleteLessonInfoQuery } from '@/hooks/lessons/useGetPreDeleteLessonInfoQuery';
+import { useDeleteGroupMutation } from '@/hooks/groups/useDeleteGroupMutation';
+import { useGetPreDeleteGroupInfo } from '@/hooks/groups/useGetPreDeleteGroupInfo';
 import { useMeQuery } from '@/hooks/users/useMeQuery';
-import {
-	Anchor,
-	Box,
-	Button,
-	Center,
-	Collapse,
-	Flex,
-	Group,
-	List,
-	Loader,
-	Text,
-	ThemeIcon,
-	rem,
-} from '@mantine/core';
+import { Box, Button, Center, Flex, Group, Loader, Text } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
-import {
-	IconChevronDown,
-	IconChevronUp,
-	IconCircleCheck,
-	IconCircleX,
-	IconUser,
-} from '@tabler/icons-react';
-import { useState } from 'react';
+import { IconCircleCheck, IconCircleX } from '@tabler/icons-react';
 
-const getTasksPlural = (taskAmount: number) => {
-	if (taskAmount === 1) return 'zadanie';
-	if (taskAmount > 1 && taskAmount < 5) return 'zadania';
-	if (taskAmount >= 5) return 'zadań';
+const getStudentsAmountPlural = (studentsAmount: number | undefined) => {
+	if (studentsAmount === undefined) {
+		return null;
+	}
+	if (studentsAmount === 1) {
+		return 'przypisanego do niej studenta';
+	} else {
+		return 'przypisanych do niej studentów';
+	}
+};
+
+const getLessonPlural = (lessonsAmount: number | undefined) => {
+	if (lessonsAmount === undefined) {
+		return null;
+	}
+	if (lessonsAmount === 1) {
+		return 'przypisaną lekcję';
+	} else {
+		return 'przypisane lekcje';
+	}
 };
 
 function DeleteGroupModal({
@@ -36,21 +32,21 @@ function DeleteGroupModal({
 	id,
 	innerProps,
 }: ContextModalProps<{
-	lessonId: number;
+	groupName: string;
+	groupId: number;
 }>) {
-	const [isListOpen, setIsListOpen] = useState(false);
+	const {
+		data: preDeleteGroupInfoData,
+		isLoading: isPreDeleteGroupInfoLoading,
+		isError: isPreDeleteGroupInfoError,
+	} = useGetPreDeleteGroupInfo(innerProps.groupId);
+
 	const {
 		mutate,
 		isPending: isDeleting,
 		isSuccess: isMutationSuccess,
 		isError: isMutationError,
-	} = useDeleteLessonMutation(innerProps.lessonId);
-
-	const {
-		data: preDeleteLessonInfoData,
-		isLoading: isPreDeleteLessonInfoLoading,
-		isError: isPreDeleteLessonInfoError,
-	} = useGetPreDeleteLessonInfoQuery(innerProps.lessonId);
+	} = useDeleteGroupMutation(innerProps.groupId);
 
 	const { refetch: refetchMeQuery } = useMeQuery();
 
@@ -64,7 +60,7 @@ function DeleteGroupModal({
 		mutate();
 	};
 
-	if (isDeleting || isPreDeleteLessonInfoLoading) {
+	if (isDeleting || isPreDeleteGroupInfoLoading) {
 		return (
 			<Center mih={90}>
 				<Loader />
@@ -77,7 +73,7 @@ function DeleteGroupModal({
 			<>
 				<Flex direction='column' align='center' gap='md' mb='md'>
 					<IconCircleCheck size='3rem' color='var(--good-state-color)' />
-					<Text>Lekcja została usunięta!</Text>
+					<Text>Grupa została usunięta!</Text>
 				</Flex>
 				<Button fullWidth onClick={handleCloseModal}>
 					Zamknij
@@ -86,15 +82,15 @@ function DeleteGroupModal({
 		);
 	}
 
-	if (isMutationError || isPreDeleteLessonInfoError) {
+	if (isMutationError || isPreDeleteGroupInfoError) {
 		<>
 			<Flex direction='column' align='center' gap='md' mb='md'>
 				<IconCircleX size='3rem' color='var(--bad-state-color)' />
 				<Text>
-					Wystąpił problem podczas{' '}
+					Wystąpił problem podczas&nbsp;
 					{isMutationError
 						? 'przesyłania zadania'
-						: 'wczytywania danych z lekcji'}
+						: 'wczytywania danych z grupy'}
 					.
 				</Text>
 			</Flex>
@@ -104,96 +100,125 @@ function DeleteGroupModal({
 		</>;
 	}
 
-	const amountOfAnswersPlural =
-		preDeleteLessonInfoData?.lessonInfo.sendAnswersAmount === 1
-			? 'odpowiedź'
-			: 'odpowiedzi';
-	const taskPlural = preDeleteLessonInfoData?.lessonInfo.taskAmount
-		? getTasksPlural(preDeleteLessonInfoData?.lessonInfo.taskAmount)
-		: null;
+	const renderDeletionMessage = () => {
+		const hasAssignedStudents =
+			preDeleteGroupInfoData?.groupInfo.assignedStudentsAmount;
+		const hasLessons = preDeleteGroupInfoData?.groupInfo.lessonsAmount;
 
-	const listItems = preDeleteLessonInfoData?.lessonInfo.studentsWithAnswers.map(
-		(student) => {
+		if (hasAssignedStudents && hasLessons) {
 			return (
-				<List.Item key={student.studentId}>
-					{`${student.firstName} ${student.lastName}`}
-				</List.Item>
+				<Text size='sm'>
+					<Text size='sm' span fw={500}>
+						Uwaga!&nbsp;
+					</Text>
+					Ta grupa zawiera&nbsp;
+					<Text
+						span
+						size='sm'
+						fw={500}
+						c='var(--mantine-primary-color-lighter)'
+					>
+						{preDeleteGroupInfoData?.groupInfo.lessonsAmount}
+					</Text>
+					&nbsp;lekcję oraz&nbsp;
+					<Text span fw={500} c='var(--mantine-primary-color-lighter)'>
+						{preDeleteGroupInfoData?.groupInfo.assignedStudentsAmount}
+					</Text>
+					&nbsp;
+					{getStudentsAmountPlural(
+						preDeleteGroupInfoData?.groupInfo.assignedStudentsAmount
+					)}
+					.
+					<Text>
+						Wszystkie lekcje oraz studenci przypisani do grupy zostaną usunięci
+						wraz z nią.
+					</Text>
+				</Text>
 			);
 		}
-	);
+
+		if (!hasAssignedStudents && hasLessons) {
+			return (
+				<>
+					<Text size='sm'>
+						<Text span size='sm'>
+							Ta grupa posiada&nbsp;
+							<Text
+								span
+								size='sm'
+								fw={500}
+								c='var(--mantine-primary-color-lighter)'
+							>
+								{preDeleteGroupInfoData.groupInfo.lessonsAmount}&nbsp;
+							</Text>
+							{getLessonPlural(preDeleteGroupInfoData.groupInfo.lessonsAmount)}.
+						</Text>
+					</Text>
+					<Text size='sm'>
+						Wszystkie lekcje istniejące w grupie zostaną usunięte wraz z nią.
+					</Text>
+				</>
+			);
+		}
+
+		if (hasAssignedStudents && !hasLessons) {
+			return (
+				<Text size='sm'>
+					<Text size='sm' span fw={500}>
+						Uwaga!&nbsp;
+					</Text>
+					Ta grupa zawiera&nbsp;
+					<Text span fw={500} c='var(--mantine-primary-color-lighter)'>
+						{preDeleteGroupInfoData?.groupInfo.assignedStudentsAmount}
+					</Text>
+					&nbsp;
+					{getStudentsAmountPlural(
+						preDeleteGroupInfoData?.groupInfo.assignedStudentsAmount
+					)}
+					.
+					<Text>
+						Wszyscy studenci przypisani do grupy zostaną usunięci wraz z nią.
+					</Text>
+				</Text>
+			);
+		}
+
+		return null;
+	};
 
 	return (
 		<Box p='sm'>
 			<Text fw={500} size='sm'>
-				Czy na pewno chcesz usunąć lekcję nr&nbsp;
+				Czy na pewno chcesz usunąć grupę&nbsp;
 				<Text fw='inherit' span c='var(--mantine-primary-color-lighter)'>
-					{preDeleteLessonInfoData?.lessonInfo.lessonNumber}
+					{innerProps.groupName}
 				</Text>
 				?
 			</Text>
-			<Text mt='xs' size='sm'>
-				<Text size='sm' span fw={500}>
-					Uwaga!&nbsp;
-				</Text>
-				Ta lekcja zawiera&nbsp;
-				<Text span size='sm' c='var(--mantine-primary-color-lighter)'>
-					{preDeleteLessonInfoData?.lessonInfo.taskAmount}
-				</Text>
-				&nbsp;
-				{taskPlural}. Po usunięciu lekcji, wszystkie zadania przypisane do
-				lekcji zostaną usunięte.
-			</Text>
-			{preDeleteLessonInfoData?.lessonInfo.sendAnswersAmount !== 0 && (
-				<>
-					<Text mt='xs' size='sm'>
-						Dodatkowo na tą lekcje zostały udzielone już&nbsp;
-						<Text
-							span
-							fw={500}
-							size='sm'
-							c='var(--mantine-primary-color-lighter)'
-						>
-							{preDeleteLessonInfoData?.lessonInfo.sendAnswersAmount}
+			<Text mt='sm' size='sm'>
+				{/* {preDeleteGroupInfoData?.groupInfo.assignedStudentsAmount &&
+				preDeleteGroupInfoData.groupInfo.lessonsAmount ? (
+					<>
+						<Text size='sm' span fw={500}>
+							Uwaga!&nbsp;
+						</Text>
+						Ta grupa zawiera&nbsp;
+						<Text span size='sm' c='var(--mantine-primary-color-lighter)'>
+							{preDeleteGroupInfoData?.groupInfo.lessonsAmount}
+						</Text>
+						&nbsp;lekcję oraz&nbsp;
+						<Text span size='sm' c='var(--mantine-primary-color-lighter)'>
+							{preDeleteGroupInfoData?.groupInfo.assignedStudentsAmount}
 						</Text>
 						&nbsp;
-						{amountOfAnswersPlural}. Po usunięciu lekcji, wszystkie odpowiedzi
-						zostaną usunięte, a punkty ewentualne przyznane punkty zostaną
-						odebrane.
-					</Text>
-					<Text mt='xs' size='sm'>
-						Rozwiń listę, aby zobaczyć studentów których odpowiedzi zostały
-						przesłane.
-					</Text>
-					<Button
-						mt='xs'
-						fullWidth
-						variant='outline'
-						leftSection={isListOpen ? <IconChevronUp /> : <IconChevronDown />}
-						onClick={() => setIsListOpen((prevState) => !prevState)}
-					>
-						{isListOpen ? 'Zwiń listę' : 'Rozwiń listę'}
-					</Button>
-					<Collapse in={isListOpen}>
-						<List
-							mt='xs'
-							spacing='xs'
-							size='sm'
-							center
-							icon={
-								<ThemeIcon
-									variant='transparent'
-									color='var(--mantine-primary-color-lighter)'
-									size={rem(20)}
-								>
-									<IconUser />
-								</ThemeIcon>
-							}
-						>
-							{listItems}
-						</List>
-					</Collapse>
-				</>
-			)}
+						{getStudentsAmountPlural(
+							preDeleteGroupInfoData?.groupInfo.assignedStudentsAmount
+						)}
+					</>
+				) : null} */}
+			</Text>
+
+			{renderDeletionMessage()}
 			<Group mt='xl' justify='center'>
 				<Button variant='default' miw={150} onClick={handleCloseModal}>
 					Anuluj

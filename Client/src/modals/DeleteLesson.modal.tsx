@@ -60,7 +60,7 @@ function DeleteLessonModal({
 		modals.closeAll();
 	};
 
-	const handleDeleteGroup = () => {
+	const handleDeleteLesson = () => {
 		mutate();
 	};
 
@@ -198,7 +198,7 @@ function DeleteLessonModal({
 				<Button variant='default' miw={150} onClick={handleCloseModal}>
 					Anuluj
 				</Button>
-				<Button bg='red' miw={150} onClick={handleDeleteGroup}>
+				<Button bg='red' miw={150} onClick={handleDeleteLesson}>
 					Usuń
 				</Button>
 			</Group>
