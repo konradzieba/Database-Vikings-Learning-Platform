@@ -84,7 +84,7 @@ function Nav({ groups, isPending }: LecturerNavProps) {
 
 	return (
 		<Group gap='xl'>
-			<Group align='center' gap='sm'>
+			<Group align='center' gap='md'>
 				<HoverCard offset={10}>
 					<HoverCard.Target>
 						<Group gap={rem(5)} align='center'>
@@ -122,6 +122,12 @@ function Nav({ groups, isPending }: LecturerNavProps) {
 						)}
 					</HoverCard.Dropdown>
 				</HoverCard>
+				{(pathname.endsWith('/dashboard') ||
+					pathname.endsWith('/dashboard/score-board')) && (
+					<NavLink to={'/dashboard/score-board'} className={classes.link}>
+						Rankingi zbiorcze
+					</NavLink>
+				)}
 			</Group>
 			{isGroupPath && (
 				<>

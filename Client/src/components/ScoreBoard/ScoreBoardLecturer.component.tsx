@@ -1,4 +1,11 @@
-import { useCallback, useMemo } from 'react';
+import {
+	Dispatch,
+	SetStateAction,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
 import {
 	Table,
 	Text,
@@ -8,10 +15,12 @@ import {
 	Stack,
 	Popover,
 	Button,
+	TextInput,
+	Center,
+	ActionIcon,
 } from '@mantine/core';
-import { IconCoins, IconTrophy } from '@tabler/icons-react';
-import { Navigate, useParams } from 'react-router-dom';
-import { TGetScoreBoard } from '@/types/ResponseTypes';
+import { IconCoins, IconSearch, IconTrophy, IconX } from '@tabler/icons-react';
+import { useParams } from 'react-router-dom';
 import { useLecturerStore } from '@/utils/stores/useLecturerStore';
 import HeartCounter from '../UI/HeartCounter';
 
@@ -35,48 +44,94 @@ type TTableRow = {
 	};
 };
 
+type TScoreBoardData =
+	| {
+			id: number;
+			indexNumber: number;
+			score: number;
+			health: number;
+			groupId: number;
+			aggregatedSendTime: number;
+			Group: {
+				lecturerId: number;
+				name: string;
+			};
+			User: {
+				firstName: string;
+				lastName: string;
+			};
+	  }[]
+	| undefined;
+
 interface ScoreBoardProps {
 	type: 'global' | 'group' | 'my-groups';
-	scoreBoardData?: TGetScoreBoard;
+	scoreBoardData?: TScoreBoardData;
+	searchTerm: string;
+	setSearchTerm: Dispatch<SetStateAction<string>>;
 }
 
-function ScoreBoardLecturer({ type, scoreBoardData }: ScoreBoardProps) {
+function ScoreBoardLecturer({
+	type,
+	scoreBoardData,
+	searchTerm,
+	setSearchTerm,
+}: ScoreBoardProps) {
 	const { lecturerData } = useLecturerStore();
 	const { id: groupId } = useParams<{ id: string }>();
 	const isGlobal = type === 'global';
 	const isMyGroups = type === 'my-groups';
 
-	if (!groupId) return <Navigate to='/dashboard' />;
+	const [sortedRows, setSortedRows] = useState<TTableRow[]>([]);
+	const [originalPositionsMap, setOriginalPositionsMap] = useState<
+		Record<number, number>
+	>({});
+
+	const positionsMap = useMemo(() => {
+		const originalPositions =
+			scoreBoardData?.map((_, index) => index + 1) || [];
+		const filteredPositions = sortedRows.map((_, index) => index + 1);
+		return originalPositions.reduce((map, originalPosition, index) => {
+			map[originalPosition] = filteredPositions[index];
+			return map;
+		}, {} as Record<number, number>);
+	}, [scoreBoardData, sortedRows]);
 
 	const filteredByLecturerIdScoreBoardData = useMemo(
 		() =>
-			scoreBoardData?.scoreBoard.filter(
+			scoreBoardData?.filter(
 				(row) => row.Group.lecturerId === lecturerData?.lecturerId
 			) || [],
 		[scoreBoardData, lecturerData]
 	);
 
 	const filteredByGroupScoreBoardData = useMemo(
-		() =>
-			scoreBoardData?.scoreBoard.filter((row) => row.groupId === +groupId) ||
-			[],
+		() => scoreBoardData?.filter((row) => row.groupId === +groupId!) || [],
 		[scoreBoardData, groupId]
 	);
 
-	const sortedRows = useMemo(() => {
+	useEffect(() => {
 		const dataToSort = isGlobal
-			? scoreBoardData?.scoreBoard
+			? scoreBoardData
 			: isMyGroups
 			? filteredByLecturerIdScoreBoardData
 			: filteredByGroupScoreBoardData;
 
-		return (
+		const sortedRows =
 			dataToSort
 				?.slice()
 				.sort(
 					(a, b) =>
 						b.score - a.score || a.aggregatedSendTime - b.aggregatedSendTime
-				) || []
+				) || [];
+
+		setSortedRows(sortedRows);
+
+		// Aktualizacja mapy pozycji po każdej zmianie danych
+		setOriginalPositionsMap(
+			dataToSort?.reduce((map, row, index) => {
+				map[row.indexNumber] = index + 1;
+				return map;
+			}, {} as Record<number, number>) || {}
 		);
 	}, [
 		isGlobal,
@@ -86,66 +141,94 @@ function ScoreBoardLecturer({ type, scoreBoardData }: ScoreBoardProps) {
 		filteredByGroupScoreBoardData,
 	]);
 
-	const renderTableRow = useCallback((row: TTableRow, index: number) => {
-		const position = index + 1;
-		const isTop3 = position < 4;
+	const renderTableRow = useCallback(
+		(row: TTableRow, index: number) => {
+			const originalPosition = originalPositionsMap[row.indexNumber];
+			const filteredPosition = positionsMap[originalPosition];
+			const isTop3 = filteredPosition && filteredPosition < 4;
 
-		return (
-			<Table.Tr key={row.indexNumber}>
-				<Table.Td>
-					{isTop3 ? (
-						<ThemeIcon
-							variant='transparent'
-							size='md'
-							c={topColors[position - 1]}
-							p={0}
-							m={0}
-						>
-							<IconTrophy />
-						</ThemeIcon>
-					) : (
-						<Text ml={rem(8)} size='md'>
-							{position}
-						</Text>
-					)}
-				</Table.Td>
-				<Table.Td>{`${row.User.firstName} ${row.User.lastName}`}</Table.Td>
-				<Table.Td>{row.indexNumber}</Table.Td>
-				<Table.Td>
-					<HeartCounter hearts={row.health} />
-				</Table.Td>
-				{isGlobal || (isMyGroups && <Table.Td>{row.Group.name}</Table.Td>)}
-				<Table.Td>
-					<Group align='center' gap={rem(5)}>
-						<ThemeIcon variant='transparent' size='sm' c='var(--score-color)'>
-							<IconCoins />
-						</ThemeIcon>
-						<Text size='sm'>{row.score}</Text>
-					</Group>
-				</Table.Td>
-			</Table.Tr>
-		);
-	}, []);
+			return (
+				<Table.Tr key={row.indexNumber}>
+					<Table.Td>
+						{isTop3 ? (
+							<ThemeIcon
+								variant='transparent'
+								size='md'
+								c={topColors[filteredPosition - 1]}
+								p={0}
+								m={0}
+							>
+								<IconTrophy />
+							</ThemeIcon>
+						) : (
+							<Text ml={rem(8)} size='md'>
+								{filteredPosition}
+							</Text>
+						)}
+					</Table.Td>
+					<Table.Td>{`${row.User.firstName} ${row.User.lastName}`}</Table.Td>
+					<Table.Td>{row.indexNumber}</Table.Td>
+					<Table.Td>
+						<HeartCounter hearts={row.health} />
+					</Table.Td>
+					{(isGlobal || isMyGroups) && <Table.Td>{row.Group.name}</Table.Td>}
+					<Table.Td>
+						<Group align='center' gap={rem(5)}>
+							<ThemeIcon variant='transparent' size='sm' c='var(--score-color)'>
+								<IconCoins />
+							</ThemeIcon>
+							<Text size='sm'>{row.score}</Text>
+						</Group>
+					</Table.Td>
+				</Table.Tr>
+			);
+		},
+		[originalPositionsMap, positionsMap]
+	);
 
 	const rows = sortedRows.map(renderTableRow);
 
 	return (
 		<Stack>
 			<Table.ScrollContainer minWidth={700}>
+				<TextInput
+					placeholder='Wyszukaj studenta po numerze indeksu lub imieniu i nazwisku'
+					value={searchTerm}
+					onChange={(event) => setSearchTerm(event.target.value)}
+					leftSection={<IconSearch size='1.25rem' />}
+					rightSection={
+						<ActionIcon
+							variant='transparent'
+							c='dimmed'
+							onClick={() => {
+								setSearchTerm('');
+							}}
+						>
+							<IconX size='1.25rem' />
+						</ActionIcon>
+					}
+				/>
 				<Table verticalSpacing='xs'>
 					<Table.Thead>
 						<Table.Tr>
 							<Table.Th>Pozycja</Table.Th>
 							<Table.Th>Student</Table.Th>
 							<Table.Th>Numer indeksu</Table.Th>
-							{isGlobal || (isMyGroups && <Table.Th>Grupa</Table.Th>)}
+							{(isGlobal || isMyGroups) && <Table.Th>Grupa</Table.Th>}
 							<Table.Th>Życia</Table.Th>
 							<Table.Th>Punkty</Table.Th>
 						</Table.Tr>
 					</Table.Thead>
-					<Table.Tbody>{rows}</Table.Tbody>
+					{rows && <Table.Tbody>{rows}</Table.Tbody>}
 				</Table>
 			</Table.ScrollContainer>
+			{!rows.length && (
+				<Center h={60}>
+					<Text size='md' fs='italic'>
+						Nie znaleziono studentów
+					</Text>
+				</Center>
+			)}
 			<Stack my='lg' gap={rem(5)}>
 				<Popover width={320} position='bottom' withArrow shadow='md'>
 					<Popover.Target>

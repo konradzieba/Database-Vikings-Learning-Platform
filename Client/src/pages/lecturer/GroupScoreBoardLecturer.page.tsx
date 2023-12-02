@@ -3,14 +3,24 @@ import useGetStudentsFromGroup from '@/hooks/groups/useGetStudentsFromGroup';
 import useGetGroupsByLecturerId from '@/hooks/users/useGetGroupsByLecturerId';
 import useGetScoreBoardQuery from '@/hooks/users/useGetScoreBoardQuery';
 import { useLecturerStore } from '@/utils/stores/useLecturerStore';
-import { Center, Loader, Select, Stack, Title } from '@mantine/core';
+import { Center, Loader, Stack, Title } from '@mantine/core';
+import { useState } from 'react';
 
-function ScoreBoardLecturerPage() {
+function GroupScoreBoardLecturerPage() {
+	const [searchTerm, setSearchTerm] = useState('');
 	const { lecturerData } = useLecturerStore();
 	const { data: groupsData } = useGetGroupsByLecturerId(
 		lecturerData.lecturerId
 	);
 	const { data: scoreBoardData } = useGetScoreBoardQuery();
+
+	const filteredBySearchTerm = scoreBoardData?.scoreBoard.filter(
+		(student) =>
+			student.indexNumber.toString().includes(searchTerm) ||
+			`${student.User.firstName} ${student.User.lastName}`
+				.toLowerCase()
+				.includes(searchTerm.toLowerCase())
+	);
 
 	if (groupsData?.groups.length === 0) {
 		return (
@@ -36,9 +46,14 @@ function ScoreBoardLecturerPage() {
 
 	return (
 		<Stack>
-			<ScoreBoardLecturer type='group' scoreBoardData={scoreBoardData} />
+			<ScoreBoardLecturer
+				type='group'
+				scoreBoardData={filteredBySearchTerm}
+				searchTerm={searchTerm}
+				setSearchTerm={setSearchTerm}
+			/>
 		</Stack>
 	);
 }
 
-export default ScoreBoardLecturerPage;
+export default GroupScoreBoardLecturerPage;

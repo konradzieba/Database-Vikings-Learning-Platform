@@ -26,8 +26,9 @@ import CreateLessonPage from './pages/lecturer/CreateLesson.page';
 import CheckFrequencyPage from './pages/lecturer/CheckFrequency.page';
 import GroupStudentsInfoPage from './pages/lecturer/GroupStudentsInfo.page';
 import LessonDashboardPage from './pages/lecturer/LessonDashboard.page';
-import ScoreBoardLecturerPage from './pages/lecturer/ScoreBoardLecturer.page';
 import StudentPreview from './pages/lecturer/StudentPreview';
+import GroupScoreBoardLecturerPage from './pages/lecturer/GroupScoreBoardLecturer.page';
+import GlobalScoreBoardLecturerPage from './pages/lecturer/GlobalScoreBoardsLecturer.page';
 
 const router = createBrowserRouter([
 	{
@@ -59,6 +60,7 @@ const router = createBrowserRouter([
 		children: [
 			{ index: true, element: <DashboardPage /> },
 			{ path: 'student-preview/:studentId', element: <StudentPreview /> },
+			{ path: 'score-board', element: <GlobalScoreBoardLecturerPage /> },
 			{ path: 'me', element: <BlankContent /> },
 			{
 				path: 'group',
@@ -86,7 +88,7 @@ const router = createBrowserRouter([
 							},
 							{
 								path: 'score-board',
-								element: <ScoreBoardLecturerPage />,
+								element: <GroupScoreBoardLecturerPage />,
 							},
 						],
 					},
