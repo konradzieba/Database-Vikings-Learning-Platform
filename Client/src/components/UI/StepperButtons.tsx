@@ -2,7 +2,7 @@ import useGetGroupInfoQuery from '@/hooks/groups/useGetGroupInfoQuery';
 import { CreatedLessonType } from '@/types/StoreTypes';
 import { Button, Group } from '@mantine/core';
 import { PDFDownloadLink } from '@react-pdf/renderer';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import FrequencyListPDF from './FrequencyList.pdf';
 import { useCreateLessonStore } from '@/utils/stores/useCreateLessonStore';
 

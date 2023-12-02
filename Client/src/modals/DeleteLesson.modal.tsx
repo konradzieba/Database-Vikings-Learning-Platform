@@ -40,6 +40,7 @@ function DeleteLessonModal({
 	const { refetch: refetchMeQuery } = useMeQuery();
 
 	const handleCloseModal = () => {
+		removeLesson(+groupId!);
 		refetchMeQuery();
 		context.closeModal(id);
 		modals.closeAll();
@@ -58,7 +59,6 @@ function DeleteLessonModal({
 	}
 
 	if (isMutationSuccess) {
-		removeLesson(+groupId!);
 		return (
 			<>
 				<Flex direction='column' align='center' gap='md' mb='md'>

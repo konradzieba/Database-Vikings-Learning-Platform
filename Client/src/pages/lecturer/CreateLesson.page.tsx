@@ -107,7 +107,11 @@ function CreateLessonPage() {
 				<FullScreenLoader />
 			) : (
 				<Stack mt={rem(-20)} gap={0}>
-					<Title mx='auto'>Lekcja&nbsp;{LessonsData?.lessons.length! + 1}</Title>
+					{activeStep !== 3 ? (
+						<Title mx='auto'>Lekcja&nbsp;{LessonsData?.lessons.length! + 1}</Title>
+					) : (
+						<Title mx='auto'>&nbsp;</Title>
+					)}
 					<Stepper
 						w='50%'
 						mx='auto'
