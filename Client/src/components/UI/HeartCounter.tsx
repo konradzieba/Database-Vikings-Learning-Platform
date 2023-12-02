@@ -15,19 +15,22 @@ function HeartCounter({ hearts }: HearthCounterProps) {
 			<ThemeIcon
 				variant='transparent'
 				size={rem(24)}
-				className={hearts >= 1 ? classes.filledHeart : classes.unfilledHeart}>
+				className={hearts >= 1 ? classes.filledHeart : classes.unfilledHeart}
+			>
 				<IconHeartFilled />
 			</ThemeIcon>
 			<ThemeIcon
 				variant='transparent'
 				size={rem(24)}
-				className={hearts >= 2 ? classes.filledHeart : classes.unfilledHeart}>
+				className={hearts >= 2 ? classes.filledHeart : classes.unfilledHeart}
+			>
 				<IconHeartFilled />
 			</ThemeIcon>
 			<ThemeIcon
 				variant='transparent'
 				size={rem(24)}
-				className={hearts >= 3 ? classes.filledHeart : classes.unfilledHeart}>
+				className={hearts >= 3 ? classes.filledHeart : classes.unfilledHeart}
+			>
 				<IconHeartFilled />
 			</ThemeIcon>
 		</Group>

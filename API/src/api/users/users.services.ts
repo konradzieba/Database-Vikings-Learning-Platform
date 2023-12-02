@@ -383,11 +383,13 @@ export async function getScoreBoard() {
     select: {
       id: true,
       indexNumber: true,
+      health: true,
       score: true,
       groupId: true,
       aggregatedSendTime: true,
       Group: {
         select: {
+          lecturerId: true,
           name: true,
         },
       },
