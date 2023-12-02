@@ -1,11 +1,4 @@
-import {
-	Dispatch,
-	SetStateAction,
-	useCallback,
-	useEffect,
-	useMemo,
-	useState,
-} from 'react';
+import { Dispatch, SetStateAction, useCallback, useMemo } from 'react';
 import {
 	Table,
 	Text,
@@ -20,7 +13,8 @@ import {
 	ActionIcon,
 } from '@mantine/core';
 import { IconCoins, IconSearch, IconTrophy, IconX } from '@tabler/icons-react';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
+import { TGetScoreBoard } from '@/types/ResponseTypes';
 import { useLecturerStore } from '@/utils/stores/useLecturerStore';
 import HeartCounter from '../UI/HeartCounter';
 
@@ -81,21 +75,6 @@ function ScoreBoardLecturer({
 	const isGlobal = type === 'global';
 	const isMyGroups = type === 'my-groups';
 
-	const [sortedRows, setSortedRows] = useState<TTableRow[]>([]);
-	const [originalPositionsMap, setOriginalPositionsMap] = useState<
-		Record<number, number>
-	>({});
-
-	const positionsMap = useMemo(() => {
-		const originalPositions =
-			scoreBoardData?.map((_, index) => index + 1) || [];
-		const filteredPositions = sortedRows.map((_, index) => index + 1);
-		return originalPositions.reduce((map, originalPosition, index) => {
-			map[originalPosition] = filteredPositions[index];
-			return map;
-		}, {} as Record<number, number>);
-	}, [scoreBoardData, sortedRows]);
-
 	const filteredByLecturerIdScoreBoardData = useMemo(
 		() =>
 			scoreBoardData?.filter(
@@ -109,29 +88,20 @@ function ScoreBoardLecturer({
 		[scoreBoardData, groupId]
 	);
 
-	useEffect(() => {
+	const sortedRows = useMemo(() => {
 		const dataToSort = isGlobal
 			? scoreBoardData
 			: isMyGroups
 			? filteredByLecturerIdScoreBoardData
 			: filteredByGroupScoreBoardData;
 
-		const sortedRows =
+		return (
 			dataToSort
 				?.slice()
 				.sort(
 					(a, b) =>
 						b.score - a.score || a.aggregatedSendTime - b.aggregatedSendTime
-				) || [];
-
-		setSortedRows(sortedRows);
-
-		// Aktualizacja mapy pozycji po każdej zmianie danych
-		setOriginalPositionsMap(
-			dataToSort?.reduce((map, row, index) => {
-				map[row.indexNumber] = index + 1;
-				return map;
-			}, {} as Record<number, number>) || {}
+				) || []
 		);
 	}, [
 		isGlobal,
@@ -141,50 +111,46 @@ function ScoreBoardLecturer({
 		filteredByGroupScoreBoardData,
 	]);
 
-	const renderTableRow = useCallback(
-		(row: TTableRow, index: number) => {
-			const originalPosition = originalPositionsMap[row.indexNumber];
-			const filteredPosition = positionsMap[originalPosition];
-			const isTop3 = filteredPosition && filteredPosition < 4;
+	const renderTableRow = useCallback((row: TTableRow, index: number) => {
+		const position = index + 1;
+		const isTop3 = position < 4;
 
-			return (
-				<Table.Tr key={row.indexNumber}>
-					<Table.Td>
-						{isTop3 ? (
-							<ThemeIcon
-								variant='transparent'
-								size='md'
-								c={topColors[filteredPosition - 1]}
-								p={0}
-								m={0}
-							>
-								<IconTrophy />
-							</ThemeIcon>
-						) : (
-							<Text ml={rem(8)} size='md'>
-								{filteredPosition}
-							</Text>
-						)}
-					</Table.Td>
-					<Table.Td>{`${row.User.firstName} ${row.User.lastName}`}</Table.Td>
-					<Table.Td>{row.indexNumber}</Table.Td>
-					<Table.Td>
-						<HeartCounter hearts={row.health} />
-					</Table.Td>
-					{(isGlobal || isMyGroups) && <Table.Td>{row.Group.name}</Table.Td>}
-					<Table.Td>
-						<Group align='center' gap={rem(5)}>
-							<ThemeIcon variant='transparent' size='sm' c='var(--score-color)'>
-								<IconCoins />
-							</ThemeIcon>
-							<Text size='sm'>{row.score}</Text>
-						</Group>
-					</Table.Td>
-				</Table.Tr>
-			);
-		},
-		[originalPositionsMap, positionsMap]
-	);
+		return (
+			<Table.Tr key={row.indexNumber}>
+				<Table.Td>
+					{isTop3 ? (
+						<ThemeIcon
+							variant='transparent'
+							size='md'
+							c={topColors[position - 1]}
+							p={0}
+							m={0}
+						>
+							<IconTrophy />
+						</ThemeIcon>
+					) : (
+						<Text ml={rem(8)} size='md'>
+							{position}
+						</Text>
+					)}
+				</Table.Td>
+				<Table.Td>{`${row.User.firstName} ${row.User.lastName}`}</Table.Td>
+				<Table.Td>{row.indexNumber}</Table.Td>
+				<Table.Td>
+					<HeartCounter hearts={row.health} />
+				</Table.Td>
+				{(isGlobal || isMyGroups) && <Table.Td>{row.Group.name}</Table.Td>}
+				<Table.Td>
+					<Group align='center' gap={rem(5)}>
+						<ThemeIcon variant='transparent' size='sm' c='var(--score-color)'>
+							<IconCoins />
+						</ThemeIcon>
+						<Text size='sm'>{row.score}</Text>
+					</Group>
+				</Table.Td>
+			</Table.Tr>
+		);
+	}, []);
 
 	const rows = sortedRows.map(renderTableRow);
 
