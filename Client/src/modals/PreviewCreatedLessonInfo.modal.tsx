@@ -1,7 +1,6 @@
 import { useCreateLessonMutation } from '@/hooks/lessons/useCreateLessonMutation';
 import { useGetLessonsByGroupId } from '@/hooks/lessons/useGetLessonsByGroupId';
 import { CreatedLessonType } from '@/types/StoreTypes';
-import { useCreateLessonStore } from '@/utils/stores/useCreateLessonStore';
 import { Button, Center, Collapse, Flex, Group, Image, Loader, Text, rem, AspectRatio, Badge } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { ContextModalProps, modals } from '@mantine/modals';
@@ -19,7 +18,6 @@ function PreviewCreatedLessonInfoModal({
 }: ContextModalProps<PreviewCreatedLessonInfoModalProps>) {
 	const { mutate: createLessonMutation, isError, isPending, isSuccess } = useCreateLessonMutation();
 	const { refetch: refetchLessons } = useGetLessonsByGroupId(innerProps.createdLesson.groupId);
-	const { removeLesson } = useCreateLessonStore();
 	const [openedPhotoPreview, { toggle: togglePhotoPreview }] = useDisclosure(false);
 	const [openedAbsentStudentsPreview, { toggle: toggleAbsentStudentsPreview }] = useDisclosure(false);
 
@@ -41,7 +39,6 @@ function PreviewCreatedLessonInfoModal({
 
 	const handleCloseModalWithFinalStep = () => {
 		refetchLessons();
-		removeLesson(innerProps.createdLesson.groupId);
 		innerProps.nextStep();
 		context.closeModal(id);
 		modals.closeAll();
