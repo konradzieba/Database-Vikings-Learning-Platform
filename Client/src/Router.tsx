@@ -15,7 +15,7 @@ import LessonTasksPage from './pages/student/LessonTasks.page';
 import GroupPanelPage from './pages/lecturer/GroupPanel.page';
 import GroupLessonsPage from './pages/lecturer/GroupLessons.page';
 import CreateLessonPage from './pages/lecturer/CreateLesson.page';
-import CheckFrequencyPage from './pages/CheckFrequency.page';
+import CheckFrequencyPage from './pages/lecturer/CheckFrequency.page';
 import GroupStudentsInfoPage from './pages/lecturer/GroupStudentsInfo.page';
 import LessonDashboardPage from './pages/lecturer/LessonDashboard.page';
 import ScoreBoardLecturerPage from './pages/lecturer/ScoreBoardLecturer.page';
