@@ -1,6 +1,20 @@
 import { Answer, Group, Lesson, Prisma, Student, User } from '@prisma/client';
 import { db } from '../../db';
 
+export function getAbsentStudents(id: Lesson['id']) {
+  return db.lesson.findUnique({
+    where: {
+      id,
+    },
+    select: {
+      id: true,
+      number: true,
+      absentStudents: true,
+      isFrequencyChecked: true,
+    },
+  });
+}
+
 export async function getLessonsByGroupId(id: Group['id']) {
   const lessonsInfo = await db.lesson.findMany({
     where: {
@@ -185,6 +199,21 @@ export async function getLessonInfoByGroupAndLessonId(
   };
 }
 
+export function updateLessonAbsentStudentList(
+  id: Lesson['id'],
+  absentStudents: Lesson['absentStudents']
+) {
+  return db.lesson.update({
+    where: {
+      id,
+    },
+    data: {
+      absentStudents: absentStudents,
+      isFrequencyChecked: true,
+    },
+  });
+}
+
 async function findStudentsWithoutAnswer(groupId: number, taskId: number) {
   const taskAnswers = await db.answer.findMany({
     where: {
@@ -252,7 +281,7 @@ export function updateLessonsOrder(
   lessons: {
     id: Lesson['id'];
     number: Lesson['number'];
-  }[],
+  }[]
 ) {
   const promises = lessons.map((lesson) => {
     return db.lesson.update({

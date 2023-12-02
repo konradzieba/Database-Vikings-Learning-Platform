@@ -64,6 +64,34 @@ export async function getPreviousLessonsImages(
   }
 }
 
+export async function getAbsentStudents(
+  req: Request<ParamsWithId>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id } = req.params;
+
+    const existingLesson = LessonServices.findLessonById(+id!);
+
+    if (!existingLesson) {
+      res.status(404);
+      throw new Error('Lesson with given ID does not exist.');
+    }
+
+    const absentStudents = await LessonServices.getAbsentStudents(+id!);
+
+    res.json({
+      id: absentStudents?.id,
+      number: absentStudents?.number,
+      absentStudents: absentStudents?.absentStudents,
+      isFrequencyChecked: absentStudents?.isFrequencyChecked,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function getTasksByLessonId(
   req: Request<ParamsWithId>,
   res: Response,
@@ -181,6 +209,65 @@ export async function getLessonInfoByGroupAndLessonId(
     }
 
     res.json({ message: 'success', lessonInfo });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function correctLessonFrequency(
+  req: Request<
+    ParamsWithId,
+    MessageResponse,
+    LessonSchemas.CorrectLessonFrequencyInput
+  >,
+  res: Response<MessageResponse>,
+  next: NextFunction
+) {
+  try {
+    const { id } = req.params;
+    const { newStudentFrequencyList } = req.body;
+
+    const existingLesson = await LessonServices.findLessonById(+id);
+
+    if (!existingLesson) {
+      res.status(404);
+      throw new Error('Lesson with given ID does not exist.');
+    }
+
+    const studentsToIncrementLife = existingLesson.absentStudents.filter(
+      (studentId) => !newStudentFrequencyList.includes(studentId)
+    );
+
+    const studentsToDecrementLife = newStudentFrequencyList.filter(
+      (studentId) => !existingLesson.absentStudents.includes(studentId)
+    );
+
+    const incrementStudentHealthPromises = studentsToIncrementLife.map(
+      async (studentId) => await UserServices.incrementStudentHealth(studentId)
+    );
+
+    const decrementStudentHealthPromises = studentsToDecrementLife.map(
+      async (studentId) => await UserServices.decrementStudentHealth(studentId)
+    );
+
+    if (
+      incrementStudentHealthPromises.length > 0 ||
+      decrementStudentHealthPromises.length > 0
+    ) {
+      await Promise.all([
+        ...incrementStudentHealthPromises,
+        ...decrementStudentHealthPromises,
+      ]);
+    }
+
+    await LessonServices.updateLessonAbsentStudentList(
+      existingLesson.id,
+      newStudentFrequencyList
+    );
+
+    res.json({
+      message: `Frequency for lesson ${existingLesson.number} with id: ${existingLesson.id} was updated successfully.`,
+    });
   } catch (error) {
     next(error);
   }

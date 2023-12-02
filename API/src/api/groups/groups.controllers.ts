@@ -7,6 +7,33 @@ import * as LessonsServices from '../lessons/lessons.services';
 import * as UserServices from '../users/users.services';
 import { db } from '../../db';
 
+export async function getGroupInfo(
+  req: Request<ParamsWithId>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id } = req.params;
+
+    const existingGroup = await GroupServices.findGroupById(+id);
+
+    if (!existingGroup) {
+      res.status(404);
+      throw new Error('Group with this id does not exist.');
+    }
+
+    res.json({
+      message: 'success',
+      group: {
+        id: existingGroup.id,
+        name: existingGroup.name,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function getGroupsByLecturerId(
   req: Request<ParamsWithId>,
   res: Response,

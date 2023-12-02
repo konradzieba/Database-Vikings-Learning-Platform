@@ -1,29 +1,12 @@
 import { useDeleteLessonMutation } from '@/hooks/lessons/useDeleteLessonMutation';
 import { useGetPreDeleteLessonInfoQuery } from '@/hooks/lessons/useGetPreDeleteLessonInfoQuery';
 import { useMeQuery } from '@/hooks/users/useMeQuery';
-import {
-	Anchor,
-	Box,
-	Button,
-	Center,
-	Collapse,
-	Flex,
-	Group,
-	List,
-	Loader,
-	Text,
-	ThemeIcon,
-	rem,
-} from '@mantine/core';
+import { useCreateLessonStore } from '@/utils/stores/useCreateLessonStore';
+import { Anchor, Box, Button, Center, Collapse, Flex, Group, List, Loader, Text, ThemeIcon, rem } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
-import {
-	IconChevronDown,
-	IconChevronUp,
-	IconCircleCheck,
-	IconCircleX,
-	IconUser,
-} from '@tabler/icons-react';
+import { IconChevronDown, IconChevronUp, IconCircleCheck, IconCircleX, IconUser } from '@tabler/icons-react';
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 const getTasksPlural = (taskAmount: number) => {
 	if (taskAmount === 1) return 'zadanie';
@@ -38,6 +21,8 @@ function DeleteLessonModal({
 }: ContextModalProps<{
 	lessonId: number;
 }>) {
+	const { id: groupId } = useParams();
+	const { removeLesson } = useCreateLessonStore();
 	const [isListOpen, setIsListOpen] = useState(false);
 	const {
 		mutate,
@@ -73,6 +58,7 @@ function DeleteLessonModal({
 	}
 
 	if (isMutationSuccess) {
+		removeLesson(+groupId!);
 		return (
 			<>
 				<Flex direction='column' align='center' gap='md' mb='md'>
@@ -90,13 +76,7 @@ function DeleteLessonModal({
 		<>
 			<Flex direction='column' align='center' gap='md' mb='md'>
 				<IconCircleX size='3rem' color='var(--bad-state-color)' />
-				<Text>
-					Wystąpił problem podczas{' '}
-					{isMutationError
-						? 'przesyłania zadania'
-						: 'wczytywania danych z lekcji'}
-					.
-				</Text>
+				<Text>Wystąpił problem podczas {isMutationError ? 'przesyłania zadania' : 'wczytywania danych z lekcji'}.</Text>
 			</Flex>
 			<Button fullWidth onClick={handleCloseModal}>
 				Rozumiem
@@ -105,22 +85,14 @@ function DeleteLessonModal({
 	}
 
 	const amountOfAnswersPlural =
-		preDeleteLessonInfoData?.lessonInfo.sendAnswersAmount === 1
-			? 'odpowiedź'
-			: 'odpowiedzi';
+		preDeleteLessonInfoData?.lessonInfo.sendAnswersAmount === 1 ? 'odpowiedź' : 'odpowiedzi';
 	const taskPlural = preDeleteLessonInfoData?.lessonInfo.taskAmount
 		? getTasksPlural(preDeleteLessonInfoData?.lessonInfo.taskAmount)
 		: null;
 
-	const listItems = preDeleteLessonInfoData?.lessonInfo.studentsWithAnswers.map(
-		(student) => {
-			return (
-				<List.Item key={student.studentId}>
-					{`${student.firstName} ${student.lastName}`}
-				</List.Item>
-			);
-		}
-	);
+	const listItems = preDeleteLessonInfoData?.lessonInfo.studentsWithAnswers.map(student => {
+		return <List.Item key={student.studentId}>{`${student.firstName} ${student.lastName}`}</List.Item>;
+	});
 
 	return (
 		<Box p='sm'>
@@ -140,37 +112,28 @@ function DeleteLessonModal({
 					{preDeleteLessonInfoData?.lessonInfo.taskAmount}
 				</Text>
 				&nbsp;
-				{taskPlural}. Po usunięciu lekcji, wszystkie zadania przypisane do
-				lekcji zostaną usunięte.
+				{taskPlural}. Po usunięciu lekcji, wszystkie zadania przypisane do lekcji zostaną usunięte.
 			</Text>
 			{preDeleteLessonInfoData?.lessonInfo.sendAnswersAmount !== 0 && (
 				<>
 					<Text mt='xs' size='sm'>
 						Dodatkowo na tą lekcje zostały udzielone już&nbsp;
-						<Text
-							span
-							fw={500}
-							size='sm'
-							c='var(--mantine-primary-color-lighter)'
-						>
+						<Text span fw={500} size='sm' c='var(--mantine-primary-color-lighter)'>
 							{preDeleteLessonInfoData?.lessonInfo.sendAnswersAmount}
 						</Text>
 						&nbsp;
-						{amountOfAnswersPlural}. Po usunięciu lekcji, wszystkie odpowiedzi
-						zostaną usunięte, a punkty ewentualne przyznane punkty zostaną
-						odebrane.
+						{amountOfAnswersPlural}. Po usunięciu lekcji, wszystkie odpowiedzi zostaną usunięte, a punkty ewentualne
+						przyznane punkty zostaną odebrane.
 					</Text>
 					<Text mt='xs' size='sm'>
-						Rozwiń listę, aby zobaczyć studentów których odpowiedzi zostały
-						przesłane.
+						Rozwiń listę, aby zobaczyć studentów których odpowiedzi zostały przesłane.
 					</Text>
 					<Button
 						mt='xs'
 						fullWidth
 						variant='outline'
 						leftSection={isListOpen ? <IconChevronUp /> : <IconChevronDown />}
-						onClick={() => setIsListOpen((prevState) => !prevState)}
-					>
+						onClick={() => setIsListOpen(prevState => !prevState)}>
 						{isListOpen ? 'Zwiń listę' : 'Rozwiń listę'}
 					</Button>
 					<Collapse in={isListOpen}>
@@ -180,15 +143,10 @@ function DeleteLessonModal({
 							size='sm'
 							center
 							icon={
-								<ThemeIcon
-									variant='transparent'
-									color='var(--mantine-primary-color-lighter)'
-									size={rem(20)}
-								>
+								<ThemeIcon variant='transparent' color='var(--mantine-primary-color-lighter)' size={rem(20)}>
 									<IconUser />
 								</ThemeIcon>
-							}
-						>
+							}>
 							{listItems}
 						</List>
 					</Collapse>

@@ -1,14 +1,5 @@
-import React, { useMemo } from 'react';
-import {
-	Center,
-	Divider,
-	Flex,
-	Group,
-	HoverCard,
-	Loader,
-	Text,
-	rem,
-} from '@mantine/core';
+import { useMemo } from 'react';
+import { Center, Divider, Flex, Group, HoverCard, Loader, Text, rem } from '@mantine/core';
 import { NavLink, useLocation, useParams } from 'react-router-dom';
 import classes from './Navbar.module.css';
 import UserPanel from '../UI/UserPanel';
@@ -36,6 +27,13 @@ function Nav({ groups, isPending }: LecturerNavProps) {
 			if (!splitLink[4]) {
 				return `/dashboard/group/${groupId}`;
 			}
+			if (
+				splitLink[4] === 'create-lesson' ||
+				splitLink[4] === 'lesson-dashboard' ||
+				splitLink[4] === 'check-frequency'
+			) {
+				return `/dashboard/group/${groupId}`;
+			}
 			return `/${splitLink[1]}/${splitLink[2]}/${groupId}/${splitLink[4]}`;
 		},
 		[]
@@ -43,7 +41,11 @@ function Nav({ groups, isPending }: LecturerNavProps) {
 
 	const getLinkClassName = useMemo(
 		() => (isActive: boolean, link: string) => {
-			if (isActive && pathname.endsWith(link)) {
+			if (
+				(isActive && pathname.endsWith(link)) ||
+				(isActive && pathname.includes('check-frequency')) ||
+				(isActive && pathname.includes('lesson-dashboard'))
+			) {
 				return `${classes.link} ${classes.activeLink}`;
 			}
 			return `${classes.link} ${classes.inactiveLink}`;
@@ -51,10 +53,7 @@ function Nav({ groups, isPending }: LecturerNavProps) {
 		[pathname]
 	);
 
-	const isGroupPath = useMemo(
-		() => pathname.includes('/dashboard/group/'),
-		[pathname]
-	);
+	const isGroupPath = useMemo(() => pathname.includes('/dashboard/group/'), [pathname]);
 
 	const groupNavLinks = [
 		{
@@ -83,8 +82,7 @@ function Nav({ groups, isPending }: LecturerNavProps) {
 									isActive && pathname.endsWith('dashboard')
 										? `${classes.link} ${classes.activeLink}`
 										: `${classes.link} ${classes.inactiveLink}`
-								}
-							>
+								}>
 								Grupy
 							</NavLink>
 							<IconChevronDown size='1.5rem' color='var(--font-color)' />
@@ -99,11 +97,7 @@ function Nav({ groups, isPending }: LecturerNavProps) {
 							groups.map((group, index) => {
 								let link = relativeGroupLink(pathname, group.groupId);
 								return (
-									<NavLink
-										to={link}
-										className={`${classes.link} ${classes.inactiveLink}`}
-										key={index}
-									>
+									<NavLink to={link} className={`${classes.link} ${classes.inactiveLink}`} key={index}>
 										{group.groupName}
 									</NavLink>
 								);
@@ -115,14 +109,8 @@ function Nav({ groups, isPending }: LecturerNavProps) {
 			{isGroupPath && (
 				<>
 					<Divider orientation='vertical' />
-					{groupNavLinks.map((link) => (
-						<NavLink
-							to={link.link}
-							className={({ isActive }) =>
-								getLinkClassName(isActive, link.link)
-							}
-							key={link.link}
-						>
+					{groupNavLinks.map(link => (
+						<NavLink to={link.link} className={({ isActive }) => getLinkClassName(isActive, link.link)} key={link.link}>
 							{link.label}
 						</NavLink>
 					))}
@@ -145,9 +133,7 @@ function LecturerNavbar({ lecturerInfo }: LecturerNavbarProps) {
 	const { pathname } = useLocation();
 	let { id } = useParams();
 
-	const { data: groupsData, isPending } = useGetGroupsByLecturerId(
-		lecturerData.lecturerId
-	);
+	const { data: groupsData, isPending } = useGetGroupsByLecturerId(lecturerData.lecturerId);
 
 	useMemo(() => {
 		if (groupsData?.groups) {
@@ -155,10 +141,7 @@ function LecturerNavbar({ lecturerInfo }: LecturerNavbarProps) {
 		}
 	}, [groupsData?.groups]);
 
-	const isGroupPath = useMemo(
-		() => pathname.includes('/dashboard/group/'),
-		[pathname]
-	);
+	const isGroupPath = useMemo(() => pathname.includes('/dashboard/group/'), [pathname]);
 
 	return (
 		<Flex justify='space-around' gap='xl' py='lg' align='center' mb={rem(60)}>
@@ -167,10 +150,7 @@ function LecturerNavbar({ lecturerInfo }: LecturerNavbarProps) {
 				{isGroupPath && id && groupsData?.groups && (
 					<>
 						<Text c='var(--mantine-primary-color)' fw={500} size='lg'>
-							{
-								groupsData?.groups.find((group) => group.groupId === +id!)
-									?.groupName
-							}
+							{groupsData?.groups.find(group => group.groupId === +id!)?.groupName}
 						</Text>
 						<Divider orientation='vertical' />
 					</>

@@ -8,6 +8,15 @@ import { EnumRole } from '../../../typings/token';
 const router = Router();
 
 router.get(
+  '/getGroupInfo/:id',
+  validateRequestAndCheckRole(
+    { params: paramsWithIdSchema },
+    EnumRole.LECTURER
+  ),
+  GroupsControllers.getGroupInfo
+);
+
+router.get(
   '/getGroupsByLecturerId/:id',
   validateRequestAndCheckRole(
     { params: paramsWithIdSchema },

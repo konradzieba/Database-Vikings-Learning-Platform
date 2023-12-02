@@ -100,7 +100,9 @@ function PhotoPicker({ previousLessonsImages }: PhotoPickerProps) {
 									onClick={() => handleSetLessonImage(image)}
 								/>
 							</Box>
-							<Text size='sm'>{usedInPreviousLesson ? `Użyto w lekcji ${usedInPreviousLesson.number}` : '\u00a0'}</Text>
+							<Text c='dimmed' fs='italic' size='sm'>
+								{usedInPreviousLesson ? `Użyto w lekcji ${usedInPreviousLesson.number}` : '\u00a0'}
+							</Text>
 						</Stack>
 					);
 				})}

@@ -25,6 +25,15 @@ router.get(
 );
 
 router.get(
+  '/getAbsentStudents/:id',
+  validateRequestAndCheckRole(
+    { params: paramsWithIdSchema },
+    EnumRole.LECTURER
+  ),
+  LessonsControllers.getAbsentStudents
+);
+
+router.get(
   '/getPreviousLessonsImages/:id',
   validateRequestAndCheckRole(
     { params: paramsWithIdSchema },
@@ -73,6 +82,18 @@ router.patch(
     EnumRole.LECTURER
   ),
   LessonsControllers.reorderLessons
+);
+
+router.patch(
+  '/correctLessonFrequency/:id',
+  validateRequestAndCheckRole(
+    {
+      params: paramsWithIdSchema,
+      body: LessonSchemas.correctLessonFrequencySchema,
+    },
+    EnumRole.LECTURER
+  ),
+  LessonsControllers.correctLessonFrequency
 );
 
 router.patch(

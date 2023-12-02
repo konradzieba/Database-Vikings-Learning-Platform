@@ -1,8 +1,4 @@
-import {
-	createBrowserRouter,
-	Navigate,
-	RouterProvider,
-} from 'react-router-dom';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import LoginForm from './components/Login/Login.form';
 import BlankContent from './components/UI/BlankContent';
 import StudentLayout from './layouts/Student.layout';
@@ -13,17 +9,13 @@ import LecturerLayout from './layouts/Lecturer.layout';
 import { NotFoundPage } from './pages/404.page';
 import DashboardPage from './pages/lecturer/Dashboard.page';
 import AuthMiddleware from './utils/Auth.middleware';
-import {
-	lecturerLayoutLoaderFn,
-	loginLoaderFn,
-	studentLayoutLoaderFn,
-} from './utils/middlewares';
+import { lecturerLayoutLoaderFn, loginLoaderFn, studentLayoutLoaderFn } from './utils/middlewares';
 import { HomePage } from './pages/student/Home.page';
 import LessonTasksPage from './pages/student/LessonTasks.page';
 import GroupPanelPage from './pages/lecturer/GroupPanel.page';
 import GroupLessonsPage from './pages/lecturer/GroupLessons.page';
 import CreateLessonPage from './pages/lecturer/CreateLesson.page';
-import CheckFrequencyPage from './pages/CheckFrequency.page';
+import CheckFrequencyPage from './pages/lecturer/CheckFrequency.page';
 import GroupStudentsInfoPage from './pages/lecturer/GroupStudentsInfo.page';
 import LessonDashboardPage from './pages/lecturer/LessonDashboard.page';
 import ScoreBoardLecturerPage from './pages/lecturer/ScoreBoardLecturer.page';
@@ -81,7 +73,7 @@ const router = createBrowserRouter([
 								element: <GroupStudentsInfoPage />,
 							},
 							{
-								path: 'check-frequency',
+								path: 'check-frequency/:lessonId',
 								element: <CheckFrequencyPage />,
 							},
 							{

@@ -1,4 +1,5 @@
 import cx from 'clsx';
+import { SetStateAction, Dispatch } from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { Table, Checkbox, Group, Text, rem, ThemeIcon, Flex } from '@mantine/core';
 import classes from './FrequencyList.component.module.css';
@@ -8,14 +9,42 @@ import { useParams } from 'react-router-dom';
 import FullScreenLoader from '../UI/FullScreenLoader';
 import { useCreateLessonStore } from '@/utils/stores/useCreateLessonStore';
 
-function FrequencyList() {
+interface FrequencyListProps {
+	setFrequencyListPDF: Dispatch<
+		SetStateAction<
+			| {
+					newStudentIds: number[] | null;
+					studentsFromGroup:
+						| {
+								id: number;
+								firstName: string;
+								lastName: string;
+								indexNumber: number;
+								score: number;
+								health: number;
+								groupId: number;
+								lastLogin: string;
+								userId: number;
+						  }[]
+						| null;
+			  }
+			| undefined
+		>
+	>;
+}
+
+function FrequencyList({ setFrequencyListPDF }: FrequencyListProps) {
 	const { id: groupId } = useParams();
-	const { data: StudentsFromGroup, isLoading } = useGetStudentsFromGroup(+groupId!);
+	const { data: StudentsFromGroup, isLoading, isSuccess } = useGetStudentsFromGroup(+groupId!);
 
 	useMemo(() => {
 		if (StudentsFromGroup?.students) {
 			StudentsFromGroup.students.sort((a, b) => {
-				return a.lastName.localeCompare(b.lastName);
+				if (a.lastName === b.lastName) {
+					return a.firstName.localeCompare(b.firstName);
+				} else {
+					return a.lastName.localeCompare(b.lastName);
+				}
 			});
 		}
 	}, [StudentsFromGroup]);
@@ -38,6 +67,15 @@ function FrequencyList() {
 	};
 
 	useEffect(() => {
+		if (isSuccess) {
+			setFrequencyListPDF({
+				newStudentIds: selection,
+				studentsFromGroup: StudentsFromGroup.students!,
+			});
+		}
+	}, [isSuccess]);
+
+	useEffect(() => {
 		if (lessonFromGroup && selection && selectedStudentCredentials) {
 			const updatedLessonFromGroup = {
 				...lessonFromGroup,
@@ -46,6 +84,10 @@ function FrequencyList() {
 				isFrequencyChecked: true,
 			};
 			updateLesson(+groupId!, updatedLessonFromGroup);
+			setFrequencyListPDF({
+				newStudentIds: selection,
+				studentsFromGroup: StudentsFromGroup?.students!,
+			});
 		}
 	}, [selection]);
 

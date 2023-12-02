@@ -7,7 +7,7 @@ function AddLessonCard() {
 	return (
 		<Flex
 			direction='column'
-			mih={589}
+			mih={595}
 			miw={380}
 			px='xs'
 			py='xl'

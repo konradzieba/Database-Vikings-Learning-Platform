@@ -15,8 +15,23 @@ import { useGetPreviousLessonsImagesMutation } from '@/hooks/lessons/useGetPrevi
 
 function CreateLessonPage() {
 	const [activeStep, setActiveStep] = useState(0);
-
-	const { createdLessonsArray, addLesson } = useCreateLessonStore();
+	const [frequencyListPDF, setFrequencyListPDF] = useState<{
+		newStudentIds: number[] | null;
+		studentsFromGroup:
+			| {
+					id: number;
+					firstName: string;
+					lastName: string;
+					indexNumber: number;
+					score: number;
+					health: number;
+					groupId: number;
+					lastLogin: string;
+					userId: number;
+			  }[]
+			| null;
+	}>();
+	const { createdLessonsArray, addLesson, updateLesson } = useCreateLessonStore();
 
 	const { id } = useParams();
 
@@ -49,35 +64,41 @@ function CreateLessonPage() {
 
 	const handleCreateLesson = () => {
 		const createdLesson = createdLessonsArray.find(lesson => lesson.groupId === +id!);
-		const createdLessonWithFrequency = { ...createdLesson, isFrequencyChecked: true };
+		if (createdLesson) {
+			const createdLessonWithFrequency = { ...createdLesson, isFrequencyChecked: true };
+			updateLesson(+id!, createdLesson);
 
-		modals.openContextModal({
-			modal: 'previewCreatedLessonInfo',
-			title: `Pogląd stworzonej lekcji nr ${createdLessonWithFrequency.lessonNumber}`,
-			closeOnClickOutside: false,
-			withCloseButton: false,
-			innerProps: {
-				modalBody: '',
-				createdLesson: createdLessonWithFrequency,
-				nextStep: nextStep,
-			},
-		});
+			modals.openContextModal({
+				modal: 'previewCreatedLessonInfo',
+				title: `Pogląd stworzonej lekcji nr ${createdLessonWithFrequency.lessonNumber}`,
+				closeOnClickOutside: false,
+				withCloseButton: false,
+				innerProps: {
+					modalBody: '',
+					createdLesson: createdLessonWithFrequency,
+					nextStep: nextStep,
+				},
+			});
+		}
 	};
 
 	const handleCreateLessonWithoutFrequency = () => {
 		const createdLesson = createdLessonsArray.find(lesson => lesson.groupId === +id!);
-		const createdLessonWithoutFrequency = { ...createdLesson, isFrequencyChecked: false, absentStudents: [] };
-		modals.openContextModal({
-			modal: 'previewCreatedLessonInfo',
-			title: `Pogląd stworzonej lekcji nr ${createdLessonWithoutFrequency.lessonNumber}`,
-			closeOnClickOutside: false,
-			withCloseButton: false,
-			innerProps: {
-				modalBody: '',
-				createdLesson: createdLessonWithoutFrequency,
-				nextStep: nextStep,
-			},
-		});
+		if (createdLesson) {
+			const createdLessonWithoutFrequency = { ...createdLesson, isFrequencyChecked: false, absentStudents: [] };
+			updateLesson(+id!, createdLessonWithoutFrequency);
+			modals.openContextModal({
+				modal: 'previewCreatedLessonInfo',
+				title: `Pogląd stworzonej lekcji nr ${createdLessonWithoutFrequency.lessonNumber}`,
+				closeOnClickOutside: false,
+				withCloseButton: false,
+				innerProps: {
+					modalBody: '',
+					createdLesson: createdLessonWithoutFrequency,
+					nextStep: nextStep,
+				},
+			});
+		}
 	};
 
 	return (
@@ -102,7 +123,7 @@ function CreateLessonPage() {
 						</Stepper.Step>
 						<Stepper.Step allowStepSelect={false} label='Sprawdzanie obecności' icon={<IconChecklist size='1.2rem' />}>
 							<Flex align='flex-start' mih={rem(550)} mt={rem(45)}>
-								<FrequencyList />
+								<FrequencyList setFrequencyListPDF={setFrequencyListPDF} />
 							</Flex>
 						</Stepper.Step>
 						<Stepper.Completed>
@@ -110,6 +131,7 @@ function CreateLessonPage() {
 						</Stepper.Completed>
 					</Stepper>
 					<StepperButtons
+						frequencyListPDF={frequencyListPDF}
 						activeStep={activeStep}
 						createdLessonsArray={createdLessonsArray}
 						groupId={+id!}
