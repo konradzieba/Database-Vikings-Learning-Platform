@@ -14,7 +14,11 @@ function CheckFrequencyPage() {
 	useMemo(() => {
 		if (StudentsFromGroup?.students) {
 			StudentsFromGroup.students.sort((a, b) => {
-				return a.lastName.localeCompare(b.lastName);
+				if (a.lastName === b.lastName) {
+					return a.firstName.localeCompare(b.firstName);
+				} else {
+					return a.lastName.localeCompare(b.lastName);
+				}
 			});
 		}
 	}, [StudentsFromGroup]);
@@ -35,6 +39,7 @@ function CheckFrequencyPage() {
 								isFrequencyChecked={AbsentStudents?.isFrequencyChecked!}
 								studentsFromGroup={StudentsFromGroup?.students!}
 								absentStudentsList={AbsentStudents?.absentStudents!}
+								lessonNumber={AbsentStudents?.number!}
 							/>
 						) : (
 							<FullScreenLoader />

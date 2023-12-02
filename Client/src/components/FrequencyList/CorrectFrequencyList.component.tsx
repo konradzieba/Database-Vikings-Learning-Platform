@@ -7,6 +7,7 @@ import { modals } from '@mantine/modals';
 import { useParams } from 'react-router-dom';
 
 interface CorrectFrequencyListProps {
+	lessonNumber: number;
 	studentsFromGroup: {
 		id: number;
 		firstName: string;
@@ -26,6 +27,7 @@ function CorrectFrequencyList({
 	studentsFromGroup,
 	absentStudentsList,
 	isFrequencyChecked,
+	lessonNumber,
 }: CorrectFrequencyListProps) {
 	const { lessonId } = useParams();
 
@@ -52,7 +54,7 @@ function CorrectFrequencyList({
 	};
 
 	const toggleCredentials = (credentials: { id: number; name: string }) => {
-		const timestamp = Date.now(); // Get the current timestamp
+		const timestamp = Date.now();
 
 		setSelectedStudentCredentials(current =>
 			current?.some(item => item.id === credentials.id && item.name === credentials.name)
@@ -117,6 +119,8 @@ function CorrectFrequencyList({
 				oldStudentListIds: absentStudentsList,
 				isFrequencyChecked: isFrequencyChecked,
 				selectedStudentCredentials: selectedStudentCredentials,
+				lessonNumber: lessonNumber,
+				studentsFromGroup: studentsFromGroup,
 			},
 		});
 	};

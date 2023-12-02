@@ -1,9 +1,12 @@
+import FrequencyListPDF from '@/components/UI/FrequencyList.pdf';
 import { useCorrectLessonFrequencyMutation } from '@/hooks/lessons/useCorrectLessonFrequencyMutation';
 import { Badge, Button, Center, Divider, Group, Loader, Stack, Text, rem } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import { IconArrowNarrowRight, IconCircleCheck, IconCircleX } from '@tabler/icons-react';
 
 interface CorrectFrequencyListProps {
+	lessonNumber: number;
 	modalBody: string;
 	lessonId: number;
 	newStudentListIds: number[];
@@ -12,6 +15,17 @@ interface CorrectFrequencyListProps {
 	selectedStudentCredentials: {
 		id: number;
 		name: string;
+	}[];
+	studentsFromGroup: {
+		id: number;
+		firstName: string;
+		lastName: string;
+		indexNumber: number;
+		score: number;
+		health: number;
+		groupId: number;
+		lastLogin: string;
+		userId: number;
 	}[];
 }
 
@@ -30,12 +44,7 @@ function CorrectFrequencyModal({ innerProps, context, id }: ContextModalProps<Co
 	const areEqual = areArraysEqual(innerProps.oldStudentListIds, innerProps.newStudentListIds);
 
 	const handleCorrectFrequency = () => {
-		if (innerProps.newStudentListIds.length === 0 && innerProps.isFrequencyChecked) {
-			context.closeModal(id);
-			modals.closeAll();
-		} else {
-			correctLessonFrequency();
-		}
+		correctLessonFrequency();
 	};
 
 	const handleCloseModal = () => {
@@ -56,9 +65,27 @@ function CorrectFrequencyModal({ innerProps, context, id }: ContextModalProps<Co
 			<Stack mx='md' align='center'>
 				<IconCircleCheck size='3rem' color='var(--good-state-color)' />
 				<Text>Lista obecności została zaktualizowana pomyślnie.</Text>
-				<Button miw={150} mx='auto' onClick={handleCloseModal}>
-					Rozumiem
-				</Button>
+				<Group justify='center'>
+					<PDFDownloadLink
+						document={
+							<FrequencyListPDF
+								lessonNumber={innerProps.lessonNumber}
+								groupName='Siema'
+								studentsFromGroup={innerProps.studentsFromGroup}
+								newStudentListIds={innerProps.newStudentListIds}
+								oldStudentListIds={innerProps.oldStudentListIds}
+								isFrequencyChecked={innerProps.isFrequencyChecked}
+							/>
+						}
+						fileName={`ListaObecnosci_Lekcja${innerProps.lessonNumber}_Grupa1_BazyDanych`}>
+						<Button miw={150} variant='outline'>
+							Pobierz PDF
+						</Button>
+					</PDFDownloadLink>
+					<Button miw={150} onClick={handleCloseModal}>
+						Rozumiem
+					</Button>
+				</Group>
 			</Stack>
 		);
 	}
@@ -150,9 +177,26 @@ function CorrectFrequencyModal({ innerProps, context, id }: ContextModalProps<Co
 				<Button miw={150} variant='outline' onClick={handleCloseModal}>
 					Anuluj
 				</Button>
-				<Button miw={150} onClick={handleCorrectFrequency}>
-					Potwierdź
-				</Button>
+				{areEqual && innerProps.isFrequencyChecked ? (
+					<PDFDownloadLink
+						document={
+							<FrequencyListPDF
+								lessonNumber={innerProps.lessonNumber}
+								groupName='Siema'
+								studentsFromGroup={innerProps.studentsFromGroup}
+								newStudentListIds={innerProps.newStudentListIds}
+								oldStudentListIds={innerProps.oldStudentListIds}
+								isFrequencyChecked={innerProps.isFrequencyChecked}
+							/>
+						}
+						fileName={`ListaObecnosci_Lekcja${innerProps.lessonNumber}_Grupa1_BazyDanych`}>
+						<Button miw={150}>Pobierz PDF</Button>
+					</PDFDownloadLink>
+				) : (
+					<Button miw={150} onClick={handleCorrectFrequency}>
+						Potwierdź
+					</Button>
+				)}
 			</Group>
 		</>
 	);
