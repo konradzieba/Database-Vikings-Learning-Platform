@@ -11,6 +11,7 @@ import {
 } from '@/types/RequestTypes';
 import {
 	TGetAbsentStudents,
+	TGetGroupInfo,
 	TGetGroupsByLecturerId,
 	TGetLessonInfoByGroupAndLessonId,
 	TGetLessonTaskById,
@@ -121,10 +122,7 @@ export const deleteUserMutationFn = async (userId: number) => {
 	return data;
 };
 
-export const updateStudentMutationFn = async (
-	studentId: number,
-	studentInfo: TUpdateStudentRequest
-) => {
+export const updateStudentMutationFn = async (studentId: number, studentInfo: TUpdateStudentRequest) => {
 	const { data } = await axios.patch<TMessageResponse>(`/users/updateStudent/${studentId}`, studentInfo);
 	return data;
 };
@@ -150,14 +148,8 @@ export const getStudentTasksQueryFn = async (groupId: number) => {
 	return data;
 };
 
-export const replyAnswerMutationFn = async (
-	answerId: number,
-	reply: TReplyAnswerRequest
-) => {
-	const { data } = await axios.patch<TMessageResponse>(
-		`/answers/answerReply/${answerId}`,
-		reply
-	);
+export const replyAnswerMutationFn = async (answerId: number, reply: TReplyAnswerRequest) => {
+	const { data } = await axios.patch<TMessageResponse>(`/answers/answerReply/${answerId}`, reply);
 	return data;
 };
 
@@ -223,15 +215,16 @@ export const correctLessonFrequencyListMutationFn = async (lessonId: number, new
 };
 
 export const getPreDeleteGroupInfoQueryFn = async (groupId: number) => {
-	const { data } = await axios.get<TGetPreDeleteGroupInfo>(
-		`/groups/getPreDeleteGroupInfo/${groupId}`
-	);
+	const { data } = await axios.get<TGetPreDeleteGroupInfo>(`/groups/getPreDeleteGroupInfo/${groupId}`);
 	return data;
 };
 
 export const deleteGroupMutationFn = async (groupId: number) => {
-	const { data } = await axios.delete<TMessageResponse>(
-		`/groups/deleteGroup/${groupId}`
-	);
+	const { data } = await axios.delete<TMessageResponse>(`/groups/deleteGroup/${groupId}`);
+	return data;
+};
+
+export const getGroupInfoQueryFn = async (groupId: number) => {
+	const { data } = await axios.get<TGetGroupInfo>(`/groups/getGroupInfo/${groupId}`);
 	return data;
 };

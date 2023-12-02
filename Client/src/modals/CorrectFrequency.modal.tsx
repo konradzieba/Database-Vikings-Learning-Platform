@@ -12,6 +12,7 @@ interface CorrectFrequencyListProps {
 	newStudentListIds: number[];
 	oldStudentListIds: number[];
 	isFrequencyChecked: boolean;
+	groupName: string;
 	selectedStudentCredentials: {
 		id: number;
 		name: string;
@@ -70,14 +71,14 @@ function CorrectFrequencyModal({ innerProps, context, id }: ContextModalProps<Co
 						document={
 							<FrequencyListPDF
 								lessonNumber={innerProps.lessonNumber}
-								groupName='Siema'
+								groupName={innerProps.groupName}
 								studentsFromGroup={innerProps.studentsFromGroup}
 								newStudentListIds={innerProps.newStudentListIds}
 								oldStudentListIds={innerProps.oldStudentListIds}
 								isFrequencyChecked={innerProps.isFrequencyChecked}
 							/>
 						}
-						fileName={`ListaObecnosci_Lekcja${innerProps.lessonNumber}_Grupa1_BazyDanych`}>
+						fileName={`ListaObecnosci_Lekcja${innerProps.lessonNumber}_${innerProps.groupName}_BazyDanych`}>
 						<Button miw={150} variant='outline'>
 							Pobierz PDF
 						</Button>

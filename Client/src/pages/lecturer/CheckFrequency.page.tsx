@@ -5,11 +5,13 @@ import { Center, Stack, Title } from '@mantine/core';
 import { useParams } from 'react-router-dom';
 import { useMemo } from 'react';
 import FullScreenLoader from '@/components/UI/FullScreenLoader';
+import useGetGroupInfoQuery from '@/hooks/groups/useGetGroupInfoQuery';
 
 function CheckFrequencyPage() {
 	const { id: groupId, lessonId } = useParams();
 	const { data: StudentsFromGroup, isLoading: isStudentsFromGroupDataLoading } = useGetStudentsFromGroup(+groupId!);
 	const { data: AbsentStudents, isLoading: isAbsentStudentsDataLoading } = useGetAbsentStudentsQuery(+lessonId!);
+	const { data: GroupInfo, isLoading: isGroupInfoDataLoading } = useGetGroupInfoQuery(+groupId!);
 
 	useMemo(() => {
 		if (StudentsFromGroup?.students) {
@@ -25,7 +27,7 @@ function CheckFrequencyPage() {
 
 	return (
 		<>
-			{isAbsentStudentsDataLoading || isStudentsFromGroupDataLoading ? (
+			{isAbsentStudentsDataLoading || isStudentsFromGroupDataLoading || isGroupInfoDataLoading ? (
 				<FullScreenLoader />
 			) : (
 				<Center>
@@ -40,6 +42,7 @@ function CheckFrequencyPage() {
 								studentsFromGroup={StudentsFromGroup?.students!}
 								absentStudentsList={AbsentStudents?.absentStudents!}
 								lessonNumber={AbsentStudents?.number!}
+								groupName={GroupInfo?.group.name!}
 							/>
 						) : (
 							<FullScreenLoader />

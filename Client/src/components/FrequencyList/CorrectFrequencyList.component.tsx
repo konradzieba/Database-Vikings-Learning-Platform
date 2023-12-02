@@ -21,6 +21,7 @@ interface CorrectFrequencyListProps {
 	}[];
 	absentStudentsList: number[];
 	isFrequencyChecked: boolean;
+	groupName: string;
 }
 
 function CorrectFrequencyList({
@@ -28,6 +29,7 @@ function CorrectFrequencyList({
 	absentStudentsList,
 	isFrequencyChecked,
 	lessonNumber,
+	groupName,
 }: CorrectFrequencyListProps) {
 	const { lessonId } = useParams();
 
@@ -121,6 +123,7 @@ function CorrectFrequencyList({
 				selectedStudentCredentials: selectedStudentCredentials,
 				lessonNumber: lessonNumber,
 				studentsFromGroup: studentsFromGroup,
+				groupName: groupName,
 			},
 		});
 	};

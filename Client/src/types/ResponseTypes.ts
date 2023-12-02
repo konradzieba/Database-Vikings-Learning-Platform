@@ -275,6 +275,14 @@ const getAbsentStudentsSchema = z.object({
 	isFrequencyChecked: z.boolean(),
 });
 
+const getGroupInfoSchema = z.object({
+	message: z.string(),
+	group: z.object({
+		id: z.number().int(),
+		name: z.string(),
+	}),
+});
+
 export type TMessageResponse = z.infer<typeof MessageResponseSchema>;
 export type TLoginResponse = z.infer<typeof LoginResponseSchema>;
 export type TRegisterManyStudents = z.infer<typeof RegisterManyStudentsSchema>;
@@ -299,3 +307,4 @@ export type TGetAbsentStudents = z.infer<typeof getAbsentStudentsSchema>;
 export type TGetPreviousLessonsImages = z.infer<typeof getPreviousLessonsImagesSchema>;
 export type TGetPreDeleteGroupInfo = z.infer<typeof getPreDeleteGroupInfoSchema>;
 export type TGetPreDeleteLessonInfo = z.infer<typeof getPreDeleteLessonInfoSchema>;
+export type TGetGroupInfo = z.infer<typeof getGroupInfoSchema>;
