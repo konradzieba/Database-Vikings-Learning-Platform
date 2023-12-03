@@ -11,9 +11,10 @@ import {
 	TextInput,
 	Center,
 	ActionIcon,
+	Anchor,
 } from '@mantine/core';
 import { IconCoins, IconSearch, IconTrophy, IconX } from '@tabler/icons-react';
-import { Navigate, useParams } from 'react-router-dom';
+import { Link, Navigate, useParams } from 'react-router-dom';
 import { TGetScoreBoard } from '@/types/ResponseTypes';
 import { useLecturerStore } from '@/utils/stores/useLecturerStore';
 import HeartCounter from '../UI/HeartCounter';
@@ -25,6 +26,7 @@ const topColors = [
 ];
 
 type TTableRow = {
+	id: number;
 	indexNumber: number;
 	User: {
 		firstName: string;
@@ -134,7 +136,13 @@ function ScoreBoardLecturer({
 						</Text>
 					)}
 				</Table.Td>
-				<Table.Td>{`${row.User.firstName} ${row.User.lastName}`}</Table.Td>
+				<Table.Td>
+					<Anchor
+						component={Link}
+						to={`/dashboard/student-preview/${row.id}`}
+						size='sm'
+					>{`${row.User.firstName} ${row.User.lastName}`}</Anchor>
+				</Table.Td>
 				<Table.Td>{row.indexNumber}</Table.Td>
 				<Table.Td>
 					<HeartCounter hearts={row.health} />
