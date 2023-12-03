@@ -71,10 +71,13 @@ export async function me(req: Request, res: Response, next: NextFunction) {
 export async function getScoreBoard(
   req: Request,
   res: Response,
-  next: NextFunction
+next: NextFunction
 ) {
   try {
-    const scoreBoard = await UserServices.getScoreBoard();
+    const parsedToken: ParsedToken = req.user;
+    const isStudent = parsedToken.role === EnumRole.STUDENT;
+
+    const scoreBoard = await UserServices.getScoreBoard(isStudent);
 
     res.json({ message: 'success', scoreBoard: scoreBoard });
   } catch (error) {

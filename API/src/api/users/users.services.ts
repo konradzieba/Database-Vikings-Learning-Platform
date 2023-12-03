@@ -378,34 +378,58 @@ export function updateStudentDuringLessonDelete(
   });
 }
 
-export async function getScoreBoard() {
-  const scoreBoard = await db.student.findMany({
-    select: {
-      id: true,
-      indexNumber: true,
-      health: true,
-      score: true,
-      groupId: true,
-      aggregatedSendTime: true,
-      Group: {
-        select: {
-          lecturerId: true,
-          name: true,
+export async function getScoreBoard(isStudent: boolean) {
+  if (isStudent) {
+    return await db.student.findMany({
+      select: {
+        id: true,
+        score: true,
+        groupId: true,
+        aggregatedSendTime: true,
+        Group: {
+          select: {
+            lecturerId: true,
+            name: true,
+          },
+        },
+        User: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
         },
       },
-      User: {
-        select: {
-          firstName: true,
-          lastName: true,
+      orderBy: {
+        score: 'desc',
+      },
+    });
+  } else {
+    return await db.student.findMany({
+      select: {
+        id: true,
+        indexNumber: true,
+        health: true,
+        score: true,
+        groupId: true,
+        aggregatedSendTime: true,
+        Group: {
+          select: {
+            lecturerId: true,
+            name: true,
+          },
+        },
+        User: {
+          select: {
+            firstName: true,
+            lastName: true,
+          },
         },
       },
-    },
-    orderBy: {
-      score: 'desc',
-    },
-  });
-
-  return scoreBoard;
+      orderBy: {
+        score: 'desc',
+      },
+    });
+  }
 }
 
 export async function restoreDefaultPassword(id: Student['id']) {
