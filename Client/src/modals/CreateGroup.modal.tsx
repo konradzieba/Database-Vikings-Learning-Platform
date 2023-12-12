@@ -6,10 +6,17 @@ import { useLecturerStore } from '@/utils/stores/useLecturerStore';
 import { useRegisterManyStudentsMutation } from '@/hooks/students/useRegisterManyStudentsMutation';
 import RegisterStudentsFromCSVFile from '@/components/CreateGroup/RegisterStudentsFromCSVFile.component';
 import useGetGroupsByLecturerId from '@/hooks/users/useGetGroupsByLecturerId';
+import RegisterStudentsByHand from '@/components/CreateGroup/RegisterStudentsByHand.component';
 
 export interface CsvData {
 	[key: string]: string;
 }
+
+export type CreateStudentListType = {
+	indexNumber: number;
+	firstName: string;
+	lastName: string;
+};
 
 function CreateGroupModal({ context, id }: ContextModalProps) {
 	const [activeTab, setActiveTab] = useState<string | null>('csv');
@@ -17,6 +24,9 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 	const [groupNameError, setGroupNameError] = useState('');
 	const [csvData, setCsvData] = useState<CsvData[]>([]);
 	const [fileInputError, setFileInputError] = useState('');
+
+	// created student list by hand
+	const [createdStudentsByHand, setCreatedStudentsByHand] = useState<CreateStudentListType[]>([]);
 
 	const { lecturerData } = useLecturerStore();
 	const { refetch: refetchGroupsData } = useGetGroupsByLecturerId(lecturerData.lecturerId);
@@ -128,7 +138,12 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 						setFileInputError={setFileInputError}
 					/>
 				</Tabs.Panel>
-				{/* <Tabs.Panel value='manual'></Tabs.Panel> */}
+				<Tabs.Panel value='manual'>
+					<RegisterStudentsByHand
+						createdStudentsByHand={createdStudentsByHand}
+						setCreatedStudentsByHand={setCreatedStudentsByHand}
+					/>
+				</Tabs.Panel>
 			</Stack>
 			<Group justify='center'>
 				<Button variant='outline' miw={150} onClick={handleCloseModal}>
