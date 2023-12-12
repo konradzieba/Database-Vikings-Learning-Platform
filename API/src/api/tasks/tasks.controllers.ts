@@ -132,13 +132,22 @@ export async function createTask(
   next: NextFunction
 ) {
   try {
-    const { number, question, closeDate, isExtra, lessonId } = req.body;
+    const { number, question, closeDate, isExtra, lessonId, isMarkdown } =
+      req.body;
+
+    const existingLesson = await LessonServices.findLessonById(lessonId);
+
+    if (!existingLesson) {
+      res.status(404);
+      throw new Error('Lesson with given id does not exist.');
+    }
 
     const task = await TaskServices.createTask({
       number,
       question,
       closeDate: dayjs(closeDate).toDate(),
       isExtra: isExtra || false,
+      isMarkdown,
       Lesson: {
         connect: {
           id: lessonId,

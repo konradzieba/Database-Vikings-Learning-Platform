@@ -40,12 +40,14 @@ function LessonDashboardPage() {
 
 	const handleOpenAddTaksModal = () => {
 		modals.openContextModal({
-			modal: 'addTask',
-			title: 'Dodaj zadanie',
+			modal: 'addTaskByHand',
+			title: `Dodaj zadanie nr ${lessonData.lessonInfo.tasks.length + 1}`,
 			size: 'xl',
 			closeOnClickOutside: false,
 			innerProps: {
 				modalBody: '',
+				lessonId: +lessonId!,
+				taskNumber: lessonData.lessonInfo.tasks.length + 1,
 			},
 		});
 	};

@@ -77,6 +77,15 @@ const TUpdateStudentRequestSchema = z.object({
 	health: z.number().int(),
 });
 
+const TCreateTaskRequestSchema = z.object({
+	lessonId: z.number().int(),
+	number: z.number().int(),
+	question: z.string(),
+	closeDate: z.string(),
+	isExtra: z.boolean(),
+	isMarkdown: z.boolean(),
+});
+
 export type TUserRequest = z.infer<typeof UserRequestSchema>;
 export type TLoginRequest = z.infer<typeof TLoginRequest>;
 export type TSendAnswerRequest = z.infer<typeof SendAnswerRequestSchema>;
@@ -87,3 +96,4 @@ export type TReplyAnswerRequest = z.infer<typeof TReplyAnswerRequestSchema>;
 export type TCreateLessonRequest = z.infer<typeof TCreateLessonRequestSchema>;
 export type TRegisterManyStudentsRequest = z.infer<typeof TRegisterManyStudentsRequestSchema>;
 export type TReorderLessonRequest = z.infer<typeof TReorderLessonRequestSchema>;
+export type TCreateTaskRequest = z.infer<typeof TCreateTaskRequestSchema>;

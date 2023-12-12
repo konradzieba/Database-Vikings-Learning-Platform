@@ -1,4 +1,5 @@
 import AddTaskModal from '@/modals/AddTask.modal';
+import AddTaskByHandModal from '@/modals/AddTaskByHand.modal';
 import ChangeDefaultPasswordModal from '@/modals/ChangeDefaultPassword.modal';
 import CorrectFrequencyModal from '@/modals/CorrectFrequency.modal';
 import CreateGroupModal from '@/modals/CreateGroup.modal';
@@ -38,4 +39,5 @@ export default {
 	renameGroup: RenameGroupModal,
 	deleteGroup: DeleteGroupModal,
 	correctFrequency: CorrectFrequencyModal,
+	addTaskByHand: AddTaskByHandModal,
 };

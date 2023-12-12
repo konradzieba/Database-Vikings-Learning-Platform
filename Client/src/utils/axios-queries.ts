@@ -1,6 +1,7 @@
 import { AnswerReplyStatus } from '@/types/Enums';
 import {
 	TCreateLessonRequest,
+	TCreateTaskRequest,
 	TLoginRequest,
 	TRegisterManyStudentsRequest,
 	TReorderLessonRequest,
@@ -226,5 +227,11 @@ export const deleteGroupMutationFn = async (groupId: number) => {
 
 export const getGroupInfoQueryFn = async (groupId: number) => {
 	const { data } = await axios.get<TGetGroupInfo>(`/groups/getGroupInfo/${groupId}`);
+	return data;
+};
+
+export const createTaskMutationFn = async (taskData: TCreateTaskRequest) => {
+	const { data } = await axios.post<TMessageResponse>(`/tasks/createTask`, taskData);
+
 	return data;
 };
