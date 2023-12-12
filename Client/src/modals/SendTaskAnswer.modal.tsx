@@ -3,6 +3,8 @@ import { useGetLessonTaskById } from '@/hooks/tasks/useGetLessonTaskById';
 import { Button, Center, Flex, Group, Loader, Text } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
 import { IconCircleCheck, IconCircleX } from '@tabler/icons-react';
+import dayjs from 'dayjs';
+import { Dispatch, SetStateAction } from 'react';
 
 function SendTaskAnswerModal({
 	context,
@@ -14,6 +16,8 @@ function SendTaskAnswerModal({
 	studentId: number;
 	modalBody: string;
 	lessonId: number;
+	setTemporaryDate: Dispatch<SetStateAction<string | null>>;
+	setTemporarySolution: Dispatch<SetStateAction<boolean>>;
 }>) {
 	const { mutate: sendAnswerMutation, isPending, isSuccess, isError } = useSendAnswerMutation();
 	const { refetch } = useGetLessonTaskById(innerProps.lessonId, innerProps.taskId);
@@ -32,6 +36,8 @@ function SendTaskAnswerModal({
 
 	const handleCloseModal = () => {
 		refetch();
+		innerProps.setTemporaryDate(dayjs().toISOString());
+		innerProps.setTemporarySolution(true);
 		context.closeModal(id);
 		modals.closeAll();
 	};

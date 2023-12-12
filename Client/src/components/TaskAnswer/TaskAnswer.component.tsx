@@ -1,4 +1,4 @@
-import { FormEvent, useRef } from 'react';
+import { Dispatch, FormEvent, SetStateAction, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Flex, Group, ScrollArea, Stack, Text, Textarea, ThemeIcon, Title } from '@mantine/core';
 import { modals } from '@mantine/modals';
@@ -19,6 +19,8 @@ interface TaskAnswerFormProps {
 	isTaskExpired: boolean;
 	solution: string;
 	answerDate: string;
+	temporaryDate: string | null;
+	setTemporaryDate: Dispatch<SetStateAction<string>>;
 }
 
 interface TaskAnswerHeaderProps {
@@ -50,7 +52,17 @@ function TaskAnswerHeader({ taskNumber, lessonNumber, taskQuestion, isMarkdown }
 	);
 }
 
-function TaskAnswerForm({ lessonId, taskId, studentId, isTaskExpired, answerDate, solution }: TaskAnswerFormProps) {
+function TaskAnswerForm({
+	lessonId,
+	taskId,
+	studentId,
+	isTaskExpired,
+	answerDate,
+	solution,
+	temporaryDate,
+	setTemporaryDate,
+}: TaskAnswerFormProps) {
+	const [temporarySolution, setTemporarySolution] = useState<boolean>(false);
 	const answerTextareaRef = useRef<HTMLTextAreaElement>(null);
 	const openConfirmAnswerModal = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -65,6 +77,8 @@ function TaskAnswerForm({ lessonId, taskId, studentId, isTaskExpired, answerDate
 				taskId: taskId,
 				studentId: studentId,
 				lessonId: lessonId,
+				setTemporaryDate: setTemporaryDate,
+				setTemporarySolution: setTemporarySolution,
 				modalBody: 'Czy na pewno chcesz wysłać odpowiedź?',
 			},
 		});
@@ -74,7 +88,7 @@ function TaskAnswerForm({ lessonId, taskId, studentId, isTaskExpired, answerDate
 		<form onSubmit={openConfirmAnswerModal}>
 			<Stack gap='sm' pos='relative'>
 				<Group gap='lg' align='flex-start'>
-					{!solution ? (
+					{!solution && !temporarySolution ? (
 						<Textarea
 							leftSection={
 								<ThemeIcon variant='transparent'>
@@ -120,7 +134,7 @@ function TaskAnswerForm({ lessonId, taskId, studentId, isTaskExpired, answerDate
 						</PrimaryButton>
 					</Group>
 				)}
-				{answerDate && (
+				{(answerDate || temporaryDate) && (
 					<Group className={classes.taskAnswerPrimaryButton}>
 						<Text c='dimmed'>Zadanie zostało przesłane</Text>
 						<PrimaryButton maw={300} disabled>
@@ -128,7 +142,7 @@ function TaskAnswerForm({ lessonId, taskId, studentId, isTaskExpired, answerDate
 						</PrimaryButton>
 					</Group>
 				)}
-				{!isTaskExpired && !answerDate && (
+				{!isTaskExpired && !answerDate && !temporaryDate && (
 					<PrimaryButton type='submit' maw={300} className={classes.taskAnswerPrimaryButton}>
 						Prześlij
 					</PrimaryButton>
@@ -141,6 +155,7 @@ function TaskAnswerForm({ lessonId, taskId, studentId, isTaskExpired, answerDate
 function TaskAnswer() {
 	const { lessonId, taskId } = useParams();
 	const { studentData } = useStudentStore();
+	const [temporarySendDate, setTemporarySendDate] = useState<string>('');
 	const { data: LessonTask, isPending } = useGetLessonTaskById(+lessonId!, +taskId!);
 	const isTaskExpired = dayjs(dayjs().toDate()).isAfter(LessonTask?.taskInfo.closeDate, 'minutes');
 	if (isPending) {
@@ -163,6 +178,8 @@ function TaskAnswer() {
 					isTaskExpired={isTaskExpired}
 					answerDate={LessonTask?.answer.sendDate!}
 					solution={LessonTask?.answer.solution!}
+					temporaryDate={temporarySendDate}
+					setTemporaryDate={setTemporarySendDate}
 				/>
 			</Stack>
 			<Stack>
@@ -178,12 +195,12 @@ function TaskAnswer() {
 						date={LessonTask?.taskInfo.closeDate!}
 					/>
 				</Group>
-				{LessonTask?.answer.sendDate && (
+				{(LessonTask?.answer.sendDate || temporarySendDate !== '') && (
 					<Group gap='lg' className={classes.taskAnswerDateDisplayGroup} justify='flex-end'>
 						<DateTimeDisplay
 							title='Data przesłania'
 							icon={<IconClockHour1 size={20} />}
-							date={LessonTask.answer.sendDate}
+							date={LessonTask ? LessonTask.answer.sendDate : temporarySendDate}
 						/>
 					</Group>
 				)}
