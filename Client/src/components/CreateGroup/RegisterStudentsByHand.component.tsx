@@ -13,7 +13,7 @@ import {
 	TextInput,
 	rem,
 } from '@mantine/core';
-import { IconCheck, IconChevronDown, IconChevronUp, IconPencil, IconX } from '@tabler/icons-react';
+import { IconCheck, IconChevronDown, IconChevronUp, IconPencil, IconX, IconHash, IconTag } from '@tabler/icons-react';
 import { useState } from 'react';
 import { IMaskInput } from 'react-imask';
 import { Dispatch, SetStateAction } from 'react';
@@ -155,16 +155,27 @@ function RegisterStudentsByHand({ createdStudentsByHand, setCreatedStudentsByHan
 			<Text fz={rem(14)}>Dodaj studenta lub kilku studentów ręcznie</Text>
 			<Group>
 				<InputBase
+					leftSection={<IconHash />}
 					label='Numer indeksu'
 					value={indexNumber}
 					onChange={event => setIndexNumber(event.currentTarget.value)}
 					component={IMaskInput}
 					mask='000000'
 				/>
-				<TextInput label='Imię' value={firstName} onChange={event => setFirstName(event.target.value)} />
-				<TextInput label='Nazwisko' value={lastName} onChange={event => setLastName(event.target.value)} />
-				<Button  onClick={handleAddStudentCredentials} style={{ alignSelf: 'flex-end' }}>
-					Dodaj studenta
+				<TextInput
+					leftSection={<IconTag />}
+					label='Imię'
+					value={firstName}
+					onChange={event => setFirstName(event.target.value)}
+				/>
+				<TextInput
+					leftSection={<IconTag />}
+					label='Nazwisko'
+					value={lastName}
+					onChange={event => setLastName(event.target.value)}
+				/>
+				<Button onClick={handleAddStudentCredentials} style={{ alignSelf: 'flex-end' }}>
+					Dodaj
 				</Button>
 			</Group>
 			<List fz={rem(14)} c='red' fs='italic'>
@@ -173,17 +184,19 @@ function RegisterStudentsByHand({ createdStudentsByHand, setCreatedStudentsByHan
 						return <List.Item key={index}>{error}</List.Item>;
 					})}
 			</List>
-			<Divider />
 			{createdStudentsByHand.length !== 0 && (
-				<Button
-					variant='outline'
-					leftSection={isPreviewOpen ? <IconChevronUp size='1.4rem' /> : <IconChevronDown size='1.4rem' />}
-					onClick={() => {
-						setIsPreviewOpen(!isPreviewOpen);
-						setEditingRowIndex(null);
-					}}>
-					{isPreviewOpen ? 'Ukryj podgląd' : 'Podgląd'}
-				</Button>
+				<>
+					<Text>Ilość dodanych studentów:&nbsp;{createdStudentsByHand.length}</Text>
+					<Button
+						variant='outline'
+						leftSection={isPreviewOpen ? <IconChevronUp size='1.4rem' /> : <IconChevronDown size='1.4rem' />}
+						onClick={() => {
+							setIsPreviewOpen(!isPreviewOpen);
+							setEditingRowIndex(null);
+						}}>
+						{isPreviewOpen ? 'Ukryj podgląd' : 'Podgląd'}
+					</Button>
+				</>
 			)}
 			{createdStudentsByHand.length !== 0 && (
 				<Collapse in={isPreviewOpen}>
