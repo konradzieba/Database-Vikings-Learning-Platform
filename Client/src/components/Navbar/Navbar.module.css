@@ -58,3 +58,33 @@
 .logoutBtn {
 	color: var(--heart-color);
 }
+
+.specialTaskCard {
+	display: flex;
+	flex-direction: column;
+	padding: 	0.75rem;
+	background-color: var(--primary-bg-color-lighter);
+	border-radius: 0.3rem;
+	cursor: pointer;
+	color: var(--font-color);
+	text-decoration: none;
+}
+
+.specialTaskCard:hover {
+	background-color: #292929;
+}
+
+.specialTaskButton {
+	cursor: pointer;
+	font-size: 0.9rem;
+	color: var(--font-color);
+	padding: 5px 7px;
+	border-radius: 0.25rem;
+	background-color: var(--mantine-primary-color);
+	text-decoration: none;
+	margin: 0 auto 0;
+}
+
+.specialTaskButton:hover {
+	background-color: #08835e;
+}

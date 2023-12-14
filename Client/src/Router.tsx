@@ -22,6 +22,8 @@ import StudentPreview from './pages/lecturer/StudentPreview';
 import GroupScoreBoardLecturerPage from './pages/lecturer/GroupScoreBoardLecturer.page';
 import GlobalScoreBoardLecturerPage from './pages/lecturer/GlobalScoreBoardsLecturer.page';
 import MyStatsPage from './pages/student/MyStats.page';
+import SpecialTaskAnswerPage from './pages/student/SpecialTaskAnswer.page';
+import MySpecialTasksPage from './pages/student/MySpecialTasks.page';
 
 const router = createBrowserRouter([
 	{
@@ -40,6 +42,8 @@ const router = createBrowserRouter([
 			{ path: 'lesson-tasks/:id', element: <LessonTasksPage /> },
 			{ path: 'task/:lessonId/:taskId', element: <TaskAnswerPage /> },
 			{ path: 'my-stats', element: <MyStatsPage /> },
+			{ path: 'special-task/:taskId', element: <SpecialTaskAnswerPage /> },
+			{ path: 'my-special-tasks', element: <MySpecialTasksPage /> },
 			{ path: 'me', element: <BlankContent /> },
 		],
 	},
