@@ -1,8 +1,4 @@
-import {
-	createBrowserRouter,
-	Navigate,
-	RouterProvider,
-} from 'react-router-dom';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import LoginForm from './components/Login/Login.form';
 import BlankContent from './components/UI/BlankContent';
 import StudentLayout from './layouts/Student.layout';
@@ -13,11 +9,7 @@ import LecturerLayout from './layouts/Lecturer.layout';
 import { NotFoundPage } from './pages/404.page';
 import DashboardPage from './pages/lecturer/Dashboard.page';
 import AuthMiddleware from './utils/Auth.middleware';
-import {
-	lecturerLayoutLoaderFn,
-	loginLoaderFn,
-	studentLayoutLoaderFn,
-} from './utils/middlewares';
+import { lecturerLayoutLoaderFn, loginLoaderFn, studentLayoutLoaderFn } from './utils/middlewares';
 import { HomePage } from './pages/student/Home.page';
 import LessonTasksPage from './pages/student/LessonTasks.page';
 import GroupPanelPage from './pages/lecturer/GroupPanel.page';
@@ -29,6 +21,7 @@ import LessonDashboardPage from './pages/lecturer/LessonDashboard.page';
 import StudentPreview from './pages/lecturer/StudentPreview';
 import GroupScoreBoardLecturerPage from './pages/lecturer/GroupScoreBoardLecturer.page';
 import GlobalScoreBoardLecturerPage from './pages/lecturer/GlobalScoreBoardsLecturer.page';
+import MyStatsPage from './pages/student/MyStats.page';
 
 const router = createBrowserRouter([
 	{
@@ -46,6 +39,7 @@ const router = createBrowserRouter([
 			{ path: 'my-tasks', element: <MyTasksPage /> },
 			{ path: 'lesson-tasks/:id', element: <LessonTasksPage /> },
 			{ path: 'task/:lessonId/:taskId', element: <TaskAnswerPage /> },
+			{ path: 'my-stats', element: <MyStatsPage /> },
 			{ path: 'me', element: <BlankContent /> },
 		],
 	},
