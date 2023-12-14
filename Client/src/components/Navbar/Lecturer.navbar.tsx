@@ -1,14 +1,5 @@
 import { useMemo } from 'react';
-import {
-	Center,
-	Divider,
-	Flex,
-	Group,
-	HoverCard,
-	Loader,
-	Text,
-	rem,
-} from '@mantine/core';
+import { Center, Divider, Flex, Group, HoverCard, Loader, Text, rem } from '@mantine/core';
 import { NavLink, useLocation, useParams } from 'react-router-dom';
 import classes from './Navbar.module.css';
 import UserPanel from '../UI/UserPanel';
@@ -62,10 +53,7 @@ function Nav({ groups, isPending }: LecturerNavProps) {
 		[pathname]
 	);
 
-	const isGroupPath = useMemo(
-		() => pathname.includes('/dashboard/group/'),
-		[pathname]
-	);
+	const isGroupPath = useMemo(() => pathname.includes('/dashboard/group/'), [pathname]);
 
 	const groupNavLinks = [
 		{
@@ -94,8 +82,7 @@ function Nav({ groups, isPending }: LecturerNavProps) {
 									isActive && pathname.endsWith('dashboard')
 										? `${classes.link} ${classes.activeLink}`
 										: `${classes.link} ${classes.inactiveLink}`
-								}
-							>
+								}>
 								Grupy
 							</NavLink>
 							<IconChevronDown size='1.5rem' color='var(--font-color)' />
@@ -110,11 +97,7 @@ function Nav({ groups, isPending }: LecturerNavProps) {
 							groups.map((group, index) => {
 								let link = relativeGroupLink(pathname, group.groupId);
 								return (
-									<NavLink
-										to={link}
-										className={`${classes.link} ${classes.inactiveLink}`}
-										key={index}
-									>
+									<NavLink to={link} className={`${classes.link} ${classes.inactiveLink}`} key={index}>
 										{group.groupName}
 									</NavLink>
 								);
@@ -122,9 +105,10 @@ function Nav({ groups, isPending }: LecturerNavProps) {
 						)}
 					</HoverCard.Dropdown>
 				</HoverCard>
-				{(pathname.endsWith('/dashboard') ||
-					pathname.endsWith('/dashboard/score-board')) && (
-					<NavLink to={'/dashboard/score-board'} className={classes.link}>
+				{(pathname.endsWith('/dashboard') || pathname.endsWith('/dashboard/score-board')) && (
+					<NavLink
+						to={'/dashboard/score-board'}
+						className={({ isActive }) => getLinkClassName(isActive, '/dashboard/score-board')}>
 						Rankingi zbiorcze
 					</NavLink>
 				)}
@@ -132,14 +116,8 @@ function Nav({ groups, isPending }: LecturerNavProps) {
 			{isGroupPath && (
 				<>
 					<Divider orientation='vertical' />
-					{groupNavLinks.map((link) => (
-						<NavLink
-							to={link.link}
-							className={({ isActive }) =>
-								getLinkClassName(isActive, link.link)
-							}
-							key={link.link}
-						>
+					{groupNavLinks.map(link => (
+						<NavLink to={link.link} className={({ isActive }) => getLinkClassName(isActive, link.link)} key={link.link}>
 							{link.label}
 						</NavLink>
 					))}
@@ -162,9 +140,7 @@ function LecturerNavbar({ lecturerInfo }: LecturerNavbarProps) {
 	const { pathname } = useLocation();
 	let { id } = useParams();
 
-	const { data: groupsData, isPending } = useGetGroupsByLecturerId(
-		lecturerData.lecturerId
-	);
+	const { data: groupsData, isPending } = useGetGroupsByLecturerId(lecturerData.lecturerId);
 
 	useMemo(() => {
 		if (groupsData?.groups) {
@@ -172,10 +148,7 @@ function LecturerNavbar({ lecturerInfo }: LecturerNavbarProps) {
 		}
 	}, [groupsData?.groups]);
 
-	const isGroupPath = useMemo(
-		() => pathname.includes('/dashboard/group/'),
-		[pathname]
-	);
+	const isGroupPath = useMemo(() => pathname.includes('/dashboard/group/'), [pathname]);
 
 	return (
 		<Flex justify='space-around' gap='xl' py='lg' align='center' mb={rem(60)}>
@@ -184,10 +157,7 @@ function LecturerNavbar({ lecturerInfo }: LecturerNavbarProps) {
 				{isGroupPath && id && groupsData?.groups && (
 					<>
 						<Text c='var(--mantine-primary-color)' fw={500} size='lg'>
-							{
-								groupsData?.groups.find((group) => group.groupId === +id!)
-									?.groupName
-							}
+							{groupsData?.groups.find(group => group.groupId === +id!)?.groupName}
 						</Text>
 						<Divider orientation='vertical' />
 					</>

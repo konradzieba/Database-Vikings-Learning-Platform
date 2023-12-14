@@ -99,7 +99,6 @@ body {
 	background-color: var(--primary-bg-color);
 }
 
-
 .tableHeader {
 	position: sticky;
 	top: 0;
@@ -112,8 +111,7 @@ body {
 		left: 0;
 		right: 0;
 		bottom: 0;
-		border-bottom: rem(1px) solid
-			light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-3));
+		border-bottom: rem(1px) solid light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-3));
 	}
 }
 
@@ -128,3 +126,10 @@ body {
 	opacity: 1;
 }
 
+.StudentTaskTextAreaOverwrite > .mantine-Textarea-wrapper > .mantine-Textarea-input {
+	&[data-disabled] {
+		opacity: 1;
+		color: var(--font-color);
+		background-color: var(--_input-bg);
+	}
+}

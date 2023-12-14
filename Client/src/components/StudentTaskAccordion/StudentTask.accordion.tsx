@@ -98,6 +98,7 @@ function StudentTaskAccordion({ tasks }: StudentTaskAccordionProps) {
 				<Stack gap='lg' mx='auto'>
 					<Group>
 						<Textarea
+							className='StudentTaskTextAreaOverwrite'
 							style={{ flexGrow: '1' }}
 							leftSectionProps={{
 								style: { alignItems: 'flex-start', marginTop: '2px', color: 'var(--mantine-primary-color)' },
@@ -109,7 +110,7 @@ function StudentTaskAccordion({ tasks }: StudentTaskAccordionProps) {
 									<IconCode />
 								</ThemeIcon>
 							}
-							placeholder={task.solution}
+							value={task.solution}
 							mt='xs'
 						/>
 						<DateTimeDisplay date={task.sendDate} title='Data przesłania' icon={<IconClock />} />
@@ -117,6 +118,7 @@ function StudentTaskAccordion({ tasks }: StudentTaskAccordionProps) {
 					{task.replyDesc && task.replyDate && task.replyStatus !== AnswerReplyStatusEnum.Enum.PENDING ? (
 						<Group>
 							<Textarea
+								className='StudentTaskTextAreaOverwrite'
 								style={{ flexGrow: '1' }}
 								leftSectionProps={{
 									style: { alignItems: 'flex-start', marginTop: '2px', color: 'var(--mantine-primary-color)' },
