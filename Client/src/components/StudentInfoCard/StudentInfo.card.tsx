@@ -1,5 +1,4 @@
 import { Anchor, Button, Flex, Group, Menu, Text, rem } from '@mantine/core';
-import classes from './StudentInfo.card.module.css';
 import HeartCounter from '../UI/HeartCounter';
 import DateTimeDisplay from '../UI/DateTimeDisplay';
 import {
@@ -14,6 +13,7 @@ import {
 import { modals } from '@mantine/modals';
 import { Link, useParams } from 'react-router-dom';
 import useGetStudentsFromGroup from '@/hooks/groups/useGetStudentsFromGroup';
+import classes from './StudentInfo.card.module.css';
 
 interface StudentInfoCardProps {
 	userId: number;

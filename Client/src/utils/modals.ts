@@ -1,3 +1,4 @@
+import AddStudentToGroupModal from '@/modals/AddStudentToGroup.modal';
 import AddTaskModal from '@/modals/AddTask.modal';
 import AddTaskByHandModal from '@/modals/AddTaskByHand.modal';
 import ChangeDefaultPasswordModal from '@/modals/ChangeDefaultPassword.modal';
@@ -40,4 +41,5 @@ export default {
 	deleteGroup: DeleteGroupModal,
 	correctFrequency: CorrectFrequencyModal,
 	addTaskByHand: AddTaskByHandModal,
+	addStudentToGroup: AddStudentToGroupModal,
 };

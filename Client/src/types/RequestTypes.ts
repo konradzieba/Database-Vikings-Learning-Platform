@@ -62,6 +62,15 @@ const TRegisterManyStudentsRequestSchema = z.object({
 	),
 });
 
+const TAddStudentToGroupRequestSchema = z.object({
+	groupId: z.number().int(),
+	studentData: z.object({
+		firstName: z.string().min(1),
+		lastName: z.string().min(1),
+		indexNumber: z.number().int(),
+	}),
+});
+
 const TReorderLessonRequestSchema = z.array(
 	z.object({
 		lessonId: z.number().int(),
@@ -90,10 +99,17 @@ export type TUserRequest = z.infer<typeof UserRequestSchema>;
 export type TLoginRequest = z.infer<typeof TLoginRequest>;
 export type TSendAnswerRequest = z.infer<typeof SendAnswerRequestSchema>;
 
-export type TUpdateTaskInfoRequest = z.infer<typeof UpdateTaskInfoRequestSchema>;
+export type TUpdateTaskInfoRequest = z.infer<
+	typeof UpdateTaskInfoRequestSchema
+>;
 export type TUpdateStudentRequest = z.infer<typeof TUpdateStudentRequestSchema>;
 export type TReplyAnswerRequest = z.infer<typeof TReplyAnswerRequestSchema>;
 export type TCreateLessonRequest = z.infer<typeof TCreateLessonRequestSchema>;
-export type TRegisterManyStudentsRequest = z.infer<typeof TRegisterManyStudentsRequestSchema>;
+export type TRegisterManyStudentsRequest = z.infer<
+	typeof TRegisterManyStudentsRequestSchema
+>;
+export type TAddStudentToGroupRequest = z.infer<
+	typeof TAddStudentToGroupRequestSchema
+>;
 export type TReorderLessonRequest = z.infer<typeof TReorderLessonRequestSchema>;
 export type TCreateTaskRequest = z.infer<typeof TCreateTaskRequestSchema>;
