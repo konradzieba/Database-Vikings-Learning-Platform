@@ -17,6 +17,7 @@ import ReorderLessonsModal from '@/modals/ReorderLessons/ReorderLessons.modal';
 import RestoreDefaultPasswordModal from '@/modals/RestoreDefaultPassword.modal';
 import SendTaskAnswerModal from '@/modals/SendTaskAnswer.modal';
 import SessionExpiredModal from '@/modals/SessionExpire.modal';
+import showStudentDefaultPasswordModal from '@/modals/ShowStudentDefaultPassword.modal';
 import StudentGroupChangeModal from '@/modals/StudentGroupChange.modal';
 import TaskDetailsModal from '@/modals/TaskDetails.modal';
 
@@ -42,4 +43,5 @@ export default {
 	correctFrequency: CorrectFrequencyModal,
 	addTaskByHand: AddTaskByHandModal,
 	addStudentToGroup: AddStudentToGroupModal,
+	showStudentDefaultPassword: showStudentDefaultPasswordModal,
 };

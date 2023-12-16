@@ -5,6 +5,7 @@ import {
 	IconClock,
 	IconCoins,
 	IconDots,
+	IconEye,
 	IconKey,
 	IconReplace,
 	IconUserEdit,
@@ -117,6 +118,19 @@ function StudentInfoCard({
 		});
 	};
 
+	const handleOpenShowStudentDefaultPasswordModal = () => {
+		modals.openContextModal({
+			modal: 'showStudentDefaultPassword',
+			title: 'Podgląd domyślnego hasła',
+			size: 'md',
+			innerProps: {
+				firstName,
+				lastName,
+				indexNumber: +index,
+			},
+		});
+	};
+
 	return (
 		<Flex
 			align='center'
@@ -160,7 +174,7 @@ function StudentInfoCard({
 					ta='end'
 				/>
 			</Flex>
-			<Menu width={200} withArrow shadow='md'>
+			<Menu width={210} withArrow shadow='md'>
 				<Menu.Target>
 					<Button variant='transparent' c='dimmed'>
 						<IconDots />
@@ -175,6 +189,12 @@ function StudentInfoCard({
 						Przenieś
 					</Menu.Item>
 					<Menu.Label>Student</Menu.Label>
+					<Menu.Item
+						leftSection={<IconEye size='1.3rem' />}
+						onClick={handleOpenShowStudentDefaultPasswordModal}
+					>
+						Pokaż domyślne hasło
+					</Menu.Item>
 					<Menu.Item
 						leftSection={<IconKey size='1.3rem' />}
 						onClick={handleOpenRecoverPasswordModal}
