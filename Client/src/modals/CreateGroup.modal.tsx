@@ -8,9 +8,11 @@ import {
 	Tabs,
 	Text,
 	TextInput,
+	ThemeIcon,
+	rem,
 } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
-import { IconTag } from '@tabler/icons-react';
+import { IconFileTypeCsv, IconKeyboard, IconTag } from '@tabler/icons-react';
 import { useLecturerStore } from '@/utils/stores/useLecturerStore';
 import { useRegisterManyStudentsMutation } from '@/hooks/students/useRegisterManyStudentsMutation';
 import RegisterStudentsFromCSVFile from '@/components/CreateGroup/RegisterStudentsFromCSVFile.component';
@@ -78,7 +80,7 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 		activeTab === 'csv'
 			? !groupName || csvData.length === 0
 			: !groupName || createdStudentsByHand.length === 0;
-			
+
 	const handleCreateGroup = () => {
 		if (activeTab === 'csv') {
 			const transformedData = csvData.map((row) => ({
@@ -165,11 +167,27 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 	return (
 		<Tabs value={activeTab} onChange={setActiveTab}>
 			<Tabs.List>
-				<Tabs.Tab value='csv' w='50%' fw={500}>
-					Z pliku CSV
+				<Tabs.Tab
+					value='csv'
+					w='50%'
+					c={activeTab === 'csv' ? 'var(--mantine-primary-color)' : undefined}
+					leftSection={<IconFileTypeCsv />}
+				>
+					<Text c='var(--font-color)' fw={500} fz='sm'>
+						Z pliku CSV
+					</Text>
 				</Tabs.Tab>
-				<Tabs.Tab value='manual' w='50%' fw={500}>
-					Ręcznie
+				<Tabs.Tab
+					value='manual'
+					w='50%'
+					c={
+						activeTab === 'manual' ? 'var(--mantine-primary-color)' : undefined
+					}
+					leftSection={<IconKeyboard />}
+				>
+					<Text c='var(--font-color)' fw={500} fz='sm'>
+						Ręcznie
+					</Text>
 				</Tabs.Tab>
 			</Tabs.List>
 			<Stack mb='xl' gap='lg' mt='xs'>

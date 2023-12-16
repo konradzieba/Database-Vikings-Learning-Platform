@@ -12,7 +12,15 @@ import {
 	TextInput,
 	rem,
 } from '@mantine/core';
-import { IconCheck, IconChevronDown, IconChevronUp, IconPencil, IconX, IconHash, IconTag } from '@tabler/icons-react';
+import {
+	IconCheck,
+	IconChevronDown,
+	IconChevronUp,
+	IconPencil,
+	IconX,
+	IconHash,
+	IconTag,
+} from '@tabler/icons-react';
 import { useState } from 'react';
 import { IMaskInput } from 'react-imask';
 import { Dispatch, SetStateAction } from 'react';
@@ -22,7 +30,10 @@ interface RegisterStudentsByOneProps {
 	setCreatedStudentsByHand: Dispatch<SetStateAction<CreateStudentListType[]>>;
 }
 
-function RegisterStudentsByHand({ createdStudentsByHand, setCreatedStudentsByHand }: RegisterStudentsByOneProps) {
+function RegisterStudentsByHand({
+	createdStudentsByHand,
+	setCreatedStudentsByHand,
+}: RegisterStudentsByOneProps) {
 	const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 	const [scrolled, setScrolled] = useState(false);
 	const [editingRowIndex, setEditingRowIndex] = useState<number | null>();
@@ -34,14 +45,16 @@ function RegisterStudentsByHand({ createdStudentsByHand, setCreatedStudentsByHan
 	const [lastName, setLastName] = useState<string>('');
 
 	const handleDeleteRow = (indexNumber: number) => {
-		setCreatedStudentsByHand(prev => prev.filter(row => row['indexNumber'] !== indexNumber));
+		setCreatedStudentsByHand((prev) =>
+			prev.filter((row) => row['indexNumber'] !== indexNumber)
+		);
 	};
 
 	const handleAddStudentCredentials = () => {
 		const isValid = handleValidateInputs();
 
 		if (isValid) {
-			setCreatedStudentsByHand(prevState => [
+			setCreatedStudentsByHand((prevState) => [
 				...prevState,
 				{ indexNumber: +indexNumber, firstName: firstName, lastName: lastName },
 			]);
@@ -55,7 +68,7 @@ function RegisterStudentsByHand({ createdStudentsByHand, setCreatedStudentsByHan
 	const handleValidateInputs = () => {
 		const inputErrorsListFn = [];
 
-		createdStudentsByHand.map(student => {
+		createdStudentsByHand.map((student) => {
 			if (student.indexNumber === +indexNumber) {
 				inputErrorsListFn.push('Numer indeksu już istnieje.');
 			}
@@ -95,7 +108,7 @@ function RegisterStudentsByHand({ createdStudentsByHand, setCreatedStudentsByHan
 					{isEditing ? (
 						<TextInput
 							value={row['firstName']}
-							onChange={e => {
+							onChange={(e) => {
 								row['firstName'] = e.target.value;
 								setCreatedStudentsByHand([...createdStudentsByHand]);
 							}}
@@ -108,7 +121,7 @@ function RegisterStudentsByHand({ createdStudentsByHand, setCreatedStudentsByHan
 					{isEditing ? (
 						<TextInput
 							value={row['lastName']}
-							onChange={e => {
+							onChange={(e) => {
 								row['lastName'] = e.target.value;
 								setCreatedStudentsByHand([...createdStudentsByHand]);
 							}}
@@ -153,27 +166,30 @@ function RegisterStudentsByHand({ createdStudentsByHand, setCreatedStudentsByHan
 		<Stack>
 			<Text fz={rem(14)}>Dodaj studenta lub kilku studentów ręcznie</Text>
 			<Group>
-				<InputBase
-					leftSection={<IconHash />}
-					label='Numer indeksu'
-					value={indexNumber}
-					onChange={event => setIndexNumber(event.currentTarget.value)}
-					component={IMaskInput}
-					mask='000000'
-				/>
 				<TextInput
 					leftSection={<IconTag />}
 					label='Imię'
 					value={firstName}
-					onChange={event => setFirstName(event.target.value)}
+					onChange={(event) => setFirstName(event.target.value)}
 				/>
 				<TextInput
 					leftSection={<IconTag />}
 					label='Nazwisko'
 					value={lastName}
-					onChange={event => setLastName(event.target.value)}
+					onChange={(event) => setLastName(event.target.value)}
 				/>
-				<Button onClick={handleAddStudentCredentials} style={{ alignSelf: 'flex-end' }}>
+				<InputBase
+					leftSection={<IconHash />}
+					label='Numer indeksu'
+					value={indexNumber}
+					onChange={(event) => setIndexNumber(event.currentTarget.value)}
+					component={IMaskInput}
+					mask='000000'
+				/>
+				<Button
+					onClick={handleAddStudentCredentials}
+					style={{ alignSelf: 'flex-end' }}
+				>
 					Dodaj
 				</Button>
 			</Group>
@@ -185,23 +201,37 @@ function RegisterStudentsByHand({ createdStudentsByHand, setCreatedStudentsByHan
 			</List>
 			{createdStudentsByHand.length !== 0 && (
 				<>
-					<Text>Ilość dodanych studentów:&nbsp;{createdStudentsByHand.length}</Text>
+					<Text>
+						Ilość dodanych studentów:&nbsp;{createdStudentsByHand.length}
+					</Text>
 					<Button
 						variant='outline'
-						leftSection={isPreviewOpen ? <IconChevronUp size='1.4rem' /> : <IconChevronDown size='1.4rem' />}
+						leftSection={
+							isPreviewOpen ? (
+								<IconChevronUp size='1.4rem' />
+							) : (
+								<IconChevronDown size='1.4rem' />
+							)
+						}
 						onClick={() => {
 							setIsPreviewOpen(!isPreviewOpen);
 							setEditingRowIndex(null);
-						}}>
+						}}
+					>
 						{isPreviewOpen ? 'Ukryj podgląd' : 'Podgląd'}
 					</Button>
 				</>
 			)}
 			{createdStudentsByHand.length !== 0 && (
 				<Collapse in={isPreviewOpen}>
-					<ScrollArea h={190} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
+					<ScrollArea
+						h={190}
+						onScrollPositionChange={({ y }) => setScrolled(y !== 0)}
+					>
 						<Table verticalSpacing='sm' withRowBorders striped>
-							<Table.Thead className={`tableHeader ${scrolled ? 'tableScrolled' : ''}`}>
+							<Table.Thead
+								className={`tableHeader ${scrolled ? 'tableScrolled' : ''}`}
+							>
 								<Table.Tr>
 									<Table.Th>Lp.</Table.Th>
 									<Table.Th>Imię</Table.Th>
