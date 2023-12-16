@@ -83,6 +83,7 @@ function LessonDashboardPage() {
 												lastName={answer.lastName}
 												index={answer.index}
 												answer={answer.answer}
+												isScoreGranted={true}
 												sendDate={answer.sendDate}
 												refetchLessonInfo={refetchLessonInfo}
 											/>
@@ -100,6 +101,7 @@ function LessonDashboardPage() {
 												firstName={answer.firstName}
 												lastName={answer.lastName}
 												index={answer.index}
+												isScoreGranted={false}
 												answer={answer.answer}
 												sendDate={answer.sendDate}
 												refetchLessonInfo={refetchLessonInfo}

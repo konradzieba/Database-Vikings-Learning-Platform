@@ -12,6 +12,7 @@ interface StudentAnswerCardProps {
 	index: number;
 	answer: string;
 	sendDate: string;
+	isScoreGranted: boolean;
 	refetchLessonInfo?: () => void;
 }
 
@@ -22,6 +23,7 @@ function StudentAnswerCard({
 	lastName,
 	index,
 	answer,
+	isScoreGranted,
 	sendDate,
 	refetchLessonInfo,
 }: StudentAnswerCardProps) {
@@ -43,14 +45,7 @@ function StudentAnswerCard({
 	};
 
 	return (
-		<Flex
-			direction='column'
-			px='md'
-			py='md'
-			gap='md'
-			miw='22%'
-			className={classes.answerCardWrapper}
-		>
+		<Flex direction='column' px='md' py='md' gap='md' miw='22%' className={classes.answerCardWrapper}>
 			<Box>
 				<Text fw={500} fz='lg'>
 					{index}
@@ -59,18 +54,9 @@ function StudentAnswerCard({
 					{firstName} {lastName}
 				</Text>
 			</Box>
-			<DateTimeDisplay
-				title='Data zwrócenia'
-				date={sendDate}
-				icon={<IconClock />}
-				titleTextAlgin='start'
-			/>
-			<Button
-				miw={150}
-				onClick={handlePreviewStudentAnswer}
-				className={classes.answerCardButton}
-			>
-				Przejdź
+			<DateTimeDisplay title='Data zwrócenia' date={sendDate} icon={<IconClock />} titleTextAlgin='start' />
+			<Button miw={150} onClick={handlePreviewStudentAnswer} className={classes.answerCardButton}>
+				{isScoreGranted ? 'Koryguj' : 'Przejdź'}
 			</Button>
 		</Flex>
 	);
