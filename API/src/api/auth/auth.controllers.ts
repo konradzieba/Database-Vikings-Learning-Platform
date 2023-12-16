@@ -175,12 +175,66 @@ export async function registerStudent(
     });
 
     res.json({
-      message: `Student ${user.firstName} ${user.lastName} created successfully.`,
+      message: `Student ${user.firstName} ${user.lastName} created and added to group with id: ${groupId} successfully.`,
     });
   } catch (error) {
     next(error);
   }
 }
+
+// export const registerStudentAndAddToGroup = async (
+//   req: Request<{}, {}, AuthSchemas.RegisterStudentInput>,
+//   res: Response<MessageResponse>,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const { firstName, lastName, indexNumber, groupId } = req.body;
+
+//     const existingUser =
+//       await UserServices.findStudentByIndexNumber(indexNumber);
+
+//     if (existingUser) {
+//       res.status(400);
+//       throw new Error('This student already exists.');
+//     }
+
+//     const generatedPassword = generatePasswordByCredentials(
+//       firstName,
+//       lastName,
+//       indexNumber
+//     );
+
+//     const user = await UserServices.createUser({
+//       email: `${indexNumber}@student.uwm.edu.pl`,
+//       password: generatedPassword,
+//       firstName,
+//       lastName,
+//     });
+
+//     if (user) {
+//       await UserServices.createStudent({
+//         indexNumber,
+//         Group: { connect: { id: groupId } },
+//         User: { connect: { id: user.id } },
+//       });
+//     }
+
+//     const jti = uuidv4();
+//     const { refreshToken } = generateTokens(user, jti);
+
+//     await AuthServices.addRefreshTokenToWhitelist({
+//       jti,
+//       refreshToken,
+//       userId: user.id,
+//     });
+
+//     res.json({
+//       message: `Student ${user.firstName} ${user.lastName} created successfully.`,
+//     });
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 
 export async function registerLecturer(
   req: Request<

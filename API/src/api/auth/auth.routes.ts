@@ -24,10 +24,13 @@ router.post(
 
 router.post(
   '/register',
-  validateRequest({
-    query: AuthSchemas.registerQuerySchema,
-    body: AuthSchemas.registerStudentSchema,
-  }),
+  validateRequestAndCheckRole(
+    {
+      query: AuthSchemas.registerQuerySchema,
+      body: AuthSchemas.registerStudentSchema,
+    },
+    EnumRole.LECTURER
+  ),
   AuthControllers.registerStudent
 );
 
