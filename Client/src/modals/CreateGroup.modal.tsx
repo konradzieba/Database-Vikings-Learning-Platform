@@ -1,5 +1,14 @@
 import { useState } from 'react';
-import { Button, Center, Group, Loader, Stack, Tabs, Text, TextInput } from '@mantine/core';
+import {
+	Button,
+	Center,
+	Group,
+	Loader,
+	Stack,
+	Tabs,
+	Text,
+	TextInput,
+} from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
 import { IconTag } from '@tabler/icons-react';
 import { useLecturerStore } from '@/utils/stores/useLecturerStore';
@@ -26,41 +35,85 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 	const [fileInputError, setFileInputError] = useState('');
 
 	// created student list by hand
-	const [createdStudentsByHand, setCreatedStudentsByHand] = useState<CreateStudentListType[]>([]);
+	const [createdStudentsByHand, setCreatedStudentsByHand] = useState<
+		CreateStudentListType[]
+	>([]);
 
 	const { lecturerData } = useLecturerStore();
-	const { refetch: refetchGroupsData } = useGetGroupsByLecturerId(lecturerData.lecturerId);
+	const { refetch: refetchGroupsData } = useGetGroupsByLecturerId(
+		lecturerData.lecturerId
+	);
 
-	const { mutate, isPending, isError, isSuccess } = useRegisterManyStudentsMutation({
+	const {
+		mutate: registerStudentsFromCSVFile,
+		isPending: isRegisterFromCSVPending,
+		isError: isRegisterFromCSVError,
+		isSuccess: isRegisterFromCSVSuccess,
+	} = useRegisterManyStudentsMutation({
 		lecturerId: lecturerData.lecturerId as number,
 		groupName: groupName,
-		studentsToRegister: csvData.map(row => ({
+		studentsToRegister: csvData.map((row) => ({
 			firstName: row['Imię'],
 			lastName: row['Nazwisko'],
 			indexNumber: +row['Numer indeksu'],
 		})),
 	});
+	const {
+		mutate: registerStudentsByHand,
+		isPending: isRegisterByHandPending,
+		isError: isRegisterByHandError,
+		isSuccess: isRegisterByHandSuccess,
+	} = useRegisterManyStudentsMutation({
+		lecturerId: lecturerData.lecturerId as number,
+		groupName: groupName,
+		studentsToRegister: createdStudentsByHand,
+	});
 
+	const isPending =
+		isRegisterFromCSVPending || isRegisterByHandPending ? true : false;
+	const isError =
+		isRegisterFromCSVError || isRegisterByHandError ? true : false;
+	const isSuccess = isRegisterFromCSVSuccess || isRegisterByHandSuccess;
+	const isCreateButtonDisabled =
+		activeTab === 'csv'
+			? !groupName || csvData.length === 0
+			: !groupName || createdStudentsByHand.length === 0;
+			
 	const handleCreateGroup = () => {
-		const transformedData = csvData.map(row => ({
-			firstName: row['Imię'],
-			lastName: row['Nazwisko'],
-			indexNumber: row['Numer indeksu'],
-		}));
+		if (activeTab === 'csv') {
+			const transformedData = csvData.map((row) => ({
+				firstName: row['Imię'],
+				lastName: row['Nazwisko'],
+				indexNumber: row['Numer indeksu'],
+			}));
 
-		if (!groupName) {
-			setGroupNameError('Nazwa grupy jest wymagana');
-			return;
+			if (!groupName) {
+				setGroupNameError('Nazwa grupy jest wymagana');
+				return;
+			}
+
+			if (csvData.length === 0) {
+				setFileInputError('Plik CSV jest wymagany');
+				return;
+			}
+
+			registerStudentsFromCSVFile();
+
+			console.log('Przetworzone dane:', transformedData);
+		} else {
+			if (!groupName) {
+				setGroupNameError('Nazwa grupy jest wymagana');
+				return;
+			}
+
+			if (createdStudentsByHand.length === 0) {
+				setGroupNameError('Wymagany jest przynajmniej jeden student');
+				return;
+			}
+
+			registerStudentsByHand();
+			console.log('Przetworzone dane:', createdStudentsByHand);
 		}
-
-		if (csvData.length === 0) {
-			setFileInputError('Plik CSV jest wymagany');
-			return;
-		}
-
-		mutate();
-
-		console.log('Przetworzone dane:', transformedData);
 	};
 
 	const handleCloseModal = () => {
@@ -125,7 +178,7 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 					placeholder='Nazwa grupy'
 					leftSection={<IconTag size='1.4rem' />}
 					error={groupNameError}
-					onChange={e => {
+					onChange={(e) => {
 						setGroupName(e.target.value);
 						setGroupNameError('');
 					}}
@@ -149,7 +202,12 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 				<Button variant='outline' miw={150} onClick={handleCloseModal}>
 					Anuluj
 				</Button>
-				<Button miw={150} onClick={handleCreateGroup} loading={isPending} disabled={!groupName || csvData.length === 0}>
+				<Button
+					miw={150}
+					onClick={handleCreateGroup}
+					loading={isPending}
+					disabled={isCreateButtonDisabled}
+				>
 					{isPending ? '' : 'Stwórz grupę'}
 				</Button>
 			</Group>

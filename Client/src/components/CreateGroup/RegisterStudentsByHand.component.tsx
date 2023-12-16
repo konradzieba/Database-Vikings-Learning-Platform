@@ -2,7 +2,6 @@ import { CreateStudentListType } from '@/modals/CreateGroup.modal';
 import {
 	Button,
 	Collapse,
-	Divider,
 	Group,
 	InputBase,
 	List,
