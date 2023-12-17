@@ -16,14 +16,6 @@ function GroupScoreBoardLecturerPage() {
 	);
 	const { data: scoreBoardData } = useGetScoreBoardQuery();
 
-	const filteredBySearchTerm = scoreBoardData?.scoreBoard.filter(
-		(student) =>
-			student.indexNumber.toString().includes(searchTerm) ||
-			`${student.User.firstName} ${student.User.lastName}`
-				.toLowerCase()
-				.includes(searchTerm.toLowerCase())
-	);
-
 	if (groupsData?.groups.length === 0) {
 		return (
 			<Center h='25vh'>
@@ -49,6 +41,14 @@ function GroupScoreBoardLecturerPage() {
 			</Center>
 		);
 	}
+
+	const filteredBySearchTerm = scoreBoardData?.scoreBoard.filter(
+		(student) =>
+			student.indexNumber.toString().includes(searchTerm) ||
+			`${student.User.firstName} ${student.User.lastName}`
+				.toLowerCase()
+				.includes(searchTerm.toLowerCase())
+	);
 
 	return (
 		<Stack maw={1100} mx='auto'>
