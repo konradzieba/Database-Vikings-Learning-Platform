@@ -13,14 +13,6 @@ function GlobalScoreBoardLecturerPage() {
 	const isGlobal = searchParams.get('type') === 'global';
 	const { data: scoreBoardData, isPending } = useGetScoreBoardQuery();
 
-	const filteredBySearchTerm = scoreBoardData?.scoreBoard.filter(
-		(student) =>
-			student.indexNumber.toString().includes(searchTerm) ||
-			`${student.User.firstName} ${student.User.lastName}`
-				.toLowerCase()
-				.includes(searchTerm.toLowerCase())
-	);
-
 	if (isPending) {
 		return (
 			<Center h={250}>
@@ -29,8 +21,14 @@ function GlobalScoreBoardLecturerPage() {
 		);
 	}
 
+	const filteredBySearchTerm = scoreBoardData?.scoreBoard.filter(
+		student =>
+			student.indexNumber.toString().includes(searchTerm) ||
+			`${student.User.firstName} ${student.User.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
+	);
+
 	return (
-		<Stack>
+		<Stack maw={1100} mx='auto'>
 			<Tabs defaultValue={isGlobal ? 'global' : 'my-groups'}>
 				<Tabs.List mb='lg'>
 					<Tabs.Tab
@@ -38,8 +36,7 @@ function GlobalScoreBoardLecturerPage() {
 						c={isGlobal ? undefined : 'var(--mantine-primary-color)'}
 						value='my-groups'
 						leftSection={<IconUsersGroup size='1.5rem' />}
-						onClick={() => setSearchParams(undefined)}
-					>
+						onClick={() => setSearchParams(undefined)}>
 						<Text c='var(--font-color)' fw={500} fz='md'>
 							Moje grupy
 						</Text>
@@ -49,8 +46,7 @@ function GlobalScoreBoardLecturerPage() {
 						value='global'
 						leftSection={<IconTrophy size='1.5rem' />}
 						c={!isGlobal ? undefined : 'var(--mantine-primary-color)'}
-						onClick={() => setSearchParams({ type: 'global' })}
-					>
+						onClick={() => setSearchParams({ type: 'global' })}>
 						<Text c='var(--font-color)' fw={500} fz='md'>
 							Wszystkie grupy
 						</Text>
