@@ -43,6 +43,11 @@ const handleOpenReorderLessonModal = (groupId: number) => {
 		modal: 'reorderLessons',
 		title: 'Zmiana kolejność lekcji',
 		size: 'xl',
+		styles: {
+			content: {
+				overflowX: 'hidden',
+			},
+		},
 		innerProps: {
 			groupId,
 		},
@@ -69,9 +74,18 @@ function LecturerLessonCard({
 }: LecturerLessonCardProps) {
 	const { id: groupId } = useParams();
 	const isZeroTasks = taskAmount === 0;
-	const frequencyColor = isFrequencyChecked ? 'var(--good-state-color)' : 'var(--bad-state-color)';
+	const frequencyColor = isFrequencyChecked
+		? 'var(--good-state-color)'
+		: 'var(--bad-state-color)';
 	return (
-		<Flex direction='column' miw={380} px='xs' pt='xs' pb='xl' className={classes.lessonCardWrapper}>
+		<Flex
+			direction='column'
+			miw={380}
+			px='xs'
+			pt='xs'
+			pb='xl'
+			className={classes.lessonCardWrapper}
+		>
 			<Box component={Menu} mr={rem(5)} className={classes.menuWrapper}>
 				<Menu.Target>
 					<ActionIcon variant='transparent' c='var(--mantine-primary-color)'>
@@ -83,7 +97,8 @@ function LecturerLessonCard({
 						component={Link}
 						to={`../${groupId}/check-frequency/${id}`}
 						leftSection={<IconChecklist size='1.25rem' />}
-						c={!isFrequencyChecked ? 'var(--good-state-color)' : ''}>
+						c={!isFrequencyChecked ? 'var(--good-state-color)' : ''}
+					>
 						{isFrequencyChecked ? 'Koryguj frekwencję' : 'Sprawdź frekwencję'}
 					</Menu.Item>
 					<Menu.Divider />
@@ -99,7 +114,8 @@ function LecturerLessonCard({
 						variant=''
 						c='var(--bad-state-color)'
 						leftSection={<IconTrash size='1.25rem' />}
-						onClick={() => handleOpenDeleteLessonModal(id)}>
+						onClick={() => handleOpenDeleteLessonModal(id)}
+					>
 						Usuń lekcję
 					</Menu.Item>
 				</Menu.Dropdown>
@@ -112,7 +128,11 @@ function LecturerLessonCard({
 					<ThemeIcon size='sm' variant='transparent' c='var(--font-color)'>
 						<IconList />
 					</ThemeIcon>
-					<Text size='md'>{isZeroTasks ? `Brak zadań` : `${taskAmount} ${getTasksPlural(taskAmount)}`}</Text>
+					<Text size='md'>
+						{isZeroTasks
+							? `Brak zadań`
+							: `${taskAmount} ${getTasksPlural(taskAmount)}`}
+					</Text>
 				</Group>
 				<Group gap={rem(5)} align='center'>
 					<ThemeIcon size='sm' variant='transparent' c={frequencyColor}>
@@ -126,7 +146,13 @@ function LecturerLessonCard({
 			<AspectRatio ratio={1} mah={rem(320)}>
 				<Image src={photoLink} alt={`Lesson number ${lessonNumber} photo`} />
 			</AspectRatio>
-			<Button component={Link} to={`lesson-dashboard/${id}`} maw={200} my='lg' mx='auto'>
+			<Button
+				component={Link}
+				to={`lesson-dashboard/${id}`}
+				maw={200}
+				my='lg'
+				mx='auto'
+			>
 				Przejdź
 			</Button>
 		</Flex>
