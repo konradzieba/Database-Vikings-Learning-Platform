@@ -77,7 +77,7 @@ function StudentTaskAccordion({ tasks }: StudentTaskAccordionProps) {
 						</Badge>
 						{task.grantedScore && (
 							<Group
-								title={`Przyznane punkty za odpowiedź: ${900}`}
+								title={`Przyznane punkty za odpowiedź: ${task.grantedScore}`}
 								align='center'
 								className={classes.grantedScore}
 								gap={rem(5)}
@@ -86,7 +86,7 @@ function StudentTaskAccordion({ tasks }: StudentTaskAccordionProps) {
 									<IconCoins />
 								</ThemeIcon>
 								<Text size='lg' fw={500}>
-									{900}
+									{task.grantedScore}
 								</Text>
 							</Group>
 						)}
