@@ -61,7 +61,7 @@ function StudentTaskAccordion({ tasks, isExtra }: StudentTaskAccordionProps) {
 				<Flex align='center' justify='space-evenly' gap='lg' mx='sm' className={classes.accordionControlWrapper}>
 					<Flex w='80%' align='center'>
 						{isExtra ? (
-							<ThemeIcon size='lg' maw='10%' radius='sm' my='md' mr='md' color='violet.8'>
+							<ThemeIcon size='lg' maw='10%' radius='sm' my='md' mr='md' color='var(--special-task-color)'>
 								<IconStarFilled />
 							</ThemeIcon>
 						) : (

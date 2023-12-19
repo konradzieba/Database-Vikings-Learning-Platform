@@ -44,7 +44,7 @@ function Nav() {
 					<HoverCard.Target>
 						{/* disabled or not when special task pops up */}
 						<Indicator color='red' size={7}>
-							<ThemeIcon variant='transparent' size={rem(24)} c='violet.8'>
+							<ThemeIcon variant='transparent' size={rem(24)} c='var(--special-task-color)'>
 								<IconStarFilled />
 							</ThemeIcon>
 						</Indicator>

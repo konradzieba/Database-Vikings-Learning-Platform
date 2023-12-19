@@ -21,7 +21,7 @@
 }
 
 .accordionSpecialTaskIconColor {
-	color: #6741d9;
+	color: var(--special-task-color);
 }
 
 .grantedScore {
