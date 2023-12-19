@@ -21,6 +21,7 @@ import SendSpecialTaskAnswerModal from '@/modals/SendSpecialTaskAnswer.modal';
 import SendTaskAnswerModal from '@/modals/SendTaskAnswer.modal';
 import SessionExpiredModal from '@/modals/SessionExpire.modal';
 import showStudentDefaultPasswordModal from '@/modals/ShowStudentDefaultPassword.modal';
+import SpecialTaskDetailsModal from '@/modals/SpecialTaskDetails.modal';
 import StudentGroupChangeModal from '@/modals/StudentGroupChange.modal';
 import TaskDetailsModal from '@/modals/TaskDetails.modal';
 
@@ -50,4 +51,5 @@ export default {
 	sendSpecialTaskAnswer: SendSpecialTaskAnswerModal,
 	createSpecialTask: CreateSpecialTaskModal,
 	previewStudentSpecialAnswer: PreviewStudentSpecialTaskAnswerModal,
+	specialTaskDetails: SpecialTaskDetailsModal,
 };

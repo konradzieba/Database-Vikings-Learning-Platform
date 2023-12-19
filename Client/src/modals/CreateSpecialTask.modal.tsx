@@ -52,6 +52,9 @@ function CreateSpecialTaskModal({ innerProps, context, id }: ContextModalProps<C
 			<Text ta='center' c='dimmed' fs='italic'>
 				Zadanie specjalne zostanie stworzone dla studentów ze wszystkich Twoich grup.
 			</Text>
+			<Text ta='center' c='dimmed' fs='italic'>
+				Po stworzeniu zadania nie będzie można go edytować.
+			</Text>
 			<Group mx='auto'>
 				<Button miw={150} variant='outline' onClick={handleCloseModal}>
 					Anuluj

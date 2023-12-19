@@ -1,10 +1,22 @@
 import { Button, Flex, Tabs, Text, rem } from '@mantine/core';
+import { modals } from '@mantine/modals';
 import { useSearchParams } from 'react-router-dom';
 
 function SpecialTaskAnswersStats() {
 	const [_, setSearchParams] = useSearchParams();
 
-  //add modal to show task description
+	const handleOpenSpecialTaskDetailsModal = () => {
+		modals.openContextModal({
+			modal: 'specialTaskDetails',
+			title: 'Szczegóły zadania specjalnego',
+			size: 'xl',
+			closeOnClickOutside: false,
+			innerProps: {
+				taskId: 10,
+				modalBody: '',
+			},
+		});
+	};
 
 	return (
 		<Flex gap={rem(10)} justify='space-between' align='center' mx='lg' mt='sm'>
@@ -22,7 +34,7 @@ function SpecialTaskAnswersStats() {
 					</Tabs.Tab>
 				</Tabs.List>
 			</Tabs>
-			<Button size='xs' c='var(--font-color)' fz='md' variant='outline'>
+			<Button size='xs' c='var(--font-color)' fz='md' variant='outline' onClick={handleOpenSpecialTaskDetailsModal}>
 				Szczegóły zadania
 			</Button>
 		</Flex>
