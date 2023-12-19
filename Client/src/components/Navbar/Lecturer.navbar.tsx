@@ -6,6 +6,7 @@ import UserPanel from '../UI/UserPanel';
 import { IconChevronDown } from '@tabler/icons-react';
 import { useLecturerStore } from '@/utils/stores/useLecturerStore';
 import useGetGroupsByLecturerId from '@/hooks/users/useGetGroupsByLecturerId';
+import LecturerSpecialTaskMenu from '../UI/LecturerSpecialTask.menu';
 
 interface LecturerNavProps {
 	groups: {
@@ -105,12 +106,18 @@ function Nav({ groups, isPending }: LecturerNavProps) {
 						)}
 					</HoverCard.Dropdown>
 				</HoverCard>
-				{(pathname.endsWith('/dashboard') || pathname.endsWith('/dashboard/score-board')) && (
-					<NavLink
-						to={'/dashboard/score-board'}
-						className={({ isActive }) => getLinkClassName(isActive, '/dashboard/score-board')}>
-						Rankingi zbiorcze
-					</NavLink>
+				{(pathname.endsWith('/dashboard') ||
+					pathname.endsWith('/dashboard/score-board') ||
+					pathname.endsWith('/dashboard/special-tasks')) && (
+					<>
+						<NavLink
+							to={'/dashboard/score-board'}
+							className={({ isActive }) => getLinkClassName(isActive, '/dashboard/score-board')}>
+							Rankingi zbiorcze
+						</NavLink>
+
+						<LecturerSpecialTaskMenu />
+					</>
 				)}
 			</Group>
 			{isGroupPath && (
@@ -121,6 +128,7 @@ function Nav({ groups, isPending }: LecturerNavProps) {
 							{link.label}
 						</NavLink>
 					))}
+					<LecturerSpecialTaskMenu />
 				</>
 			)}
 		</Group>

@@ -4,6 +4,7 @@ import AddTaskByHandModal from '@/modals/AddTaskByHand.modal';
 import ChangeDefaultPasswordModal from '@/modals/ChangeDefaultPassword.modal';
 import CorrectFrequencyModal from '@/modals/CorrectFrequency.modal';
 import CreateGroupModal from '@/modals/CreateGroup.modal';
+import CreateSpecialTaskModal from '@/modals/CreateSpecialTask.modal';
 import DeleteGroupModal from '@/modals/DeleteGroup.modal';
 import DeleteLessonModal from '@/modals/DeleteLesson.modal';
 import DeleteStudentModal from '@/modals/DeleteStudent.modal';
@@ -46,4 +47,5 @@ export default {
 	addStudentToGroup: AddStudentToGroupModal,
 	showStudentDefaultPassword: showStudentDefaultPasswordModal,
 	sendSpecialTaskAnswer: SendSpecialTaskAnswerModal,
+	createSpecialTask: CreateSpecialTaskModal,
 };

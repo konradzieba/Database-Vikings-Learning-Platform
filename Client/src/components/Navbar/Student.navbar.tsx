@@ -40,7 +40,7 @@ function Nav() {
 				);
 			})}
 			<Flex style={{ alignSelf: 'flex-start' }}>
-				<HoverCard width={280} shadow='md'>
+				<HoverCard width={280} shadow='md' withArrow arrowSize={15}>
 					<HoverCard.Target>
 						{/* disabled or not when special task pops up */}
 						<Indicator color='red' size={7}>
