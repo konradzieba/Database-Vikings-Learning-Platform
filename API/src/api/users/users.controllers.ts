@@ -102,12 +102,13 @@ export async function getStudentPreviewData(
     }
 
     const studentPreviewData = await UserServices.getStudentPreviewData(
-      +studentId, role
+      +studentId,
+      role
     );
 
     res.json({
       message: 'success',
-      studentPreviewData: studentPreviewData,
+      studentData: studentPreviewData,
     });
   } catch (error) {
     next(error);

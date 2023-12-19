@@ -184,7 +184,6 @@ export async function getStudentPreviewData(
         },
       })
       .then((lesson) => lesson.map((lesson) => lesson.number))) || [];
-  //************************************* */
 
   const totalTaskInfo =
     (await db.task.findMany({
@@ -244,11 +243,9 @@ export async function getStudentPreviewData(
   };
 
   return {
-    studentPreviewData: {
       studentInfo: studentData,
       absentLessonNumbers,
       taskStats,
-    },
   };
 }
 
