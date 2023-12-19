@@ -32,12 +32,7 @@ router.get(
 
 router.get(
   '/getStudentPreviewData/:id',
-  validateRequestAndCheckRole(
-    {
-      params: paramsWithIdSchema,
-    },
-    EnumRole.LECTURER
-  ),
+  requireUser,
   UserController.getStudentPreviewData
 );
 

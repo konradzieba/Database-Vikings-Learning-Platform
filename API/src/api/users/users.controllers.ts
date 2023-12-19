@@ -91,6 +91,7 @@ export async function getStudentPreviewData(
   next: NextFunction
 ) {
   try {
+    const { role } = req.user;
     const { id: studentId } = req.params;
 
     const student = await UserServices.findStudentByStudentId(+studentId);
@@ -101,7 +102,7 @@ export async function getStudentPreviewData(
     }
 
     const studentPreviewData = await UserServices.getStudentPreviewData(
-      +studentId
+      +studentId, role
     );
 
     res.json({
