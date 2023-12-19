@@ -19,8 +19,16 @@ function SendTaskAnswerModal({
 	setTemporaryDate: Dispatch<SetStateAction<string | null>>;
 	setTemporarySolution: Dispatch<SetStateAction<boolean>>;
 }>) {
-	const { mutate: sendAnswerMutation, isPending, isSuccess, isError } = useSendAnswerMutation();
-	const { refetch } = useGetLessonTaskById(innerProps.lessonId, innerProps.taskId);
+	const {
+		mutate: sendAnswerMutation,
+		isPending,
+		isSuccess,
+		isError,
+	} = useSendAnswerMutation();
+	const { refetch } = useGetLessonTaskById(
+		innerProps.lessonId,
+		innerProps.taskId
+	);
 
 	const handleSendAnswer = () => {
 		if (!innerProps.answerContent) {

@@ -121,6 +121,58 @@ export function findLecturerById(id: Lecturer['id']) {
   });
 }
 
+export async function getStudentPreviewData(studentId: Student['id']) {
+  const studentData = await db.student.findUnique({
+    where: {
+      id: studentId,
+    },
+    select: {
+      id: true,
+      indexNumber: true,
+      score: true,
+      health: true,
+      groupId: true,
+      aggregatedSendTime: true,
+      Group: {
+        select: {
+          name: true,
+          id: true,
+        },
+      },
+      User: {
+        select: {
+          firstName: true,
+          lastName: true,
+        },
+      },
+    },
+  });
+
+  const studentAbsentDates = await db.lesson.findMany({
+    where: {
+      absentStudents: {
+        has: studentId,
+      },
+    },
+    select: {
+      number: true,
+      // date: true,
+    },
+  });
+
+  if (!studentData) {
+    throw new Error(`Student with studentId: ${studentId} not found`);
+  }
+
+  return {
+    message: 'success',
+    studentPreviewData: {
+      ...studentData,
+      absentDates: studentAbsentDates.map((lesson) => lesson.number),
+    },
+  };
+}
+
 export async function getStudentDefaultPasswordState(userId: User['id']) {
   return db.student.findUnique({
     where: {
@@ -188,39 +240,6 @@ export function createSuperUser(
     data: { ...superUser, isAdmin: true },
   });
 }
-
-// export const createManyStudents = (
-//   lecturerId: Lecturer['id'],
-//   studentsToRegisterData: Prisma.StudentCreateInput[]
-// ) => {
-//   return db.student.createMany({
-//     data: studentsToRegisterData.map((student) => ({
-//       ...student,
-//       User: {
-//         create: {
-//           email: `${
-//             student.indexNumber ? student.indexNumber : ''
-//           }@student.uwm.edu.pl`,
-//           firstName: student.User.create?.firstName,
-//           lastName: student.User.create?.lastName,
-//           password: bcrypt.hashSync(
-//             generatePasswordByCredentials(
-//               student.User.create?.firstName,
-//               student.User.create?.lastName,
-//               student.indexNumber
-//             ),
-//             12
-//           ),
-//         },
-//       },
-//       Lecturer: {
-//         connect: {
-//           id: lecturerId,
-//         },
-//       },
-//     })),
-//   });
-// };
 
 export function createStudent(student: Prisma.StudentCreateInput) {
   return db.student.create({

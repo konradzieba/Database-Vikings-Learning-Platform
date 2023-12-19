@@ -30,6 +30,17 @@ router.get(
   UserController.getStudentDefaultPasswordState
 );
 
+router.get(
+  '/getStudentPreviewData/:id',
+  validateRequestAndCheckRole(
+    {
+      params: paramsWithIdSchema,
+    },
+    EnumRole.LECTURER
+  ),
+  UserController.getStudentPreviewData
+);
+
 router.get('/getScoreBoard', requireUser, UserController.getScoreBoard);
 
 router.patch(

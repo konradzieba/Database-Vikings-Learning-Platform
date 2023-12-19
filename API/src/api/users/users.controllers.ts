@@ -71,7 +71,7 @@ export async function me(req: Request, res: Response, next: NextFunction) {
 export async function getScoreBoard(
   req: Request,
   res: Response,
-next: NextFunction
+  next: NextFunction
 ) {
   try {
     const parsedToken: ParsedToken = req.user;
@@ -80,6 +80,34 @@ next: NextFunction
     const scoreBoard = await UserServices.getScoreBoard(isStudent);
 
     res.json({ message: 'success', scoreBoard: scoreBoard });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getStudentPreviewData(
+  req: Request<ParamsWithId>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id: studentId } = req.params;
+
+    const student = await UserServices.findStudentByStudentId(+studentId);
+
+    if (!student) {
+      res.status(404);
+      throw new Error('Student with given id does not exists');
+    }
+
+    const studentPreviewData = await UserServices.getStudentPreviewData(
+      +studentId
+    );
+
+    res.json({
+      message: 'success',
+      studentPreviewData: studentPreviewData,
+    });
   } catch (error) {
     next(error);
   }

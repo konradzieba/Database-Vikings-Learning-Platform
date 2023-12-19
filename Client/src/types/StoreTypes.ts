@@ -1,5 +1,4 @@
 import { UserRole } from './Enums';
-import { TGetGroupsByLecturerId } from './ResponseTypes';
 
 export interface IUserStoreStore {
 	role: UserRole | null;
