@@ -54,7 +54,7 @@ function StudentAnswerCard({
 					{firstName} {lastName}
 				</Text>
 			</Box>
-			<DateTimeDisplay title='Data zwrócenia' date={sendDate} icon={<IconClock />} titleTextAlgin='start' />
+			<DateTimeDisplay title='Data zwrócenia' date={sendDate} icon={<IconClock />}/>
 			<Button miw={150} onClick={handlePreviewStudentAnswer} className={classes.answerCardButton}>
 				{isScoreGranted ? 'Koryguj' : 'Przejdź'}
 			</Button>
