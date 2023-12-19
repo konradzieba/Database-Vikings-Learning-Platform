@@ -20,6 +20,10 @@
 	color: var(--font-color);
 }
 
+.accordionSpecialTaskIconColor {
+	color: #6741d9;
+}
+
 .grantedScore {
 	color: var(--score-color);
 }

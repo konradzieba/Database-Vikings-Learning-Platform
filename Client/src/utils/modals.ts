@@ -15,6 +15,7 @@ import PreviewStudentAnswerModal from '@/modals/PreviewStudentAnswer.modal';
 import RenameGroupModal from '@/modals/RenameGroup.modal';
 import ReorderLessonsModal from '@/modals/ReorderLessons/ReorderLessons.modal';
 import RestoreDefaultPasswordModal from '@/modals/RestoreDefaultPassword.modal';
+import SendSpecialTaskAnswerModal from '@/modals/SendSpecialTaskAnswer.modal';
 import SendTaskAnswerModal from '@/modals/SendTaskAnswer.modal';
 import SessionExpiredModal from '@/modals/SessionExpire.modal';
 import showStudentDefaultPasswordModal from '@/modals/ShowStudentDefaultPassword.modal';
@@ -44,4 +45,5 @@ export default {
 	addTaskByHand: AddTaskByHandModal,
 	addStudentToGroup: AddStudentToGroupModal,
 	showStudentDefaultPassword: showStudentDefaultPasswordModal,
+	sendSpecialTaskAnswer: SendSpecialTaskAnswerModal,
 };
