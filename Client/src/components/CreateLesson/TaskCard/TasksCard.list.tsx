@@ -12,8 +12,8 @@ function TasksCardList() {
 	const lessonFromGroup = createdLessonsArray.find(lesson => lesson.groupId === +id!);
 
 	return (
-		<Box h={rem(550)}>
-			<Flex w='80%' mt={rem(43)} mx='auto' gap='md' align='center' justify='center' wrap='wrap'>
+		<Box mih={rem(550)} mb='xl'>
+			<Flex w='80%' mt={rem(43)} mx='auto' gap='md' direction='column' align='center' justify='center'>
 				{lessonFromGroup?.tasks &&
 					lessonFromGroup.tasks.map((task, index) => (
 						<TaskCard
