@@ -29,7 +29,7 @@ function StudentAnswerCard({
 }: StudentAnswerCardProps) {
 	const handlePreviewStudentAnswer = () => {
 		modals.openContextModal({
-			modal: 'previewStudentAnswer',
+			modal: 'createAnswerReply',
 			title: 'Oceń zadanie',
 			size: 'lg',
 			closeOnClickOutside: false,
@@ -45,7 +45,14 @@ function StudentAnswerCard({
 	};
 
 	return (
-		<Flex direction='column' px='md' py='md' gap='md' miw='22%' className={classes.answerCardWrapper}>
+		<Flex
+			direction='column'
+			px='md'
+			py='md'
+			gap='md'
+			miw='22%'
+			className={classes.answerCardWrapper}
+		>
 			<Box>
 				<Text fw={500} fz='lg'>
 					{index}
@@ -54,8 +61,17 @@ function StudentAnswerCard({
 					{firstName} {lastName}
 				</Text>
 			</Box>
-			<DateTimeDisplay title='Data zwrócenia' date={sendDate} icon={<IconClock />} titleTextAlgin='start' />
-			<Button miw={150} onClick={handlePreviewStudentAnswer} className={classes.answerCardButton}>
+			<DateTimeDisplay
+				title='Data zwrócenia'
+				date={sendDate}
+				icon={<IconClock />}
+				titleTextAlgin='start'
+			/>
+			<Button
+				miw={150}
+				onClick={handlePreviewStudentAnswer}
+				className={classes.answerCardButton}
+			>
 				{isScoreGranted ? 'Koryguj' : 'Przejdź'}
 			</Button>
 		</Flex>

@@ -13,10 +13,14 @@ import {
 	Textarea,
 } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
-import { IconBlockquote, IconCoins, IconListDetails } from '@tabler/icons-react';
+import {
+	IconBlockquote,
+	IconCoins,
+	IconListDetails,
+} from '@tabler/icons-react';
 import { CodeHighlight } from '@mantine/code-highlight';
 import { useForm, zodResolver } from '@mantine/form';
-import { answerReplySchema } from './PreviewStudentAnswerModal.schema';
+import { answerReplySchema } from './CreateAnswerReply.schema';
 import { useState } from 'react';
 import { AnswerReplyStatus, AnswerReplyStatusEnum } from '@/types/Enums';
 import useReplyAnswerMutation from '@/hooks/answer/useReplyAnswerMutation';
@@ -37,14 +41,18 @@ const selectData = [
 	},
 ];
 
-interface PreviewStudentAnswerModalProps {
+interface CreateAnswerReplyModalProps {
 	studentFullName: string;
 	studentIndex: number;
 	studentAnswer: string;
 	answerId: number;
 }
 
-function PreviewStudentAnswerModal({ context, id, innerProps }: ContextModalProps<PreviewStudentAnswerModalProps>) {
+function CreateAnswerReplyModal({
+	context,
+	id,
+	innerProps,
+}: ContextModalProps<CreateAnswerReplyModalProps>) {
 	const [selectError, setSelectError] = useState<string | null>(null);
 	const answerReplyForm = useForm({
 		initialValues: {
@@ -103,16 +111,21 @@ function PreviewStudentAnswerModal({ context, id, innerProps }: ContextModalProp
 
 	return (
 		<form
-			onSubmit={e => {
+			onSubmit={(e) => {
 				e.preventDefault();
 				handleReplyAnswer();
-			}}>
+			}}
+		>
 			<Text mb='md'>
 				{innerProps.studentFullName},&nbsp;{innerProps.studentIndex}
 			</Text>
 
 			<ScrollArea.Autosize mah={250} type='auto' offsetScrollbars>
-				<CodeHighlight code={innerProps.studentAnswer} language='sql' withCopyButton={false} />
+				<CodeHighlight
+					code={innerProps.studentAnswer}
+					language='sql'
+					withCopyButton={false}
+				/>
 			</ScrollArea.Autosize>
 
 			<Divider my='md' />
@@ -123,12 +136,15 @@ function PreviewStudentAnswerModal({ context, id, innerProps }: ContextModalProp
 					w='50%'
 					label='Ocena zadania'
 					placeholder='Ocena zadania...'
-					data={selectData.map(item => item.label)}
+					data={selectData.map((item) => item.label)}
 					error={selectError}
 					{...(answerReplyForm.getInputProps('replyStatus'),
 					{
-						onChange: value => {
-							answerReplyForm.setFieldValue('replyStatus', selectData.find(item => item.label === value)!.value);
+						onChange: (value) => {
+							answerReplyForm.setFieldValue(
+								'replyStatus',
+								selectData.find((item) => item.label === value)!.value
+							);
 							setSelectError(null);
 						},
 					})}
@@ -173,4 +189,4 @@ function PreviewStudentAnswerModal({ context, id, innerProps }: ContextModalProp
 	);
 }
 
-export default PreviewStudentAnswerModal;
+export default CreateAnswerReplyModal;
