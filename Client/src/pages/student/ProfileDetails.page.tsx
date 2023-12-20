@@ -26,7 +26,7 @@ import {
 } from '@tabler/icons-react';
 import CountUp from 'react-countup';
 
-function MyStatsPage() {
+function ProfileDetailsPage() {
 	const { studentData: studentStoreData } = useStudentStore();
 	const { data, isLoading, isError } = useGetStudentPreviewDataQuery(
 		studentStoreData.studentId!
@@ -122,4 +122,4 @@ function MyStatsPage() {
 	);
 }
 
-export default MyStatsPage;
+export default ProfileDetailsPage;

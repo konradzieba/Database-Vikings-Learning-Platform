@@ -28,10 +28,10 @@ import GroupStudentsInfoPage from './pages/lecturer/GroupStudentsInfo.page';
 import LessonDashboardPage from './pages/lecturer/LessonDashboard.page';
 import GroupScoreBoardLecturerPage from './pages/lecturer/GroupScoreBoardLecturer.page';
 import GlobalScoreBoardLecturerPage from './pages/lecturer/GlobalScoreBoardsLecturer.page';
-import MyStatsPage from './pages/student/MyStats.page';
 import SpecialTaskAnswerPage from './pages/student/SpecialTaskAnswer.page';
 import MySpecialTasksPage from './pages/student/MySpecialTasks.page';
 import StudentPreview from './pages/lecturer/StudentPreview.page';
+import ProfileDetailsPage from './pages/student/ProfileDetails.page';
 
 const router = createBrowserRouter([
 	{
@@ -49,7 +49,7 @@ const router = createBrowserRouter([
 			{ path: 'my-tasks', element: <MyTasksPage /> },
 			{ path: 'lesson-tasks/:id', element: <LessonTasksPage /> },
 			{ path: 'task/:lessonId/:taskId', element: <TaskAnswerPage /> },
-			{ path: 'my-stats', element: <MyStatsPage /> },
+			{ path: 'details', element: <ProfileDetailsPage /> },
 			{ path: 'special-task/:taskId', element: <SpecialTaskAnswerPage /> },
 			{ path: 'my-special-tasks', element: <MySpecialTasksPage /> },
 			{ path: 'me', element: <BlankContent /> },
