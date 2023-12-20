@@ -1,7 +1,7 @@
 import FullScreenLoader from '@/components/UI/FullScreenLoader';
+import StatsCell from '@/components/StudentPreview/StatsCell';
 import { useGetStudentPreviewDataQuery } from '@/hooks/students/useGetStudentPreviewDataQuery';
 import {
-	Box,
 	Center,
 	Divider,
 	Group,
@@ -14,25 +14,9 @@ import {
 	Title,
 	rem,
 } from '@mantine/core';
-import { IconChartBar, IconChecklist, IconUser } from '@tabler/icons-react';
 import { useParams } from 'react-router-dom';
-
-interface CellProps {
-	label: string;
-	value: string | number;
-	valueWithLts?: boolean;
-}
-
-const Cell = ({ label, value, valueWithLts }: CellProps) => {
-	return (
-		<Box ta='center'>
-			<Text>{label}:</Text>
-			<Text size='xl' fw={500} lts={valueWithLts ? rem(0.9) : ''}>
-				{value}
-			</Text>
-		</Box>
-	);
-};
+import { IconChartBar, IconChecklist, IconUser } from '@tabler/icons-react';
+import AbsentList from '@/components/StudentPreview/AbsentList';
 
 function StudentPreview() {
 	const { studentId } = useParams();
@@ -61,8 +45,7 @@ function StudentPreview() {
 			</Center>
 		);
 
-	const { studentInfo } = data.studentData;
-	const { absentLessonNumbers } = data.studentData;
+	const { studentInfo, absentLessonNumbers, taskStats } = data.studentData;
 
 	return (
 		<Stack maw={1200} align='center' mx='auto' mb='xl' px='sm'>
@@ -75,12 +58,16 @@ function StudentPreview() {
 				</Title>
 			</Group>
 			<SimpleGrid cols={3} w='100%'>
-				<Cell label='Imię' value={studentInfo.User.firstName} />
-				<Cell label='Nazwisko' value={studentInfo.User.lastName} />
-				<Cell label='Numer indeksu' value={studentInfo.indexNumber} />
-				<Cell label='Grupa' value={studentInfo.Group.name} />
-				<Cell label='Wynik' value={studentInfo.score} />
-				<Cell label='Życia' value={`${studentInfo.health}/3`} valueWithLts />
+				<StatsCell label='Imię' value={studentInfo.User.firstName} />
+				<StatsCell label='Nazwisko' value={studentInfo.User.lastName} />
+				<StatsCell label='Numer indeksu' value={studentInfo.indexNumber} />
+				<StatsCell label='Grupa' value={studentInfo.Group.name} />
+				<StatsCell label='Wynik' value={studentInfo.score} />
+				<StatsCell
+					label='Życia'
+					value={`${studentInfo.health}/3`}
+					valueWithLts
+				/>
 			</SimpleGrid>
 			<Divider w='100%' size='md' my='md' />
 			<Group gap='xs'>
@@ -91,26 +78,26 @@ function StudentPreview() {
 					Statystyki zadań
 				</Title>
 			</Group>
-			<Cell
+			<StatsCell
 				label='Łączna ilość zadań'
-				value={data.studentData.taskStats.totalTasksAmount}
+				value={taskStats.totalTasksAmount}
 			/>
 			<SimpleGrid cols={4} w='100%'>
-				<Cell
+				<StatsCell
 					label='Zadania do wykonania'
-					value={data.studentData.taskStats.toDoTasksAmount}
+					value={taskStats.toDoTasksAmount}
 				/>
-				<Cell
+				<StatsCell
 					label='Przesłane zadania'
-					value={data.studentData.taskStats.sentTasksAmount}
+					value={taskStats.sentTasksAmount}
 				/>
-				<Cell
+				<StatsCell
 					label='Ocenione zadania'
-					value={data.studentData.taskStats.repliedAnswersAmount}
+					value={taskStats.repliedAnswersAmount}
 				/>
-				<Cell
+				<StatsCell
 					label='Spóźnione zadania'
-					value={data.studentData.taskStats.notRepliedAndOutdatedTasksAmount}
+					value={taskStats.notRepliedAndOutdatedTasksAmount}
 				/>
 			</SimpleGrid>
 			<Divider w='100%' size='md' my='md' />
@@ -123,7 +110,8 @@ function StudentPreview() {
 				</Title>
 			</Group>
 			<Center>
-				<List type='ordered' fz='lg'>
+				<AbsentList absentLessonNumbers={absentLessonNumbers} />
+				{/* <List type='ordered' fz='lg'>
 					{absentLessonNumbers.length === 0 ? (
 						<Text size='lg' c='dimmed' fs='italic'>
 							Brak
@@ -140,7 +128,7 @@ function StudentPreview() {
 							</ListItem>
 						))
 					)}
-				</List>
+				</List> */}
 			</Center>
 		</Stack>
 	);
