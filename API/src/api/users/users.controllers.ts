@@ -1,9 +1,9 @@
 import { Response, Request, NextFunction } from 'express';
 import { EnumRole, ParsedToken } from '../../../typings/token';
 import { ParamsWithId } from 'interfaces/ParamsWithId';
+import { UpdateStudentInput, UpdateUserInput } from './users.schemas';
 import MessageResponse from 'interfaces/MessageResponse';
 import * as UserServices from './users.services';
-import { UpdateStudentInput, UpdateUserInput } from './users.schemas';
 
 export async function me(req: Request, res: Response, next: NextFunction) {
   try {
@@ -34,7 +34,7 @@ export async function me(req: Request, res: Response, next: NextFunction) {
             indexNumber: student.indexNumber,
             score: student.score,
             health: student.health,
-            rank: student.rank,
+            // rank: student.rank,
             isPasswordChanged: student.isPasswordChanged,
             groupId: student.groupId,
             answersId: student.answersId,
