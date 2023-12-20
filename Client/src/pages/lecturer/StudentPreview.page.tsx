@@ -8,6 +8,7 @@ import {
 	List,
 	ListItem,
 	SimpleGrid,
+	Space,
 	Stack,
 	Text,
 	ThemeIcon,
@@ -17,6 +18,26 @@ import {
 import { useParams } from 'react-router-dom';
 import { IconChartBar, IconChecklist, IconUser } from '@tabler/icons-react';
 import AbsentList from '@/components/StudentPreview/AbsentList';
+import dayjs from 'dayjs';
+import duration from 'dayjs/plugin/duration';
+
+dayjs.extend(duration);
+
+function formatDuration(durationInSeconds: number) {
+	const durationObj = dayjs.duration(durationInSeconds, 'seconds');
+	const days = durationObj.days();
+	const hours = durationObj.hours();
+	const minutes = durationObj.minutes();
+	const seconds = durationObj.seconds();
+
+	const formattedDuration = [];
+	if (days > 0) formattedDuration.push(`${days} dni`);
+	if (hours > 0) formattedDuration.push(`${hours} godz.`);
+	if (minutes > 0) formattedDuration.push(`${minutes} min.`);
+	if (seconds > 0) formattedDuration.push(`${seconds} sek.`);
+
+	return formattedDuration.join(' ');
+}
 
 function StudentPreview() {
 	const { studentId } = useParams();
@@ -46,6 +67,9 @@ function StudentPreview() {
 		);
 
 	const { studentInfo, absentLessonNumbers, taskStats } = data.studentData;
+	const averageTaskSolveTimeInSeconds =
+		(studentInfo.aggregatedSendTime * 1_000_000) / taskStats.sentTasksAmount;
+	const averageTaskSolveTime = formatDuration(averageTaskSolveTimeInSeconds);
 
 	return (
 		<Stack maw={1200} align='center' mx='auto' mb='xl' px='sm'>
@@ -100,6 +124,14 @@ function StudentPreview() {
 					value={taskStats.notRepliedAndOutdatedTasksAmount}
 				/>
 			</SimpleGrid>
+			<Space h={rem(5)} />
+			<StatsCell
+				label='Średni czas wykonania zadania'
+				value={
+					studentInfo.aggregatedSendTime === 0 ? 'Brak' : averageTaskSolveTime
+				}
+				dimmed={studentInfo.aggregatedSendTime === 0}
+			/>
 			<Divider w='100%' size='md' my='md' />
 			<Group align='center' gap='xs'>
 				<ThemeIcon variant='transparent' size={rem(26)}>
@@ -111,24 +143,6 @@ function StudentPreview() {
 			</Group>
 			<Center>
 				<AbsentList absentLessonNumbers={absentLessonNumbers} />
-				{/* <List type='ordered' fz='lg'>
-					{absentLessonNumbers.length === 0 ? (
-						<Text size='lg' c='dimmed' fs='italic'>
-							Brak
-						</Text>
-					) : (
-						absentLessonNumbers.map((lessonNumber) => (
-							<ListItem key={lessonNumber} my={rem(5)}>
-								<Text size='lg'>
-									Lekcja nr&nbsp;
-									<Text span fw={500}>
-										{lessonNumber}
-									</Text>
-								</Text>
-							</ListItem>
-						))
-					)}
-				</List> */}
 			</Center>
 		</Stack>
 	);
