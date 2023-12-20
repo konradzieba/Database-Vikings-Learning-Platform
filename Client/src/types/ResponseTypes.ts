@@ -287,6 +287,36 @@ const getGroupInfoSchema = z.object({
 	}),
 });
 
+const getStudentPreviewDataSchema = z.object({
+	message: z.string(),
+	studentData: z.object({
+		studentInfo: z.object({
+			id: z.number().int(),
+			indexNumber: z.number().int(),
+			score: z.number().int(),
+			health: z.number().int(),
+			groupId: z.number().int(),
+			aggregatedSendTime: z.number(),
+			lastLogin: z.string(),
+			Group: z.object({
+				name: z.string(),
+			}),
+			User: z.object({
+				firstName: z.string(),
+				lastName: z.string(),
+			}),
+		}),
+		absentLessonNumbers: z.array(z.number().int()),
+		taskStats: z.object({
+			totalTasksAmount: z.number().int(),
+			repliedAnswersAmount: z.number().int(),
+			sentTasksAmount: z.number().int(),
+			notRepliedAndOutdatedTasksAmount: z.number().int(),
+			toDoTasksAmount: z.number().int(),
+		}),
+	}),
+});
+
 export type TMessageResponse = z.infer<typeof MessageResponseSchema>;
 export type TLoginResponse = z.infer<typeof LoginResponseSchema>;
 export type TRegisterManyStudents = z.infer<typeof RegisterManyStudentsSchema>;
@@ -326,3 +356,6 @@ export type TGetPreDeleteLessonInfo = z.infer<
 	typeof getPreDeleteLessonInfoSchema
 >;
 export type TGetGroupInfo = z.infer<typeof getGroupInfoSchema>;
+export type TGetStudentPreviewData = z.infer<
+	typeof getStudentPreviewDataSchema
+>;

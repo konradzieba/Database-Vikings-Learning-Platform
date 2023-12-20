@@ -1,6 +1,22 @@
-import { Button, Divider, Flex, Group, HoverCard, Indicator, Stack, Text, ThemeIcon, rem } from '@mantine/core';
+import {
+	Button,
+	Divider,
+	Flex,
+	Group,
+	HoverCard,
+	Indicator,
+	Stack,
+	Text,
+	ThemeIcon,
+	rem,
+} from '@mantine/core';
 import { NavLink } from 'react-router-dom';
-import { IconClock, IconCoins, IconStar, IconStarFilled } from '@tabler/icons-react';
+import {
+	IconClock,
+	IconCoins,
+	IconStar,
+	IconStarFilled,
+} from '@tabler/icons-react';
 import UserPanel from '../UI/UserPanel';
 import classes from './Navbar.module.css';
 import HeartCounter from '../UI/HeartCounter';
@@ -19,22 +35,25 @@ const navLinks = [
 		link: '/my-tasks',
 	},
 	{
-		label: 'Statystyki',
-		link: '/my-stats',
+		label: 'Szczegóły',
+		link: '/details',
 	},
 ];
 
 function Nav() {
 	return (
 		<Group gap='xl'>
-			{navLinks.map(link => {
+			{navLinks.map((link) => {
 				return (
 					<NavLink
 						to={link.link}
 						className={({ isActive }) =>
-							isActive ? `${classes.link} ${classes.activeLink}` : `${classes.link} ${classes.inactiveLink}`
+							isActive
+								? `${classes.link} ${classes.activeLink}`
+								: `${classes.link} ${classes.inactiveLink}`
 						}
-						key={link.link}>
+						key={link.link}
+					>
 						{link.label}
 					</NavLink>
 				);
@@ -53,7 +72,10 @@ function Nav() {
 						{/* text or card render depends on is there a special task added */}
 						{/* :taskId will be changed depend on specialTaskID */}
 						<Flex direction='column' gap='sm'>
-							<NavLink to={`special-task/1`} className={classes.specialTaskCard}>
+							<NavLink
+								to={`special-task/1`}
+								className={classes.specialTaskCard}
+							>
 								<Text fw={500}>Zadanie specjalne 1</Text>
 								<Group>
 									<IconClock />
@@ -64,7 +86,10 @@ function Nav() {
 								Brak zadań specjalnych
 							</Text>
 							<Divider />
-							<NavLink to='/my-special-tasks' className={classes.specialTaskButton}>
+							<NavLink
+								to='/my-special-tasks'
+								className={classes.specialTaskButton}
+							>
 								Moje zadania specjalne
 							</NavLink>
 						</Flex>
@@ -86,7 +111,11 @@ function Info({ studentInfo }: InfoProps) {
 					Wynik
 				</Text>
 				<Group className={classes.score} gap={rem(2)} py={rem(3.1)}>
-					<ThemeIcon variant='transparent' size={rem(24)} className={classes.score}>
+					<ThemeIcon
+						variant='transparent'
+						size={rem(24)}
+						className={classes.score}
+					>
 						<IconCoins />
 					</ThemeIcon>
 					<Text size='lg' fw={500}>

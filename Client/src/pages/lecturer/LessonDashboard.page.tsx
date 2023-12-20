@@ -35,10 +35,12 @@ function LessonDashboardPage() {
 	}
 
 	if (!lessonData?.lessonInfo.tasks.length) {
-		return <DataNotFound firstLineText='Lista zadań' secondLineText='jest pusta' />;
+		return (
+			<DataNotFound firstLineText='Lista zadań' secondLineText='jest pusta' />
+		);
 	}
 
-	const handleOpenAddTaksModal = () => {
+	const handleOpenAddTaskModal = () => {
 		modals.openContextModal({
 			modal: 'addTaskByHand',
 			title: `Dodaj zadanie nr ${lessonData.lessonInfo.tasks.length + 1}`,
@@ -52,17 +54,21 @@ function LessonDashboardPage() {
 		});
 	};
 
-	const tasksTabs = lessonData?.lessonInfo.tasks.map(task => {
+	const tasksTabs = lessonData?.lessonInfo.tasks.map((task) => {
 		return (
 			<Tabs.Tab
 				value={`task-${task.taskNumber}`}
-				key={`task-${task.taskNumber}-tab`}>{`Zadanie ${task.taskNumber}`}</Tabs.Tab>
+				key={`task-${task.taskNumber}-tab`}
+			>{`Zadanie ${task.taskNumber}`}</Tabs.Tab>
 		);
 	});
 
-	const tasksPanels = lessonData?.lessonInfo.tasks.map(task => {
+	const tasksPanels = lessonData?.lessonInfo.tasks.map((task) => {
 		return (
-			<Tabs.Panel value={`task-${task.taskNumber}`} key={`task-${task.taskNumber}-panel`}>
+			<Tabs.Panel
+				value={`task-${task.taskNumber}`}
+				key={`task-${task.taskNumber}-panel`}
+			>
 				<Flex direction='column'>
 					<TaskAnswersStats
 						endDate={task.endDate}
@@ -72,7 +78,7 @@ function LessonDashboardPage() {
 					/>
 					<Flex wrap='wrap' gap='xl' mx='lg' mt='md' justify='flex-start'>
 						{isRepliedTabChosen
-							? task.answers.map(answer => {
+							? task.answers.map((answer) => {
 									if (answer.grantedScore) {
 										return (
 											<StudentAnswerCard
@@ -91,7 +97,7 @@ function LessonDashboardPage() {
 									}
 									return null;
 							  })
-							: task.answers.map(answer => {
+							: task.answers.map((answer) => {
 									if (!answer.grantedScore) {
 										return (
 											<StudentAnswerCard
@@ -122,12 +128,18 @@ function LessonDashboardPage() {
 				<Title>Lekcja&nbsp;{lessonData?.lessonInfo.lessonNumber}</Title>
 			</Center>
 			<Center>
-				<Button variant='outline' size='xs' onClick={handleOpenAddTaksModal}>
+				<Button variant='outline' size='xs' onClick={handleOpenAddTaskModal}>
 					Dodaj zadanie
 				</Button>
 			</Center>
 			<Center>
-				<Tabs orientation='vertical' defaultValue='task-1' h='60vh' w='60vw' mt='sm'>
+				<Tabs
+					orientation='vertical'
+					defaultValue='task-1'
+					h='60vh'
+					w='60vw'
+					mt='sm'
+				>
 					<Tabs.List grow>{tasksTabs}</Tabs.List>
 					{tasksPanels}
 				</Tabs>

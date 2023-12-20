@@ -24,6 +24,7 @@ import {
 	TGetScoreBoard,
 	TGetStudentDefaultPasswordState,
 	TGetStudentLessonsInfo,
+	TGetStudentPreviewData,
 	TGetStudentTasks,
 	TGetStudentsFromGroup,
 	TGetTaskInfoById,
@@ -344,6 +345,14 @@ export const getGroupInfoQueryFn = async (groupId: number) => {
 	const { data } = await axios.get<TGetGroupInfo>(
 		`/groups/getGroupInfo/${groupId}`
 	);
+	return data;
+};
+
+export const getStudentPreviewDataQueryFn = async (studentId: number) => {
+	const { data } = await axios.get<TGetStudentPreviewData>(
+		`/users/getStudentPreviewData/${studentId}`
+	);
+
 	return data;
 };
 
