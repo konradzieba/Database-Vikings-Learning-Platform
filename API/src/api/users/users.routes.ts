@@ -30,6 +30,12 @@ router.get(
   UserController.getStudentDefaultPasswordState
 );
 
+router.get(
+  '/getStudentPreviewData/:id',
+  requireUser,
+  UserController.getStudentPreviewData
+);
+
 router.get('/getScoreBoard', requireUser, UserController.getScoreBoard);
 
 router.patch(

@@ -1,9 +1,9 @@
 import { Response, Request, NextFunction } from 'express';
 import { EnumRole, ParsedToken } from '../../../typings/token';
 import { ParamsWithId } from 'interfaces/ParamsWithId';
+import { UpdateStudentInput, UpdateUserInput } from './users.schemas';
 import MessageResponse from 'interfaces/MessageResponse';
 import * as UserServices from './users.services';
-import { UpdateStudentInput, UpdateUserInput } from './users.schemas';
 
 export async function me(req: Request, res: Response, next: NextFunction) {
   try {
@@ -34,7 +34,7 @@ export async function me(req: Request, res: Response, next: NextFunction) {
             indexNumber: student.indexNumber,
             score: student.score,
             health: student.health,
-            rank: student.rank,
+            // rank: student.rank,
             isPasswordChanged: student.isPasswordChanged,
             groupId: student.groupId,
             answersId: student.answersId,
@@ -71,7 +71,7 @@ export async function me(req: Request, res: Response, next: NextFunction) {
 export async function getScoreBoard(
   req: Request,
   res: Response,
-next: NextFunction
+  next: NextFunction
 ) {
   try {
     const parsedToken: ParsedToken = req.user;
@@ -80,6 +80,36 @@ next: NextFunction
     const scoreBoard = await UserServices.getScoreBoard(isStudent);
 
     res.json({ message: 'success', scoreBoard: scoreBoard });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getStudentPreviewData(
+  req: Request<ParamsWithId>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { role } = req.user;
+    const { id: studentId } = req.params;
+
+    const student = await UserServices.findStudentByStudentId(+studentId);
+
+    if (!student) {
+      res.status(404);
+      throw new Error('Student with given id does not exists');
+    }
+
+    const studentPreviewData = await UserServices.getStudentPreviewData(
+      +studentId,
+      role
+    );
+
+    res.json({
+      message: 'success',
+      studentData: studentPreviewData,
+    });
   } catch (error) {
     next(error);
   }

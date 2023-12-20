@@ -121,6 +121,134 @@ export function findLecturerById(id: Lecturer['id']) {
   });
 }
 
+export async function getStudentPreviewData(
+  studentId: Student['id'],
+  role: User['role']
+) {
+  const studentData =
+    role === 'STUDENT'
+      ? await db.student.findUnique({
+          where: {
+            id: studentId,
+          },
+          select: {
+            groupId: true,
+            aggregatedSendTime: true,
+            Group: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        })
+      : await db.student.findUnique({
+          where: {
+            id: studentId,
+          },
+          select: {
+            id: true,
+            indexNumber: true,
+            score: true,
+            health: true,
+            groupId: true,
+            aggregatedSendTime: true,
+            lastLogin: true,
+            Group: {
+              select: {
+                name: true,
+              },
+            },
+            User: {
+              select: {
+                firstName: true,
+                lastName: true,
+              },
+            },
+          },
+        });
+
+  if (!studentData) {
+    throw new Error(`Student with studentId: ${studentId} not found`);
+  }
+
+  const absentLessonNumbers =
+    (await db.lesson
+      .findMany({
+        where: {
+          absentStudents: {
+            has: studentId,
+          },
+        },
+        select: {
+          number: true,
+        },
+      })
+      .then((lesson) => lesson.map((lesson) => lesson.number))) || [];
+
+  const totalTaskInfo =
+    (await db.task.findMany({
+      where: {
+        Lesson: {
+          groupId: studentData?.groupId,
+        },
+      },
+    })) || [];
+
+  const answers =
+    (await db.answer.findMany({
+      where: {
+        studentId: studentId,
+      },
+      select: {
+        taskId: true,
+        replyStatus: true,
+      },
+    })) || [];
+
+  const repliedAnswersAmount = answers.filter(
+    (answer) => answer.replyStatus !== 'PENDING'
+  ).length;
+
+  const sentTasks =
+    (await db.task.findMany({
+      where: {
+        Lesson: {
+          groupId: studentData?.groupId,
+        },
+        answers: {
+          some: {
+            studentId: studentId,
+          },
+        },
+      },
+      select: {
+        id: true,
+      },
+    })) || [];
+
+  const notRepliedTasks = totalTaskInfo.filter(
+    (task) => !sentTasks.some((sentTask) => sentTask.id === task.id)
+  );
+
+  const notRepliedAndOutdatedTasks = notRepliedTasks.filter((task) =>
+    dayjs(task.closeDate).isBefore(dayjs())
+  );
+
+  const taskStats = {
+    totalTasksAmount: totalTaskInfo.length,
+    repliedAnswersAmount: repliedAnswersAmount,
+    sentTasksAmount: sentTasks.length,
+    notRepliedAndOutdatedTasksAmount: notRepliedAndOutdatedTasks.length,
+    toDoTasksAmount: notRepliedTasks.length - notRepliedAndOutdatedTasks.length,
+  };
+
+  return {
+    studentInfo: studentData,
+    absentLessonNumbers: absentLessonNumbers.sort((a, b) => a - b),
+    taskStats,
+  };
+}
+
 export async function getStudentDefaultPasswordState(userId: User['id']) {
   return db.student.findUnique({
     where: {
@@ -132,9 +260,6 @@ export async function getStudentDefaultPasswordState(userId: User['id']) {
     },
   });
 }
-// export function findStudentGroup(userId: number) {
-//   return db.student.
-// }
 
 export function findLecturerByUserId(userId: number) {
   return db.lecturer.findUnique({
@@ -188,39 +313,6 @@ export function createSuperUser(
     data: { ...superUser, isAdmin: true },
   });
 }
-
-// export const createManyStudents = (
-//   lecturerId: Lecturer['id'],
-//   studentsToRegisterData: Prisma.StudentCreateInput[]
-// ) => {
-//   return db.student.createMany({
-//     data: studentsToRegisterData.map((student) => ({
-//       ...student,
-//       User: {
-//         create: {
-//           email: `${
-//             student.indexNumber ? student.indexNumber : ''
-//           }@student.uwm.edu.pl`,
-//           firstName: student.User.create?.firstName,
-//           lastName: student.User.create?.lastName,
-//           password: bcrypt.hashSync(
-//             generatePasswordByCredentials(
-//               student.User.create?.firstName,
-//               student.User.create?.lastName,
-//               student.indexNumber
-//             ),
-//             12
-//           ),
-//         },
-//       },
-//       Lecturer: {
-//         connect: {
-//           id: lecturerId,
-//         },
-//       },
-//     })),
-//   });
-// };
 
 export function createStudent(student: Prisma.StudentCreateInput) {
   return db.student.create({

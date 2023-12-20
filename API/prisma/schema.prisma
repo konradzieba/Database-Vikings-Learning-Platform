@@ -64,7 +64,7 @@ model Student {
   indexNumber        Int       @unique
   score              Int       @default(0)
   health             Int       @default(3)
-  rank               Int?      @default(-1)
+  // rank               Int?      @default(-1)
   isPasswordChanged  Boolean   @default(false)
   aggregatedSendTime Float     @default(0)
   lastLogin          DateTime?

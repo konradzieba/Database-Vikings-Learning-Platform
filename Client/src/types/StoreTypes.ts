@@ -1,5 +1,4 @@
 import { UserRole } from './Enums';
-import { TGetGroupsByLecturerId } from './ResponseTypes';
 
 export interface IUserStoreStore {
 	role: UserRole | null;
@@ -19,7 +18,7 @@ export interface IStudentStoreStore {
 		indexNumber: number | null;
 		health: number | null;
 		score: number | null;
-		rank: number | null;
+		// rank: number | null;
 		isPasswordChanged: boolean | null;
 		// lastLogin: null,
 		studentId: number | null;

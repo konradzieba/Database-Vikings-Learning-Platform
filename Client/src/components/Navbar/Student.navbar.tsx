@@ -20,22 +20,25 @@ const navLinks = [
 		link: '/my-tasks',
 	},
 	{
-		label: 'Statystyki',
-		link: '/my-stats',
+		label: 'Szczegóły',
+		link: '/details',
 	},
 ];
 
 function Nav() {
 	return (
 		<Group gap='xl'>
-			{navLinks.map(link => {
+			{navLinks.map((link) => {
 				return (
 					<NavLink
 						to={link.link}
 						className={({ isActive }) =>
-							isActive ? `${classes.link} ${classes.activeLink}` : `${classes.link} ${classes.inactiveLink}`
+							isActive
+								? `${classes.link} ${classes.activeLink}`
+								: `${classes.link} ${classes.inactiveLink}`
 						}
-						key={link.link}>
+						key={link.link}
+					>
 						{link.label}
 					</NavLink>
 				);
@@ -56,7 +59,11 @@ function Info({ studentInfo }: InfoProps) {
 					Wynik
 				</Text>
 				<Group className={classes.score} gap={rem(2)} py={rem(3.1)}>
-					<ThemeIcon variant='transparent' size={rem(24)} className={classes.score}>
+					<ThemeIcon
+						variant='transparent'
+						size={rem(24)}
+						className={classes.score}
+					>
 						<IconCoins />
 					</ThemeIcon>
 					<Text size='lg' fw={500}>
