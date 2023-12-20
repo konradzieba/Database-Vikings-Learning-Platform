@@ -5,8 +5,6 @@ import {
 	Center,
 	Divider,
 	Group,
-	List,
-	ListItem,
 	SimpleGrid,
 	Space,
 	Stack,
@@ -66,7 +64,11 @@ function StudentPreview() {
 				<StatsCell label='Imię' value={studentInfo.User.firstName} />
 				<StatsCell label='Nazwisko' value={studentInfo.User.lastName} />
 				<StatsCell label='Numer indeksu' value={studentInfo.indexNumber} />
-				<StatsCell label='Grupa' value={studentInfo.Group.name} />
+				<StatsCell
+					label='Grupa'
+					value={studentInfo.Group.name}
+					href={`/dashboard/group/${studentInfo.groupId}/students`}
+				/>
 				<StatsCell label='Wynik' value={studentInfo.score} />
 				<StatsCell
 					label='Życia'
