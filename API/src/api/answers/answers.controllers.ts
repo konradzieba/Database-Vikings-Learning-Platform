@@ -5,6 +5,7 @@ import { AnswerInput, AnswerReply, AnswerUpdate } from './answers.schemas';
 import * as AnswerServices from './answers.services';
 import * as UserServices from '../users/users.services';
 import * as TaskServices from '../tasks/tasks.services';
+import { Answer, PrismaClient } from '@prisma/client';
 
 export async function createAnswer(
   req: Request<{}, MessageResponse, AnswerInput>,
@@ -50,6 +51,29 @@ export async function createAnswer(
 
     res.json({
       message: `Answer id:${answer.id} for task id: ${answer.taskId} by student id ${answer.studentId} created successfully.`,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getEditReplyAnswerData(
+  req: Request<ParamsWithId, { answerData: Answer }, {}>,
+  res: Response<{ answerData: Answer }>,
+  next: NextFunction
+) {
+  try {
+    const { id } = req.params;
+
+    const existingAnswer = await AnswerServices.findAnswerById(+id);
+
+    if (!existingAnswer) {
+      res.status(404);
+      throw new Error('Answer with this id does not exist.');
+    }
+
+    res.json({
+      answerData: existingAnswer,
     });
   } catch (error) {
     next(error);

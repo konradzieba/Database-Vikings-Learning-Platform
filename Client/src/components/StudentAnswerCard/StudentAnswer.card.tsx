@@ -27,7 +27,7 @@ function StudentAnswerCard({
 	sendDate,
 	refetchLessonInfo,
 }: StudentAnswerCardProps) {
-	const handlePreviewStudentAnswer = () => {
+	const openCreateAnswerReplyModal = () => {
 		modals.openContextModal({
 			modal: 'createAnswerReply',
 			title: 'Oceń zadanie',
@@ -42,6 +42,30 @@ function StudentAnswerCard({
 				studentAnswer: answer,
 			},
 		});
+	};
+
+	const openEditAnswerReplyModal = () => {
+		modals.openContextModal({
+			modal: 'editAnswerReply',
+			title: 'Koryguj ocenę zadania',
+			size: 'lg',
+			closeOnClickOutside: false,
+			onClose: refetchLessonInfo,
+			innerProps: {
+				answerId,
+				studentId,
+				studentFullName: `${firstName} ${lastName}`,
+				studentIndex: index,
+			},
+		});
+	};
+
+	const handleButtonClick = () => {
+		if (!isScoreGranted) {
+			openCreateAnswerReplyModal();
+		} else {
+			openEditAnswerReplyModal();
+		}
 	};
 
 	return (
@@ -69,7 +93,7 @@ function StudentAnswerCard({
 			/>
 			<Button
 				miw={150}
-				onClick={handlePreviewStudentAnswer}
+				onClick={handleButtonClick}
 				className={classes.answerCardButton}
 			>
 				{isScoreGranted ? 'Koryguj' : 'Przejdź'}

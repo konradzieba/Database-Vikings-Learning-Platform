@@ -1,4 +1,4 @@
-import z from 'zod';
+import z, { string } from 'zod';
 import { AnswerReplyStatusEnum, UserRoleEnum } from './Enums';
 
 const MessageResponseSchema = z.object({
@@ -317,6 +317,21 @@ const getStudentPreviewDataSchema = z.object({
 	}),
 });
 
+const editAnswerReply = z.object({
+	message: string(),
+	answerData: z.object({
+		id: z.number().int(),
+		solution: z.string(),
+		replyStatus: AnswerReplyStatusEnum,
+		sendDate: z.string(),
+		replyDesc: z.string().nullable(),
+		replyDate: z.string().nullable(),
+		grantedScore: z.string().nullable(),
+		taskId: z.number().int(),
+		studentId: z.number().int(),
+	}),
+});
+
 export type TMessageResponse = z.infer<typeof MessageResponseSchema>;
 export type TLoginResponse = z.infer<typeof LoginResponseSchema>;
 export type TRegisterManyStudents = z.infer<typeof RegisterManyStudentsSchema>;
@@ -359,3 +374,4 @@ export type TGetGroupInfo = z.infer<typeof getGroupInfoSchema>;
 export type TGetStudentPreviewData = z.infer<
 	typeof getStudentPreviewDataSchema
 >;
+export type TGetEditAnswerReply = z.infer<typeof editAnswerReply>;

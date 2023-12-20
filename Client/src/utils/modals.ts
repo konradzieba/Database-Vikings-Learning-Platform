@@ -20,6 +20,7 @@ import showStudentDefaultPasswordModal from '@/modals/ShowStudentDefaultPassword
 import StudentGroupChangeModal from '@/modals/StudentGroupChange.modal';
 import TaskDetailsModal from '@/modals/TaskDetails.modal';
 import CreateAnswerReplyModal from '@/modals/CreateAnswerReply.modal';
+import EditAnswerReplyModal from '@/modals/EditAnswerReply.modal';
 
 export default {
 	sessionExpired: SessionExpiredModal,
@@ -29,6 +30,7 @@ export default {
 	editStudentInfo: EditStudentInfoModal,
 	deleteStudent: DeleteStudentModal,
 	createAnswerReply: CreateAnswerReplyModal,
+	editAnswerReply: EditAnswerReplyModal,
 	changeDefaultPassword: ChangeDefaultPasswordModal,
 	createGroup: CreateGroupModal,
 	sendTaskAnswer: SendTaskAnswerModal,

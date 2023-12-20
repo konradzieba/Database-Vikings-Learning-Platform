@@ -11,6 +11,17 @@ import { EnumRole } from '../../../typings/token';
 const router = Router();
 
 router.post(
+  '/getEditReplyAnswerData/:id',
+  validateRequestAndCheckRole(
+    {
+      params: paramsWithIdSchema,
+    },
+    EnumRole.LECTURER
+  ),
+  AnswersControllers.getEditReplyAnswerData
+);
+
+router.post(
   '/createAnswer',
   validateRequestAndCheckRole(
     { body: AnswerSchemas.answerInputSchema },

@@ -13,6 +13,7 @@ import {
 } from '@/types/RequestTypes';
 import {
 	TGetAbsentStudents,
+	TGetEditAnswerReply,
 	TGetGroupInfo,
 	TGetGroupsByLecturerId,
 	TGetLessonInfoByGroupAndLessonId,
@@ -351,6 +352,14 @@ export const getGroupInfoQueryFn = async (groupId: number) => {
 export const getStudentPreviewDataQueryFn = async (studentId: number) => {
 	const { data } = await axios.get<TGetStudentPreviewData>(
 		`/users/getStudentPreviewData/${studentId}`
+	);
+
+	return data;
+};
+
+export const getEditAnswerReplyQueryFn = async (answerId: number) => {
+	const { data } = await axios.post<TGetEditAnswerReply>(
+		`/answers//getEditReplyAnswerData/${answerId}`
 	);
 
 	return data;

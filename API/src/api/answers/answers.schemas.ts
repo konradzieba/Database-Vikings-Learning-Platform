@@ -41,6 +41,8 @@ export const answerUpdateSchema = answerReplySchema
     replyDate: true,
   });
 
+export type Answer = z.infer<typeof answerSchema>;
+
 export type AnswerInput = z.infer<typeof answerInputSchema>;
 
 export type AnswerReply = z.infer<typeof answerReplySchema>;
