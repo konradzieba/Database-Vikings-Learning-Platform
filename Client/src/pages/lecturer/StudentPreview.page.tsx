@@ -18,26 +18,7 @@ import {
 import { useParams } from 'react-router-dom';
 import { IconChartBar, IconChecklist, IconUser } from '@tabler/icons-react';
 import AbsentList from '@/components/StudentPreview/AbsentList';
-import dayjs from 'dayjs';
-import duration from 'dayjs/plugin/duration';
-
-dayjs.extend(duration);
-
-function formatDuration(durationInSeconds: number) {
-	const durationObj = dayjs.duration(durationInSeconds, 'seconds');
-	const days = durationObj.days();
-	const hours = durationObj.hours();
-	const minutes = durationObj.minutes();
-	const seconds = durationObj.seconds();
-
-	const formattedDuration = [];
-	if (days > 0) formattedDuration.push(`${days} dni`);
-	if (hours > 0) formattedDuration.push(`${hours} godz.`);
-	if (minutes > 0) formattedDuration.push(`${minutes} min.`);
-	if (seconds > 0) formattedDuration.push(`${seconds} sek.`);
-
-	return formattedDuration.join(' ');
-}
+import { formatDuration } from '@/utils/formatAverageSendTime';
 
 function StudentPreview() {
 	const { studentId } = useParams();
@@ -50,7 +31,7 @@ function StudentPreview() {
 	if (isError) {
 		return (
 			<Center mih='30vh'>
-				<Text size='lg' fw={500} c='red'>
+				<Text size='lg' fw={500}>
 					Wystąpił błąd podczas pobierania danych studenta
 				</Text>
 			</Center>
