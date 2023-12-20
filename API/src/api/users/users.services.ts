@@ -243,9 +243,9 @@ export async function getStudentPreviewData(
   };
 
   return {
-      studentInfo: studentData,
-      absentLessonNumbers,
-      taskStats,
+    studentInfo: studentData,
+    absentLessonNumbers: absentLessonNumbers.sort((a, b) => a - b),
+    taskStats,
   };
 }
 

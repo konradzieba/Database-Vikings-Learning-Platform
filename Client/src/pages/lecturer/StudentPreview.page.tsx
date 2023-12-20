@@ -1,3 +1,5 @@
+import FullScreenLoader from '@/components/UI/FullScreenLoader';
+import { useGetStudentPreviewDataQuery } from '@/hooks/students/useGetStudentPreviewDataQuery';
 import {
 	Box,
 	Center,
@@ -6,7 +8,6 @@ import {
 	List,
 	ListItem,
 	SimpleGrid,
-	Space,
 	Stack,
 	Text,
 	ThemeIcon,
@@ -14,38 +15,7 @@ import {
 	rem,
 } from '@mantine/core';
 import { IconChartBar, IconChecklist, IconUser } from '@tabler/icons-react';
-import { useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-
-const mockData = {
-	message: 'success',
-	studentData: {
-		studentInfo: {
-			id: 2,
-			indexNumber: 111111,
-			score: 1259,
-			health: 2,
-			groupId: 3,
-			aggregatedSendTime: 0.013347,
-			lastLogin: '2023-12-19T21:50:09.108Z',
-			Group: {
-				name: 'Testowa ISI 10',
-			},
-			User: {
-				firstName: 'Tadeusz',
-				lastName: 'Prusak',
-			},
-		},
-		absentLessonNumbers: [3, 4, 5],
-		taskStats: {
-			totalTasksAmount: 5,
-			repliedAnswersAmount: 1,
-			sentTasksAmount: 2,
-			notRepliedAndOutdatedTasksAmount: 3,
-			toDoTasksAmount: 0,
-		},
-	},
-};
 
 interface CellProps {
 	label: string;
@@ -66,16 +36,36 @@ const Cell = ({ label, value, valueWithLts }: CellProps) => {
 
 function StudentPreview() {
 	const { studentId } = useParams();
+	const { data, isLoading, isError } = useGetStudentPreviewDataQuery(
+		+studentId!
+	);
 
-	const { studentInfo } = mockData.studentData;
-	const { absentLessonNumbers } = mockData.studentData;
+	if (isLoading) return <FullScreenLoader />;
 
-	useMemo(() => {
-		absentLessonNumbers.sort((a, b) => a - b);
-	}, [absentLessonNumbers]);
+	if (isError) {
+		return (
+			<Center mih='30vh'>
+				<Text size='lg' fw={500} c='red'>
+					Wystąpił błąd podczas pobierania danych studenta
+				</Text>
+			</Center>
+		);
+	}
+
+	if (!data)
+		return (
+			<Center mih='30vh'>
+				<Title order={1} size={rem(26)}>
+					Niestety nie udało się pobrać danych. Spróbuj ponownie
+				</Title>
+			</Center>
+		);
+
+	const { studentInfo } = data.studentData;
+	const { absentLessonNumbers } = data.studentData;
 
 	return (
-		<Stack maw={1200} align='center' mx='auto' mb='xl'>
+		<Stack maw={1200} align='center' mx='auto' mb='xl' px='sm'>
 			<Group align='center' gap='xs'>
 				<ThemeIcon variant='transparent' size={rem(26)}>
 					<IconUser stroke={rem(2.5)} />
@@ -103,26 +93,24 @@ function StudentPreview() {
 			</Group>
 			<Cell
 				label='Łączna ilość zadań'
-				value={mockData.studentData.taskStats.totalTasksAmount}
+				value={data.studentData.taskStats.totalTasksAmount}
 			/>
 			<SimpleGrid cols={4} w='100%'>
 				<Cell
 					label='Zadania do wykonania'
-					value={mockData.studentData.taskStats.toDoTasksAmount}
+					value={data.studentData.taskStats.toDoTasksAmount}
 				/>
 				<Cell
-					label='Ilość przesłanych zadań'
-					value={mockData.studentData.taskStats.sentTasksAmount}
+					label='Przesłane zadania'
+					value={data.studentData.taskStats.sentTasksAmount}
 				/>
 				<Cell
-					label='Ilość ocenionych zadań'
-					value={mockData.studentData.taskStats.repliedAnswersAmount}
+					label='Ocenione zadania'
+					value={data.studentData.taskStats.repliedAnswersAmount}
 				/>
 				<Cell
-					label='Ilość spóźnionych zadań'
-					value={
-						mockData.studentData.taskStats.notRepliedAndOutdatedTasksAmount
-					}
+					label='Spóźnione zadania'
+					value={data.studentData.taskStats.notRepliedAndOutdatedTasksAmount}
 				/>
 			</SimpleGrid>
 			<Divider w='100%' size='md' my='md' />
