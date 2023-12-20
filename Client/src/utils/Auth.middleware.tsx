@@ -69,7 +69,7 @@ function AuthMiddleware({ children }: PropsWithChildren) {
 					indexNumber: userData.studentInfos.indexNumber,
 					score: userData.studentInfos.score,
 					health: userData.studentInfos.health,
-					rank: userData.studentInfos.rank,
+					// rank: userData.studentInfos.rank,
 					isPasswordChanged: userData.studentInfos.isPasswordChanged,
 					groupId: userData.studentInfos.groupId,
 					answersIds: userData.studentInfos.answersId,

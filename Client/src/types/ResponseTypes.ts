@@ -29,7 +29,7 @@ const StudentInfoSchema = z.object({
 	indexNumber: z.number(),
 	score: z.number(),
 	health: z.number().int().min(0).max(3),
-	rank: z.number().int(),
+	// rank: z.number().int(),
 	isPasswordChanged: z.boolean(),
 	idCheck: z.number(),
 	groupId: z.number(),
