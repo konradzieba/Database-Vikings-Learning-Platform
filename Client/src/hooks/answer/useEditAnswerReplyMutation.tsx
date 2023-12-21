@@ -8,7 +8,7 @@ type UpdateAnswerReplyData = {
 	replyDesc: string;
 };
 
-export function useGetEditAnswerReplyMutation(
+export function useEditAnswerReplyMutation(
 	answerId: number,
 	answerReplyData: UpdateAnswerReplyData
 ) {

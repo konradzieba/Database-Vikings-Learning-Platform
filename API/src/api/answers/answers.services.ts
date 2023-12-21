@@ -131,24 +131,48 @@ export async function updateAnswerReply(
   replyDesc: Answer['replyDesc'] | null = null,
   newGrantedScore: Answer['grantedScore'] | null = null
 ) {
-  const grantedScore = newGrantedScore || oldGrantedScore;
+  const answer = await db.answer.findUnique({
+    where: { id: answerId },
+    select: {
+      studentId: true,
+      Student: {
+        select: {
+          score: true,
+        },
+      },
+    },
+  });
 
-  return db.$transaction([
+  //find student by answerId
+
+  if (!answer) {
+    throw new Error(`Unable to find the answer with ID ${answerId}.`);
+  }
+
+  if (
+    newGrantedScore === null ||
+    newGrantedScore === undefined ||
+    oldGrantedScore === null ||
+    oldGrantedScore === undefined
+  ) {
+    return null;
+  }
+
+  const newStudentScore =
+    answer.Student.score - oldGrantedScore + newGrantedScore;
+
+  return await db.$transaction([
     db.answer.update({
       where: { id: answerId },
       data: {
         replyStatus: replyStatus || undefined,
         replyDesc: replyDesc || undefined,
-        grantedScore: grantedScore || undefined,
+        grantedScore: newGrantedScore || undefined,
       },
     }),
     db.student.update({
-      where: { id: answerId },
-      data: {
-        score: {
-          set: grantedScore! - oldGrantedScore!,
-        },
-      },
+      where: { id: answer.studentId },
+      data: { score: { set: newStudentScore } },
     }),
   ]);
 }

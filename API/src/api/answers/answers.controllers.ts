@@ -132,7 +132,7 @@ export async function updateAnswerReply(
       res.status(404);
       throw new Error('Answer with this id does not exist.');
     }
-
+    console.log('przed servicem');
     await AnswerServices.updateAnswerReply(
       +id,
       existingAnswer.grantedScore,
@@ -140,6 +140,7 @@ export async function updateAnswerReply(
       replyDesc,
       newGrantedScore
     );
+    console.log('po servicie');
 
     res.json({
       message: `Answer id: ${existingAnswer.id} reply updated successfully.`,

@@ -9,7 +9,6 @@ import {
 	NumberInput,
 	ScrollArea,
 	Select,
-	Space,
 	Text,
 	Textarea,
 	rem,
@@ -23,10 +22,11 @@ import {
 import { CodeHighlight } from '@mantine/code-highlight';
 import { useForm, zodResolver } from '@mantine/form';
 import { answerReplySchema } from './CreateAnswerReply.schema';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AnswerReplyStatus, AnswerReplyStatusEnum } from '@/types/Enums';
 import dayjs from 'dayjs';
 import { useGetEditAnswerReplyDataQuery } from '@/hooks/answer/useGetEditAnswerReplyQuery';
+import { useEditAnswerReplyMutation } from '@/hooks/answer/useEditAnswerReplyMutation';
 
 const selectData = [
 	{
@@ -73,9 +73,37 @@ function EditAnswerReplyModal({
 		validate: zodResolver(answerReplySchema),
 	});
 
+	useEffect(() => {
+		if (answerData) {
+			answerReplyForm.setFieldValue(
+				'replyStatus',
+				answerData.answerData.replyStatus
+			);
+			answerReplyForm.setFieldValue(
+				'replyDesc',
+				answerData.answerData.replyDesc || ''
+			);
+			answerReplyForm.setFieldValue(
+				'grantedScore',
+				answerData.answerData.grantedScore || ''
+			);
+		}
+	}, [answerData]);
+
+	const {
+		mutate: createAnswerReply,
+		isPending: isEditing,
+		isSuccess: isEditSuccess,
+		isError: isEditError,
+	} = useEditAnswerReplyMutation(innerProps.answerId, {
+		grantedScore: answerReplyForm.values.grantedScore as number,
+		replyStatus: answerReplyForm.values.replyStatus as AnswerReplyStatus,
+		replyDesc: answerReplyForm.values.replyDesc,
+	});
+
 	console.log(answerReplyForm.values);
 
-	if (isFetching) {
+	if (isFetching || isEditing) {
 		return (
 			<Center h={120}>
 				<Loader />
@@ -83,34 +111,26 @@ function EditAnswerReplyModal({
 		);
 	}
 
-	if (isFetchingError) {
+	if (isFetchingError || isEditError) {
+		const error = isFetchingError
+			? 'Nie udało się pobrać danych'
+			: 'Nie udało się skorygować odpowiedzi';
 		return (
 			<Center h={120}>
-				<Text>Nie udało się pobrać danych</Text>
+				<Text>{error}</Text>
 			</Center>
 		);
 	}
 
 	console.log(answerData);
 
-	// const {
-	// 	mutate: createAnswerReply,
-	// 	isPending,
-	// 	isSuccess,
-	// } = useReplyAnswerMutation(innerProps.answerId, {
-	// 	replyDate: dayjs().toDate(),
-	// 	replyDesc: answerReplyForm.values.replyDesc,
-	// 	replyStatus: answerReplyForm.values.replyStatus as AnswerReplyStatus,
-	// 	grantedScore: answerReplyForm.values.grantedScore as number,
-	// });
-
 	const handleReplyAnswer = () => {
 		answerReplyForm.validate();
 		if (!answerReplyForm.values.replyStatus) {
-			// setSelectError('Wybierz status odpowiedzi');
+			setSelectError('Wybierz status odpowiedzi');
 			return;
 		}
-		// createAnswerReply();
+		createAnswerReply();
 	};
 
 	const handleCloseModal = () => {
@@ -118,26 +138,18 @@ function EditAnswerReplyModal({
 		modals.closeAll();
 	};
 
-	// if (isPending) {
-	// 	return (
-	// 		<Center h={120}>
-	// 			<Loader />
-	// 		</Center>
-	// 	);
-	// }
-
-	// if (isSuccess) {
-	// 	return (
-	// 		<Box>
-	// 			<Center h={120}>
-	// 				<Text>Odpowiedź została skorygowana</Text>
-	// 			</Center>
-	// 			<Button fullWidth onClick={handleCloseModal}>
-	// 				Zamknij
-	// 			</Button>
-	// 		</Box>
-	// 	);
-	// }
+	if (isEditSuccess) {
+		return (
+			<Box>
+				<Center h={120}>
+					<Text>Odpowiedź została skorygowana</Text>
+				</Center>
+				<Button fullWidth onClick={handleCloseModal}>
+					Zamknij
+				</Button>
+			</Box>
+		);
+	}
 
 	return (
 		<form
