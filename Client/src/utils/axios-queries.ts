@@ -8,6 +8,7 @@ import {
 	TReorderLessonRequest,
 	TReplyAnswerRequest,
 	TSendAnswerRequest,
+	TUpdateAnswerReplyRequest,
 	TUpdateStudentRequest,
 	TUpdateTaskInfoRequest,
 } from '@/types/RequestTypes';
@@ -358,8 +359,20 @@ export const getStudentPreviewDataQueryFn = async (studentId: number) => {
 };
 
 export const getEditAnswerReplyQueryFn = async (answerId: number) => {
-	const { data } = await axios.post<TGetEditAnswerReply>(
-		`/answers//getEditReplyAnswerData/${answerId}`
+	const { data } = await axios.get<TGetEditAnswerReply>(
+		`/answers/getEditReplyAnswerData/${answerId}`
+	);
+
+	return data;
+};
+
+export const updateAnswerReplyMutationFn = async (
+	answerId: number,
+	answerReply: TUpdateAnswerReplyRequest
+) => {
+	const { data } = await axios.patch<TMessageResponse>(
+		`/answers/updateAnswerReply/${answerId}`,
+		answerReply
 	);
 
 	return data;

@@ -124,6 +124,35 @@ export async function answerReply(
   });
 }
 
+export async function updateAnswerReply(
+  answerId: Answer['id'],
+  oldGrantedScore: Answer['grantedScore'],
+  replyStatus: Answer['replyStatus'] | null = null,
+  replyDesc: Answer['replyDesc'] | null = null,
+  newGrantedScore: Answer['grantedScore'] | null = null
+) {
+  const grantedScore = newGrantedScore || oldGrantedScore;
+
+  return db.$transaction([
+    db.answer.update({
+      where: { id: answerId },
+      data: {
+        replyStatus: replyStatus || undefined,
+        replyDesc: replyDesc || undefined,
+        grantedScore: grantedScore || undefined,
+      },
+    }),
+    db.student.update({
+      where: { id: answerId },
+      data: {
+        score: {
+          set: grantedScore! - oldGrantedScore!,
+        },
+      },
+    }),
+  ]);
+}
+
 export function updateAnswer(
   id: Answer['id'],
   replyDesc: Answer['replyDesc'] = null,

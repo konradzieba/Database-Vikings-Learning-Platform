@@ -1,7 +1,12 @@
 import { Response, Request, NextFunction } from 'express';
 import MessageResponse from 'interfaces/MessageResponse';
 import { ParamsWithId } from 'interfaces/ParamsWithId';
-import { AnswerInput, AnswerReply, AnswerUpdate } from './answers.schemas';
+import {
+  AnswerInput,
+  AnswerReply,
+  AnswerReplyUpdate,
+  AnswerUpdate,
+} from './answers.schemas';
 import * as AnswerServices from './answers.services';
 import * as UserServices from '../users/users.services';
 import * as TaskServices from '../tasks/tasks.services';
@@ -106,6 +111,38 @@ export async function answerReply(
 
     res.json({
       message: `Answer id: ${answerId} replied successfully, student score has been increased by ${grantedScore}.`,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function updateAnswerReply(
+  req: Request<ParamsWithId, MessageResponse, AnswerReplyUpdate>,
+  res: Response<MessageResponse>,
+  next: NextFunction
+) {
+  try {
+    const { replyStatus, replyDesc, grantedScore: newGrantedScore } = req.body;
+    const { id } = req.params;
+
+    const existingAnswer = await AnswerServices.findAnswerById(+id);
+
+    if (!existingAnswer) {
+      res.status(404);
+      throw new Error('Answer with this id does not exist.');
+    }
+
+    await AnswerServices.updateAnswerReply(
+      +id,
+      existingAnswer.grantedScore,
+      replyStatus,
+      replyDesc,
+      newGrantedScore
+    );
+
+    res.json({
+      message: `Answer id: ${existingAnswer.id} reply updated successfully.`,
     });
   } catch (error) {
     next(error);

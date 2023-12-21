@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { UserRoleEnum } from './Enums';
+import { AnswerReplyStatusEnum, UserRoleEnum } from './Enums';
 
 const UserRequestSchema = z.object({
 	email: z.string().email(),
@@ -95,6 +95,12 @@ const TCreateTaskRequestSchema = z.object({
 	isMarkdown: z.boolean(),
 });
 
+const TUpdateAnswerReplyRequestSchema = z.object({
+	replyStatus: AnswerReplyStatusEnum,
+	replyDesc: z.string(),
+	grantedScore: z.number().int(),
+});
+
 export type TUserRequest = z.infer<typeof UserRequestSchema>;
 export type TLoginRequest = z.infer<typeof TLoginRequest>;
 export type TSendAnswerRequest = z.infer<typeof SendAnswerRequestSchema>;
@@ -113,3 +119,6 @@ export type TAddStudentToGroupRequest = z.infer<
 >;
 export type TReorderLessonRequest = z.infer<typeof TReorderLessonRequestSchema>;
 export type TCreateTaskRequest = z.infer<typeof TCreateTaskRequestSchema>;
+export type TUpdateAnswerReplyRequest = z.infer<
+	typeof TUpdateAnswerReplyRequestSchema
+>;

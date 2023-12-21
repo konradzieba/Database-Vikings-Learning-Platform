@@ -10,7 +10,7 @@ import { EnumRole } from '../../../typings/token';
 
 const router = Router();
 
-router.post(
+router.get(
   '/getEditReplyAnswerData/:id',
   validateRequestAndCheckRole(
     {
@@ -40,6 +40,18 @@ router.patch(
     EnumRole.LECTURER
   ),
   AnswersControllers.answerReply
+);
+
+router.patch(
+  '/updateAnswerReply/:id',
+  validateRequestAndCheckRole(
+    {
+      params: paramsWithIdSchema,
+      body: AnswerSchemas.answerReplyUpdateSchema,
+    },
+    EnumRole.LECTURER
+  ),
+  AnswersControllers.updateAnswerReply
 );
 
 router.patch(
