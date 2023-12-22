@@ -39,6 +39,7 @@ export async function getSpecialTasks(lecturerId: number) {
       question: true,
       isMarkdown: true,
       openDate: true,
+      numberOfAnswers: true,
     },
   });
 }

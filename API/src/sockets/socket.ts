@@ -19,15 +19,19 @@ const socket = async ({ io }: { io: Server }) => {
       socket.on(
         EVENTS.SERVER.RECEIVE_CREATED_SPECIAL_TASK,
         async (specialTaskData: TSpecialTaskData) => {
-          console.log(specialTaskData);
           const createdSpecialTask =
             await SpecialTaskServices.createSpecialTask(specialTaskData);
+
           if (!createdSpecialTask) {
             io.emit(EVENTS.SERVER.ERROR_CREATING_SPECIAL_TASK, { error: true });
           }
 
-          io.emit(EVENTS.CLIENT.EMIT_SPECIAL_TASK, specialTaskData);
-          
+          if (createdSpecialTask) {
+            io.emit(EVENTS.SERVER.SUCCESS_CREATING_SPECIAL_TASK, {
+              success: true,
+            });
+          }
+
           socket
             .to(createdSpecialTask.lecturerId.toString())
             .emit(EVENTS.CLIENT.EMIT_SPECIAL_TASK, createdSpecialTask);

@@ -37,18 +37,26 @@ function CreateSpecialTaskModal({
 		socket.emit(SocketEvents.connection, () => {
 			console.log('Connected to socket');
 		});
-		socket.on(SocketEvents.CLIENT.EMIT_SPECIAL_TASK, (data) => {
-			console.log('Received data:', data);
-			console.log('done');
-			setIsSending(false);
-			setIsSent(true);
-		});
+		// socket.on(SocketEvents.CLIENT.EMIT_SPECIAL_TASK, (data) => {
+		// 	console.log('Received data:', data);
+		// 	console.log('done');
+		// 	setIsSending(false);
+		// 	setIsSent(true);
+		// });
 
 		socket.on(
 			SocketEvents.SERVER.ERROR_CREATING_SPECIAL_TASK,
 			({ error }: { error: boolean }) => {
 				setIsSending(false);
 				setIsCreatingError(true);
+			}
+		);
+
+		socket.on(
+			SocketEvents.SERVER.SUCCESS_CREATING_SPECIAL_TASK,
+			({ success }: { success: boolean }) => {
+				setIsSending(false);
+				setIsSent(true);
 			}
 		);
 

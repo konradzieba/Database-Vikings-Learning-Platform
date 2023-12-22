@@ -13,6 +13,16 @@ export interface IUserStoreStore {
 	clearUserStoreData: () => void;
 }
 
+export type TAssignedSpecialTasks = {
+	id: number;
+	number: number;
+	openDate: string;
+	question: string;
+	isMarkdown: boolean;
+	numberOfAnswers: number;
+	lecturerId: number;
+};
+
 export interface IStudentStoreStore {
 	studentData: {
 		indexNumber: number | null;
