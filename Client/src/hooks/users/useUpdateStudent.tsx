@@ -1,5 +1,5 @@
 import { updateStudentMutationFn } from '@/utils/axios-queries';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface IStudentInfo {
 	firstName: string;
@@ -10,10 +10,13 @@ interface IStudentInfo {
 }
 
 export function useUpdateStudent(studentId: number, studentInfo: IStudentInfo) {
+	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: () => updateStudentMutationFn(studentId, studentInfo),
-		onError: (error) => {
-			console.error(error);
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ['studentsFromGroup'],
+			});
 		},
 	});
 

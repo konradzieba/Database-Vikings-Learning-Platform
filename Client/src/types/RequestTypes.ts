@@ -27,10 +27,10 @@ const UpdateTaskInfoRequestSchema = z.object({
 });
 
 const TReplyAnswerRequestSchema = z.object({
-	studentId: z.number().int(),
-	taskId: z.number().int(),
-	replyStatus: z.string(),
+	replyStatus: AnswerReplyStatusEnum,
 	replyDesc: z.string(),
+	grantedScore: z.number().int(),
+	replyDate: z.date(),
 });
 
 const TCreateLessonRequestSchema = z.object({

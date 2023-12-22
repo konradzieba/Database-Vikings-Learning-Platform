@@ -1,11 +1,13 @@
-import { TReply, replyAnswerMutationFn } from '@/utils/axios-queries';
-import { useMutation } from '@tanstack/react-query';
+import { TReplyAnswerRequest } from '@/types/RequestTypes';
+import { replyAnswerMutationFn } from '@/utils/axios-queries';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-function useReplyAnswerMutation(answerId: number, reply: TReply) {
+function useReplyAnswerMutation(answerId: number, reply: TReplyAnswerRequest) {
+	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: () => replyAnswerMutationFn(answerId, reply),
-		onError: (error) => {
-			console.error(error);
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['studentTasks'] });
 		},
 	});
 

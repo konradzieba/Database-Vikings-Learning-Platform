@@ -101,8 +101,6 @@ function EditAnswerReplyModal({
 		replyDesc: answerReplyForm.values.replyDesc,
 	});
 
-	console.log(answerReplyForm.values);
-
 	if (isFetching || isEditing) {
 		return (
 			<Center h={120}>
@@ -122,11 +120,8 @@ function EditAnswerReplyModal({
 		);
 	}
 
-	console.log(answerData);
-
 	const handleReplyAnswer = () => {
 		answerReplyForm.validate();
-		console.log(answerReplyForm.values);
 		if (answerReplyForm.values.grantedScore === '') {
 			return;
 		}

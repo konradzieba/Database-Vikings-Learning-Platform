@@ -7,9 +7,6 @@ export function useChangeStudentGroupMutation(
 ) {
 	const changeStudentGroupMutation = useMutation({
 		mutationFn: () => changeStudentGroupMutationFn(studentId!, newGroupId!),
-		onError: (error) => {
-			console.error(error);
-		},
 	});
 
 	return changeStudentGroupMutation;

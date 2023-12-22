@@ -1,12 +1,12 @@
 import { sendAnswerMutationFn } from '@/utils/axios-queries';
-import { useMutation } from '@tanstack/react-query';
-import { AxiosError } from 'axios';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export function useSendAnswerMutation() {
+	const queryClient = useQueryClient();
 	const sendAnswerMutation = useMutation({
 		mutationFn: sendAnswerMutationFn,
-		onError: (error: AxiosError) => {
-			console.error(error);
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['taskFromLesson'] });
 		},
 	});
 

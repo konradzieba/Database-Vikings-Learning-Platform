@@ -1,14 +1,15 @@
 import { TRegisterManyStudentsRequest } from '@/types/RequestTypes';
 import { registerManyStudentsMutationFn } from '@/utils/axios-queries';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export function useRegisterManyStudentsMutation(
 	mutationData: TRegisterManyStudentsRequest
 ) {
+	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: async () => registerManyStudentsMutationFn(mutationData),
-		onError: () => {
-			console.log('Nie udało się dodać studentów');
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['studentsFromGroup'] });
 		},
 	});
 

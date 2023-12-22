@@ -10,9 +10,6 @@ export function useRenameGroupMutation(groupId: number, newGroupName: string) {
 				queryKey: ['groups'],
 			});
 		},
-		onError: (error) => {
-			console.error(error);
-		},
 	});
 
 	return mutation;

@@ -8,13 +8,8 @@ const socket = async ({ io }: { io: Server }) => {
 
   try {
     io.on(EVENTS.connection, (socket: Socket) => {
-      // console.log('New client connected');
-      socket.on(EVENTS.connection, () => {
-        // console.log('Client connected');
-      });
-      socket.on(EVENTS.disconnect, () => {
-        // console.log('Client disconnected');
-      });
+      socket.on(EVENTS.connection, () => {});
+      socket.on(EVENTS.disconnect, () => {});
 
       socket.on(
         EVENTS.SERVER.RECEIVE_CREATED_SPECIAL_TASK,
@@ -47,7 +42,6 @@ const socket = async ({ io }: { io: Server }) => {
       socket.on(
         EVENTS.SERVER.RECEIVE_SPECIAL_TASK_ANSWER,
         async (specialTaskAnswerData: TSpecialTaskAnswerData) => {
-          console.log(specialTaskAnswerData);
           const createdSpecialTaskAnswer =
             await SpecialTaskServices.createSpecialTaskAnswer(
               specialTaskAnswerData
@@ -57,7 +51,6 @@ const socket = async ({ io }: { io: Server }) => {
 
       socket.on(EVENTS.CLIENT.JOIN_ROOM, async (roomId: string) => {
         socket.join(roomId);
-        console.log(`Student dołączył do pokoju: ${roomId}`);
       });
     });
   } catch (error) {

@@ -19,9 +19,6 @@ export function useLogoutMutation() {
 			clearUserStoreData();
 			navigate('/login');
 		},
-		onError: (error: AxiosError) => {
-			console.error(error);
-		},
 	});
 
 	return logoutMutation;

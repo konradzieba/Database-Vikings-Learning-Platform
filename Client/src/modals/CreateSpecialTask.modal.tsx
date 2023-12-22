@@ -34,9 +34,7 @@ function CreateSpecialTaskModal({
 	const [isCreatingError, setIsCreatingError] = useState(false);
 
 	useEffect(() => {
-		socket.emit(SocketEvents.connection, () => {
-			console.log('Connected to socket');
-		});
+		socket.emit(SocketEvents.connection, () => {});
 
 		socket.emit(
 			SocketEvents.CLIENT.JOIN_ROOM,
@@ -71,7 +69,6 @@ function CreateSpecialTaskModal({
 			number: 1,
 			lecturerId: lecturerData.lecturerId,
 		});
-		console.log('emit');
 	};
 
 	const handleAddSpecialTask = () => {

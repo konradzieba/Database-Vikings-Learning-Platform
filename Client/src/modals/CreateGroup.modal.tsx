@@ -100,8 +100,6 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 			}
 
 			registerStudentsFromCSVFile();
-
-			console.log('Przetworzone dane:', transformedData);
 		} else {
 			if (!groupName) {
 				setGroupNameError('Nazwa grupy jest wymagana');
@@ -114,7 +112,6 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 			}
 
 			registerStudentsByHand();
-			console.log('Przetworzone dane:', createdStudentsByHand);
 		}
 	};
 
