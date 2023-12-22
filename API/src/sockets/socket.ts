@@ -9,7 +9,9 @@ const socket = async ({ io }: { io: Server }) => {
   try {
     io.on(EVENTS.connection, (socket: Socket) => {
       console.log('New client connected');
-
+      socket.on(EVENTS.connection, () => {
+        console.log('Client connected');
+      });
       socket.on(EVENTS.disconnect, () => {
         console.log('Client disconnected');
       });
@@ -28,6 +30,7 @@ const socket = async ({ io }: { io: Server }) => {
       socket.on(
         EVENTS.SERVER.RECEIVE_SPECIAL_TASK_ANSWER,
         async (specialTaskAnswerData: TSpecialTaskAnswerData) => {
+          console.log(specialTaskAnswerData);
           const createdSpecialTaskAnswer =
             await SpecialTaskServices.createSpecialTaskAnswer(
               specialTaskAnswerData
@@ -36,7 +39,7 @@ const socket = async ({ io }: { io: Server }) => {
       );
     });
   } catch (error) {
-    console.error('Error connecting to MongoDB:', error);
+    console.error('Error connecting to DB:', error);
   }
 };
 

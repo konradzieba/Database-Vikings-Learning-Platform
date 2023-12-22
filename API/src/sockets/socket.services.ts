@@ -1,4 +1,4 @@
-import { db } from 'db';
+import { db } from '../db';
 import { TSpecialTaskAnswerData, TSpecialTaskData } from './socket.types';
 
 export async function createSpecialTask(specialTaskData: TSpecialTaskData) {
