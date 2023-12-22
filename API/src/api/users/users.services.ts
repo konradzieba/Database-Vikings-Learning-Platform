@@ -478,6 +478,7 @@ export async function getScoreBoard(isStudent: boolean) {
         score: true,
         groupId: true,
         aggregatedSendTime: true,
+        indexNumber: true,
         Group: {
           select: {
             lecturerId: true,

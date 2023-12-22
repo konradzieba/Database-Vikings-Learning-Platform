@@ -44,6 +44,11 @@ function CreateSpecialTaskModal({
 		// 	setIsSent(true);
 		// });
 
+		socket.emit(
+			SocketEvents.CLIENT.JOIN_ROOM,
+			lecturerData.lecturerId!.toString()
+		);
+
 		socket.on(
 			SocketEvents.SERVER.ERROR_CREATING_SPECIAL_TASK,
 			({ error }: { error: boolean }) => {

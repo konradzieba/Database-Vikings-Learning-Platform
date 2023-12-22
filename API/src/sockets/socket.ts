@@ -23,13 +23,19 @@ const socket = async ({ io }: { io: Server }) => {
             await SpecialTaskServices.createSpecialTask(specialTaskData);
 
           if (!createdSpecialTask) {
-            io.emit(EVENTS.SERVER.ERROR_CREATING_SPECIAL_TASK, { error: true });
+            io.to(specialTaskData.lecturerId.toString()).emit(
+              EVENTS.SERVER.ERROR_CREATING_SPECIAL_TASK,
+              { error: true }
+            );
           }
 
           if (createdSpecialTask) {
-            io.emit(EVENTS.SERVER.SUCCESS_CREATING_SPECIAL_TASK, {
-              success: true,
-            });
+            io.to(createdSpecialTask.lecturerId.toString()).emit(
+              EVENTS.SERVER.SUCCESS_CREATING_SPECIAL_TASK,
+              {
+                success: true,
+              }
+            );
           }
 
           socket
