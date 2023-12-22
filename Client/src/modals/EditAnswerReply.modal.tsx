@@ -56,9 +56,6 @@ function EditAnswerReplyModal({
 	innerProps,
 }: ContextModalProps<EditAnswerReplyModalProps>) {
 	const [selectError, setSelectError] = useState<string | null>(null);
-	const [grantedScoreError, setGrantedScoreError] = useState<string | null>(
-		null
-	);
 	const {
 		data: answerData,
 		isLoading: isFetching,
@@ -131,7 +128,6 @@ function EditAnswerReplyModal({
 		answerReplyForm.validate();
 		console.log(answerReplyForm.values);
 		if (answerReplyForm.values.grantedScore === '') {
-			setGrantedScoreError('Wprowadź ilość punktów');
 			return;
 		}
 		if (!answerReplyForm.values.replyStatus) {
@@ -224,7 +220,6 @@ function EditAnswerReplyModal({
 					allowDecimal={false}
 					label='Ilość punktów'
 					placeholder='Ilość punktów'
-					error={grantedScoreError}
 					{...answerReplyForm.getInputProps('grantedScore')}
 				/>
 			</Flex>
