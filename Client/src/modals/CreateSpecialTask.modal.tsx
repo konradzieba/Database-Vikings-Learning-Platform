@@ -37,12 +37,6 @@ function CreateSpecialTaskModal({
 		socket.emit(SocketEvents.connection, () => {
 			console.log('Connected to socket');
 		});
-		// socket.on(SocketEvents.CLIENT.EMIT_SPECIAL_TASK, (data) => {
-		// 	console.log('Received data:', data);
-		// 	console.log('done');
-		// 	setIsSending(false);
-		// 	setIsSent(true);
-		// });
 
 		socket.emit(
 			SocketEvents.CLIENT.JOIN_ROOM,
@@ -68,7 +62,7 @@ function CreateSpecialTaskModal({
 		// return () => {
 		// 	socket.disconnect();
 		// };
-	}, []);
+	}, [socket, lecturerData.lecturerId]);
 
 	const sendCreatedSpecialTask = () => {
 		socket.emit(SocketEvents.SERVER.RECEIVE_CREATED_SPECIAL_TASK, {

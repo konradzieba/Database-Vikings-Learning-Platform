@@ -5,6 +5,7 @@ export function useGetSpecialTasksQuery(lecturerId: number) {
 	const query = useQuery({
 		queryKey: ['specialTasks', lecturerId],
 		queryFn: () => getSpecialTasksQueryFn(lecturerId),
+		refetchOnWindowFocus: false,
 	});
 
 	return query;

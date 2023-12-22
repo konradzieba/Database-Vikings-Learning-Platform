@@ -1,11 +1,10 @@
+import { useEffect, useMemo, useState } from 'react';
 import {
-	Center,
 	Divider,
 	Flex,
 	Group,
 	HoverCard,
 	Indicator,
-	Loader,
 	Text,
 	ThemeIcon,
 	rem,
@@ -16,22 +15,17 @@ import classes from '../Navbar/Navbar.module.css';
 import { useStudentStore } from '@/utils/stores/useStudentStore';
 import { useGetSpecialTasksQuery } from '@/hooks/tasks/useGetSpecialTasksQuery';
 import dayjs from 'dayjs';
-import { useEffect, useState } from 'react';
 import socket from '@/utils/sockets/socket-instance';
 import SocketEvents from '@/utils/sockets/socket-events';
 import { TAssignedSpecialTasks } from '@/types/StoreTypes';
 
 function StudentSpecialTaskMenu() {
-	const {
-		studentData,
-		// , assignedSpecialTasks, setAssignedSpecialTasks
-	} = useStudentStore();
+	const { studentData } = useStudentStore();
 	const [specialTasks, setSpecialTasks] = useState<TAssignedSpecialTasks[]>([]);
 
 	const { data: specialTasksData, isLoading } = useGetSpecialTasksQuery(
 		studentData.lecturerId!
 	);
-	console.log(specialTasks);
 
 	useEffect(() => {
 		if (specialTasksData && Array.isArray(specialTasksData.specialTasks)) {
@@ -54,19 +48,26 @@ function StudentSpecialTaskMenu() {
 		}
 	}, [socket, studentData.lecturerId]);
 
-	if (isLoading) {
-		return (
-			<Center>
-				<Loader />
-			</Center>
-		);
-	}
+	const specialTasksWithoutDuplicates = useMemo(() => {
+		const uniqueTaskIds = new Set<number>();
+		return specialTasks.filter((specialTask) => {
+			if (!uniqueTaskIds.has(specialTask.id)) {
+				uniqueTaskIds.add(specialTask.id);
+				return true;
+			}
+			return false;
+		});
+	}, [specialTasks]);
 
 	return (
 		<Flex style={{ alignSelf: 'flex-start' }}>
 			<HoverCard width={280} shadow='md' withArrow arrowSize={15}>
 				<HoverCard.Target>
-					<Indicator color='red' size={7} disabled={specialTasks.length === 0}>
+					<Indicator
+						color='red'
+						size={7}
+						disabled={specialTasksWithoutDuplicates.length === 0}
+					>
 						<ThemeIcon
 							variant='transparent'
 							size={rem(24)}
@@ -78,12 +79,12 @@ function StudentSpecialTaskMenu() {
 				</HoverCard.Target>
 				<HoverCard.Dropdown>
 					<Flex direction='column' gap='sm'>
-						{specialTasks.length === 0 ? (
+						{specialTasksWithoutDuplicates.length === 0 ? (
 							<Text mx='auto' c='dimmed' fs='italic'>
 								Brak zadań specjalnych
 							</Text>
 						) : (
-							specialTasks.map((specialTask) => (
+							specialTasksWithoutDuplicates.map((specialTask) => (
 								<NavLink
 									key={specialTask.id}
 									to={`special-task/${specialTask.id}`}
