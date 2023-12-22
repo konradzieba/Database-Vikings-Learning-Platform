@@ -1,5 +1,6 @@
 import SocketEvents from '@/utils/sockets/socket-events';
 import socket from '@/utils/sockets/socket-instance';
+import { useLecturerStore } from '@/utils/stores/useLecturerStore';
 import {
 	Button,
 	Center,
@@ -24,6 +25,7 @@ function CreateSpecialTaskModal({
 	context,
 	id,
 }: ContextModalProps<CreateSpecialTaskModalProps>) {
+	const { lecturerData } = useLecturerStore();
 	const textAreaRef = useRef<HTMLTextAreaElement>(null);
 	const [isTextAreaError, setIsTextAreaError] = useState(false);
 	const [textFormat, setTextFormat] = useState<string | null>('Zwykły tekst');
@@ -60,6 +62,7 @@ function CreateSpecialTaskModal({
 			question: textAreaRef.current?.value!,
 			isMarkdown: textFormat === 'Markdown' ? true : false,
 			number: 1,
+			lecturerId: lecturerData.lecturerId,
 		});
 		console.log('emit');
 	};

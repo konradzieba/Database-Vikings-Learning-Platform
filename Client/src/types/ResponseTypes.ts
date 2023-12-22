@@ -317,7 +317,7 @@ const getStudentPreviewDataSchema = z.object({
 	}),
 });
 
-const editAnswerReply = z.object({
+const editAnswerReplySchema = z.object({
 	message: string(),
 	answerData: z.object({
 		id: z.number().int(),
@@ -330,6 +330,19 @@ const editAnswerReply = z.object({
 		taskId: z.number().int(),
 		studentId: z.number().int(),
 	}),
+});
+
+const getSpecialTasksSchema = z.object({
+	message: z.string(),
+	specialTasks: z.array(
+		z.object({
+			id: z.number().int(),
+			number: z.number().int(),
+			question: z.string(),
+			isMarkdown: z.boolean(),
+			lecturerId: z.number().int(),
+		})
+	),
 });
 
 export type TMessageResponse = z.infer<typeof MessageResponseSchema>;
@@ -374,4 +387,6 @@ export type TGetGroupInfo = z.infer<typeof getGroupInfoSchema>;
 export type TGetStudentPreviewData = z.infer<
 	typeof getStudentPreviewDataSchema
 >;
-export type TGetEditAnswerReply = z.infer<typeof editAnswerReply>;
+export type TGetEditAnswerReply = z.infer<typeof editAnswerReplySchema>;
+
+export type TGetSpecialTasks = z.infer<typeof getSpecialTasksSchema>;

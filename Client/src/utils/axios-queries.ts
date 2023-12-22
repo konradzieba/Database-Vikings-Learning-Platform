@@ -24,6 +24,7 @@ import {
 	TGetPreDeleteLessonInfo,
 	TGetPreviousLessonsImages,
 	TGetScoreBoard,
+	TGetSpecialTasks,
 	TGetStudentDefaultPasswordState,
 	TGetStudentLessonsInfo,
 	TGetStudentPreviewData,
@@ -37,6 +38,7 @@ import {
 	TRegisterManyStudents,
 } from '@/types/ResponseTypes';
 import axios from '@/utils/axios';
+import { func } from 'prop-types';
 
 export const meQueryFn = async () => {
 	const { data } = await axios.get<TMeResponse>('/users/me');
@@ -382,6 +384,14 @@ export const createTaskMutationFn = async (taskData: TCreateTaskRequest) => {
 	const { data } = await axios.post<TMessageResponse>(
 		`/tasks/createTask`,
 		taskData
+	);
+
+	return data;
+};
+
+export const getSpecialTasksQueryFn = async (lecturerId: number) => {
+	const { data } = await axios.get<TGetSpecialTasks>(
+		`/tasks/getSpecialTasks/${lecturerId}`
 	);
 
 	return data;
