@@ -1,18 +1,7 @@
 import FullScreenLoader from '@/components/UI/FullScreenLoader';
 import StatsCell from '@/components/StudentPreview/StatsCell';
 import { useGetStudentPreviewDataQuery } from '@/hooks/students/useGetStudentPreviewDataQuery';
-import {
-	Center,
-	Divider,
-	Group,
-	SimpleGrid,
-	Space,
-	Stack,
-	Text,
-	ThemeIcon,
-	Title,
-	rem,
-} from '@mantine/core';
+import { Center, Divider, Group, SimpleGrid, Space, Stack, Text, ThemeIcon, Title, rem } from '@mantine/core';
 import { useParams } from 'react-router-dom';
 import { IconChartBar, IconChecklist, IconUser } from '@tabler/icons-react';
 import AbsentList from '@/components/StudentPreview/AbsentList';
@@ -20,9 +9,7 @@ import { formatDuration } from '@/utils/formatAverageSendTime';
 
 function StudentPreview() {
 	const { studentId } = useParams();
-	const { data, isLoading, isError } = useGetStudentPreviewDataQuery(
-		+studentId!
-	);
+	const { data, isLoading, isError } = useGetStudentPreviewDataQuery(+studentId!);
 
 	if (isLoading) return <FullScreenLoader />;
 
@@ -46,8 +33,7 @@ function StudentPreview() {
 		);
 
 	const { studentInfo, absentLessonNumbers, taskStats } = data.studentData;
-	const averageTaskSolveTimeInSeconds =
-		(studentInfo.aggregatedSendTime * 1_000_000) / taskStats.sentTasksAmount;
+	const averageTaskSolveTimeInSeconds = (studentInfo.aggregatedSendTime * 1_000_000) / taskStats.sentTasksAmount;
 	const averageTaskSolveTime = formatDuration(averageTaskSolveTimeInSeconds);
 
 	return (
@@ -70,11 +56,7 @@ function StudentPreview() {
 					href={`/dashboard/group/${studentInfo.groupId}/students`}
 				/>
 				<StatsCell label='Wynik' value={studentInfo.score} />
-				<StatsCell
-					label='Życia'
-					value={`${studentInfo.health}/3`}
-					valueWithLts
-				/>
+				<StatsCell label='Życia' value={`${studentInfo.health}/3`} valueWithLts />
 			</SimpleGrid>
 			<Divider w='100%' size='md' my='md' />
 			<Group gap='xs'>
@@ -85,34 +67,17 @@ function StudentPreview() {
 					Statystyki zadań
 				</Title>
 			</Group>
-			<StatsCell
-				label='Łączna ilość zadań'
-				value={taskStats.totalTasksAmount}
-			/>
+			<StatsCell label='Łączna ilość zadań' value={taskStats.totalTasksAmount} />
 			<SimpleGrid cols={4} w='100%'>
-				<StatsCell
-					label='Zadania do wykonania'
-					value={taskStats.toDoTasksAmount}
-				/>
-				<StatsCell
-					label='Przesłane zadania'
-					value={taskStats.sentTasksAmount}
-				/>
-				<StatsCell
-					label='Ocenione zadania'
-					value={taskStats.repliedAnswersAmount}
-				/>
-				<StatsCell
-					label='Spóźnione zadania'
-					value={taskStats.notRepliedAndOutdatedTasksAmount}
-				/>
+				<StatsCell label='Zadania do wykonania' value={taskStats.toDoTasksAmount} />
+				<StatsCell label='Przesłane zadania' value={taskStats.sentTasksAmount} />
+				<StatsCell label='Ocenione zadania' value={taskStats.repliedAnswersAmount} />
+				<StatsCell label='Spóźnione zadania' value={taskStats.notRepliedAndOutdatedTasksAmount} />
 			</SimpleGrid>
 			<Space h={rem(5)} />
 			<StatsCell
 				label='Średni czas wykonania zadania'
-				value={
-					studentInfo.aggregatedSendTime === 0 ? 'Brak' : averageTaskSolveTime
-				}
+				value={studentInfo.aggregatedSendTime === 0 ? 'Brak' : averageTaskSolveTime}
 				dimmed={studentInfo.aggregatedSendTime === 0}
 			/>
 			<Divider w='100%' size='md' my='md' />

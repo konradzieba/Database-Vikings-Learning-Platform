@@ -1,0 +1,5 @@
+.countUpWrapper {
+	font-size: var(--mantine-font-size-lg);
+	line-height: var(--mantine-line-height-lg);
+	font-weight: 500;
+}

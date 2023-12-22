@@ -2,10 +2,10 @@ import { AnswerReplyStatus, AnswerReplyStatusEnum } from '@/types/Enums';
 import { useForm, zodResolver } from '@mantine/form';
 import { ContextModalProps, modals } from '@mantine/modals';
 import { useState } from 'react';
-import { answerReplySchema } from './PreviewStudentAnswerModal.schema';
 import { Box, Button, Center, Divider, Flex, Group, Loader, NumberInput, ScrollArea, Select, Text, Textarea } from '@mantine/core';
 import { CodeHighlight } from '@mantine/code-highlight';
 import { IconBlockquote, IconCoins, IconListDetails } from '@tabler/icons-react';
+import { answerReplySchema } from './CreateAnswerReply.schema';
 
 const selectData = [
 	{
