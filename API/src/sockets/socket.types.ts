@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client';
 
 export type TSpecialTaskData = Pick<
   Prisma.SpecialTaskCreateInput,
-  'number' | 'question' | 'isMarkdown' | 'lecturerId'
+  'title' | 'question' | 'isMarkdown' | 'lecturerId'
 >;
 
 export type TSpecialTaskAnswerData = Pick<

@@ -337,7 +337,7 @@ const getSpecialTasksSchema = z.object({
 	specialTasks: z.array(
 		z.object({
 			id: z.number().int(),
-			number: z.number().int(),
+			title: z.string(),
 			question: z.string(),
 			isMarkdown: z.boolean(),
 			lecturerId: z.number().int(),
@@ -351,7 +351,7 @@ const getSpecialTaskByIdSchema = z.object({
 	message: z.string(),
 	specialTaskInfo: z.object({
 		id: z.number().int(),
-		numer: z.number().int(),
+		title: z.string(),
 		question: z.string(),
 		isMarkdown: z.boolean(),
 		numberOfAnswers: z.number().int(),

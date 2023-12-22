@@ -35,7 +35,7 @@ export async function getSpecialTasks(lecturerId: number) {
     },
     select: {
       id: true,
-      number: true,
+      title: true,
       question: true,
       isMarkdown: true,
       openDate: true,

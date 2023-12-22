@@ -130,7 +130,7 @@ model Answer {
 
 model SpecialTask {
   id          Int       @id @default(autoincrement())
-  number      Int
+  title       String
   question    String
   openDate    DateTime  @default(now())
   // isExtra     Boolean   @db.Boolean @default(false)

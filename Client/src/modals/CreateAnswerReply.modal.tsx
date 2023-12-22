@@ -68,7 +68,7 @@ function CreateAnswerReplyModal({
 		isPending,
 		isSuccess,
 	} = useReplyAnswerMutation(innerProps.answerId, {
-		replyDate: dayjs().toISOString(),
+		replyDate: dayjs().toDate(),
 		replyDesc: answerReplyForm.values.replyDesc,
 		replyStatus: answerReplyForm.values.replyStatus as AnswerReplyStatus,
 		grantedScore: answerReplyForm.values.grantedScore as number,

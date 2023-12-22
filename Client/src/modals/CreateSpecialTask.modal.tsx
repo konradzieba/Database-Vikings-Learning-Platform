@@ -9,6 +9,7 @@ import {
 	Select,
 	Stack,
 	Text,
+	TextInput,
 	Textarea,
 } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
@@ -66,7 +67,7 @@ function CreateSpecialTaskModal({
 		socket.emit(SocketEvents.SERVER.RECEIVE_CREATED_SPECIAL_TASK, {
 			question: textAreaRef.current?.value!,
 			isMarkdown: textFormat === 'Markdown' ? true : false,
-			number: 1,
+			title: // dodać tytuł
 			lecturerId: lecturerData.lecturerId,
 		});
 	};
@@ -110,6 +111,7 @@ function CreateSpecialTaskModal({
 
 	return (
 		<Stack>
+			<TextInput label='Tytuł zadania' placeholder='Tytuł zadania...' />
 			<Select
 				value={textFormat}
 				onChange={(value) => setTextFormat(value)}
