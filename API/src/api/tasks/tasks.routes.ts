@@ -27,6 +27,17 @@ router.get(
 );
 
 router.get(
+  '/getSpecialTaskInfoById/:id',
+  validateRequestAndCheckRole(
+    {
+      params: paramsWithIdSchema,
+    },
+    EnumRole.STUDENT
+  ),
+  TasksControllers.getSpecialTaskById
+)
+
+router.get(
   '/getLessonTaskById/:lessonId/:id',
   validateRequestAndCheckRole(
     { params: paramsWithLessonIdSchema },

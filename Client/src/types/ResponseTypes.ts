@@ -243,9 +243,7 @@ const getStudentDefaultPasswordStateSchema = z.object({
 
 const getPreviousLessonsImagesSchema = z.object({
 	message: z.string(),
-	previousLessonsImages: z.array(
-		z.object({ number: z.number().int(), image: z.string() })
-	),
+	previousLessonsImages: z.array(z.object({ number: z.number().int(), image: z.string() })),
 });
 
 const getPreDeleteGroupInfoSchema = z.object({
@@ -341,8 +339,22 @@ const getSpecialTasksSchema = z.object({
 			question: z.string(),
 			isMarkdown: z.boolean(),
 			lecturerId: z.number().int(),
+			openDate: z.string(),
 		})
 	),
+});
+
+const getSpecialTaskByIdSchema = z.object({
+	message: z.string(),
+	specialTaskInfo: z.object({
+		id: z.number().int(),
+		numer: z.number().int(),
+		question: z.string(),
+		isMarkdown: z.boolean(),
+		numberOfAnswers: z.number().int(),
+		lecturerId: z.number().int(),
+		openDate: z.string(),
+	}),
 });
 
 export type TMessageResponse = z.infer<typeof MessageResponseSchema>;
@@ -351,42 +363,27 @@ export type TRegisterManyStudents = z.infer<typeof RegisterManyStudentsSchema>;
 export type TLecturerInfo = z.infer<typeof LecturerInfoSchema>;
 export type TStudentInfo = z.infer<typeof StudentInfoSchema>;
 export type TMeResponse = z.infer<typeof MeResponseSchema>;
-export type TGetGroupsByLecturerId = z.infer<
-	typeof GetGroupsByLecturerIdSchema
->;
+export type TGetGroupsByLecturerId = z.infer<typeof GetGroupsByLecturerIdSchema>;
 export type TGetStudentsFromGroup = z.infer<typeof GetStudentsFromGroupSchema>;
 export type TGetLessonsByGroupId = z.infer<typeof GetLessonsByGroupIdSchema>;
-export type TGetLessonInfoByGroupAndLessonId = z.infer<
-	typeof getLessonInfoByGroupAndLessonIdSchema
->;
-export type TGetStudentLessonsInfo = z.infer<
-	typeof getStudentLessonsInfoSchema
->;
+export type TGetLessonInfoByGroupAndLessonId = z.infer<typeof getLessonInfoByGroupAndLessonIdSchema>;
+export type TGetStudentLessonsInfo = z.infer<typeof getStudentLessonsInfoSchema>;
 export type TGetTasksByLessonId = z.infer<typeof getTasksByLessonIdSchema>;
 export type TGetLessonTaskById = z.infer<typeof getLessonTaskByIdSchema>;
 
 export type TGetStudentTasks = z.infer<typeof getStudentTasksSchema>;
-export type TGetStudentDefaultPasswordState = z.infer<
-	typeof getStudentDefaultPasswordStateSchema
->;
+export type TGetStudentDefaultPasswordState = z.infer<typeof getStudentDefaultPasswordStateSchema>;
 export type TGetTaskInfoById = z.infer<typeof getTaskInfoByIdSchema>;
 export type TGetScoreBoard = z.infer<typeof getScoreBoardSchema>;
 
 export type TGetAbsentStudents = z.infer<typeof getAbsentStudentsSchema>;
 
-export type TGetPreviousLessonsImages = z.infer<
-	typeof getPreviousLessonsImagesSchema
->;
-export type TGetPreDeleteGroupInfo = z.infer<
-	typeof getPreDeleteGroupInfoSchema
->;
-export type TGetPreDeleteLessonInfo = z.infer<
-	typeof getPreDeleteLessonInfoSchema
->;
+export type TGetPreviousLessonsImages = z.infer<typeof getPreviousLessonsImagesSchema>;
+export type TGetPreDeleteGroupInfo = z.infer<typeof getPreDeleteGroupInfoSchema>;
+export type TGetPreDeleteLessonInfo = z.infer<typeof getPreDeleteLessonInfoSchema>;
 export type TGetGroupInfo = z.infer<typeof getGroupInfoSchema>;
-export type TGetStudentPreviewData = z.infer<
-	typeof getStudentPreviewDataSchema
->;
+export type TGetStudentPreviewData = z.infer<typeof getStudentPreviewDataSchema>;
 export type TGetEditAnswerReply = z.infer<typeof editAnswerReplySchema>;
 
 export type TGetSpecialTasks = z.infer<typeof getSpecialTasksSchema>;
+export type TGetSpecialTaskById = z.infer<typeof getSpecialTaskByIdSchema>;

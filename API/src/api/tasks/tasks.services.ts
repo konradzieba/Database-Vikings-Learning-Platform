@@ -1,4 +1,11 @@
-import { Group, Lesson, Prisma, Student, Task } from '@prisma/client';
+import {
+  Group,
+  Lesson,
+  Prisma,
+  SpecialTask,
+  Student,
+  Task,
+} from '@prisma/client';
 import { db } from '../../db';
 
 export function getLessonTaskById(id: Task['id']) {
@@ -31,6 +38,15 @@ export async function getSpecialTasks(lecturerId: number) {
       number: true,
       question: true,
       isMarkdown: true,
+      openDate: true,
+    },
+  });
+}
+
+export async function getSpecialTaskById(id: SpecialTask['id']) {
+  return await db.specialTask.findUnique({
+    where: {
+      id,
     },
   });
 }

@@ -1,12 +1,13 @@
-import { Button, Flex, Group, ScrollArea, Stack, Text, Textarea, ThemeIcon, Title } from '@mantine/core';
+import { Button, Flex, Group, Loader, ScrollArea, Stack, Text, Textarea, ThemeIcon, Title } from '@mantine/core';
 import { IconClipboardList, IconClockHour1, IconCode } from '@tabler/icons-react';
 import Markdown from 'react-markdown';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import classes from '../../components/TaskAnswer/TaskAnswer.component.module.css';
 import DateTimeDisplay from '@/components/UI/DateTimeDisplay';
 import { FormEvent, useRef } from 'react';
 import PrimaryButton from '@/components/UI/PrimaryButton';
 import { modals } from '@mantine/modals';
+import { useGetSpecialTaskByIdQuery } from '@/hooks/tasks/useGetSpecialTaskByIdQuery';
 
 interface TaskAnswerHeaderProps {
 	taskNumber: number;
@@ -83,32 +84,45 @@ function SpecialTaskAnswerForm() {
 
 function SpecialTaskAnswerPage() {
 	const navigate = useNavigate();
+	const { taskId } = useParams();
+
+	const { data: specialTaskData, isLoading } = useGetSpecialTaskByIdQuery(+taskId!);
 
 	return (
-		<Flex direction='column' justify='center'>
-			<Button
-				leftSection={<IconClipboardList />}
-				variant='outline'
-				mx='auto'
-				onClick={() => navigate('/my-special-tasks')}>
-				Moje zadania specjalne
-			</Button>
-			<Flex px='xl' align='flex-start' justify='space-evenly'>
-				<Stack w='50%' gap={0}>
-					<SpecialTaskAnswerHeader taskNumber={1} taskQuestion='Czy kto to pies' isMarkdown />
-					<SpecialTaskAnswerForm />
-				</Stack>
-				<Stack>
-					<Group gap='lg' className={classes.taskAnswerDateDisplayGroup}>
-						<DateTimeDisplay
-							title='Data rozpoczęcia'
-							icon={<IconClockHour1 size={20} />}
-							date={'2023-12-17T20:38:13.755Z'}
-						/>
-					</Group>
-				</Stack>
-			</Flex>
-		</Flex>
+		<>
+			{isLoading ? (
+				<Loader />
+			) : (
+				<Flex direction='column' justify='center'>
+					<Button
+						leftSection={<IconClipboardList />}
+						variant='outline'
+						mx='auto'
+						onClick={() => navigate('/my-special-tasks')}>
+						Moje zadania specjalne
+					</Button>
+					<Flex px='xl' align='flex-start' justify='space-evenly'>
+						<Stack w='50%' gap={0}>
+							<SpecialTaskAnswerHeader
+								taskNumber={specialTaskData?.specialTaskInfo.numer!}
+								taskQuestion={specialTaskData?.specialTaskInfo.question!}
+								isMarkdown={specialTaskData?.specialTaskInfo.isMarkdown!}
+							/>
+							<SpecialTaskAnswerForm />
+						</Stack>
+						<Stack>
+							<Group gap='lg' className={classes.taskAnswerDateDisplayGroup}>
+								<DateTimeDisplay
+									title='Data rozpoczęcia'
+									icon={<IconClockHour1 size={20} />}
+									date={specialTaskData?.specialTaskInfo.openDate!}
+								/>
+							</Group>
+						</Stack>
+					</Flex>
+				</Flex>
+			)}
+		</>
 	);
 }
 

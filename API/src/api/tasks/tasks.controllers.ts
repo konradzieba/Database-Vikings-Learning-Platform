@@ -36,6 +36,30 @@ export async function getTaskInfoById(
   }
 }
 
+export async function getSpecialTaskById(
+  req: Request<ParamsWithId>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id: specialTaskId } = req.params;
+
+    const specialTask = await TaskServices.getSpecialTaskById(+specialTaskId);
+
+    if (!specialTask) {
+      res.status(404);
+      throw new Error('Special task with given ID does not exist.');
+    }
+
+    res.json({
+      message: 'success',
+      specialTaskInfo: specialTask,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function getLessonTaksById(
   req: Request<ParamsWithLessonId>,
   res: Response,
@@ -174,7 +198,6 @@ export async function getSpecialTasks(
       res.status(404);
       throw new Error('Lecturer with given id does not exist.');
     }
-    console.log('aaaaa');
 
     const specialTasks = (await TaskServices.getSpecialTasks(+lecturerId)).sort(
       (a, b) => a.id - b.id
