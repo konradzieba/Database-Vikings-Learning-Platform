@@ -132,7 +132,7 @@ export async function createTask(
   next: NextFunction
 ) {
   try {
-    const { number, question, closeDate, isExtra, lessonId, isMarkdown } =
+    const { number, question, closeDate, lessonId, isMarkdown } =
       req.body;
 
     const existingLesson = await LessonServices.findLessonById(lessonId);
@@ -146,7 +146,6 @@ export async function createTask(
       number,
       question,
       closeDate: dayjs(closeDate).toDate(),
-      isExtra: isExtra || false,
       isMarkdown,
       Lesson: {
         connect: {

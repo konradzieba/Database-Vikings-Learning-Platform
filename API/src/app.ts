@@ -8,8 +8,19 @@ import * as middlewares from './middlewares';
 import api from './api';
 import MessageResponse from './interfaces/MessageResponse';
 import { env } from 'process';
+import { createServer } from 'http';
+import { Server } from 'socket.io';
 
 const app = express();
+
+export const httpServer = createServer(app);
+
+export const io = new Server(httpServer, {
+  cors: {
+    origin: env.CORS_ORIGIN,
+    credentials: true,
+  },
+});
 
 app.use(morgan('dev'));
 app.use(helmet());

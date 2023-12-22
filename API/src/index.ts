@@ -1,7 +1,13 @@
-import app from './app';
+import app, { httpServer } from './app';
 import { config } from './utils/config';
 
-app.listen(config.port, () => {
+// app.listen(config.port, () => {
+//   /* eslint-disable no-console */
+//   console.log(`Listening: http://localhost:${config.port}`);
+//   /* eslint-enable no-console */
+// });
+
+httpServer.listen(config.port, () => {
   /* eslint-disable no-console */
   console.log(`Listening: http://localhost:${config.port}`);
   /* eslint-enable no-console */
