@@ -41,8 +41,20 @@ export const answerUpdateSchema = answerReplySchema
     replyDate: true,
   });
 
+export const answerReplyUpdateSchema = answerReplySchema
+  .pick({
+    replyStatus: true,
+    replyDesc: true,
+    grantedScore: true,
+  })
+  .partial();
+
+export type Answer = z.infer<typeof answerSchema>;
+
 export type AnswerInput = z.infer<typeof answerInputSchema>;
 
 export type AnswerReply = z.infer<typeof answerReplySchema>;
 
 export type AnswerUpdate = z.infer<typeof answerUpdateSchema>;
+
+export type AnswerReplyUpdate = z.infer<typeof answerReplyUpdateSchema>;

@@ -27,9 +27,9 @@ function StudentAnswerCard({
 	sendDate,
 	refetchLessonInfo,
 }: StudentAnswerCardProps) {
-	const handlePreviewStudentAnswer = () => {
+	const openCreateAnswerReplyModal = () => {
 		modals.openContextModal({
-			modal: 'previewStudentAnswer',
+			modal: 'createAnswerReply',
 			title: 'Oceń zadanie',
 			size: 'lg',
 			closeOnClickOutside: false,
@@ -44,8 +44,39 @@ function StudentAnswerCard({
 		});
 	};
 
+	const openEditAnswerReplyModal = () => {
+		modals.openContextModal({
+			modal: 'editAnswerReply',
+			title: 'Koryguj ocenę zadania',
+			size: 'lg',
+			closeOnClickOutside: false,
+			onClose: refetchLessonInfo,
+			innerProps: {
+				answerId,
+				studentId,
+				studentFullName: `${firstName} ${lastName}`,
+				studentIndex: index,
+			},
+		});
+	};
+
+	const handleButtonClick = () => {
+		if (!isScoreGranted) {
+			openCreateAnswerReplyModal();
+		} else {
+			openEditAnswerReplyModal();
+		}
+	};
+
 	return (
-		<Flex direction='column' px='md' py='md' gap='md' miw='22%' className={classes.answerCardWrapper}>
+		<Flex
+			direction='column'
+			px='md'
+			py='md'
+			gap='md'
+			miw='22%'
+			className={classes.answerCardWrapper}
+		>
 			<Box>
 				<Text fw={500} fz='lg'>
 					{index}

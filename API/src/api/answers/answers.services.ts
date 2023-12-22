@@ -124,6 +124,59 @@ export async function answerReply(
   });
 }
 
+export async function updateAnswerReply(
+  answerId: Answer['id'],
+  oldGrantedScore: Answer['grantedScore'],
+  replyStatus: Answer['replyStatus'] | null = null,
+  replyDesc: Answer['replyDesc'] | null = null,
+  newGrantedScore: Answer['grantedScore'] | null = null
+) {
+  const answer = await db.answer.findUnique({
+    where: { id: answerId },
+    select: {
+      studentId: true,
+      Student: {
+        select: {
+          score: true,
+        },
+      },
+    },
+  });
+
+  //find student by answerId
+
+  if (!answer) {
+    throw new Error(`Unable to find the answer with ID ${answerId}.`);
+  }
+
+  if (
+    newGrantedScore === null ||
+    newGrantedScore === undefined ||
+    oldGrantedScore === null ||
+    oldGrantedScore === undefined
+  ) {
+    return null;
+  }
+
+  const newStudentScore =
+    answer.Student.score - oldGrantedScore + newGrantedScore;
+
+  return await db.$transaction([
+    db.answer.update({
+      where: { id: answerId },
+      data: {
+        replyStatus: replyStatus || undefined,
+        replyDesc: replyDesc || undefined,
+        grantedScore: newGrantedScore || undefined,
+      },
+    }),
+    db.student.update({
+      where: { id: answer.studentId },
+      data: { score: { set: newStudentScore } },
+    }),
+  ]);
+}
+
 export function updateAnswer(
   id: Answer['id'],
   replyDesc: Answer['replyDesc'] = null,

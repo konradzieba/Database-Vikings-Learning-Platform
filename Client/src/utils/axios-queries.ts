@@ -8,11 +8,13 @@ import {
 	TReorderLessonRequest,
 	TReplyAnswerRequest,
 	TSendAnswerRequest,
+	TUpdateAnswerReplyRequest,
 	TUpdateStudentRequest,
 	TUpdateTaskInfoRequest,
 } from '@/types/RequestTypes';
 import {
 	TGetAbsentStudents,
+	TGetEditAnswerReply,
 	TGetGroupInfo,
 	TGetGroupsByLecturerId,
 	TGetLessonInfoByGroupAndLessonId,
@@ -351,6 +353,26 @@ export const getGroupInfoQueryFn = async (groupId: number) => {
 export const getStudentPreviewDataQueryFn = async (studentId: number) => {
 	const { data } = await axios.get<TGetStudentPreviewData>(
 		`/users/getStudentPreviewData/${studentId}`
+	);
+
+	return data;
+};
+
+export const getEditAnswerReplyQueryFn = async (answerId: number) => {
+	const { data } = await axios.get<TGetEditAnswerReply>(
+		`/answers/getEditReplyAnswerData/${answerId}`
+	);
+
+	return data;
+};
+
+export const updateAnswerReplyMutationFn = async (
+	answerId: number,
+	answerReply: TUpdateAnswerReplyRequest
+) => {
+	const { data } = await axios.patch<TMessageResponse>(
+		`/answers/updateAnswerReply/${answerId}`,
+		answerReply
 	);
 
 	return data;
