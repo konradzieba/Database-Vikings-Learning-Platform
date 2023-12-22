@@ -132,8 +132,7 @@ export async function createTask(
   next: NextFunction
 ) {
   try {
-    const { number, question, closeDate, lessonId, isMarkdown } =
-      req.body;
+    const { number, question, closeDate, lessonId, isMarkdown } = req.body;
 
     const existingLesson = await LessonServices.findLessonById(lessonId);
 
@@ -156,6 +155,33 @@ export async function createTask(
 
     res.json({
       message: `Task with ${task.id}, number ${task.number} created successfully. Close time is: ${task.closeDate}`,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getSpecialTasks(
+  req: Request<ParamsWithId>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id: lecturerId } = req.params;
+    const lecturer = await UserServices.findLecturerById(+lecturerId);
+
+    if (!lecturer) {
+      res.status(404);
+      throw new Error('Lecturer with given id does not exist.');
+    }
+
+    const specialTasks = (await TaskServices.getSpecialTasks(+lecturerId)).sort(
+      (a, b) => a.id - b.id
+    );
+
+    res.json({
+      message: 'success',
+      specialTasks,
     });
   } catch (error) {
     next(error);

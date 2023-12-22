@@ -18,6 +18,23 @@ export function getLessonTaskById(id: Task['id']) {
   });
 }
 
+export async function getSpecialTasks(lecturerId: number) {
+  return await db.specialTask.findMany({
+    where: {
+      lecturerId,
+      numberOfAnswers: {
+        lte: 3,
+      },
+    },
+    select: {
+      id: true,
+      number: true,
+      question: true,
+      isMarkdown: true,
+    },
+  });
+}
+
 export async function getStudentTasks(
   studentId: Student['id'],
   groupId: Group['id']

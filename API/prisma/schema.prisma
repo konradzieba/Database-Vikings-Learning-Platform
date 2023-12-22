@@ -136,6 +136,7 @@ model SpecialTask {
   // isExtra     Boolean   @db.Boolean @default(false)
   isMarkdown  Boolean   @default(false)
   numberOfAnswers Int   @default(0)
+  lecturerId  Int       
   // relations
   specialTaskAnswer     SpecialTaskAnswer[]
 }

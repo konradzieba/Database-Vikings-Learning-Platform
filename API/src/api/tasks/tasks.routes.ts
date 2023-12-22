@@ -24,7 +24,7 @@ router.get(
     EnumRole.LECTURER
   ),
   TasksControllers.getTaskInfoById
-)
+);
 
 router.get(
   '/getLessonTaskById/:lessonId/:id',
@@ -40,6 +40,12 @@ router.get(
   validateRequest({ params: paramsWithGroupIdSchema }),
   requireUser,
   TasksControllers.getStudentTasks
+);
+
+router.get(
+  '/getSpecialTasks/:id',
+  requireUser,
+  TasksControllers.getSpecialTasks
 );
 
 router.post(
