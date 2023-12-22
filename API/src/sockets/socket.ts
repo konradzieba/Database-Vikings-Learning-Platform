@@ -22,6 +22,9 @@ const socket = async ({ io }: { io: Server }) => {
           console.log(specialTaskData);
           const createdSpecialTask =
             await SpecialTaskServices.createSpecialTask(specialTaskData);
+          if (!createdSpecialTask) {
+            io.emit(EVENTS.SERVER.ERROR_CREATING_SPECIAL_TASK, { error: true });
+          }
 
           io.emit(EVENTS.CLIENT.EMIT_SPECIAL_TASK, specialTaskData);
         }

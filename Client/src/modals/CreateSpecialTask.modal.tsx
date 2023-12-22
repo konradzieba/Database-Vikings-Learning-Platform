@@ -1,6 +1,15 @@
 import SocketEvents from '@/utils/sockets/socket-events';
 import socket from '@/utils/sockets/socket-instance';
-import { Button, Group, Select, Stack, Text, Textarea } from '@mantine/core';
+import {
+	Button,
+	Center,
+	Group,
+	Loader,
+	Select,
+	Stack,
+	Text,
+	Textarea,
+} from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
 import { IconFloatLeft, IconListDetails } from '@tabler/icons-react';
 import dayjs from 'dayjs';
@@ -18,6 +27,9 @@ function CreateSpecialTaskModal({
 	const textAreaRef = useRef<HTMLTextAreaElement>(null);
 	const [isTextAreaError, setIsTextAreaError] = useState(false);
 	const [textFormat, setTextFormat] = useState<string | null>('Zwykły tekst');
+	const [isSending, setIsSending] = useState(false);
+	const [isSent, setIsSent] = useState(false);
+	const [isCreatingError, setIsCreatingError] = useState(false);
 
 	useEffect(() => {
 		socket.emit(SocketEvents.connection, () => {
@@ -26,12 +38,22 @@ function CreateSpecialTaskModal({
 		socket.on(SocketEvents.CLIENT.EMIT_SPECIAL_TASK, (data) => {
 			console.log('Received data:', data);
 			console.log('done');
+			setIsSending(false);
+			setIsSent(true);
 		});
 
-		return () => {
-			socket.disconnect();
-		};
-	}, [socket]);
+		socket.on(
+			SocketEvents.SERVER.ERROR_CREATING_SPECIAL_TASK,
+			({ error }: { error: boolean }) => {
+				setIsSending(false);
+				setIsCreatingError(true);
+			}
+		);
+
+		// return () => {
+		// 	socket.disconnect();
+		// };
+	}, []);
 
 	const sendCreatedSpecialTask = () => {
 		socket.emit(SocketEvents.SERVER.RECEIVE_CREATED_SPECIAL_TASK, {
@@ -54,6 +76,30 @@ function CreateSpecialTaskModal({
 		context.closeModal(id);
 		modals.closeAll();
 	};
+
+	if (isSending) {
+		return (
+			<Center h={120}>
+				<Loader />
+			</Center>
+		);
+	}
+
+	if (isSent) {
+		return (
+			<Center h={120}>
+				<Text>Zadanie specjalne zostało utworzone</Text>
+			</Center>
+		);
+	}
+
+	if (isCreatingError) {
+		return (
+			<Center h={120}>
+				<Text>Wystąpił błąd podczas tworzenia zadania specjalnego</Text>
+			</Center>
+		);
+	}
 
 	return (
 		<Stack>
