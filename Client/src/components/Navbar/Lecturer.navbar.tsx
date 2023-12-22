@@ -106,20 +106,20 @@ function Nav({ groups, isPending }: LecturerNavProps) {
 						)}
 					</HoverCard.Dropdown>
 				</HoverCard>
-				{pathname.endsWith('/dashboard') ||
+				{(pathname.endsWith('/dashboard') ||
 					pathname.endsWith('/dashboard/score-board') ||
 					pathname.endsWith('/dashboard/special-tasks') ||
-					(pathname.includes('/dashboard/student-preview/') && (
-						<>
-							<NavLink
-								to={'/dashboard/score-board'}
-								className={({ isActive }) => getLinkClassName(isActive, '/dashboard/score-board')}>
-								Rankingi zbiorcze
-							</NavLink>
+					pathname.includes('/dashboard/student-preview/')) && (
+					<>
+						<NavLink
+							to={'/dashboard/score-board'}
+							className={({ isActive }) => getLinkClassName(isActive, '/dashboard/score-board')}>
+							Rankingi zbiorcze
+						</NavLink>
 
-							<LecturerSpecialTaskMenu />
-						</>
-					))}
+						<LecturerSpecialTaskMenu />
+					</>
+				)}
 			</Group>
 			{isGroupPath && (
 				<>
