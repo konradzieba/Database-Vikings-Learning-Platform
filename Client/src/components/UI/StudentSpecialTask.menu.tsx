@@ -5,11 +5,23 @@ import classes from '../Navbar/Navbar.module.css';
 import { useStudentStore } from '@/utils/stores/useStudentStore';
 import { useGetSpecialTasksQuery } from '@/hooks/tasks/useGetSpecialTasksQuery';
 import dayjs from 'dayjs';
+import { useEffect } from 'react';
+import socket from '@/utils/sockets/socket-instance';
+import SocketEvents from '@/utils/sockets/socket-events';
 
 function StudentSpecialTaskMenu() {
 	const { studentData } = useStudentStore();
 
 	const { data: specialTasksData, isLoading } = useGetSpecialTasksQuery(studentData.lecturerId!);
+
+	useEffect(() => {
+		if (studentData.lecturerId) {
+			socket.emit(SocketEvents.CLIENT.JOIN_ROOM, studentData.lecturerId.toString());
+			socket.on(SocketEvents.CLIENT.EMIT_SPECIAL_TASK, (data: any) => {
+				console.log('Student -> Special task', data);
+			});
+		}
+	}, [socket, studentData]);
 
 	return (
 		<Flex style={{ alignSelf: 'flex-start' }}>

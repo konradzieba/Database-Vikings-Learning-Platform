@@ -3,6 +3,7 @@ const SocketEvents = {
   disconnect: 'disconnect',
   CLIENT: {
     EMIT_SPECIAL_TASK: 'EMIT_SPECIAL_TASK',
+    JOIN_ROOM: 'JOIN_ROOM',
   },
   SERVER: {
     RECEIVE_CREATED_SPECIAL_TASK: 'RECEIVE_CREATED_SPECIAL_TASK',

@@ -8,12 +8,12 @@ const socket = async ({ io }: { io: Server }) => {
 
   try {
     io.on(EVENTS.connection, (socket: Socket) => {
-      console.log('New client connected');
+      // console.log('New client connected');
       socket.on(EVENTS.connection, () => {
-        console.log('Client connected');
+        // console.log('Client connected');
       });
       socket.on(EVENTS.disconnect, () => {
-        console.log('Client disconnected');
+        // console.log('Client disconnected');
       });
 
       socket.on(
@@ -27,6 +27,10 @@ const socket = async ({ io }: { io: Server }) => {
           }
 
           io.emit(EVENTS.CLIENT.EMIT_SPECIAL_TASK, specialTaskData);
+          
+          socket
+            .to(createdSpecialTask.lecturerId.toString())
+            .emit(EVENTS.CLIENT.EMIT_SPECIAL_TASK, createdSpecialTask);
         }
       );
 
@@ -40,6 +44,11 @@ const socket = async ({ io }: { io: Server }) => {
             );
         }
       );
+
+      socket.on(EVENTS.CLIENT.JOIN_ROOM, async (roomId: string) => {
+        socket.join(roomId);
+        console.log(`Student dołączył do pokoju: ${roomId}`);
+      });
     });
   } catch (error) {
     console.error('Error connecting to DB:', error);
