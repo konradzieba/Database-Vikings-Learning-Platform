@@ -31,10 +31,10 @@ const StudentInfoSchema = z.object({
 	health: z.number().int().min(0).max(3),
 	// rank: z.number().int(),
 	isPasswordChanged: z.boolean(),
-	idCheck: z.number(),
 	groupId: z.number(),
 	answersId: z.array(z.number()),
 	aggregatedSendTime: z.number(),
+	lecturerId: z.number().int(),
 });
 
 const MeResponseSchema = z.object({

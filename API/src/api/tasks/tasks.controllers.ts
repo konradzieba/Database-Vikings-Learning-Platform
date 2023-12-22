@@ -174,6 +174,7 @@ export async function getSpecialTasks(
       res.status(404);
       throw new Error('Lecturer with given id does not exist.');
     }
+    console.log('aaaaa');
 
     const specialTasks = (await TaskServices.getSpecialTasks(+lecturerId)).sort(
       (a, b) => a.id - b.id

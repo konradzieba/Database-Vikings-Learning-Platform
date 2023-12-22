@@ -11,10 +11,11 @@ const initialStudentStoreValues = {
 		studentId: null,
 		groupId: null,
 		answersIds: null,
+		lecturerId: null,
 	},
 };
 
-export const useStudentStore = create<IStudentStoreStore>(set => ({
+export const useStudentStore = create<IStudentStoreStore>((set) => ({
 	studentData: {
 		indexNumber: null,
 		health: null,
@@ -24,7 +25,8 @@ export const useStudentStore = create<IStudentStoreStore>(set => ({
 		studentId: null,
 		groupId: null,
 		answersIds: null,
+		lecturerId: null,
 	},
-	setStudentData: studentData => set({ studentData }),
+	setStudentData: (studentData) => set({ studentData }),
 	clearStudentStoreData: () => set(initialStudentStoreValues),
 }));

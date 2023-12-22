@@ -24,6 +24,7 @@ export interface IStudentStoreStore {
 		studentId: number | null;
 		groupId: number | null;
 		answersIds: number[] | null;
+		lecturerId: number | null;
 	};
 	setStudentData: (studentData: IStudentStoreStore['studentData']) => void;
 	clearStudentStoreData: () => void;

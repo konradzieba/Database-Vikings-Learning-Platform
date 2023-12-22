@@ -73,6 +73,7 @@ function AuthMiddleware({ children }: PropsWithChildren) {
 					isPasswordChanged: userData.studentInfos.isPasswordChanged,
 					groupId: userData.studentInfos.groupId,
 					answersIds: userData.studentInfos.answersId,
+					lecturerId: userData.studentInfos.lecturerId,
 				});
 			}
 			if (userData.lecturerInfos) {
