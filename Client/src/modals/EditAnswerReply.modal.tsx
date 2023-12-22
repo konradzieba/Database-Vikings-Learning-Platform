@@ -56,6 +56,9 @@ function EditAnswerReplyModal({
 	innerProps,
 }: ContextModalProps<EditAnswerReplyModalProps>) {
 	const [selectError, setSelectError] = useState<string | null>(null);
+	const [grantedScoreError, setGrantedScoreError] = useState<string | null>(
+		null
+	);
 	const {
 		data: answerData,
 		isLoading: isFetching,
@@ -91,12 +94,12 @@ function EditAnswerReplyModal({
 	}, [answerData]);
 
 	const {
-		mutate: createAnswerReply,
+		mutate: editAnswerReply,
 		isPending: isEditing,
 		isSuccess: isEditSuccess,
 		isError: isEditError,
 	} = useEditAnswerReplyMutation(innerProps.answerId, {
-		grantedScore: answerReplyForm.values.grantedScore as number,
+		grantedScore: +answerReplyForm.values.grantedScore as number,
 		replyStatus: answerReplyForm.values.replyStatus as AnswerReplyStatus,
 		replyDesc: answerReplyForm.values.replyDesc,
 	});
@@ -126,11 +129,16 @@ function EditAnswerReplyModal({
 
 	const handleReplyAnswer = () => {
 		answerReplyForm.validate();
+		console.log(answerReplyForm.values);
+		if (answerReplyForm.values.grantedScore === '') {
+			setGrantedScoreError('Wprowadź ilość punktów');
+			return;
+		}
 		if (!answerReplyForm.values.replyStatus) {
 			setSelectError('Wybierz status odpowiedzi');
 			return;
 		}
-		createAnswerReply();
+		editAnswerReply();
 	};
 
 	const handleCloseModal = () => {
@@ -216,6 +224,7 @@ function EditAnswerReplyModal({
 					allowDecimal={false}
 					label='Ilość punktów'
 					placeholder='Ilość punktów'
+					error={grantedScoreError}
 					{...answerReplyForm.getInputProps('grantedScore')}
 				/>
 			</Flex>

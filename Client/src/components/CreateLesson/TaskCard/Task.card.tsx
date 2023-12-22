@@ -10,10 +10,9 @@ interface TaskCardProps {
 	question: string;
 	closeDate: string;
 	isMarkdown: boolean;
-	isExtra: boolean;
 }
 
-function TaskCard({ number, question, closeDate, isMarkdown, isExtra }: TaskCardProps) {
+function TaskCard({ number, question, closeDate, isMarkdown }: TaskCardProps) {
 	const { id } = useParams();
 
 	const handleOpenModifyAddedTaskModal = () => {
@@ -28,7 +27,6 @@ function TaskCard({ number, question, closeDate, isMarkdown, isExtra }: TaskCard
 				question: question,
 				closeDate: closeDate,
 				isMarkdown: isMarkdown,
-				isExtra: isExtra,
 			},
 		});
 	};
@@ -52,7 +50,11 @@ function TaskCard({ number, question, closeDate, isMarkdown, isExtra }: TaskCard
 					<Text fw={500}>{number}</Text>
 				</ThemeIcon>
 				<Text w='50%'>{splitQuestion(question, isMarkdown)}</Text>
-				<DateTimeDisplay date={closeDate} title='Data zakończenia' icon={<IconClockHour11 />} />
+				<DateTimeDisplay
+					date={closeDate}
+					title='Data zakończenia'
+					icon={<IconClockHour11 />}
+				/>
 				<Button variant='transparent' onClick={handleOpenModifyAddedTaskModal}>
 					<Text size='xl' c='var(--font-color)'>
 						{<IconPencilMinus size='1.5rem' />}

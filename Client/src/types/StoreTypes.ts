@@ -44,7 +44,6 @@ export type TaskType = {
 	question: string;
 	closeDate: string;
 	isMarkdown: boolean;
-	isExtra: boolean;
 };
 
 export type CreatedLessonType = {

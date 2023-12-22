@@ -44,7 +44,6 @@ const TCreateLessonRequestSchema = z.object({
 			number: z.number().int(),
 			question: z.string(),
 			closeDate: z.string(),
-			isExtra: z.boolean(),
 			isMarkdown: z.boolean(),
 		})
 	),
@@ -91,7 +90,6 @@ const TCreateTaskRequestSchema = z.object({
 	number: z.number().int(),
 	question: z.string(),
 	closeDate: z.string(),
-	isExtra: z.boolean(),
 	isMarkdown: z.boolean(),
 });
 
