@@ -1,6 +1,6 @@
 import { Accordion, Badge, Divider, Flex, Group, Stack, Text, Textarea, ThemeIcon, rem } from '@mantine/core';
 import classes from './StudentTask.accordion.module.css';
-import { IconBlockquote, IconChevronDown, IconClock, IconCode, IconCoins } from '@tabler/icons-react';
+import { IconBlockquote, IconChevronDown, IconClock, IconCode, IconCoins, IconStarFilled } from '@tabler/icons-react';
 import { AnswerReplyStatusEnum } from '@/types/Enums';
 import DateTimeDisplay from '../UI/DateTimeDisplay';
 
@@ -17,9 +17,10 @@ interface TaskInterface {
 
 interface StudentTaskAccordionProps {
 	tasks: TaskInterface[];
+	isExtra?: boolean;
 }
 
-function StudentTaskAccordion({ tasks }: StudentTaskAccordionProps) {
+function StudentTaskAccordion({ tasks, isExtra }: StudentTaskAccordionProps) {
 	const spliceQuestion = (question: string) => {
 		if (question.length > 251) {
 			return question.substring(0, 251) + '...';
@@ -59,9 +60,15 @@ function StudentTaskAccordion({ tasks }: StudentTaskAccordionProps) {
 			<Accordion.Control mih={rem(120)}>
 				<Flex align='center' justify='space-evenly' gap='lg' mx='sm' className={classes.accordionControlWrapper}>
 					<Flex w='80%' align='center'>
-						<ThemeIcon size='lg' maw='10%' radius='sm' my='md' mr='md' className={classes.accordionIconColor}>
-							<Text fw={500}>{task.taskNumber}</Text>
-						</ThemeIcon>
+						{isExtra ? (
+							<ThemeIcon size='lg' maw='10%' radius='sm' my='md' mr='md' color='var(--special-task-color)'>
+								<IconStarFilled />
+							</ThemeIcon>
+						) : (
+							<ThemeIcon size='lg' maw='10%' radius='sm' my='md' mr='md' className={classes.accordionIconColor}>
+								<Text fw={500}>{task.taskNumber}</Text>
+							</ThemeIcon>
+						)}
 
 						<Text my='md'>{spliceQuestion(task.taskQuestion)}</Text>
 					</Flex>

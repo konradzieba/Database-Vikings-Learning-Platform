@@ -7,7 +7,7 @@ export const theme = createTheme({
 	defaultRadius: 'xs',
 });
 
-export const resolver: CSSVariablesResolver = (theme) => ({
+export const resolver: CSSVariablesResolver = theme => ({
 	variables: {
 		'--mantine-primary-color': theme.colors.teal[8],
 		'--mantine-primary-color-lighter': theme.colors.teal[6],
@@ -21,6 +21,7 @@ export const resolver: CSSVariablesResolver = (theme) => ({
 		'--good-state-color': theme.colors.green[8],
 		'--neutral-state-color': theme.colors.yellow[8],
 		'--bad-state-color': theme.colors.red[8],
+		'--special-task-color': theme.colors.violet[8],
 	},
 	light: {},
 	dark: {},

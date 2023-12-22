@@ -30,6 +30,7 @@ import GroupScoreBoardLecturerPage from './pages/lecturer/GroupScoreBoardLecture
 import GlobalScoreBoardLecturerPage from './pages/lecturer/GlobalScoreBoardsLecturer.page';
 import SpecialTaskAnswerPage from './pages/student/SpecialTaskAnswer.page';
 import MySpecialTasksPage from './pages/student/MySpecialTasks.page';
+import SpecialTaskDashboardPage from './pages/lecturer/SpecialTaskDashboard.page';
 import StudentPreview from './pages/lecturer/StudentPreview.page';
 import ProfileDetailsPage from './pages/student/ProfileDetails.page';
 
@@ -68,6 +69,7 @@ const router = createBrowserRouter([
 			{ path: 'student-preview/:studentId', element: <StudentPreview /> },
 			{ path: 'score-board', element: <GlobalScoreBoardLecturerPage /> },
 			{ path: 'me', element: <BlankContent /> },
+			{ path: 'special-tasks', element: <SpecialTaskDashboardPage /> },
 			{
 				path: 'group',
 				element: <GroupPanelPage />,
