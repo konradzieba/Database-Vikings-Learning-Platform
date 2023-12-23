@@ -1,9 +1,9 @@
 import SocketEvents from '@/utils/sockets/socket-events';
 import socket from '@/utils/sockets/socket-instance';
 import { useLecturerStore } from '@/utils/stores/useLecturerStore';
-import { Button, Center, Group, Loader, Select, Stack, Text, TextInput, Textarea } from '@mantine/core';
+import { Button, Center, Flex, Group, Loader, Select, Stack, Text, TextInput, Textarea } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
-import { IconFloatLeft, IconListDetails, IconTag } from '@tabler/icons-react';
+import { IconCircleCheck, IconCircleX, IconFloatLeft, IconListDetails, IconTag } from '@tabler/icons-react';
 import { useEffect, useRef, useState } from 'react';
 
 interface CreateSpecialTaskModalProps {
@@ -69,7 +69,7 @@ function CreateSpecialTaskModal({ innerProps, context, id }: ContextModalProps<C
 
 	if (isSending) {
 		return (
-			<Center h={120}>
+			<Center mih={120}>
 				<Loader />
 			</Center>
 		);
@@ -77,17 +77,29 @@ function CreateSpecialTaskModal({ innerProps, context, id }: ContextModalProps<C
 
 	if (isSent) {
 		return (
-			<Center h={120}>
-				<Text>Zadanie specjalne zostało utworzone</Text>
-			</Center>
+			<>
+				<Flex direction='column' align='center' gap='md' mb='md'>
+					<IconCircleCheck size='3rem' color='var(--good-state-color)' />
+					<Text>Zadanie specjalne zostało stworzone</Text>
+				</Flex>
+				<Button fullWidth onClick={handleCloseModal}>
+					Zamknij
+				</Button>
+			</>
 		);
 	}
 
 	if (isCreatingError) {
 		return (
-			<Center h={120}>
-				<Text>Wystąpił błąd podczas tworzenia zadania specjalnego</Text>
-			</Center>
+			<>
+				<Flex direction='column' align='center' gap='md' mb='md'>
+					<IconCircleX size='3rem' color='var(--bad-state-color)' />
+					<Text>Wystąpił błąd podczas tworzenia zadania specjalnego</Text>
+				</Flex>
+				<Button fullWidth onClick={handleCloseModal}>
+					Rozumiem
+				</Button>
+			</>
 		);
 	}
 

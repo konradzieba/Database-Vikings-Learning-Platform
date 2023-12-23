@@ -135,7 +135,7 @@ model SpecialTask {
   openDate    DateTime  @default(now())
   // isExtra     Boolean   @db.Boolean @default(false)
   isMarkdown  Boolean   @default(false)
-  numberOfAnswers Int   @default(0)
+  numberOfAnswers Int   @default(3)
   lecturerId  Int       
   // relations
   specialTaskAnswer     SpecialTaskAnswer[]

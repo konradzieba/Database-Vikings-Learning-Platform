@@ -18,6 +18,7 @@ import dayjs from 'dayjs';
 import socket from '@/utils/sockets/socket-instance';
 import SocketEvents from '@/utils/sockets/socket-events';
 import { TAssignedSpecialTasks } from '@/types/StoreTypes';
+import AmountOfSpecialTaskAnswersLeft from './AmountOfSpecialTaskLeft';
 
 function StudentSpecialTaskMenu() {
 	const { studentData } = useStudentStore();
@@ -61,7 +62,7 @@ function StudentSpecialTaskMenu() {
 
 	return (
 		<Flex style={{ alignSelf: 'flex-start' }}>
-			<HoverCard width={280} shadow='md' withArrow arrowSize={15}>
+			<HoverCard width={300} shadow='md' withArrow arrowSize={15}>
 				<HoverCard.Target>
 					<Indicator
 						color='red'
@@ -97,6 +98,7 @@ function StudentSpecialTaskMenu() {
 											{dayjs(specialTask.openDate).format('DD/MM/YYYY, HH:mm')}
 										</Text>
 									</Group>
+									<AmountOfSpecialTaskAnswersLeft answersLeft={specialTask.numberOfAnswers}/>
 								</NavLink>
 							))
 						)}
