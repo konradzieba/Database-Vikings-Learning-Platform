@@ -1,34 +1,21 @@
 import SocketEvents from '@/utils/sockets/socket-events';
 import socket from '@/utils/sockets/socket-instance';
 import { useLecturerStore } from '@/utils/stores/useLecturerStore';
-import {
-	Button,
-	Center,
-	Group,
-	Loader,
-	Select,
-	Stack,
-	Text,
-	TextInput,
-	Textarea,
-} from '@mantine/core';
+import { Button, Center, Group, Loader, Select, Stack, Text, TextInput, Textarea } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
-import { IconFloatLeft, IconListDetails } from '@tabler/icons-react';
-import dayjs from 'dayjs';
+import { IconFloatLeft, IconListDetails, IconTag } from '@tabler/icons-react';
 import { useEffect, useRef, useState } from 'react';
 
 interface CreateSpecialTaskModalProps {
 	modalBody: string;
 }
 
-function CreateSpecialTaskModal({
-	innerProps,
-	context,
-	id,
-}: ContextModalProps<CreateSpecialTaskModalProps>) {
+function CreateSpecialTaskModal({ innerProps, context, id }: ContextModalProps<CreateSpecialTaskModalProps>) {
 	const { lecturerData } = useLecturerStore();
 	const textAreaRef = useRef<HTMLTextAreaElement>(null);
+	const textInputRef = useRef<HTMLInputElement>(null);
 	const [isTextAreaError, setIsTextAreaError] = useState(false);
+	const [isNameInputError, setIsNameInputError] = useState(false);
 	const [textFormat, setTextFormat] = useState<string | null>('Zwykły tekst');
 	const [isSending, setIsSending] = useState(false);
 	const [isSent, setIsSent] = useState(false);
@@ -37,26 +24,17 @@ function CreateSpecialTaskModal({
 	useEffect(() => {
 		socket.emit(SocketEvents.connection, () => {});
 
-		socket.emit(
-			SocketEvents.CLIENT.JOIN_ROOM,
-			lecturerData.lecturerId!.toString()
-		);
+		socket.emit(SocketEvents.CLIENT.JOIN_ROOM, lecturerData.lecturerId!.toString());
 
-		socket.on(
-			SocketEvents.SERVER.ERROR_CREATING_SPECIAL_TASK,
-			({ error }: { error: boolean }) => {
-				setIsSending(false);
-				setIsCreatingError(true);
-			}
-		);
+		socket.on(SocketEvents.SERVER.ERROR_CREATING_SPECIAL_TASK, ({ error }: { error: boolean }) => {
+			setIsSending(false);
+			setIsCreatingError(true);
+		});
 
-		socket.on(
-			SocketEvents.SERVER.SUCCESS_CREATING_SPECIAL_TASK,
-			({ success }: { success: boolean }) => {
-				setIsSending(false);
-				setIsSent(true);
-			}
-		);
+		socket.on(SocketEvents.SERVER.SUCCESS_CREATING_SPECIAL_TASK, ({ success }: { success: boolean }) => {
+			setIsSending(false);
+			setIsSent(true);
+		});
 
 		// return () => {
 		// 	socket.disconnect();
@@ -67,7 +45,7 @@ function CreateSpecialTaskModal({
 		socket.emit(SocketEvents.SERVER.RECEIVE_CREATED_SPECIAL_TASK, {
 			question: textAreaRef.current?.value!,
 			isMarkdown: textFormat === 'Markdown' ? true : false,
-			title: // dodać tytuł
+			title: textInputRef.current?.value!,
 			lecturerId: lecturerData.lecturerId,
 		});
 	};
@@ -75,6 +53,10 @@ function CreateSpecialTaskModal({
 	const handleAddSpecialTask = () => {
 		if (textAreaRef.current?.value === '') {
 			setIsTextAreaError(true);
+			return;
+		}
+		if (textInputRef.current?.value === '') {
+			setIsNameInputError(true);
 			return;
 		}
 		sendCreatedSpecialTask();
@@ -111,10 +93,17 @@ function CreateSpecialTaskModal({
 
 	return (
 		<Stack>
-			<TextInput label='Tytuł zadania' placeholder='Tytuł zadania...' />
+			<TextInput
+				label='Tytuł zadania'
+				placeholder='Tytuł zadania...'
+				ref={textInputRef}
+				error={isNameInputError ? 'Tytuł zadania nie może być pusty' : ''}
+				leftSection={<IconTag />}
+				onChange={value => (value.currentTarget.value === '' ? setIsNameInputError(true) : setIsNameInputError(false))}
+			/>
 			<Select
 				value={textFormat}
-				onChange={(value) => setTextFormat(value)}
+				onChange={value => setTextFormat(value)}
 				allowDeselect={false}
 				leftSection={<IconListDetails />}
 				label='Formatowanie tekstu'
@@ -124,11 +113,7 @@ function CreateSpecialTaskModal({
 			<Textarea
 				ref={textAreaRef}
 				error={isTextAreaError ? 'Treść zadania nie może być pusta' : ''}
-				onChange={(value) =>
-					value.currentTarget.value === ''
-						? setIsTextAreaError(true)
-						: setIsTextAreaError(false)
-				}
+				onChange={value => (value.currentTarget.value === '' ? setIsTextAreaError(true) : setIsTextAreaError(false))}
 				leftSection={<IconFloatLeft />}
 				leftSectionProps={{
 					style: { alignItems: 'flex-start', marginTop: '3px' },
@@ -140,8 +125,7 @@ function CreateSpecialTaskModal({
 				placeholder='Treść zadania...'
 			/>
 			<Text ta='center' c='dimmed' fs='italic'>
-				Zadanie specjalne zostanie stworzone dla studentów ze wszystkich Twoich
-				grup.
+				Zadanie specjalne zostanie stworzone dla studentów ze wszystkich Twoich grup.
 			</Text>
 			<Text ta='center' c='dimmed' fs='italic'>
 				Po stworzeniu zadania nie będzie można go edytować.
@@ -150,11 +134,7 @@ function CreateSpecialTaskModal({
 				<Button miw={150} variant='outline' onClick={handleCloseModal}>
 					Anuluj
 				</Button>
-				<Button
-					disabled={isTextAreaError}
-					miw={150}
-					onClick={handleAddSpecialTask}
-				>
+				<Button disabled={isTextAreaError || isNameInputError} miw={150} onClick={handleAddSpecialTask}>
 					Stwórz
 				</Button>
 			</Group>

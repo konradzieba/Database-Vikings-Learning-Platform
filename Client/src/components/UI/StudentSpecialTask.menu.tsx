@@ -90,7 +90,7 @@ function StudentSpecialTaskMenu() {
 									to={`special-task/${specialTask.id}`}
 									className={classes.specialTaskCard}
 								>
-									<Text fw={500}>Zadanie specjalne {specialTask.number}</Text>
+									<Text fw={500}>{specialTask.title}</Text>
 									<Group>
 										<IconClock />
 										<Text>

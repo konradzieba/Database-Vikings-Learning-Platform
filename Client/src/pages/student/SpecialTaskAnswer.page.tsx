@@ -1,20 +1,5 @@
-import {
-	Button,
-	Flex,
-	Group,
-	Loader,
-	ScrollArea,
-	Stack,
-	Text,
-	Textarea,
-	ThemeIcon,
-	Title,
-} from '@mantine/core';
-import {
-	IconClipboardList,
-	IconClockHour1,
-	IconCode,
-} from '@tabler/icons-react';
+import { Button, Flex, Group, ScrollArea, Stack, Text, Textarea, ThemeIcon, Title } from '@mantine/core';
+import { IconClipboardList, IconClockHour1, IconCode } from '@tabler/icons-react';
 import Markdown from 'react-markdown';
 import { useNavigate, useParams } from 'react-router-dom';
 import classes from '../../components/TaskAnswer/TaskAnswer.component.module.css';
@@ -23,22 +8,19 @@ import { FormEvent, useRef } from 'react';
 import PrimaryButton from '@/components/UI/PrimaryButton';
 import { modals } from '@mantine/modals';
 import { useGetSpecialTaskByIdQuery } from '@/hooks/tasks/useGetSpecialTaskByIdQuery';
+import FullScreenLoader from '@/components/UI/FullScreenLoader';
 
 interface TaskAnswerHeaderProps {
-	taskNumber: number;
+	taskTitle: string;
 	taskQuestion: string;
 	isMarkdown: boolean;
 }
 
-function SpecialTaskAnswerHeader({
-	taskNumber,
-	taskQuestion,
-	isMarkdown,
-}: TaskAnswerHeaderProps) {
+function SpecialTaskAnswerHeader({ taskTitle, taskQuestion, isMarkdown }: TaskAnswerHeaderProps) {
 	return (
 		<>
 			<Title fw={700} py={0} order={2}>
-				Zadanie specjalne {taskNumber}
+				{taskTitle}
 			</Title>
 			<ScrollArea.Autosize type='auto' mah={280} pb='lg' offsetScrollbars='y'>
 				{isMarkdown ? (
@@ -96,11 +78,7 @@ function SpecialTaskAnswerForm() {
 						className={classes.taskAnswerTextArea}
 					/>
 				</Group>
-				<PrimaryButton
-					maw={300}
-					className={classes.taskAnswerPrimaryButton}
-					type='submit'
-				>
+				<PrimaryButton maw={300} className={classes.taskAnswerPrimaryButton} type='submit'>
 					Prześlij
 				</PrimaryButton>
 			</Stack>
@@ -112,28 +90,25 @@ function SpecialTaskAnswerPage() {
 	const navigate = useNavigate();
 	const { taskId } = useParams();
 
-	const { data: specialTaskData, isLoading } = useGetSpecialTaskByIdQuery(
-		+taskId!
-	);
+	const { data: specialTaskData, isLoading } = useGetSpecialTaskByIdQuery(+taskId!);
 
 	return (
 		<>
 			{isLoading ? (
-				<Loader />
+				<FullScreenLoader />
 			) : (
 				<Flex direction='column' justify='center'>
 					<Button
 						leftSection={<IconClipboardList />}
 						variant='outline'
 						mx='auto'
-						onClick={() => navigate('/my-special-tasks')}
-					>
+						onClick={() => navigate('/my-special-tasks')}>
 						Moje zadania specjalne
 					</Button>
 					<Flex px='xl' align='flex-start' justify='space-evenly'>
 						<Stack w='50%' gap={0}>
 							<SpecialTaskAnswerHeader
-								taskNumber={specialTaskData?.specialTaskInfo.numer!}
+								taskTitle={specialTaskData?.specialTaskInfo.title!}
 								taskQuestion={specialTaskData?.specialTaskInfo.question!}
 								isMarkdown={specialTaskData?.specialTaskInfo.isMarkdown!}
 							/>

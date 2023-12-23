@@ -15,7 +15,7 @@ export interface IUserStoreStore {
 
 export type TAssignedSpecialTasks = {
 	id: number;
-	number: number;
+	title: string;
 	openDate: string;
 	question: string;
 	isMarkdown: boolean;
