@@ -14,6 +14,11 @@ import { useStudentStore } from '@/utils/stores/useStudentStore';
 import socket from '@/utils/sockets/socket-instance';
 import SocketEvents from '@/utils/sockets/socket-events';
 
+export type TemporarySpecialTaskAnswerData = {
+	temporarySolution: string;
+	temporarySendDate: string;
+};
+
 interface TaskAnswerHeaderProps {
 	taskTitle: string;
 	taskQuestion: string;
@@ -21,10 +26,13 @@ interface TaskAnswerHeaderProps {
 }
 
 interface TaskAnswerFormProps {
+	answer: string;
 	amountOfTask: number;
 	specialTaskId: number;
 	amount: number | null;
 	setAmount: Dispatch<SetStateAction<number | null>>;
+	temporaryData: TemporarySpecialTaskAnswerData;
+	setTemporaryData: Dispatch<SetStateAction<TemporarySpecialTaskAnswerData>>;
 }
 
 function SpecialTaskAnswerHeader({ taskTitle, taskQuestion, isMarkdown }: TaskAnswerHeaderProps) {
@@ -46,7 +54,15 @@ function SpecialTaskAnswerHeader({ taskTitle, taskQuestion, isMarkdown }: TaskAn
 	);
 }
 
-function SpecialTaskAnswerForm({ amountOfTask, specialTaskId, amount, setAmount }: TaskAnswerFormProps) {
+function SpecialTaskAnswerForm({
+	amountOfTask,
+	specialTaskId,
+	amount,
+	setAmount,
+	answer,
+	temporaryData,
+	setTemporaryData,
+}: TaskAnswerFormProps) {
 	const answerTextareaRef = useRef<HTMLTextAreaElement>(null);
 
 	useEffect(() => {
@@ -65,6 +81,7 @@ function SpecialTaskAnswerForm({ amountOfTask, specialTaskId, amount, setAmount 
 				answerContent: answerTextareaRef.current?.value,
 				specialTaskId: specialTaskId,
 				modalBody: 'Czy na pewno chcesz wysłać odpowiedź?',
+				setTemporaryData: setTemporaryData,
 			},
 		});
 	};
@@ -72,27 +89,51 @@ function SpecialTaskAnswerForm({ amountOfTask, specialTaskId, amount, setAmount 
 		<form onSubmit={openConfirmSpecialAnswerModal}>
 			<Stack gap='sm' pos='relative'>
 				<Group gap='lg' align='flex-start'>
-					<Textarea
-						disabled={amount === 0 ? true : false}
-						leftSection={
-							<ThemeIcon variant='transparent'>
-								<IconCode />
-							</ThemeIcon>
-						}
-						leftSectionProps={{
-							style: {
-								alignItems: 'flex-start',
-								marginTop: '6px',
-								color: 'var(--mantine-primary-color)',
-							},
-						}}
-						ref={answerTextareaRef}
-						w='100%'
-						size='md'
-						rows={8}
-						placeholder='Twoja odpowiedz...'
-						className={classes.taskAnswerTextArea}
-					/>
+					{answer || temporaryData.temporarySolution ? (
+						<Textarea
+							disabled
+							leftSection={
+								<ThemeIcon variant='transparent'>
+									<IconCode />
+								</ThemeIcon>
+							}
+							leftSectionProps={{
+								style: {
+									alignItems: 'flex-start',
+									marginTop: '6px',
+									color: 'var(--mantine-primary-color)',
+								},
+							}}
+							ref={answerTextareaRef}
+							w='100%'
+							size='md'
+							rows={8}
+							placeholder={answer ? answer : temporaryData.temporarySolution}
+							className={classes.taskAnswerTextArea}
+						/>
+					) : (
+						<Textarea
+							disabled={amount === 0 ? true : false}
+							leftSection={
+								<ThemeIcon variant='transparent'>
+									<IconCode />
+								</ThemeIcon>
+							}
+							leftSectionProps={{
+								style: {
+									alignItems: 'flex-start',
+									marginTop: '6px',
+									color: 'var(--mantine-primary-color)',
+								},
+							}}
+							ref={answerTextareaRef}
+							w='100%'
+							size='md'
+							rows={8}
+							placeholder='Twoja odpowiedz...'
+							className={classes.taskAnswerTextArea}
+						/>
+					)}
 				</Group>
 				<Group justify='flex-end'>
 					<Stack w='30%'>
@@ -104,7 +145,7 @@ function SpecialTaskAnswerForm({ amountOfTask, specialTaskId, amount, setAmount 
 					<PrimaryButton
 						maw={300}
 						style={{ alignSelf: 'flex-start' }}
-						disabled={amount === 0 ? true : false}
+						disabled={amount === 0 || temporaryData.temporarySolution || answer ? true : false}
 						type='submit'>
 						Prześlij
 					</PrimaryButton>
@@ -119,8 +160,11 @@ function SpecialTaskAnswerPage() {
 	const { taskId } = useParams();
 	const { studentData } = useStudentStore();
 	const { data: specialTaskData, isLoading } = useGetSpecialTaskByIdQuery(+taskId!);
-
 	const [amount, setAmount] = useState<number | null>(null);
+	const [temporaryData, setTemporaryData] = useState<TemporarySpecialTaskAnswerData>({
+		temporarySolution: '',
+		temporarySendDate: '',
+	});
 
 	useEffect(() => {
 		socket.emit(SocketEvents.connection, () => {});
@@ -153,10 +197,13 @@ function SpecialTaskAnswerPage() {
 								isMarkdown={specialTaskData?.specialTaskInfo.isMarkdown!}
 							/>
 							<SpecialTaskAnswerForm
+								answer={specialTaskData?.answer.solution!}
 								amount={amount}
 								setAmount={setAmount}
 								amountOfTask={specialTaskData?.specialTaskInfo.numberOfAnswers!}
 								specialTaskId={specialTaskData?.specialTaskInfo.id!}
+								temporaryData={temporaryData}
+								setTemporaryData={setTemporaryData}
 							/>
 						</Stack>
 						<Stack>
@@ -166,6 +213,13 @@ function SpecialTaskAnswerPage() {
 									icon={<IconClockHour1 size={20} />}
 									date={specialTaskData?.specialTaskInfo.openDate!}
 								/>
+								{(specialTaskData?.answer.sendDate || temporaryData.temporarySendDate !== '') && (
+									<DateTimeDisplay
+										title='Data przesłania'
+										icon={<IconClockHour1 size={20} />}
+										date={specialTaskData?.answer.sendDate ? specialTaskData?.answer.sendDate : temporaryData.temporarySendDate}
+									/>
+								)}
 							</Group>
 						</Stack>
 					</Flex>

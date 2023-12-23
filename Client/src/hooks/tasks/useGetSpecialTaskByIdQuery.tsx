@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 
 export function useGetSpecialTaskByIdQuery(specialTaskId: number) {
 	const query = useQuery({
-		queryKey: ['specialTask', specialTaskId],
+		queryKey: [specialTaskId],
 		queryFn: () => getSpecialTaskByIdQueryFn(specialTaskId),
 	});
 

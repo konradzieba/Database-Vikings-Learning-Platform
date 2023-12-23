@@ -8,6 +8,18 @@ import {
 } from '@prisma/client';
 import { db } from '../../db';
 
+export function getSpecialTaskAnswerWithStudentAndTaskID(
+  specialTaskId: SpecialTask['id'],
+  studentId: Student['id']
+) {
+  return db.specialTaskAnswer.findMany({
+    where: {
+      specialTaskId: specialTaskId,
+      studentId: studentId,
+    },
+  });
+}
+
 export function getLessonTaskById(id: Task['id']) {
   return db.task.findUnique({
     where: {
@@ -30,7 +42,7 @@ export async function getSpecialTasks(lecturerId: number) {
     where: {
       lecturerId,
       numberOfAnswers: {
-        lte: 3,
+        gt: 0,
       },
     },
     select: {

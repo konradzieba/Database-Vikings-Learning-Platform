@@ -1,10 +1,12 @@
+import { TemporarySpecialTaskAnswerData } from '@/pages/student/SpecialTaskAnswer.page';
 import SocketEvents from '@/utils/sockets/socket-events';
 import socket from '@/utils/sockets/socket-instance';
 import { useStudentStore } from '@/utils/stores/useStudentStore';
 import { Button, Center, Flex, Group, Loader, Text } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
 import { IconCircleCheck, IconCircleX, IconInfoCircle } from '@tabler/icons-react';
-import { useEffect, useState } from 'react';
+import dayjs from 'dayjs';
+import { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 function SendSpecialTaskAnswerModal({
 	context,
@@ -14,6 +16,7 @@ function SendSpecialTaskAnswerModal({
 	answerContent: string;
 	specialTaskId: number;
 	modalBody: string;
+	setTemporaryData: Dispatch<SetStateAction<TemporarySpecialTaskAnswerData>>;
 }>) {
 	const { studentData } = useStudentStore();
 	const [isSending, setIsSending] = useState(false);
@@ -62,6 +65,15 @@ function SendSpecialTaskAnswerModal({
 		modals.closeAll();
 	};
 
+	const handleSentCloseModal = () => {
+		innerProps.setTemporaryData({
+			temporarySolution: innerProps.answerContent,
+			temporarySendDate: dayjs().toISOString(),
+		});
+		context.closeModal(id);
+		modals.closeAll();
+	};
+
 	if (isSending) {
 		return (
 			<Center mih={90}>
@@ -92,7 +104,7 @@ function SendSpecialTaskAnswerModal({
 
 					<Text>Zadanie specjalne zostało przesłane do oceny!</Text>
 				</Flex>
-				<Button fullWidth onClick={handleCloseModal}>
+				<Button fullWidth onClick={handleSentCloseModal}>
 					Zamknij
 				</Button>
 			</>
