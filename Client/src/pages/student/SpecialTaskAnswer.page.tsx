@@ -4,16 +4,27 @@ import Markdown from 'react-markdown';
 import { useNavigate, useParams } from 'react-router-dom';
 import classes from '../../components/TaskAnswer/TaskAnswer.component.module.css';
 import DateTimeDisplay from '@/components/UI/DateTimeDisplay';
-import { FormEvent, useRef } from 'react';
+import { Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from 'react';
 import PrimaryButton from '@/components/UI/PrimaryButton';
 import { modals } from '@mantine/modals';
 import { useGetSpecialTaskByIdQuery } from '@/hooks/tasks/useGetSpecialTaskByIdQuery';
 import FullScreenLoader from '@/components/UI/FullScreenLoader';
+import AmountOfSpecialTaskAnswersLeft from '@/components/UI/AmountOfSpecialTaskLeft';
+import { useStudentStore } from '@/utils/stores/useStudentStore';
+import socket from '@/utils/sockets/socket-instance';
+import SocketEvents from '@/utils/sockets/socket-events';
 
 interface TaskAnswerHeaderProps {
 	taskTitle: string;
 	taskQuestion: string;
 	isMarkdown: boolean;
+}
+
+interface TaskAnswerFormProps {
+	amountOfTask: number;
+	specialTaskId: number;
+	amount: number | null;
+	setAmount: Dispatch<SetStateAction<number | null>>;
 }
 
 function SpecialTaskAnswerHeader({ taskTitle, taskQuestion, isMarkdown }: TaskAnswerHeaderProps) {
@@ -35,8 +46,12 @@ function SpecialTaskAnswerHeader({ taskTitle, taskQuestion, isMarkdown }: TaskAn
 	);
 }
 
-function SpecialTaskAnswerForm() {
+function SpecialTaskAnswerForm({ amountOfTask, specialTaskId, amount, setAmount }: TaskAnswerFormProps) {
 	const answerTextareaRef = useRef<HTMLTextAreaElement>(null);
+
+	useEffect(() => {
+		setAmount(amountOfTask);
+	}, [amountOfTask]);
 
 	const openConfirmSpecialAnswerModal = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
@@ -48,7 +63,7 @@ function SpecialTaskAnswerForm() {
 			closeOnClickOutside: false,
 			innerProps: {
 				answerContent: answerTextareaRef.current?.value,
-				specialTaskId: 0,
+				specialTaskId: specialTaskId,
 				modalBody: 'Czy na pewno chcesz wysłać odpowiedź?',
 			},
 		});
@@ -58,6 +73,7 @@ function SpecialTaskAnswerForm() {
 			<Stack gap='sm' pos='relative'>
 				<Group gap='lg' align='flex-start'>
 					<Textarea
+						disabled={amount === 0 ? true : false}
 						leftSection={
 							<ThemeIcon variant='transparent'>
 								<IconCode />
@@ -78,9 +94,21 @@ function SpecialTaskAnswerForm() {
 						className={classes.taskAnswerTextArea}
 					/>
 				</Group>
-				<PrimaryButton maw={300} className={classes.taskAnswerPrimaryButton} type='submit'>
-					Prześlij
-				</PrimaryButton>
+				<Group justify='flex-end'>
+					<Stack w='30%'>
+						<AmountOfSpecialTaskAnswersLeft answersLeft={amount!} />
+						<Text size='sm' mx='auto' c='dimmed' fs='italic'>
+							Ilość pozostałych odpowiedzi na to zadanie
+						</Text>
+					</Stack>
+					<PrimaryButton
+						maw={300}
+						style={{ alignSelf: 'flex-start' }}
+						disabled={amount === 0 ? true : false}
+						type='submit'>
+						Prześlij
+					</PrimaryButton>
+				</Group>
 			</Stack>
 		</form>
 	);
@@ -89,8 +117,20 @@ function SpecialTaskAnswerForm() {
 function SpecialTaskAnswerPage() {
 	const navigate = useNavigate();
 	const { taskId } = useParams();
-
+	const { studentData } = useStudentStore();
 	const { data: specialTaskData, isLoading } = useGetSpecialTaskByIdQuery(+taskId!);
+
+	const [amount, setAmount] = useState<number | null>(null);
+
+	useEffect(() => {
+		socket.emit(SocketEvents.connection, () => {});
+
+		socket.emit(SocketEvents.CLIENT.JOIN_ROOM, studentData.lecturerId!.toString());
+
+		socket.on(SocketEvents.CLIENT.REDUCE_AMOUNT_OF_TASKS, ({ specialTaskId }: { specialTaskId: number }) => {
+			setAmount(prev => (prev === 0 ? 0 : prev! - 1));
+		});
+	}, [socket, studentData.lecturerId]);
 
 	return (
 		<>
@@ -112,7 +152,12 @@ function SpecialTaskAnswerPage() {
 								taskQuestion={specialTaskData?.specialTaskInfo.question!}
 								isMarkdown={specialTaskData?.specialTaskInfo.isMarkdown!}
 							/>
-							<SpecialTaskAnswerForm />
+							<SpecialTaskAnswerForm
+								amount={amount}
+								setAmount={setAmount}
+								amountOfTask={specialTaskData?.specialTaskInfo.numberOfAnswers!}
+								specialTaskId={specialTaskData?.specialTaskInfo.id!}
+							/>
 						</Stack>
 						<Stack>
 							<Group gap='lg' className={classes.taskAnswerDateDisplayGroup}>

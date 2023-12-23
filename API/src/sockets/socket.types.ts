@@ -5,7 +5,17 @@ export type TSpecialTaskData = Pick<
   'title' | 'question' | 'isMarkdown' | 'lecturerId'
 >;
 
-export type TSpecialTaskAnswerData = Pick<
-  Prisma.SpecialTaskAnswerCreateInput,
-  'solution' | 'SpecialTask' | 'Student' | 'sendDate'
->;
+export type TSpecialTaskResponseData = {
+  answerData: {
+    solution: string;
+    specialTaskId: number;
+    studentId: number;
+  };
+  lecturerId: number;
+};
+
+export type TSpecialTaskAnswerData = {
+  solution: string;
+  specialTaskId: number;
+  studentId: number;
+};

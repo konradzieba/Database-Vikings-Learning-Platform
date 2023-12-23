@@ -1,6 +1,10 @@
 import { Server, Socket } from 'socket.io';
 import EVENTS from './socket.events';
-import { TSpecialTaskAnswerData, TSpecialTaskData } from './socket.types';
+import {
+  TSpecialTaskAnswerData,
+  TSpecialTaskData,
+  TSpecialTaskResponseData,
+} from './socket.types';
 import * as SpecialTaskServices from './socket.services';
 
 const socket = async ({ io }: { io: Server }) => {
@@ -41,11 +45,61 @@ const socket = async ({ io }: { io: Server }) => {
 
       socket.on(
         EVENTS.SERVER.RECEIVE_SPECIAL_TASK_ANSWER,
-        async (specialTaskAnswerData: TSpecialTaskAnswerData) => {
-          const createdSpecialTaskAnswer =
-            await SpecialTaskServices.createSpecialTaskAnswer(
-              specialTaskAnswerData
+        async (specialTaskAnswerData: TSpecialTaskResponseData) => {
+          const specialTask = await SpecialTaskServices.findSpecialTaskById(
+            specialTaskAnswerData.answerData.specialTaskId
+          );
+
+          if (specialTask?.numberOfAnswers === 0) {
+            io.to(specialTaskAnswerData.lecturerId.toString()).emit(
+              EVENTS.SERVER.STATUS_NO_MORE_ANSWERS_LEFT,
+              {
+                status: true,
+              }
             );
+          }
+
+          if (specialTask?.numberOfAnswers! > 0) {
+            const createdSpecialTaskAnswer =
+              await SpecialTaskServices.createSpecialTaskAnswer({
+                solution: specialTaskAnswerData.answerData.solution,
+                specialTaskId: specialTaskAnswerData.answerData.specialTaskId,
+                studentId: specialTaskAnswerData.answerData.studentId,
+              });
+
+            if (!createdSpecialTaskAnswer) {
+              io.to(specialTaskAnswerData.lecturerId.toString()).emit(
+                EVENTS.SERVER.ERROR_CREATING_SPECIAL_TASK_ANSWER,
+                {
+                  error: true,
+                }
+              );
+            }
+
+            if (createdSpecialTaskAnswer) {
+              io.to(specialTaskAnswerData.lecturerId.toString()).emit(
+                EVENTS.SERVER.SUCCESS_CREATING_SPECIAL_TASK_ANSWER,
+                {
+                  success: true,
+                }
+              );
+              await SpecialTaskServices.decreaseAmountOfSpecialTaskAnswers(
+                createdSpecialTaskAnswer.specialTaskId
+              );
+
+              socket
+                .to(specialTaskAnswerData.lecturerId.toString())
+                .emit(EVENTS.CLIENT.REDUCE_AMOUNT_OF_TASKS, {
+                  specialTaskId: createdSpecialTaskAnswer.specialTaskId,
+                });
+              io.to(specialTaskAnswerData.lecturerId.toString()).emit(
+                EVENTS.CLIENT.REDUCE_AMOUNT_OF_TASKS,
+                {
+                  specialTaskId: createdSpecialTaskAnswer.specialTaskId,
+                }
+              );
+            }
+          }
         }
       );
 
