@@ -81,16 +81,23 @@ function StudentSpecialTaskMenu() {
 								Brak zadań specjalnych
 							</Text>
 						) : (
-							specialTasksWithoutDuplicates.map(specialTask => (
-								<NavLink key={specialTask.id} to={`special-task/${specialTask.id}`} className={classes.specialTaskCard}>
-									<Text fw={500}>{specialTask.title}</Text>
-									<Group>
-										<IconClock />
-										<Text>{dayjs(specialTask.openDate).format('DD/MM/YYYY, HH:mm')}</Text>
-									</Group>
-									<AmountOfSpecialTaskAnswersLeft answersLeft={specialTask.numberOfAnswers} />
-								</NavLink>
-							))
+							specialTasksWithoutDuplicates.map(specialTask => {
+								if (specialTask.numberOfAnswers > 0) {
+									return (
+										<NavLink
+											key={specialTask.id}
+											to={`special-task/${specialTask.id}`}
+											className={classes.specialTaskCard}>
+											<Text fw={500}>{specialTask.title}</Text>
+											<Group>
+												<IconClock />
+												<Text>{dayjs(specialTask.openDate).format('DD/MM/YYYY, HH:mm')}</Text>
+											</Group>
+											<AmountOfSpecialTaskAnswersLeft answersLeft={specialTask.numberOfAnswers} />
+										</NavLink>
+									);
+								}
+							})
 						)}
 						<Divider />
 						<NavLink to='/my-special-tasks' className={classes.specialTaskButton}>
