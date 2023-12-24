@@ -1,5 +1,7 @@
 import StudentSpecialTaskAccordion from '@/components/StudentSpecialTaskAccordion/StudentSpecialTask.accordion';
 import DataNotFound from '@/components/UI/DataNotFound';
+import FullScreenLoader from '@/components/UI/FullScreenLoader';
+import { useGetStudentSpecialTaskAnswersQuery } from '@/hooks/tasks/useGetStudentSpecialTaskAnswers';
 import { AnswerReplyStatusEnum } from '@/types/Enums';
 import { Box, Divider, Flex, Text, rem } from '@mantine/core';
 
@@ -27,34 +29,45 @@ const specialTaskMock = [
 ];
 
 function MySpecialTasksPage() {
-	//If student don't have any special tasks send
-	if (specialTaskMock.length === 0) {
-		return <DataNotFound firstLineText='Brak zadań' secondLineText='specjalnych' />;
+	const { data: SpecialTaskAnswers, isLoading } = useGetStudentSpecialTaskAnswersQuery();
+
+	if (SpecialTaskAnswers?.studentSpecialTaskAnswers.length === 0) {
+		return <DataNotFound firstLineText='Brak brak przesłanych' secondLineText='zadań specjalnych' />;
 	}
 
-	const pendingSpecialTaskAnswers = specialTaskMock.filter(
-		task => task.replyStatus === AnswerReplyStatusEnum.Enum.PENDING
+	const pendingSpecialTaskAnswers = SpecialTaskAnswers?.studentSpecialTaskAnswers.filter(
+		task => task.answer.replyStatus === AnswerReplyStatusEnum.Enum.PENDING
 	);
-	const evaluatedSpecialTaskAnswers = specialTaskMock.filter(
-		task => task.replyStatus !== AnswerReplyStatusEnum.Enum.PENDING
+	const evaluatedSpecialTaskAnswers = SpecialTaskAnswers?.studentSpecialTaskAnswers.filter(
+		task => task.answer.replyStatus !== AnswerReplyStatusEnum.Enum.PENDING
 	);
 
 	return (
-		<Flex w='80%' mx='auto' direction='column'>
-			<Text fz={rem(34)} mx='auto'>
-				Przesłane
-			</Text>
-			<Box w='50%' mx='auto' mt='md'>
-				<StudentSpecialTaskAccordion specialTasks={pendingSpecialTaskAnswers} />
-			</Box>
-			<Divider w='50%' mx='auto' my='lg' />
-			<Text fz={rem(34)} mx='auto'>
-				Sprawdzone
-			</Text>
-			<Box w='50%' mx='auto' mb='xl' mt='md'>
-				<StudentSpecialTaskAccordion specialTasks={evaluatedSpecialTaskAnswers} />
-			</Box>
-		</Flex>
+		<>
+			{isLoading ? (
+				<FullScreenLoader />
+			) : (
+				<Flex w='80%' mx='auto' direction='column'>
+					<Text fz={rem(34)} mx='auto'>
+						Przesłane
+					</Text>
+					<Box w='50%' mx='auto' mt='md'>
+						<StudentSpecialTaskAccordion specialTasks={pendingSpecialTaskAnswers!} />
+					</Box>
+					{evaluatedSpecialTaskAnswers && evaluatedSpecialTaskAnswers?.length > 0 && (
+						<>
+							<Divider w='50%' mx='auto' my='lg' />
+							<Text fz={rem(34)} mx='auto'>
+								Sprawdzone
+							</Text>
+							<Box w='50%' mx='auto' mb='xl' mt='md'>
+								<StudentSpecialTaskAccordion specialTasks={evaluatedSpecialTaskAnswers!} />
+							</Box>
+						</>
+					)}
+				</Flex>
+			)}
+		</>
 	);
 }
 

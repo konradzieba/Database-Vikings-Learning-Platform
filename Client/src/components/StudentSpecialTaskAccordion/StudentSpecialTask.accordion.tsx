@@ -5,14 +5,16 @@ import { IconBlockquote, IconChevronDown, IconClock, IconCode, IconCoins, IconSt
 import DateTimeDisplay from '../UI/DateTimeDisplay';
 
 interface SpecialTaskInterface {
-	id: number;
-	solution: string;
-	replyStatus: string;
-	sendDate: string;
-	replyDesc: string | null;
-	replyDate: string | null;
-	grantedScore: number | null;
 	question: string;
+	answer: {
+		id: number;
+		solution: string;
+		replyStatus: string;
+		sendDate: string;
+		replyDesc: string | null;
+		replyDate: string | null;
+		grantedScore: number | null;
+	};
 }
 
 interface StudentSpecialTaskAccordionProps {
@@ -55,7 +57,7 @@ function StudentSpecialTaskAccordion({ specialTasks }: StudentSpecialTaskAccordi
 	};
 
 	const studentSpecialTaskAnswers = specialTasks.map((task, index) => (
-		<Accordion.Item key={`${task.id}-${index}`} value={`${task.id}-${index}`}>
+		<Accordion.Item key={`${task.answer.id}-${index}`} value={`${task.answer.id}-${index}`}>
 			<Accordion.Control mih={rem(120)}>
 				<Flex align='center' justify='space-evenly' gap='lg' mx='sm' className={classes.accordionControlWrapper}>
 					<Flex w='80%' align='center'>
@@ -67,16 +69,16 @@ function StudentSpecialTaskAccordion({ specialTasks }: StudentSpecialTaskAccordi
 
 					<Flex direction='column' align='flex-end' w='20%'>
 						<Badge
-							title={`Status odpowiedzi: ${translateStatus(task.replyStatus)}`}
+							title={`Status odpowiedzi: ${translateStatus(task.answer.replyStatus)}`}
 							size='lg'
 							my='md'
-							color={statusBadgeColor(task.replyStatus)}
+							color={statusBadgeColor(task.answer.replyStatus)}
 							className={classes.accordionBadge}>
-							{translateStatus(task.replyStatus)}
+							{translateStatus(task.answer.replyStatus)}
 						</Badge>
-						{task.grantedScore && (
+						{task.answer.grantedScore && (
 							<Group
-								title={`Przyznane punkty za odpowiedź: ${task.grantedScore}`}
+								title={`Przyznane punkty za odpowiedź: ${task.answer.grantedScore}`}
 								align='center'
 								className={classes.grantedScore}
 								gap={rem(5)}
@@ -85,7 +87,7 @@ function StudentSpecialTaskAccordion({ specialTasks }: StudentSpecialTaskAccordi
 									<IconCoins />
 								</ThemeIcon>
 								<Text size='lg' fw={500}>
-									{task.grantedScore}
+									{task.answer.grantedScore}
 								</Text>
 							</Group>
 						)}
@@ -109,12 +111,12 @@ function StudentSpecialTaskAccordion({ specialTasks }: StudentSpecialTaskAccordi
 									<IconCode />
 								</ThemeIcon>
 							}
-							value={task.solution}
+							value={task.answer.solution}
 							mt='xs'
 						/>
-						<DateTimeDisplay date={task.sendDate} title='Data przesłania' icon={<IconClock />} />
+						<DateTimeDisplay date={task.answer.sendDate} title='Data przesłania' icon={<IconClock />} />
 					</Group>
-					{task.replyDesc && task.replyDate && task.replyStatus !== AnswerReplyStatusEnum.Enum.PENDING ? (
+					{task.answer.replyDesc && task.answer.replyDate && task.answer.replyStatus !== AnswerReplyStatusEnum.Enum.PENDING ? (
 						<Group>
 							<Textarea
 								className='StudentTaskTextAreaOverwrite'
@@ -129,10 +131,10 @@ function StudentSpecialTaskAccordion({ specialTasks }: StudentSpecialTaskAccordi
 										<IconBlockquote />
 									</ThemeIcon>
 								}
-								placeholder={task.replyDesc}
+								placeholder={task.answer.replyDesc}
 								mt='xs'
 							/>
-							<DateTimeDisplay date={task.replyDate} title='Data zwrócenia' icon={<IconClock />} />
+							<DateTimeDisplay date={task.answer.replyDate} title='Data zwrócenia' icon={<IconClock />} />
 						</Group>
 					) : null}
 				</Stack>

@@ -47,6 +47,12 @@ router.get(
 );
 
 router.get(
+  '/getStudentSpecialTaskAnswers',
+  requireUser,
+  TasksControllers.getStudentSpecialTaskAnswers,
+)
+
+router.get(
   '/getStudentTasks/:groupId',
   validateRequest({ params: paramsWithGroupIdSchema }),
   requireUser,

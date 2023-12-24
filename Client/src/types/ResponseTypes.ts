@@ -368,6 +368,25 @@ const getSpecialTaskByIdSchema = z.object({
 	}),
 });
 
+const getStudentSpecialTaskAnswersSchema = z.object({
+	message: z.string(),
+	studentSpecialTaskAnswers: z.array(
+		z.object({
+			question: z.string(),
+			answer: z.object({
+				id: z.number().int(),
+				solution: z.string(),
+				replyStatus: z.string(),
+				sendDate: z.string(),
+				replyDesc: z.string().nullable(),
+				replyDate: z.string().nullable(),
+				grantedScore: z.number().int().nullable(),
+				specialTaskId: z.number().int(),
+			}),
+		})
+	),
+});
+
 export type TMessageResponse = z.infer<typeof MessageResponseSchema>;
 export type TLoginResponse = z.infer<typeof LoginResponseSchema>;
 export type TRegisterManyStudents = z.infer<typeof RegisterManyStudentsSchema>;
@@ -398,3 +417,4 @@ export type TGetEditAnswerReply = z.infer<typeof editAnswerReplySchema>;
 
 export type TGetSpecialTasks = z.infer<typeof getSpecialTasksSchema>;
 export type TGetSpecialTaskById = z.infer<typeof getSpecialTaskByIdSchema>;
+export type TGetStudentSpecialTaskAnswers = z.infer<typeof getStudentSpecialTaskAnswersSchema>;

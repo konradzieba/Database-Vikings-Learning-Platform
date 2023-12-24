@@ -3,6 +3,7 @@ import {
   Lesson,
   Prisma,
   SpecialTask,
+  SpecialTaskAnswer,
   Student,
   Task,
 } from '@prisma/client';
@@ -18,6 +19,51 @@ export function getSpecialTaskAnswerWithStudentAndTaskID(
       studentId: studentId,
     },
   });
+}
+
+export async function getStudentSpecialTaskAnswers(
+  studentId: SpecialTaskAnswer['studentId']
+) {
+  const answers = await db.specialTaskAnswer.findMany({
+    where: {
+      studentId,
+    },
+    select: {
+      id: true,
+      solution: true,
+      replyStatus: true,
+      sendDate: true,
+      replyDesc: true,
+      replyDate: true,
+      grantedScore: true,
+      specialTaskId: true,
+    },
+  });
+
+  const tasksQuestions = await db.specialTask.findMany({
+    where: {
+      id: {
+        in: answers.map((answer) => answer.specialTaskId),
+      },
+    },
+    select: {
+      id: true,
+      question: true,
+    },
+  });
+
+  const matchedAnswers = tasksQuestions.map((question) => {
+    const correspondingAnswer = answers.find(
+      (answer) => answer.specialTaskId === question.id
+    );
+
+    return {
+      question: question.question,
+      answer: correspondingAnswer,
+    };
+  });
+
+  return matchedAnswers;
 }
 
 export function getLessonTaskById(id: Task['id']) {
