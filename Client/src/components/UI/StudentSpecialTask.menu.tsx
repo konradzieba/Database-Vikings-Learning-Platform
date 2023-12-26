@@ -15,6 +15,7 @@ function StudentSpecialTaskMenu() {
 	const { studentData } = useStudentStore();
 	const [specialTasks, setSpecialTasks] = useState<TAssignedSpecialTasks[]>([]);
 	const [specialTaskIdToUpdate, setSpecialTaskIdToUpdate] = useState<number>();
+	const [studentId, setStudentId] = useState<number>();
 
 	const { data: specialTasksData } = useGetSpecialTasksQuery(studentData.lecturerId!);
 
@@ -32,25 +33,36 @@ function StudentSpecialTaskMenu() {
 				setSpecialTasks(prev => [...prev, { ...data, isFromSocket: true }]);
 			});
 
-			socket.on(SocketEvents.CLIENT.REDUCE_AMOUNT_OF_TASKS, ({ specialTaskId }: { specialTaskId: number }) => {
-				setSpecialTaskIdToUpdate(specialTaskId);
-			});
+			socket.on(
+				SocketEvents.CLIENT.REDUCE_AMOUNT_OF_TASKS,
+				({ specialTaskId, studentId }: { specialTaskId: number; studentId: number }) => {
+					setSpecialTaskIdToUpdate(specialTaskId);
+					setStudentId(studentId);
+				}
+			);
 		}
 	}, [socket, studentData.lecturerId]);
 
 	useEffect(() => {
-		setSpecialTasks(prev => {
-			return prev.map(task => {
-				if (task.id === specialTaskIdToUpdate) {
-					return {
-						...task,
-						numberOfAnswers: task.numberOfAnswers === 0 ? 0 : task.numberOfAnswers - 1,
-					};
-				}
-				return task;
+		if (studentId === studentData.studentId) {
+			setSpecialTasks(prev => prev.filter(task => task.id !== specialTaskIdToUpdate));
+			setSpecialTaskIdToUpdate(-1);
+			setStudentId(-1);
+		} else {
+			setSpecialTasks(prev => {
+				return prev.map(task => {
+					if (task.id === specialTaskIdToUpdate) {
+						return {
+							...task,
+							numberOfAnswers: task.numberOfAnswers === 0 ? 0 : task.numberOfAnswers - 1,
+						};
+					}
+					return task;
+				});
 			});
-		});
-		setSpecialTaskIdToUpdate(-1);
+			setSpecialTaskIdToUpdate(-1);
+			setStudentId(-1);
+		}
 	}, [specialTaskIdToUpdate]);
 
 	const specialTasksWithoutDuplicates = useMemo(() => {

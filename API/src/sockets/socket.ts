@@ -91,11 +91,13 @@ const socket = async ({ io }: { io: Server }) => {
                 .to(specialTaskAnswerData.lecturerId.toString())
                 .emit(EVENTS.CLIENT.REDUCE_AMOUNT_OF_TASKS, {
                   specialTaskId: createdSpecialTaskAnswer.specialTaskId,
+                  studentId: createdSpecialTaskAnswer.studentId,
                 });
               io.to(specialTaskAnswerData.lecturerId.toString()).emit(
                 EVENTS.CLIENT.REDUCE_AMOUNT_OF_TASKS,
                 {
                   specialTaskId: createdSpecialTaskAnswer.specialTaskId,
+                  studentId: createdSpecialTaskAnswer.studentId,
                 }
               );
             }

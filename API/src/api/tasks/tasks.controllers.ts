@@ -243,20 +243,38 @@ export async function getSpecialTasks(
 ) {
   try {
     const { id: lecturerId } = req.params;
+    const parsedToken: ParsedToken = req.user;
     const lecturer = await UserServices.findLecturerById(+lecturerId);
+
+    const student = await UserServices.findStudentByUserId(parsedToken.userId);
+
+    if (!student) {
+      res.status(404);
+      throw new Error('Student with given id does not exist.');
+    }
 
     if (!lecturer) {
       res.status(404);
       throw new Error('Lecturer with given id does not exist.');
     }
 
+    const studentSpecialTaskAnswers =
+      await TaskServices.getStudentSpecialTaskAnswers(student.id);
+
     const specialTasks = (await TaskServices.getSpecialTasks(+lecturerId)).sort(
       (a, b) => a.id - b.id
     );
 
+    const specialTaskWithoutAnswers = specialTasks.filter(
+      (task) =>
+        !studentSpecialTaskAnswers.some(
+          (answer) => answer.answer?.specialTaskId === task.id
+        )
+    );
+
     res.json({
       message: 'success',
-      specialTasks,
+      specialTasks: specialTaskWithoutAnswers,
     });
   } catch (error) {
     next(error);
