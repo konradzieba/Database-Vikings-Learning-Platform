@@ -1,3 +1,4 @@
+import { useGetSpecialTaskDetailsByIdQuery } from '@/hooks/tasks/useGetSpecialTaskDetailsByIdQuery';
 import { Center, Loader, Select, Stack, Text, Textarea, rem } from '@mantine/core';
 import { ContextModalProps } from '@mantine/modals';
 import { IconFloatLeft, IconListDetails } from '@tabler/icons-react';
@@ -8,48 +9,44 @@ function SpecialTaskDetailsModal({
 	context,
 	id,
 	innerProps,
-}: ContextModalProps<{ modalBody: string; taskId: number }>) {
+}: ContextModalProps<{ modalBody: string; specialTaskId: number }>) {
 	//QUERY TO GET SPECIAL TASK DETAILS
+	const { data: specialTaskDetails, isPending } = useGetSpecialTaskDetailsByIdQuery(innerProps.specialTaskId);
 
-	const [isTypeMarkdown, setIsTypeMarkdown] = useState(
-		// !!specialTaskInfo?.taskInfo.isMarkdown
-		false
-	);
+	const [isTypeMarkdown, setIsTypeMarkdown] = useState(!!specialTaskDetails?.specialTask.isMarkdown);
 
-	const [question, setQuestion] = useState(
-		// specialTaskInfo?.taskInfo.question || ''
-		''
-	);
+	const [question, setQuestion] = useState(specialTaskDetails?.specialTask.question || '');
 
-	// if get special task query is pending
-	// if (isQueryPending) {
-	// 	return (
-	// 		<Center h={300}>
-	// 			<Loader />
-	// 		</Center>
-	// 	);
-	// }
+	if (isPending) {
+		return (
+			<Center h={300}>
+				<Loader />
+			</Center>
+		);
+	}
 
 	return (
 		<Stack>
-			<Text fw={500}>
-				Szczegóły zadania specjalnego number&nbsp;
-				<Text size='lg' span c='var(--mantine-primary-color)'>
-					{/* {specialTaskInfo?.taskInfo.number} */}1
+			<Stack gap={0}>
+				<Text fw={500}>
+					Szczegóły zadania specjalnego &nbsp;
+					<Text size='lg' span c='var(--mantine-primary-color)'>
+						{specialTaskDetails?.specialTask.title}
+					</Text>
 				</Text>
-				&nbsp;dodanego&nbsp;
-				<Text span c='var(--mantine-primary-color)'>
-					{/* {dayjs(specialTaskInfo?.taskInfo.openDate).format('D/MM/YYYY HH:mm')} */}
-					03/10/2000 10:11
+				<Text fw={500}>
+					dodanego&nbsp;
+					<Text span c='var(--mantine-primary-color)'>
+						{dayjs(specialTaskDetails?.specialTask.openDate).format('D/MM/YYYY HH:mm')}
+					</Text>
 				</Text>
-			</Text>
+			</Stack>
 			<Select
 				allowDeselect={false}
 				leftSection={<IconListDetails />}
 				label='Formatowanie tekstu'
 				data={['Zwykły tekst', 'Markdown']}
-				// defaultValue={specialTaskInfo?.taskInfo.isMarkdown ? 'Markdown' : 'Zwykły tekst'}
-				defaultValue='Markdown'
+				defaultValue={specialTaskDetails?.specialTask.isMarkdown ? 'Markdown' : 'Zwykły tekst'}
 				disabled
 			/>
 			<Textarea
@@ -62,8 +59,7 @@ function SpecialTaskDetailsModal({
 				autosize
 				maxRows={10}
 				placeholder='Treść zadania...'
-				// defaultValue={specialTaskInfo?.taskInfo.question}
-				defaultValue='Siema fajne zadanie'
+				defaultValue={specialTaskDetails?.specialTask.question}
 				disabled
 			/>
 		</Stack>

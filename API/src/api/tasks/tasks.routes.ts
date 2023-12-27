@@ -16,6 +16,12 @@ import { EnumRole } from '../../../typings/token';
 const router = Router();
 
 router.get(
+  '/getSpecialTasksToEvaluate',
+  requireUser,
+  TasksControllers.getSpecialTasksToEvaluate
+);
+
+router.get(
   '/getTaskInfoById/:id',
   validateRequestAndCheckRole(
     {
@@ -35,6 +41,17 @@ router.get(
     EnumRole.STUDENT
   ),
   TasksControllers.getSpecialTaskById
+);
+
+router.get(
+  '/getSpecialTaskDetailsById/:id',
+  validateRequestAndCheckRole(
+    {
+      params: paramsWithIdSchema,
+    },
+    EnumRole.LECTURER
+  ),
+  TasksControllers.getSpecialTaskDetailsById
 )
 
 router.get(
@@ -49,8 +66,8 @@ router.get(
 router.get(
   '/getStudentSpecialTaskAnswers',
   requireUser,
-  TasksControllers.getStudentSpecialTaskAnswers,
-)
+  TasksControllers.getStudentSpecialTaskAnswers
+);
 
 router.get(
   '/getStudentTasks/:groupId',

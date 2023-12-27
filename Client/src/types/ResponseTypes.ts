@@ -90,6 +90,48 @@ const GetLessonsByGroupIdSchema = z.object({
 	),
 });
 
+const getSpecialTaskDetailsByIdSchema = z.object({
+	message: z.string(),
+	specialTask: z.object({
+		id: z.number().int(),
+		title: z.string(),
+		question: z.string(),
+		openDate: z.string(),
+		isMarkdown: z.boolean(),
+		numberOfAnswers: z.number().int(),
+		lecturerId: z.number().int(),
+	}),
+});
+
+const getSpecialTasksToEvaluateSchema = z.object({
+	message: z.string(),
+	specialTasksToEvaluate: z.array(
+		z.object({
+			taskInfo: z.object({
+				id: z.number().int(),
+				title: z.string(),
+			}),
+			answerInfo: z.array(
+				z.object({
+					userId: z.number().int(),
+					studentId: z.number().int(),
+					firstName: z.string(),
+					lastName: z.string(),
+					indexNumber: z.number().int(),
+					id: z.number().int(),
+					solution: z.string(),
+					replyStatus: z.string(),
+					sendDate: z.string(),
+					replyDesc: z.string().nullable(),
+					replyDate: z.string().nullable(),
+					grantedScore: z.number().int().nullable(),
+					specialTaskId: z.number().int(),
+				})
+			),
+		})
+	),
+});
+
 const getLessonInfoByGroupAndLessonIdSchema = z.object({
 	message: z.string().min(1),
 	lessonInfo: z.object({
@@ -418,3 +460,5 @@ export type TGetEditAnswerReply = z.infer<typeof editAnswerReplySchema>;
 export type TGetSpecialTasks = z.infer<typeof getSpecialTasksSchema>;
 export type TGetSpecialTaskById = z.infer<typeof getSpecialTaskByIdSchema>;
 export type TGetStudentSpecialTaskAnswers = z.infer<typeof getStudentSpecialTaskAnswersSchema>;
+export type TGetSpecialTasksToEvaluate = z.infer<typeof getSpecialTasksToEvaluateSchema>;
+export type TGetSpecialTaskDetailsById = z.infer<typeof getSpecialTaskDetailsByIdSchema>;

@@ -36,6 +36,36 @@ export async function getTaskInfoById(
   }
 }
 
+export async function getSpecialTasksToEvaluate(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const parsedToken: ParsedToken = req.user;
+
+    const lecturer = await UserServices.findLecturerByUserId(
+      parsedToken.userId
+    );
+
+    if (!lecturer) {
+      res.status(404);
+      throw new Error('Lecturer with given ID does not exists');
+    }
+
+    const specialTasksToEvaluate = await TaskServices.getSpecialTasksToEvaluate(
+      lecturer.id
+    );
+
+    res.json({
+      message: 'success',
+      specialTasksToEvaluate: specialTasksToEvaluate,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function getStudentSpecialTaskAnswers(
   req: Request,
   res: Response,
@@ -57,6 +87,30 @@ export async function getStudentSpecialTaskAnswers(
     res.json({
       message: 'success',
       studentSpecialTaskAnswers: studentSpecialTaskAnswers,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getSpecialTaskDetailsById(
+  req: Request<ParamsWithId>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id: specialTaskId } = req.params;
+
+    const specialTask = await TaskServices.getSpecialTaskById(+specialTaskId);
+
+    if (!specialTask) {
+      res.status(404);
+      throw new Error('Special task with given id does not exist');
+    }
+
+    res.json({
+      message: 'success',
+      specialTask,
     });
   } catch (error) {
     next(error);

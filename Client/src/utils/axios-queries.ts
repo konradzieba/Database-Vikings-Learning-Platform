@@ -25,7 +25,9 @@ import {
 	TGetPreviousLessonsImages,
 	TGetScoreBoard,
 	TGetSpecialTaskById,
+	TGetSpecialTaskDetailsById,
 	TGetSpecialTasks,
+	TGetSpecialTasksToEvaluate,
 	TGetStudentDefaultPasswordState,
 	TGetStudentLessonsInfo,
 	TGetStudentPreviewData,
@@ -283,6 +285,18 @@ export const getSpecialTaskByIdQueryFn = async (specialTaskId: number) => {
 
 export const getStudentSpecialTaskAnswersQueryFn = async () => {
 	const { data } = await axios.get<TGetStudentSpecialTaskAnswers>(`/tasks/getStudentSpecialTaskAnswers`);
+
+	return data;
+};
+
+export const getSpecialTasksToEvaluateQueryFn = async () => {
+	const { data } = await axios.get<TGetSpecialTasksToEvaluate>(`/tasks/getSpecialTasksToEvaluate`);
+
+	return data;
+};
+
+export const getSpecialTaskDetailsByIdQueryFn = async (specialTaskId: number) => {
+	const { data } = await axios.get<TGetSpecialTaskDetailsById>(`/tasks/getSpecialTaskDetailsById/${specialTaskId}`);
 
 	return data;
 };

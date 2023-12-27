@@ -21,6 +21,98 @@ export function getSpecialTaskAnswerWithStudentAndTaskID(
   });
 }
 
+export async function getSpecialTasksToEvaluate(
+  lecturerId: SpecialTask['lecturerId']
+) {
+  const lecturerSpecialTasks = await db.specialTask.findMany({
+    where: {
+      lecturerId: lecturerId,
+    },
+    select: {
+      id: true,
+      title: true,
+    },
+  });
+
+  const allSpecialTasksAnswers = await db.specialTaskAnswer.findMany({
+    where: {
+      specialTaskId: {
+        in: lecturerSpecialTasks.map((task) => task.id),
+      },
+    },
+  });
+
+  const studentsIdFromSpecialTasksAnswers = await db.student.findMany({
+    where: {
+      id: {
+        in: allSpecialTasksAnswers.map((answer) => answer.studentId),
+      },
+    },
+    select: {
+      id: true,
+      userId: true,
+      indexNumber: true,
+    },
+  });
+
+  const userCredentialsFromSpecialTasksAnswers = await db.user.findMany({
+    where: {
+      id: {
+        in: studentsIdFromSpecialTasksAnswers.map((student) => student.userId),
+      },
+    },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+    },
+  });
+
+  const studentCredentials = userCredentialsFromSpecialTasksAnswers.map(
+    (user) => {
+      const correspondingStudent = studentsIdFromSpecialTasksAnswers.find(
+        (student) => student.userId === user.id
+      );
+
+      return {
+        userId: user.id,
+        studentId: correspondingStudent?.id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        indexNumber: correspondingStudent?.indexNumber,
+      };
+    }
+  );
+
+  const specialTasksAnswersWithStudentCredentials = lecturerSpecialTasks.map(
+    (task) => {
+      const correspondingAnswers = allSpecialTasksAnswers.filter(
+        (answer) => answer.specialTaskId === task.id
+      );
+
+      const answerInfo = correspondingAnswers.map((answer) => {
+        const correspondingStudent = studentCredentials.find(
+          (student) => student.studentId === answer.studentId
+        );
+
+        return {
+          ...correspondingStudent,
+          ...answer,
+        };
+      });
+
+      return {
+        taskInfo: {
+          ...task,
+        },
+        answerInfo: answerInfo,
+      };
+    }
+  );
+
+  return specialTasksAnswersWithStudentCredentials;
+}
+
 export async function getStudentSpecialTaskAnswers(
   studentId: SpecialTaskAnswer['studentId']
 ) {
