@@ -31,6 +31,18 @@ router.post(
 );
 
 router.patch(
+  '/specialTaskAnswerReply/:id',
+  validateRequestAndCheckRole(
+    {
+      params: paramsWithIdSchema,
+      body: AnswerSchemas.answerReplySchema,
+    },
+    EnumRole.LECTURER
+  ),
+  AnswersControllers.specialTaskAnswerReply
+)
+
+router.patch(
   '/answerReply/:id',
   validateRequestAndCheckRole(
     {

@@ -85,6 +85,39 @@ export async function getEditReplyAnswerData(
   }
 }
 
+export async function specialTaskAnswerReply(
+  req: Request<ParamsWithId, MessageResponse, AnswerReply>,
+  res: Response<MessageResponse>,
+  next: NextFunction
+) {
+  try {
+    const { replyStatus, replyDate, replyDesc, grantedScore } = req.body;
+    const { id: answerId } = req.params;
+
+    const existingSpecialTaskAnswer =
+      await AnswerServices.findSpecialTaskAnswerById(+answerId);
+
+    if (!existingSpecialTaskAnswer) {
+      res.status(404);
+      throw new Error('Special task answer with this id does not exist.');
+    }
+
+    await AnswerServices.specialTaskAnswerReply(
+      +answerId,
+      replyStatus,
+      replyDesc,
+      replyDate,
+      grantedScore
+    );
+
+    res.json({
+      message: `Answer id: ${answerId} replied successfully, student score has been increased by ${grantedScore}.`,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function answerReply(
   req: Request<ParamsWithId, MessageResponse, AnswerReply>,
   res: Response<MessageResponse>,

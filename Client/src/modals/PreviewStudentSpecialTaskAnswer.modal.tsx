@@ -2,10 +2,25 @@ import { AnswerReplyStatus, AnswerReplyStatusEnum } from '@/types/Enums';
 import { useForm, zodResolver } from '@mantine/form';
 import { ContextModalProps, modals } from '@mantine/modals';
 import { useState } from 'react';
-import { Box, Button, Center, Divider, Flex, Group, Loader, NumberInput, ScrollArea, Select, Text, Textarea } from '@mantine/core';
+import {
+	Box,
+	Button,
+	Center,
+	Divider,
+	Flex,
+	Group,
+	Loader,
+	NumberInput,
+	ScrollArea,
+	Select,
+	Text,
+	Textarea,
+} from '@mantine/core';
 import { CodeHighlight } from '@mantine/code-highlight';
 import { IconBlockquote, IconCoins, IconListDetails } from '@tabler/icons-react';
 import { answerReplySchema } from './CreateAnswerReply.schema';
+import dayjs from 'dayjs';
+import useSpecialTaskAnswerReplyMutation from '@/hooks/answer/useSpecialTaskAnswerReplyMutation';
 
 const selectData = [
 	{
@@ -44,13 +59,24 @@ function PreviewStudentSpecialTaskAnswerModal({
 		validate: zodResolver(answerReplySchema),
 	});
 
+	const {
+		mutate: createSpecialTaskAnswerReply,
+		isPending,
+		isSuccess,
+	} = useSpecialTaskAnswerReplyMutation(innerProps.answerId, {
+		replyDate: dayjs().toDate(),
+		replyDesc: answerReplyForm.values.replyDesc,
+		replyStatus: answerReplyForm.values.replyStatus as AnswerReplyStatus,
+		grantedScore: answerReplyForm.values.grantedScore as number,
+	});
+
 	const handleReplySpecialTaskAnswer = () => {
 		answerReplyForm.validate();
 		if (!answerReplyForm.values.replyStatus) {
 			setSelectError('Wybierz status odpowiedzi');
 			return;
 		}
-		//Mutation to send answer
+		createSpecialTaskAnswerReply();
 	};
 
 	const handleCloseModal = () => {
@@ -58,26 +84,24 @@ function PreviewStudentSpecialTaskAnswerModal({
 		modals.closeAll();
 	};
 
-	// if mutation is pending
-	// if(isPending) {
-	//   return (
-	//     <Center h={120}>
-	//       <Loader />
-	//     </Center>
-	//   )
-	// }
+	if(isPending) {
+	  return (
+	    <Center h={120}>
+	      <Loader />
+	    </Center>
+	  )
+	}
 
-	// is mutation is success
-	// if(isSuccess){
-	//   return (
-	//     <Box>
-	//       <Center h={120}>
-	//         <Text>Odpowiedź została oceniona</Text>
-	//       </Center>
-	//       <Button fullWidth onClick={handleCloseModal}>Zamknij</Button>
-	//     </Box>
-	//   )
-	// }
+	if(isSuccess){
+	  return (
+	    <Box>
+	      <Center h={120}>
+	        <Text>Odpowiedź została oceniona</Text>
+	      </Center>
+	      <Button fullWidth onClick={handleCloseModal}>Zamknij</Button>
+	    </Box>
+	  )
+	}
 
 	return (
 		<form

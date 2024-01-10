@@ -164,6 +164,11 @@ export const replyAnswerMutationFn = async (answerId: number, reply: TReplyAnswe
 	return data;
 };
 
+export const specialTaskAnswerReplyMutationFn = async (answerId: number, reply: TReplyAnswerRequest) => {
+	const { data } = await axios.patch<TMessageResponse>(`/answers/specialTaskAnswerReply/${answerId}`, reply);
+	return data;
+};
+
 export const createLessonMutationFn = async (createLessonRequest: TCreateLessonRequest) => {
 	const { data } = await axios.post<TMessageResponse>('/lessons/createLesson', createLessonRequest);
 
