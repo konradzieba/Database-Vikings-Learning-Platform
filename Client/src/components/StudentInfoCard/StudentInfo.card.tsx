@@ -132,21 +132,9 @@ function StudentInfoCard({
 	};
 
 	return (
-		<Flex
-			align='center'
-			justify='space-between'
-			px='sm'
-			py='sm'
-			miw='50%'
-			className={classes.studentInfoCardContainer}
-		>
+		<Flex align='center' justify='space-between' px='sm' py='sm' miw='50%' className={classes.studentInfoCardContainer}>
 			<Flex direction='column' align='center' miw='25%'>
-				<Anchor
-					component={Link}
-					to={`/dashboard/student-preview/${studentId}`}
-					relative='path'
-					target='_blank'
-				>
+				<Anchor component={Link} to={`/dashboard/student-preview/${studentId}`} relative='path' target='_blank'>
 					<Text>{`${firstName} ${lastName}`}</Text>
 				</Anchor>
 				<Text fw={500} size='lg' py={rem(4)}>
@@ -167,12 +155,7 @@ function StudentInfoCard({
 				<HeartCounter hearts={hearts} />
 			</Flex>
 			<Flex direction='column' miw='20%'>
-				<DateTimeDisplay
-					date={lastLoggedIn}
-					title='Ostatnie logowanie'
-					icon={<IconClock size='1.3rem' />}
-					ta='end'
-				/>
+				<DateTimeDisplay date={lastLoggedIn} title='Ostatnie logowanie' icon={<IconClock size='1.3rem' />} ta='end' />
 			</Flex>
 			<Menu width={210} withArrow shadow='md'>
 				<Menu.Target>
@@ -183,35 +166,22 @@ function StudentInfoCard({
 				<Menu.Dropdown>
 					<Menu.Label>Grupa</Menu.Label>
 					<Menu.Item
+						disabled={groups.length < 2}
 						leftSection={<IconReplace size='1.3rem' />}
-						onClick={handleOpenGroupChangeModal}
-					>
+						onClick={handleOpenGroupChangeModal}>
 						Przenieś
 					</Menu.Item>
 					<Menu.Label>Student</Menu.Label>
-					<Menu.Item
-						leftSection={<IconEye size='1.3rem' />}
-						onClick={handleOpenShowStudentDefaultPasswordModal}
-					>
+					<Menu.Item leftSection={<IconEye size='1.3rem' />} onClick={handleOpenShowStudentDefaultPasswordModal}>
 						Pokaż domyślne hasło
 					</Menu.Item>
-					<Menu.Item
-						leftSection={<IconKey size='1.3rem' />}
-						onClick={handleOpenRecoverPasswordModal}
-					>
+					<Menu.Item leftSection={<IconKey size='1.3rem' />} onClick={handleOpenRecoverPasswordModal}>
 						Przywróć hasło
 					</Menu.Item>
-					<Menu.Item
-						leftSection={<IconUserEdit size='1.3rem' />}
-						onClick={handleOpenEditStudentModal}
-					>
+					<Menu.Item leftSection={<IconUserEdit size='1.3rem' />} onClick={handleOpenEditStudentModal}>
 						Edytuj
 					</Menu.Item>
-					<Menu.Item
-						color='red.8'
-						leftSection={<IconUserMinus size='1.3rem' />}
-						onClick={handleOpenDeleteStudentModal}
-					>
+					<Menu.Item color='red.8' leftSection={<IconUserMinus size='1.3rem' />} onClick={handleOpenDeleteStudentModal}>
 						Usuń
 					</Menu.Item>
 				</Menu.Dropdown>
