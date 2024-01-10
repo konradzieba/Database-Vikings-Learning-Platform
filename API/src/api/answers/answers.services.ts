@@ -176,6 +176,59 @@ export async function answerReply(
   });
 }
 
+export async function updateSpecialTaskAnswerReply(
+  answerId: SpecialTaskAnswer['id'],
+  oldGrantedScore: SpecialTaskAnswer['grantedScore'],
+  replyStatus: SpecialTaskAnswer['replyStatus'] | null = null,
+  replyDesc: SpecialTaskAnswer['replyDesc'] | null = null,
+  newGrantedScore: SpecialTaskAnswer['grantedScore'] | null = null
+) {
+  const specialTaskAnswer = await db.specialTaskAnswer.findUnique({
+    where: { id: answerId },
+    select: {
+      studentId: true,
+      Student: {
+        select: {
+          score: true,
+        },
+      },
+    },
+  });
+
+  if (!specialTaskAnswer) {
+    throw new Error(
+      `Unable to find the special task answer with ID ${answerId}.`
+    );
+  }
+
+  if (
+    newGrantedScore === null ||
+    newGrantedScore === undefined ||
+    oldGrantedScore === null ||
+    oldGrantedScore === undefined
+  ) {
+    return null;
+  }
+
+  const newStudentScore =
+    specialTaskAnswer.Student.score - oldGrantedScore + newGrantedScore;
+
+  return await db.$transaction([
+    db.specialTaskAnswer.update({
+      where: { id: answerId },
+      data: {
+        replyStatus: replyStatus || undefined,
+        replyDesc: replyDesc || undefined,
+        grantedScore: newGrantedScore || undefined,
+      },
+    }),
+    db.student.update({
+      where: { id: specialTaskAnswer.studentId },
+      data: { score: { set: newStudentScore } },
+    }),
+  ]);
+}
+
 export async function updateAnswerReply(
   answerId: Answer['id'],
   oldGrantedScore: Answer['grantedScore'],

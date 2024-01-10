@@ -65,11 +65,13 @@ function SpecialTaskDashboardPage() {
 										return (
 											<StudentSpecialTaskAnswerCard
 												key={`${task.taskInfo.id}-${answer.indexNumber}-answer`}
-												index={answer.indexNumber}
-												answer={answer.solution}
+												studentId={answer.studentId}
 												answerId={answer.id}
 												firstName={answer.firstName}
 												lastName={answer.lastName}
+												index={answer.indexNumber}
+												answer={answer.solution}
+												isScoreGranted={true}
 												sendDate={answer.sendDate}
 											/>
 										);
@@ -81,11 +83,13 @@ function SpecialTaskDashboardPage() {
 										return (
 											<StudentSpecialTaskAnswerCard
 												key={`${task.taskInfo.id}-${answer.indexNumber}-answer`}
-												index={answer.indexNumber}
-												answer={answer.solution}
+												studentId={answer.studentId}
 												answerId={answer.id}
 												firstName={answer.firstName}
 												lastName={answer.lastName}
+												index={answer.indexNumber}
+												isScoreGranted={false}
+												answer={answer.solution}
 												sendDate={answer.sendDate}
 											/>
 										);

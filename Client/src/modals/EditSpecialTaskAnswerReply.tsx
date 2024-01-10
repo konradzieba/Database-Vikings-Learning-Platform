@@ -1,28 +1,14 @@
-import {
-	Box,
-	Button,
-	Center,
-	Divider,
-	Flex,
-	Group,
-	Loader,
-	NumberInput,
-	ScrollArea,
-	Select,
-	Text,
-	Textarea,
-	rem,
-} from '@mantine/core';
-import { ContextModalProps, modals } from '@mantine/modals';
-import { IconBlockquote, IconCoins, IconListDetails } from '@tabler/icons-react';
-import { CodeHighlight } from '@mantine/code-highlight';
 import { useForm, zodResolver } from '@mantine/form';
-import { answerReplySchema } from './CreateAnswerReply.schema';
+import { ContextModalProps, modals } from '@mantine/modals';
 import { useEffect, useState } from 'react';
+import { answerReplySchema } from './CreateAnswerReply.schema';
+import { useGetEditSpecialTaskAnswerReplyDataQuery } from '@/hooks/answer/useGetEditSpecialTaskAnswerReplyDataQuery';
 import { AnswerReplyStatus, AnswerReplyStatusEnum } from '@/types/Enums';
+import { useEditSpecialTaskAnswerReplyMutation } from '@/hooks/answer/useEditSpecialTaskAnswerReplyMutation';
+import { Box, Button, Center, Divider, Flex, Group, Loader, NumberInput, ScrollArea, Select, Text, Textarea, rem } from '@mantine/core';
 import dayjs from 'dayjs';
-import { useGetEditAnswerReplyDataQuery } from '@/hooks/answer/useGetEditAnswerReplyQuery';
-import { useEditAnswerReplyMutation } from '@/hooks/answer/useEditAnswerReplyMutation';
+import { CodeHighlight } from '@mantine/code-highlight';
+import { IconBlockquote, IconCoins, IconListDetails } from '@tabler/icons-react';
 
 const selectData = [
 	{
@@ -39,50 +25,54 @@ const selectData = [
 	},
 ];
 
-interface EditAnswerReplyModalProps {
+interface EditSpecialTaskAnswerReplyModalProps {
 	answerId: number;
 	studentId: number;
 	studentFullName: string;
 	studentIndex: number;
 }
 
-function EditAnswerReplyModal({ context, id, innerProps }: ContextModalProps<EditAnswerReplyModalProps>) {
+function EditSpecialTaskAnswerReplyModal({
+	context,
+	id,
+	innerProps,
+}: ContextModalProps<EditSpecialTaskAnswerReplyModalProps>) {
 	const [selectError, setSelectError] = useState<string | null>(null);
 	const {
-		data: answerData,
+		data: specialTaskAnswerData,
 		isLoading: isFetching,
 		isError: isFetchingError,
-	} = useGetEditAnswerReplyDataQuery(+innerProps.answerId);
+	} = useGetEditSpecialTaskAnswerReplyDataQuery(+innerProps.answerId);
 
-	const answerReplyForm = useForm({
+	const specialTaskAnswerReplyForm = useForm({
 		initialValues: {
-			replyStatus: answerData?.answerData.replyStatus as AnswerReplyStatus,
-			replyDesc: answerData?.answerData.replyDesc ?? '',
-			grantedScore: (answerData?.answerData.grantedScore || '') as number | string,
+			replyStatus: specialTaskAnswerData?.answerData.replyStatus as AnswerReplyStatus,
+			replyDesc: specialTaskAnswerData?.answerData.replyDesc ?? '',
+			grantedScore: (specialTaskAnswerData?.answerData.grantedScore || '') as number | string,
 		},
 		validate: zodResolver(answerReplySchema),
 	});
 
 	useEffect(() => {
-		if (answerData) {
-			answerReplyForm.setFieldValue('replyStatus', answerData.answerData.replyStatus);
-			answerReplyForm.setFieldValue('replyDesc', answerData.answerData.replyDesc || '');
-			answerReplyForm.setFieldValue('grantedScore', answerData.answerData.grantedScore || '');
+		if (specialTaskAnswerData) {
+			specialTaskAnswerReplyForm.setFieldValue('replyStatus', specialTaskAnswerData.answerData.replyStatus);
+			specialTaskAnswerReplyForm.setFieldValue('replyDesc', specialTaskAnswerData.answerData.replyDesc || '');
+			specialTaskAnswerReplyForm.setFieldValue('grantedScore', specialTaskAnswerData.answerData.grantedScore || '');
 		}
-	}, [answerData]);
+	}, [specialTaskAnswerData]);
 
-	const {
-		mutate: editAnswerReply,
-		isPending: isEditing,
-		isSuccess: isEditSuccess,
-		isError: isEditError,
-	} = useEditAnswerReplyMutation(innerProps.answerId, {
-		grantedScore: +answerReplyForm.values.grantedScore as number,
-		replyStatus: answerReplyForm.values.replyStatus as AnswerReplyStatus,
-		replyDesc: answerReplyForm.values.replyDesc,
-	});
+  const {
+    mutate: editSpecialTaskAnswerReply,
+    isPending: isEditing,
+    isSuccess: isEditSuccess,
+    isError: isEditError,
+  } = useEditSpecialTaskAnswerReplyMutation(innerProps.answerId, {
+    grantedScore: +specialTaskAnswerReplyForm.values.grantedScore as number,
+    replyStatus: specialTaskAnswerReplyForm.values.replyStatus as AnswerReplyStatus,
+    replyDesc: specialTaskAnswerReplyForm.values.replyDesc
+  })
 
-	if (isFetching || isEditing) {
+  if (isFetching || isEditing) {
 		return (
 			<Center h={120}>
 				<Loader />
@@ -100,15 +90,15 @@ function EditAnswerReplyModal({ context, id, innerProps }: ContextModalProps<Edi
 	}
 
 	const handleReplyAnswer = () => {
-		answerReplyForm.validate();
-		if (answerReplyForm.values.grantedScore === '') {
+		specialTaskAnswerReplyForm.validate();
+		if (specialTaskAnswerReplyForm.values.grantedScore === '') {
 			return;
 		}
-		if (!answerReplyForm.values.replyStatus) {
+		if (!specialTaskAnswerReplyForm.values.replyStatus) {
 			setSelectError('Wybierz status odpowiedzi');
 			return;
 		}
-		editAnswerReply();
+		editSpecialTaskAnswerReply();
 	};
 
 	const handleCloseModal = () => {
@@ -137,11 +127,11 @@ function EditAnswerReplyModal({ context, id, innerProps }: ContextModalProps<Edi
 			}}>
 			<Text c='dimmed' fs='italic'>
 				Data przesłania:&nbsp;
-				{dayjs(answerData?.answerData.sendDate).format('DD/MM/YYYY HH:mm')}
+				{dayjs(specialTaskAnswerData?.answerData.sendDate).format('DD/MM/YYYY HH:mm')}
 			</Text>
 			<Text c='dimmed' fs='italic'>
 				Data ocenienia:&nbsp;
-				{dayjs(answerData?.answerData.replyDate).format('DD/MM/YYYY HH:mm')}
+				{dayjs(specialTaskAnswerData?.answerData.replyDate).format('DD/MM/YYYY HH:mm')}
 			</Text>
 			<Divider mt={rem(5)} mb='lg' />
 			<Text mb='md'>
@@ -149,7 +139,7 @@ function EditAnswerReplyModal({ context, id, innerProps }: ContextModalProps<Edi
 			</Text>
 
 			<ScrollArea.Autosize mah={250} type='auto' offsetScrollbars>
-				<CodeHighlight code={answerData?.answerData.solution ?? ''} language='sql' withCopyButton={false} />
+				<CodeHighlight code={specialTaskAnswerData?.answerData.solution ?? ''} language='sql' withCopyButton={false} />
 			</ScrollArea.Autosize>
 
 			<Divider my='md' />
@@ -161,12 +151,12 @@ function EditAnswerReplyModal({ context, id, innerProps }: ContextModalProps<Edi
 					label='Ocena zadania'
 					placeholder='Ocena zadania...'
 					data={selectData.map(item => item.label)}
-					value={selectData.find(item => item.value === answerReplyForm.values.replyStatus)?.label ?? ''}
+					value={selectData.find(item => item.value === specialTaskAnswerReplyForm.values.replyStatus)?.label ?? ''}
 					error={selectError}
-					{...(answerReplyForm.getInputProps('replyStatus'),
+					{...(specialTaskAnswerReplyForm.getInputProps('replyStatus'),
 					{
 						onChange: value => {
-							answerReplyForm.setFieldValue('replyStatus', selectData.find(item => item.label === value)!.value);
+							specialTaskAnswerReplyForm.setFieldValue('replyStatus', selectData.find(item => item.label === value)!.value);
 							setSelectError(null);
 						},
 					})}
@@ -182,7 +172,7 @@ function EditAnswerReplyModal({ context, id, innerProps }: ContextModalProps<Edi
 					allowDecimal={false}
 					label='Ilość punktów'
 					placeholder='Ilość punktów'
-					{...answerReplyForm.getInputProps('grantedScore')}
+					{...specialTaskAnswerReplyForm.getInputProps('grantedScore')}
 				/>
 			</Flex>
 
@@ -196,7 +186,7 @@ function EditAnswerReplyModal({ context, id, innerProps }: ContextModalProps<Edi
 				label='Komentarz do zadania'
 				placeholder='Treść komentarza...'
 				rows={5}
-				{...answerReplyForm.getInputProps('replyDesc')}
+				{...specialTaskAnswerReplyForm.getInputProps('replyDesc')}
 			/>
 
 			<Group justify='center' mt='lg'>
@@ -211,4 +201,4 @@ function EditAnswerReplyModal({ context, id, innerProps }: ContextModalProps<Edi
 	);
 }
 
-export default EditAnswerReplyModal;
+export default EditSpecialTaskAnswerReplyModal;

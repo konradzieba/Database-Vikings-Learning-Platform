@@ -258,8 +258,23 @@ export const getStudentPreviewDataQueryFn = async (studentId: number) => {
 	return data;
 };
 
+export const getEditSpecialTaskAnswerReplyQueryFn = async (answerId: number) => {
+	const { data } = await axios.get<TGetEditAnswerReply>(`/answers/getEditSpecialTaskAnswerData/${answerId}`);
+
+	return data;
+};
+
 export const getEditAnswerReplyQueryFn = async (answerId: number) => {
 	const { data } = await axios.get<TGetEditAnswerReply>(`/answers/getEditReplyAnswerData/${answerId}`);
+
+	return data;
+};
+
+export const updateSpecialTaskAnswerReplyMutationFn = async (
+	answerId: number,
+	answerReply: TUpdateAnswerReplyRequest
+) => {
+	const { data } = await axios.patch<TMessageResponse>(`/answers/updateSpecialTaskAnswerReply/${answerId}`, answerReply);
 
 	return data;
 };

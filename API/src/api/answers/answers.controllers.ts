@@ -10,7 +10,7 @@ import {
 import * as AnswerServices from './answers.services';
 import * as UserServices from '../users/users.services';
 import * as TaskServices from '../tasks/tasks.services';
-import { Answer, PrismaClient } from '@prisma/client';
+import { Answer, PrismaClient, SpecialTaskAnswer } from '@prisma/client';
 
 export async function createAnswer(
   req: Request<{}, MessageResponse, AnswerInput>,
@@ -56,6 +56,30 @@ export async function createAnswer(
 
     res.json({
       message: `Answer id:${answer.id} for task id: ${answer.taskId} by student id ${answer.studentId} created successfully.`,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getEditSpecialTaskAnswerReplyData(
+  req: Request<ParamsWithId, { answerData: SpecialTaskAnswer }, {}>,
+  res: Response<{ answerData: SpecialTaskAnswer }>,
+  next: NextFunction
+) {
+  try {
+    const { id } = req.params;
+
+    const existingSpecialTaskAnswer =
+      await AnswerServices.findSpecialTaskAnswerById(+id);
+
+    if (!existingSpecialTaskAnswer) {
+      res.status(404);
+      throw new Error('Special task answer with this id does not exist.');
+    }
+
+    res.json({
+      answerData: existingSpecialTaskAnswer,
     });
   } catch (error) {
     next(error);
@@ -144,6 +168,39 @@ export async function answerReply(
 
     res.json({
       message: `Answer id: ${answerId} replied successfully, student score has been increased by ${grantedScore}.`,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function updateSpecialTaskAnswerReply(
+  req: Request<ParamsWithId, MessageResponse, AnswerReplyUpdate>,
+  res: Response<MessageResponse>,
+  next: NextFunction
+) {
+  try {
+    const { replyStatus, replyDesc, grantedScore: newGrantedScore } = req.body;
+    const { id } = req.params;
+
+    const existingSpecialTaskAnswer =
+      await AnswerServices.findSpecialTaskAnswerById(+id);
+
+    if (!existingSpecialTaskAnswer) {
+      res.status(404);
+      throw new Error('Special task answer with this id does not exist.');
+    }
+
+    await AnswerServices.updateSpecialTaskAnswerReply(
+      +id,
+      existingSpecialTaskAnswer.grantedScore,
+      replyStatus,
+      replyDesc,
+      newGrantedScore
+    );
+
+    res.json({
+      message: `Special task answer id: ${existingSpecialTaskAnswer.id} reply updated successfully.`,
     });
   } catch (error) {
     next(error);

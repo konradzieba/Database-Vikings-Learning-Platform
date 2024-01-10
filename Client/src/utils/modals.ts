@@ -25,6 +25,7 @@ import StudentGroupChangeModal from '@/modals/StudentGroupChange.modal';
 import TaskDetailsModal from '@/modals/TaskDetails.modal';
 import CreateAnswerReplyModal from '@/modals/CreateAnswerReply.modal';
 import EditAnswerReplyModal from '@/modals/EditAnswerReply.modal';
+import EditSpecialTaskAnswerReplyModal from '@/modals/EditSpecialTaskAnswerReply';
 
 export default {
 	sessionExpired: SessionExpiredModal,
@@ -35,6 +36,7 @@ export default {
 	deleteStudent: DeleteStudentModal,
 	createAnswerReply: CreateAnswerReplyModal,
 	editAnswerReply: EditAnswerReplyModal,
+	editSpecialTaskAnswerReply: EditSpecialTaskAnswerReplyModal,
 	changeDefaultPassword: ChangeDefaultPasswordModal,
 	createGroup: CreateGroupModal,
 	sendTaskAnswer: SendTaskAnswerModal,
