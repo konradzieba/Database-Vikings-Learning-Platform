@@ -1,7 +1,7 @@
 import { decodeDefaultPassword } from '@/utils/decodeDefaultPassword';
 import { ActionIcon, Button, Group, Text, rem } from '@mantine/core';
 import { useClipboard } from '@mantine/hooks';
-import { ContextModalProps } from '@mantine/modals';
+import { ContextModalProps, modals } from '@mantine/modals';
 import { IconCopy } from '@tabler/icons-react';
 
 interface StudentDefaultPasswordModalProps {
@@ -16,11 +16,12 @@ function showStudentDefaultPasswordModal({
 	innerProps,
 }: ContextModalProps<StudentDefaultPasswordModalProps>) {
 	const clipboard = useClipboard({ timeout: 800 });
-	const decodedPassword = decodeDefaultPassword(
-		innerProps.firstName,
-		innerProps.lastName,
-		innerProps.indexNumber
-	);
+	const decodedPassword = decodeDefaultPassword(innerProps.firstName, innerProps.lastName, innerProps.indexNumber);
+
+	const handleCloseModal = () => {
+		context.closeModal(id);
+		modals.closeAll();
+	};
 	return (
 		<>
 			<Text size='sm'>
@@ -38,13 +39,12 @@ function showStudentDefaultPasswordModal({
 						size='md'
 						variant='transparent'
 						c={clipboard.copied ? 'var(--good-state-color)' : 'dimmed'}
-						onClick={() => clipboard.copy(decodedPassword)}
-					>
+						onClick={() => clipboard.copy(decodedPassword)}>
 						<IconCopy />
 					</ActionIcon>
 				</Group>
 			</Text>
-			<Button mt='md' fullWidth>
+			<Button mt='md' fullWidth onClick={handleCloseModal}>
 				Zamknij
 			</Button>
 		</>
