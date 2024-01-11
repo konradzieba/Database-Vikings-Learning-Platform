@@ -3,6 +3,7 @@ import StudentLessonCard from '@/components/LessonCard/StudentLesson.card';
 import { Center, Loader, Text } from '@mantine/core';
 import { useGetStudentLessonsInfo } from '@/hooks/lessons/useGetStudentLessonsInfo';
 import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import DataNotFound from '@/components/UI/DataNotFound';
 
 export function HomePage() {
 	const { data: StudentLessonsInfo, isPending } = useGetStudentLessonsInfo();
@@ -31,8 +32,8 @@ export function HomePage() {
 
 	if (!slides?.length) {
 		return (
-			<Center h='25vh'>
-				<Text>Brak lekcji</Text>
+			<Center>
+				<DataNotFound firstLineText='Brak' secondLineText='dostępnych lekcji' />
 			</Center>
 		);
 	}
