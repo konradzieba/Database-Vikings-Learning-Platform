@@ -62,7 +62,7 @@ function DeleteLessonModal({
 		return (
 			<>
 				<Flex direction='column' align='center' gap='md' mb='md'>
-					<IconCircleCheck size='3rem' color='var(--good-state-color)' />
+					<IconCircleCheck size='3rem' color='var(--mantine-primary-color)' />
 					<Text>Lekcja została usunięta!</Text>
 				</Flex>
 				<Button fullWidth onClick={handleCloseModal}>

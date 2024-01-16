@@ -1,18 +1,7 @@
 import { useState } from 'react';
-import {
-	Button,
-	Center,
-	Group,
-	Loader,
-	Stack,
-	Tabs,
-	Text,
-	TextInput,
-	ThemeIcon,
-	rem,
-} from '@mantine/core';
+import { Button, Center, Flex, Group, Loader, Stack, Tabs, Text, TextInput, ThemeIcon, rem } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
-import { IconFileTypeCsv, IconKeyboard, IconTag } from '@tabler/icons-react';
+import { IconCircleCheck, IconCircleX, IconFileTypeCsv, IconKeyboard, IconTag } from '@tabler/icons-react';
 import { useLecturerStore } from '@/utils/stores/useLecturerStore';
 import { useRegisterManyStudentsMutation } from '@/hooks/students/useRegisterManyStudentsMutation';
 import RegisterStudentsFromCSVFile from '@/components/CreateGroup/RegisterStudentsFromCSVFile.component';
@@ -37,14 +26,10 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 	const [fileInputError, setFileInputError] = useState('');
 
 	// created student list by hand
-	const [createdStudentsByHand, setCreatedStudentsByHand] = useState<
-		CreateStudentListType[]
-	>([]);
+	const [createdStudentsByHand, setCreatedStudentsByHand] = useState<CreateStudentListType[]>([]);
 
 	const { lecturerData } = useLecturerStore();
-	const { refetch: refetchGroupsData } = useGetGroupsByLecturerId(
-		lecturerData.lecturerId
-	);
+	const { refetch: refetchGroupsData } = useGetGroupsByLecturerId(lecturerData.lecturerId);
 
 	const {
 		mutate: registerStudentsFromCSVFile,
@@ -54,7 +39,7 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 	} = useRegisterManyStudentsMutation({
 		lecturerId: lecturerData.lecturerId as number,
 		groupName: groupName,
-		studentsToRegister: csvData.map((row) => ({
+		studentsToRegister: csvData.map(row => ({
 			firstName: row['Imię'],
 			lastName: row['Nazwisko'],
 			indexNumber: +row['Numer indeksu'],
@@ -71,19 +56,15 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 		studentsToRegister: createdStudentsByHand,
 	});
 
-	const isPending =
-		isRegisterFromCSVPending || isRegisterByHandPending ? true : false;
-	const isError =
-		isRegisterFromCSVError || isRegisterByHandError ? true : false;
+	const isPending = isRegisterFromCSVPending || isRegisterByHandPending ? true : false;
+	const isError = isRegisterFromCSVError || isRegisterByHandError ? true : false;
 	const isSuccess = isRegisterFromCSVSuccess || isRegisterByHandSuccess;
 	const isCreateButtonDisabled =
-		activeTab === 'csv'
-			? !groupName || csvData.length === 0
-			: !groupName || createdStudentsByHand.length === 0;
+		activeTab === 'csv' ? !groupName || csvData.length === 0 : !groupName || createdStudentsByHand.length === 0;
 
 	const handleCreateGroup = () => {
 		if (activeTab === 'csv') {
-			const transformedData = csvData.map((row) => ({
+			const transformedData = csvData.map(row => ({
 				firstName: row['Imię'],
 				lastName: row['Nazwisko'],
 				indexNumber: row['Numer indeksu'],
@@ -134,14 +115,13 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 		refetchGroupsData();
 		return (
 			<>
-				<Center mih={80}>
+				<Flex direction='column' align='center' gap='md' mb='md'>
+					<IconCircleCheck size='3rem' color='var(--mantine-primary-color)' />
 					<Text>Pomyślnie dodano studentów</Text>
-				</Center>
-				<Group justify='center'>
-					<Button variant='outline' miw={150} onClick={handleCloseModal}>
-						Zamknij
-					</Button>
-				</Group>
+				</Flex>
+				<Button variant='outline' fullWidth onClick={handleCloseModal}>
+					Zamknij
+				</Button>
 			</>
 		);
 	}
@@ -149,14 +129,13 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 	if (isError) {
 		return (
 			<>
-				<Center mih={80}>
-					<Text>Błąd podczas dodawania studentów</Text>
-				</Center>
-				<Group justify='center'>
-					<Button variant='outline' miw={150} onClick={handleCloseModal}>
-						Zamknij
-					</Button>
-				</Group>
+				<Flex direction='column' align='center' gap='md' mb='md'>
+					<IconCircleX size='3rem' color='var(--bad-state-color)' />
+					<Text>Wystąpił błąd podczas dodawania studentów</Text>
+				</Flex>
+				<Button variant='outline' fullWidth onClick={handleCloseModal}>
+					Zamknij
+				</Button>
 			</>
 		);
 	}
@@ -168,8 +147,7 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 					value='csv'
 					w='50%'
 					c={activeTab === 'csv' ? 'var(--mantine-primary-color)' : undefined}
-					leftSection={<IconFileTypeCsv />}
-				>
+					leftSection={<IconFileTypeCsv />}>
 					<Text c='var(--font-color)' fw={500} fz='sm'>
 						Z pliku CSV
 					</Text>
@@ -177,11 +155,8 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 				<Tabs.Tab
 					value='manual'
 					w='50%'
-					c={
-						activeTab === 'manual' ? 'var(--mantine-primary-color)' : undefined
-					}
-					leftSection={<IconKeyboard />}
-				>
+					c={activeTab === 'manual' ? 'var(--mantine-primary-color)' : undefined}
+					leftSection={<IconKeyboard />}>
 					<Text c='var(--font-color)' fw={500} fz='sm'>
 						Ręcznie
 					</Text>
@@ -193,7 +168,7 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 					placeholder='Nazwa grupy'
 					leftSection={<IconTag size='1.4rem' />}
 					error={groupNameError}
-					onChange={(e) => {
+					onChange={e => {
 						setGroupName(e.target.value);
 						setGroupNameError('');
 					}}
@@ -217,12 +192,7 @@ function CreateGroupModal({ context, id }: ContextModalProps) {
 				<Button variant='outline' miw={150} onClick={handleCloseModal}>
 					Anuluj
 				</Button>
-				<Button
-					miw={150}
-					onClick={handleCreateGroup}
-					loading={isPending}
-					disabled={isCreateButtonDisabled}
-				>
+				<Button miw={150} onClick={handleCreateGroup} loading={isPending} disabled={isCreateButtonDisabled}>
 					{isPending ? '' : 'Stwórz grupę'}
 				</Button>
 			</Group>

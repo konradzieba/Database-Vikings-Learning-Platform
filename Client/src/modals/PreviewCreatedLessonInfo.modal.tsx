@@ -56,10 +56,10 @@ function PreviewCreatedLessonInfoModal({
 		return (
 			<>
 				<Flex direction='column' align='center' gap='md' mb='md'>
-					<IconCircleCheck size='3rem' color='var(--good-state-color)' />
+					<IconCircleCheck size='3rem' color='var(--mantine-primary-color)' />
 					<Text>
 						Lekcja {innerProps.createdLesson.lessonNumber} została&nbsp;
-						<Text span fw={500} c='var(--good-state-color)'>
+						<Text span fw={500} c='var(--mantine-primary-color)'>
 							stworzona
 						</Text>
 						.

@@ -10,7 +10,6 @@ function SpecialTaskDetailsModal({
 	id,
 	innerProps,
 }: ContextModalProps<{ modalBody: string; specialTaskId: number }>) {
-	//QUERY TO GET SPECIAL TASK DETAILS
 	const { data: specialTaskDetails, isPending } = useGetSpecialTaskDetailsByIdQuery(innerProps.specialTaskId);
 
 	const [isTypeMarkdown, setIsTypeMarkdown] = useState(!!specialTaskDetails?.specialTask.isMarkdown);

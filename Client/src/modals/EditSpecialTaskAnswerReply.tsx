@@ -8,7 +8,7 @@ import { useEditSpecialTaskAnswerReplyMutation } from '@/hooks/answer/useEditSpe
 import { Box, Button, Center, Divider, Flex, Group, Loader, NumberInput, ScrollArea, Select, Text, Textarea, rem } from '@mantine/core';
 import dayjs from 'dayjs';
 import { CodeHighlight } from '@mantine/code-highlight';
-import { IconBlockquote, IconCoins, IconListDetails } from '@tabler/icons-react';
+import { IconBlockquote, IconCircleCheck, IconCoins, IconListDetails } from '@tabler/icons-react';
 
 const selectData = [
 	{
@@ -108,14 +108,17 @@ function EditSpecialTaskAnswerReplyModal({
 
 	if (isEditSuccess) {
 		return (
-			<Box>
-				<Center h={120}>
-					<Text>Odpowiedź została skorygowana</Text>
-				</Center>
+			<>
+				<Flex direction='column' align='center' gap='md' mb='md'>
+					<IconCircleCheck size='3rem' color='var(--mantine-primary-color)' />
+					<Text>
+						Odpowiedź została skorygowana
+					</Text>
+				</Flex>
 				<Button fullWidth onClick={handleCloseModal}>
 					Zamknij
 				</Button>
-			</Box>
+			</>
 		);
 	}
 

@@ -74,10 +74,10 @@ function AddStudentToGroupModal({
 		return (
 			<>
 				<Flex direction='column' align='center' gap='md' mb='md'>
-					<IconCircleCheck size='3rem' color='var(--good-state-color)' />
+					<IconCircleCheck size='3rem' color='var(--mantine-primary-color)' />
 					<Text>
 						Student&nbsp;
-						<Text c='var(--good-state-color)' span>
+						<Text c='var(--mantine-primary-color)' span>
 							{form.getInputProps('firstName').value}&nbsp;
 							{form.getInputProps('lastName').value}
 						</Text>

@@ -50,7 +50,7 @@ function AddTaskByHandModal({ innerProps, context, id }: ContextModalProps<AddTa
 		return (
 			<>
 				<Flex direction='column' align='center' gap='md' mb='md'>
-					<IconCircleCheck size='3rem' color='var(--good-state-color)' />
+					<IconCircleCheck size='3rem' color='var(--mantine-primary-color)' />
 					<Text>
 						Zadanie {innerProps.taskNumber} zostało stworzone&nbsp;
 						<Text span fw={500} c='var(--mantine-primary-color)'>

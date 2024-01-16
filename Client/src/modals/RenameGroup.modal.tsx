@@ -65,7 +65,7 @@ function RenameGroupModal({
 		return (
 			<>
 				<Flex direction='column' align='center' gap='md' mb='md'>
-					<IconCircleCheck size='3rem' color='var(--good-state-color)' />
+					<IconCircleCheck size='3rem' color='var(--mantine-primary-color)' />
 					<Text>Nazwa grupy została zmieniona!</Text>
 				</Flex>
 				<Button fullWidth onClick={handleCloseModal}>

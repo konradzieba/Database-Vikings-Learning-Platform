@@ -17,7 +17,7 @@ import {
 	Textarea,
 } from '@mantine/core';
 import { CodeHighlight } from '@mantine/code-highlight';
-import { IconBlockquote, IconCoins, IconListDetails } from '@tabler/icons-react';
+import { IconBlockquote, IconCircleCheck, IconCoins, IconListDetails } from '@tabler/icons-react';
 import { answerReplySchema } from './CreateAnswerReply.schema';
 import dayjs from 'dayjs';
 import useSpecialTaskAnswerReplyMutation from '@/hooks/answer/useSpecialTaskAnswerReplyMutation';
@@ -84,23 +84,26 @@ function PreviewStudentSpecialTaskAnswerModal({
 		modals.closeAll();
 	};
 
-	if(isPending) {
-	  return (
-	    <Center h={120}>
-	      <Loader />
-	    </Center>
-	  )
+	if (isPending) {
+		return (
+			<Center h={120}>
+				<Loader />
+			</Center>
+		);
 	}
 
-	if(isSuccess){
-	  return (
-	    <Box>
-	      <Center h={120}>
-	        <Text>Odpowiedź została oceniona</Text>
-	      </Center>
-	      <Button fullWidth onClick={handleCloseModal}>Zamknij</Button>
-	    </Box>
-	  )
+	if (isSuccess) {
+		return (
+			<>
+				<Flex direction='column' align='center' gap='md' mb='md'>
+					<IconCircleCheck size='3rem' color='var(--mantine-primary-color)' />
+					<Text>Odpowiedź została oceniona</Text>
+				</Flex>
+				<Button fullWidth onClick={handleCloseModal}>
+					Zamknij
+				</Button>
+			</>
+		);
 	}
 
 	return (

@@ -100,7 +100,7 @@ function SendSpecialTaskAnswerModal({
 		return (
 			<>
 				<Flex direction='column' align='center' gap='md' mb='md'>
-					<IconCircleCheck size='3rem' color='var(--good-state-color)' />
+					<IconCircleCheck size='3rem' color='var(--mantine-primary-color)' />
 
 					<Text>Zadanie specjalne zostało przesłane do oceny!</Text>
 				</Flex>

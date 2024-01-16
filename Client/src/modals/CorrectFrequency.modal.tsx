@@ -64,7 +64,7 @@ function CorrectFrequencyModal({ innerProps, context, id }: ContextModalProps<Co
 	if (isSuccess) {
 		return (
 			<Stack mx='md' align='center'>
-				<IconCircleCheck size='3rem' color='var(--good-state-color)' />
+				<IconCircleCheck size='3rem' color='var(-mantine-primary-color)' />
 				<Text>Lista obecności została zaktualizowana pomyślnie.</Text>
 				<Group justify='center'>
 					<PDFDownloadLink

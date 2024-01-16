@@ -62,7 +62,7 @@ function EditStudentInfoModal({ context, id, innerProps }: ContextModalProps<Edi
 		return (
 			<>
 				<Flex direction='column' align='center' gap='md' mb='md'>
-					<IconCircleCheck size='3rem' color='var(--good-state-color)' />
+					<IconCircleCheck size='3rem' color='var(--mantine-primary-color)' />
 					<Text>
 						Student {form.getInputProps('firstName').value} {form.getInputProps('lastName').value} został&nbsp;
 						<Text span fw={500} c='var(--mantine-primary-color)'>
