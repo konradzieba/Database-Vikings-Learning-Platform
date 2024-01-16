@@ -1,24 +1,45 @@
 import { Button, Flex, Group, ScrollArea, Stack, Text, Textarea, ThemeIcon, Title } from '@mantine/core';
 import { IconClipboardList, IconClockHour1, IconCode } from '@tabler/icons-react';
 import Markdown from 'react-markdown';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import classes from '../../components/TaskAnswer/TaskAnswer.component.module.css';
 import DateTimeDisplay from '@/components/UI/DateTimeDisplay';
-import { FormEvent, useRef } from 'react';
+import { Dispatch, FormEvent, SetStateAction, useEffect, useRef, useState } from 'react';
 import PrimaryButton from '@/components/UI/PrimaryButton';
 import { modals } from '@mantine/modals';
+import { useGetSpecialTaskByIdQuery } from '@/hooks/tasks/useGetSpecialTaskByIdQuery';
+import FullScreenLoader from '@/components/UI/FullScreenLoader';
+import AmountOfSpecialTaskAnswersLeft from '@/components/UI/AmountOfSpecialTaskLeft';
+import { useStudentStore } from '@/utils/stores/useStudentStore';
+import socket from '@/utils/sockets/socket-instance';
+import SocketEvents from '@/utils/sockets/socket-events';
+
+export type TemporarySpecialTaskAnswerData = {
+	temporarySolution: string;
+	temporarySendDate: string;
+};
 
 interface TaskAnswerHeaderProps {
-	taskNumber: number;
+	taskTitle: string;
 	taskQuestion: string;
 	isMarkdown: boolean;
 }
 
-function SpecialTaskAnswerHeader({ taskNumber, taskQuestion, isMarkdown }: TaskAnswerHeaderProps) {
+interface TaskAnswerFormProps {
+	answer: string;
+	amountOfTask: number;
+	specialTaskId: number;
+	amount: number | null;
+	setAmount: Dispatch<SetStateAction<number | null>>;
+	temporaryData: TemporarySpecialTaskAnswerData;
+	setTemporaryData: Dispatch<SetStateAction<TemporarySpecialTaskAnswerData>>;
+}
+
+function SpecialTaskAnswerHeader({ taskTitle, taskQuestion, isMarkdown }: TaskAnswerHeaderProps) {
 	return (
 		<>
 			<Title fw={700} py={0} order={2}>
-				Zadanie specjalne {taskNumber}
+				{taskTitle}
 			</Title>
 			<ScrollArea.Autosize type='auto' mah={280} pb='lg' offsetScrollbars='y'>
 				{isMarkdown ? (
@@ -33,12 +54,23 @@ function SpecialTaskAnswerHeader({ taskNumber, taskQuestion, isMarkdown }: TaskA
 	);
 }
 
-function SpecialTaskAnswerForm() {
+function SpecialTaskAnswerForm({
+	amountOfTask,
+	specialTaskId,
+	amount,
+	setAmount,
+	answer,
+	temporaryData,
+	setTemporaryData,
+}: TaskAnswerFormProps) {
 	const answerTextareaRef = useRef<HTMLTextAreaElement>(null);
+
+	useEffect(() => {
+		setAmount(amountOfTask);
+	}, [amountOfTask]);
 
 	const openConfirmSpecialAnswerModal = (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		console.log('Wysłanie odpowiedzi');
 
 		modals.openContextModal({
 			modal: 'sendSpecialTaskAnswer',
@@ -47,8 +79,9 @@ function SpecialTaskAnswerForm() {
 			closeOnClickOutside: false,
 			innerProps: {
 				answerContent: answerTextareaRef.current?.value,
-				specialTaskId: 0,
+				specialTaskId: specialTaskId,
 				modalBody: 'Czy na pewno chcesz wysłać odpowiedź?',
+				setTemporaryData: setTemporaryData,
 			},
 		});
 	};
@@ -56,26 +89,67 @@ function SpecialTaskAnswerForm() {
 		<form onSubmit={openConfirmSpecialAnswerModal}>
 			<Stack gap='sm' pos='relative'>
 				<Group gap='lg' align='flex-start'>
-					<Textarea
-						leftSection={
-							<ThemeIcon variant='transparent'>
-								<IconCode />
-							</ThemeIcon>
-						}
-						leftSectionProps={{
-							style: { alignItems: 'flex-start', marginTop: '6px', color: 'var(--mantine-primary-color)' },
-						}}
-						ref={answerTextareaRef}
-						w='100%'
-						size='md'
-						rows={8}
-						placeholder='Twoja odpowiedz...'
-						className={classes.taskAnswerTextArea}
-					/>
+					{answer || temporaryData.temporarySolution ? (
+						<Textarea
+							disabled
+							leftSection={
+								<ThemeIcon variant='transparent'>
+									<IconCode />
+								</ThemeIcon>
+							}
+							leftSectionProps={{
+								style: {
+									alignItems: 'flex-start',
+									marginTop: '6px',
+									color: 'var(--mantine-primary-color)',
+								},
+							}}
+							ref={answerTextareaRef}
+							w='100%'
+							size='md'
+							rows={8}
+							placeholder={answer ? answer : temporaryData.temporarySolution}
+							className={classes.taskAnswerTextArea}
+						/>
+					) : (
+						<Textarea
+							disabled={amount === 0 ? true : false}
+							leftSection={
+								<ThemeIcon variant='transparent'>
+									<IconCode />
+								</ThemeIcon>
+							}
+							leftSectionProps={{
+								style: {
+									alignItems: 'flex-start',
+									marginTop: '6px',
+									color: 'var(--mantine-primary-color)',
+								},
+							}}
+							ref={answerTextareaRef}
+							w='100%'
+							size='md'
+							rows={8}
+							placeholder='Twoja odpowiedz...'
+							className={classes.taskAnswerTextArea}
+						/>
+					)}
 				</Group>
-				<PrimaryButton maw={300} className={classes.taskAnswerPrimaryButton} type='submit'>
-					Prześlij
-				</PrimaryButton>
+				<Group justify='flex-end'>
+					<Stack w='30%'>
+						<AmountOfSpecialTaskAnswersLeft answersLeft={amount!} />
+						<Text size='sm' mx='auto' c='dimmed' fs='italic'>
+							Ilość pozostałych odpowiedzi na to zadanie
+						</Text>
+					</Stack>
+					<PrimaryButton
+						maw={300}
+						style={{ alignSelf: 'flex-start' }}
+						disabled={amount === 0 || temporaryData.temporarySolution || answer ? true : false}
+						type='submit'>
+						Prześlij
+					</PrimaryButton>
+				</Group>
 			</Stack>
 		</form>
 	);
@@ -83,32 +157,75 @@ function SpecialTaskAnswerForm() {
 
 function SpecialTaskAnswerPage() {
 	const navigate = useNavigate();
+	const { taskId } = useParams();
+	const { studentData } = useStudentStore();
+	const { data: specialTaskData, isLoading } = useGetSpecialTaskByIdQuery(+taskId!);
+	const [amount, setAmount] = useState<number | null>(null);
+	const [temporaryData, setTemporaryData] = useState<TemporarySpecialTaskAnswerData>({
+		temporarySolution: '',
+		temporarySendDate: '',
+	});
+
+	useEffect(() => {
+		socket.emit(SocketEvents.connection, () => {});
+
+		socket.emit(SocketEvents.CLIENT.JOIN_ROOM, studentData.lecturerId!.toString());
+
+		socket.on(SocketEvents.CLIENT.REDUCE_AMOUNT_OF_TASKS, ({ specialTaskId }: { specialTaskId: number }) => {
+			setAmount(prev => (prev === 0 ? 0 : prev! - 1));
+		});
+	}, [socket, studentData.lecturerId]);
 
 	return (
-		<Flex direction='column' justify='center'>
-			<Button
-				leftSection={<IconClipboardList />}
-				variant='outline'
-				mx='auto'
-				onClick={() => navigate('/my-special-tasks')}>
-				Moje zadania specjalne
-			</Button>
-			<Flex px='xl' align='flex-start' justify='space-evenly'>
-				<Stack w='50%' gap={0}>
-					<SpecialTaskAnswerHeader taskNumber={1} taskQuestion='Czy kto to pies' isMarkdown />
-					<SpecialTaskAnswerForm />
-				</Stack>
-				<Stack>
-					<Group gap='lg' className={classes.taskAnswerDateDisplayGroup}>
-						<DateTimeDisplay
-							title='Data rozpoczęcia'
-							icon={<IconClockHour1 size={20} />}
-							date={'2023-12-17T20:38:13.755Z'}
-						/>
-					</Group>
-				</Stack>
-			</Flex>
-		</Flex>
+		<>
+			{isLoading ? (
+				<FullScreenLoader />
+			) : (
+				<Flex direction='column' justify='center'>
+					<Button
+						leftSection={<IconClipboardList />}
+						variant='outline'
+						mx='auto'
+						onClick={() => navigate('/my-special-tasks')}>
+						Moje zadania specjalne
+					</Button>
+					<Flex px='xl' align='flex-start' justify='space-evenly'>
+						<Stack w='50%' gap={0}>
+							<SpecialTaskAnswerHeader
+								taskTitle={specialTaskData?.specialTaskInfo.title!}
+								taskQuestion={specialTaskData?.specialTaskInfo.question!}
+								isMarkdown={specialTaskData?.specialTaskInfo.isMarkdown!}
+							/>
+							<SpecialTaskAnswerForm
+								answer={specialTaskData?.answer.solution!}
+								amount={amount}
+								setAmount={setAmount}
+								amountOfTask={specialTaskData?.specialTaskInfo.numberOfAnswers!}
+								specialTaskId={specialTaskData?.specialTaskInfo.id!}
+								temporaryData={temporaryData}
+								setTemporaryData={setTemporaryData}
+							/>
+						</Stack>
+						<Stack>
+							<Group gap='lg' className={classes.taskAnswerDateDisplayGroup}>
+								<DateTimeDisplay
+									title='Data rozpoczęcia'
+									icon={<IconClockHour1 size={20} />}
+									date={specialTaskData?.specialTaskInfo.openDate!}
+								/>
+								{(specialTaskData?.answer.sendDate || temporaryData.temporarySendDate !== '') && (
+									<DateTimeDisplay
+										title='Data przesłania'
+										icon={<IconClockHour1 size={20} />}
+										date={specialTaskData?.answer.sendDate ? specialTaskData?.answer.sendDate : temporaryData.temporarySendDate}
+									/>
+								)}
+							</Group>
+						</Stack>
+					</Flex>
+				</Flex>
+			)}
+		</>
 	);
 }
 

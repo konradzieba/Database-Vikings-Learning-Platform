@@ -12,7 +12,6 @@ import EditStudentInfoModal from '@/modals/EditStudentInfo.modal';
 import ModifyAddedTaskModal from '@/modals/ModifyAddedTask.modal';
 import NotAnsweredListModal from '@/modals/NotAnsweredList.modal';
 import PreviewCreatedLessonInfoModal from '@/modals/PreviewCreatedLessonInfo.modal';
-import PreviewStudentAnswerModal from '@/modals/PreviewStudentAnswer.modal';
 import PreviewStudentSpecialTaskAnswerModal from '@/modals/PreviewStudentSpecialTaskAnswer.modal';
 import RenameGroupModal from '@/modals/RenameGroup.modal';
 import ReorderLessonsModal from '@/modals/ReorderLessons/ReorderLessons.modal';
@@ -26,6 +25,7 @@ import StudentGroupChangeModal from '@/modals/StudentGroupChange.modal';
 import TaskDetailsModal from '@/modals/TaskDetails.modal';
 import CreateAnswerReplyModal from '@/modals/CreateAnswerReply.modal';
 import EditAnswerReplyModal from '@/modals/EditAnswerReply.modal';
+import EditSpecialTaskAnswerReplyModal from '@/modals/EditSpecialTaskAnswerReply';
 
 export default {
 	sessionExpired: SessionExpiredModal,
@@ -36,6 +36,7 @@ export default {
 	deleteStudent: DeleteStudentModal,
 	createAnswerReply: CreateAnswerReplyModal,
 	editAnswerReply: EditAnswerReplyModal,
+	editSpecialTaskAnswerReply: EditSpecialTaskAnswerReplyModal,
 	changeDefaultPassword: ChangeDefaultPasswordModal,
 	createGroup: CreateGroupModal,
 	sendTaskAnswer: SendTaskAnswerModal,

@@ -36,6 +36,134 @@ export async function getTaskInfoById(
   }
 }
 
+export async function getSpecialTasksToEvaluate(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const parsedToken: ParsedToken = req.user;
+
+    const lecturer = await UserServices.findLecturerByUserId(
+      parsedToken.userId
+    );
+
+    if (!lecturer) {
+      res.status(404);
+      throw new Error('Lecturer with given ID does not exists');
+    }
+
+    const specialTasksToEvaluate = await TaskServices.getSpecialTasksToEvaluate(
+      lecturer.id
+    );
+
+    res.json({
+      message: 'success',
+      specialTasksToEvaluate: specialTasksToEvaluate,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getStudentSpecialTaskAnswers(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const parsedToken: ParsedToken = req.user;
+
+    const student = await UserServices.findStudentByUserId(parsedToken.userId);
+
+    if (!student) {
+      res.status(404);
+      throw new Error('Student with given userId does not exist.');
+    }
+
+    const studentSpecialTaskAnswers =
+      await TaskServices.getStudentSpecialTaskAnswers(student.id);
+
+    res.json({
+      message: 'success',
+      studentSpecialTaskAnswers: studentSpecialTaskAnswers,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getSpecialTaskDetailsById(
+  req: Request<ParamsWithId>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id: specialTaskId } = req.params;
+
+    const specialTask = await TaskServices.getSpecialTaskById(+specialTaskId);
+
+    if (!specialTask) {
+      res.status(404);
+      throw new Error('Special task with given id does not exist');
+    }
+
+    res.json({
+      message: 'success',
+      specialTask,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getSpecialTaskById(
+  req: Request<ParamsWithId>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id: specialTaskId } = req.params;
+    const parsedToken: ParsedToken = req.user;
+
+    const student = await UserServices.findStudentByUserId(parsedToken.userId);
+
+    if (!student) {
+      res.status(404);
+      throw new Error('Student with given userId does not exist.');
+    }
+
+    const specialTask = await TaskServices.getSpecialTaskById(+specialTaskId);
+
+    if (!specialTask) {
+      res.status(404);
+      throw new Error('Special task with given ID does not exist.');
+    }
+
+    const specialTaskAnswer =
+      await TaskServices.getSpecialTaskAnswerWithStudentAndTaskID(
+        +specialTaskId,
+        student.id
+      );
+
+    if (specialTaskAnswer) {
+      res.json({
+        message: 'success',
+        specialTaskInfo: specialTask,
+        answer: { ...specialTaskAnswer[0] },
+      });
+    } else {
+      res.json({
+        message: 'success',
+        specialTaskInfo: specialTask,
+        answer: {},
+      });
+    }
+  } catch (error) {
+    next(error);
+  }
+}
+
 export async function getLessonTaksById(
   req: Request<ParamsWithLessonId>,
   res: Response,
@@ -51,6 +179,7 @@ export async function getLessonTaksById(
       res.status(404);
       throw new Error('Student with given userId does not exist.');
     }
+
     const tasksWithStudentAnswers =
       await AnswersServices.findCompletedTaskByStudent(student.answersId);
 
@@ -132,8 +261,7 @@ export async function createTask(
   next: NextFunction
 ) {
   try {
-    const { number, question, closeDate, isExtra, lessonId, isMarkdown } =
-      req.body;
+    const { number, question, closeDate, lessonId, isMarkdown } = req.body;
 
     const existingLesson = await LessonServices.findLessonById(lessonId);
 
@@ -146,7 +274,6 @@ export async function createTask(
       number,
       question,
       closeDate: dayjs(closeDate).toDate(),
-      isExtra: isExtra || false,
       isMarkdown,
       Lesson: {
         connect: {
@@ -157,6 +284,51 @@ export async function createTask(
 
     res.json({
       message: `Task with ${task.id}, number ${task.number} created successfully. Close time is: ${task.closeDate}`,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function getSpecialTasks(
+  req: Request<ParamsWithId>,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const { id: lecturerId } = req.params;
+    const parsedToken: ParsedToken = req.user;
+    const lecturer = await UserServices.findLecturerById(+lecturerId);
+
+    const student = await UserServices.findStudentByUserId(parsedToken.userId);
+
+    if (!student) {
+      res.status(404);
+      throw new Error('Student with given id does not exist.');
+    }
+
+    if (!lecturer) {
+      res.status(404);
+      throw new Error('Lecturer with given id does not exist.');
+    }
+
+    const studentSpecialTaskAnswers =
+      await TaskServices.getStudentSpecialTaskAnswers(student.id);
+
+    const specialTasks = (await TaskServices.getSpecialTasks(+lecturerId)).sort(
+      (a, b) => a.id - b.id
+    );
+
+    const specialTaskWithoutAnswers = specialTasks.filter(
+      (task) =>
+        !studentSpecialTaskAnswers.some(
+          (answer) => answer.answer?.specialTaskId === task.id
+        )
+    );
+
+    res.json({
+      message: 'success',
+      specialTasks: specialTaskWithoutAnswers,
     });
   } catch (error) {
     next(error);

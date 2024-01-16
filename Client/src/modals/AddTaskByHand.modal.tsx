@@ -29,7 +29,6 @@ function AddTaskByHandModal({ innerProps, context, id }: ContextModalProps<AddTa
 			number: +innerProps.taskNumber,
 			question: textAreaRef.current?.value!,
 			closeDate: selectedDate?.toISOString()!,
-			isExtra: false,
 			isMarkdown: textFormat === 'Markdown' ? true : false,
 		});
 	};

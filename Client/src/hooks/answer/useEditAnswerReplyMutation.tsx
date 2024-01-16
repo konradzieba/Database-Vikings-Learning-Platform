@@ -21,9 +21,6 @@ export function useEditAnswerReplyMutation(
 				queryKey: ['getEditAnswerReplyData', answerId],
 			});
 		},
-		onError: (error) => {
-			console.error(error);
-		},
 	});
 
 	return mutation;

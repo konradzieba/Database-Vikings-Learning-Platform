@@ -14,7 +14,6 @@ describe('POST /api/v1/tasks/createTask', () => {
         number: 5,
         question: 'Is kot pies?',
         closeDate: dayjs().add(7, 'day').toDate(),
-        isExtra: false,
         lessonId: lessonId,
       });
     expect(res.statusCode).toBe(200);
@@ -28,7 +27,6 @@ describe('POST /api/v1/tasks/createTask', () => {
       .send({
         question: 'Is kot pies?',
         closeDate: dayjs().add(7, 'day').toDate(),
-        isExtra: false,
         lessonId: lessonId,
       });
     expect(res.statusCode).toBe(400);
@@ -42,7 +40,7 @@ describe('POST /api/v1/tasks/createTask', () => {
       .send({
         number: 5,
         closeDate: dayjs().add(7, 'day').toDate(),
-        isExtra: false,
+
         lessonId: lessonId,
       });
     expect(res.statusCode).toBe(400);
@@ -56,21 +54,7 @@ describe('POST /api/v1/tasks/createTask', () => {
       .send({
         number: 5,
         question: 'Is kot pies?',
-        isExtra: false,
-        lessonId: lessonId,
-      });
-    expect(res.statusCode).toBe(400);
-  });
 
-  it('should respond an error if isExtra is missing', async () => {
-    const res = await request(app)
-      .post('/api/v1/tasks/createTask')
-      .set('Accept', 'application/json')
-      .set('Cookie', `access_token=${validLecturerToken}`)
-      .send({
-        number: 5,
-        question: 'Is kot pies?',
-        closeDate: dayjs().add(7, 'day').toDate(),
         lessonId: lessonId,
       });
     expect(res.statusCode).toBe(400);
@@ -85,7 +69,6 @@ describe('POST /api/v1/tasks/createTask', () => {
         number: 5,
         question: 'Is kot pies?',
         closeDate: dayjs().add(7, 'day').toDate(),
-        isExtra: false,
       });
     expect(res.statusCode).toBe(400);
   });
@@ -99,7 +82,7 @@ describe('POST /api/v1/tasks/createTask', () => {
         number: 5,
         question: 'Is kot pies?',
         closeDate: dayjs().subtract(7, 'day').toDate(),
-        isExtra: false,
+
         lessonId: lessonId,
       });
     expect(res.statusCode).toBe(400);
@@ -110,7 +93,7 @@ describe('POST /api/v1/tasks/createTask', () => {
       number: 5,
       question: 'Get all data from Users table',
       closeDate: dayjs().add(7, 'day').toDate(),
-      isExtra: false,
+
       lessonId: 9999,
     };
 

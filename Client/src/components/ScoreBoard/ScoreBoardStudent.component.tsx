@@ -95,8 +95,6 @@ function ScoreBoardStudent({
 	const studentPosition =
 		studentPositionIdx != null ? studentPositionIdx + 1 : -1;
 
-	console.log(studentPosition);
-
 	const renderTableRow = useCallback(
 		(row: TTableRow, index: number) => {
 			const position = index + 1;
@@ -138,7 +136,7 @@ function ScoreBoardStudent({
 				</Table.Tr>
 			);
 		},
-		[studentPosition]
+		[scoreBoardData?.scoreBoard, studentPosition]
 	);
 
 	const rows = sortedRows.map(renderTableRow);

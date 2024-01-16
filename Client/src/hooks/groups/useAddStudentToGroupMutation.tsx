@@ -11,9 +11,6 @@ export function useAddStudentToGroupMutation(
 	const queryClient = useQueryClient();
 	const mutation = useMutation({
 		mutationFn: () => addStudentToGroupMutationFn(studentData),
-		onError: (error) => {
-			console.error(error);
-		},
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: ['studentsFromGroup', studentData.groupId],

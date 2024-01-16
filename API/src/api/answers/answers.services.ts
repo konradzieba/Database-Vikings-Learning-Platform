@@ -1,4 +1,4 @@
-import { Answer, Prisma, Student } from '@prisma/client';
+import { Answer, Prisma, SpecialTaskAnswer, Student } from '@prisma/client';
 import { db } from '../../db';
 
 export function createAnswer(answer: Prisma.AnswerCreateInput) {
@@ -55,6 +55,14 @@ export function findAnswerById(id: Answer['id']) {
   });
 }
 
+export function findSpecialTaskAnswerById(id: SpecialTaskAnswer['id']) {
+  return db.specialTaskAnswer.findUnique({
+    where: {
+      id,
+    },
+  });
+}
+
 export function findAnswerByTaskIdAndStudentId(
   taskId: Answer['taskId'],
   studentId: Answer['studentId']
@@ -77,6 +85,50 @@ export function findCompletedTaskByStudent(ids: Answer['id'][]) {
     select: {
       taskId: true,
     },
+  });
+}
+
+export async function specialTaskAnswerReply(
+  id: SpecialTaskAnswer['id'],
+  replyStatus: SpecialTaskAnswer['replyStatus'],
+  replyDesc: SpecialTaskAnswer['replyDesc'] | null = null,
+  replyDate: SpecialTaskAnswer['replyDate'],
+  grantedScore: SpecialTaskAnswer['grantedScore']
+) {
+  if (grantedScore === null) {
+    return null;
+  }
+
+  const updatedSpecialTaskAnswer = await db.specialTaskAnswer.update({
+    where: { id },
+    data: {
+      replyStatus,
+      replyDesc: replyDesc || undefined,
+      replyDate,
+      grantedScore,
+    },
+  });
+
+  if (!updatedSpecialTaskAnswer) {
+    throw new Error(`Unable to find the answer with ID ${id}.`);
+  }
+
+  const student = await db.student.findUnique({
+    where: { id: updatedSpecialTaskAnswer.studentId },
+    select: { score: true },
+  });
+
+  if (!student) {
+    throw new Error(
+      `The student with ID ${updatedSpecialTaskAnswer.studentId} was not found.`
+    );
+  }
+
+  const newScore = student.score + grantedScore;
+
+  await db.student.update({
+    where: { id: updatedSpecialTaskAnswer.studentId },
+    data: { score: newScore },
   });
 }
 
@@ -122,6 +174,59 @@ export async function answerReply(
     where: { id: updatedAnswer.studentId },
     data: { score: newScore },
   });
+}
+
+export async function updateSpecialTaskAnswerReply(
+  answerId: SpecialTaskAnswer['id'],
+  oldGrantedScore: SpecialTaskAnswer['grantedScore'],
+  replyStatus: SpecialTaskAnswer['replyStatus'] | null = null,
+  replyDesc: SpecialTaskAnswer['replyDesc'] | null = null,
+  newGrantedScore: SpecialTaskAnswer['grantedScore'] | null = null
+) {
+  const specialTaskAnswer = await db.specialTaskAnswer.findUnique({
+    where: { id: answerId },
+    select: {
+      studentId: true,
+      Student: {
+        select: {
+          score: true,
+        },
+      },
+    },
+  });
+
+  if (!specialTaskAnswer) {
+    throw new Error(
+      `Unable to find the special task answer with ID ${answerId}.`
+    );
+  }
+
+  if (
+    newGrantedScore === null ||
+    newGrantedScore === undefined ||
+    oldGrantedScore === null ||
+    oldGrantedScore === undefined
+  ) {
+    return null;
+  }
+
+  const newStudentScore =
+    specialTaskAnswer.Student.score - oldGrantedScore + newGrantedScore;
+
+  return await db.$transaction([
+    db.specialTaskAnswer.update({
+      where: { id: answerId },
+      data: {
+        replyStatus: replyStatus || undefined,
+        replyDesc: replyDesc || undefined,
+        grantedScore: newGrantedScore || undefined,
+      },
+    }),
+    db.student.update({
+      where: { id: specialTaskAnswer.studentId },
+      data: { score: { set: newStudentScore } },
+    }),
+  ]);
 }
 
 export async function updateAnswerReply(

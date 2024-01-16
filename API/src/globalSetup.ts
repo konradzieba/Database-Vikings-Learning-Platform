@@ -146,7 +146,6 @@ const setup = async () => {
       number: 15,
       question: 'Is kot pies?',
       closeDate: dayjs().add(7, 'day').toDate(),
-      isExtra: false,
       Lesson: {
         connect: {
           id: lesson.id,
@@ -160,7 +159,6 @@ const setup = async () => {
       number: 16,
       question: 'Is kot pies?',
       closeDate: dayjs().add(7, 'day').toDate(),
-      isExtra: false,
       Lesson: {
         connect: {
           id: lesson.id,
@@ -174,7 +172,6 @@ const setup = async () => {
       number: 61,
       question: 'Will I be removed?',
       closeDate: dayjs().add(7, 'day').toDate(),
-      isExtra: true,
       Lesson: {
         connect: {
           id: lesson.id,

@@ -85,8 +85,16 @@ function StudentAnswerCard({
 					{firstName} {lastName}
 				</Text>
 			</Box>
-			<DateTimeDisplay title='Data zwrócenia' date={sendDate} icon={<IconClock />}/>
-			<Button miw={150} onClick={handlePreviewStudentAnswer} className={classes.answerCardButton}>
+			<DateTimeDisplay
+				title='Data zwrócenia'
+				date={sendDate}
+				icon={<IconClock />}
+			/>
+			<Button
+				miw={150}
+				onClick={handleButtonClick}
+				className={classes.answerCardButton}
+			>
 				{isScoreGranted ? 'Koryguj' : 'Przejdź'}
 			</Button>
 		</Flex>

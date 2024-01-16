@@ -4,6 +4,7 @@ import { ParamsWithId } from 'interfaces/ParamsWithId';
 import { UpdateStudentInput, UpdateUserInput } from './users.schemas';
 import MessageResponse from 'interfaces/MessageResponse';
 import * as UserServices from './users.services';
+import * as GroupServices from '../groups/groups.services';
 
 export async function me(req: Request, res: Response, next: NextFunction) {
   try {
@@ -26,6 +27,17 @@ export async function me(req: Request, res: Response, next: NextFunction) {
     if (user.role === EnumRole.STUDENT) {
       const student = await UserServices.findStudentByUserId(user.id);
 
+      if (!student) {
+        res.status(404);
+        throw new Error('Student not found');
+      }
+      const studentGroup = await GroupServices.findGroupById(student.groupId);
+
+      if (!studentGroup) {
+        res.status(404);
+        throw new Error('Student group not found');
+      }
+
       if (student) {
         res.json({
           ...userData,
@@ -38,7 +50,7 @@ export async function me(req: Request, res: Response, next: NextFunction) {
             isPasswordChanged: student.isPasswordChanged,
             groupId: student.groupId,
             answersId: student.answersId,
-            idCheck: student.userId,
+            lecturerId: studentGroup.lecturerId,
           },
         });
       } else {

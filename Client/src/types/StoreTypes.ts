@@ -13,6 +13,16 @@ export interface IUserStoreStore {
 	clearUserStoreData: () => void;
 }
 
+export type TAssignedSpecialTasks = {
+	id: number;
+	title: string;
+	openDate: string;
+	question: string;
+	isMarkdown: boolean;
+	numberOfAnswers: number;
+	lecturerId: number;
+};
+
 export interface IStudentStoreStore {
 	studentData: {
 		indexNumber: number | null;
@@ -24,6 +34,7 @@ export interface IStudentStoreStore {
 		studentId: number | null;
 		groupId: number | null;
 		answersIds: number[] | null;
+		lecturerId: number | null;
 	};
 	setStudentData: (studentData: IStudentStoreStore['studentData']) => void;
 	clearStudentStoreData: () => void;
@@ -44,7 +55,6 @@ export type TaskType = {
 	question: string;
 	closeDate: string;
 	isMarkdown: boolean;
-	isExtra: boolean;
 };
 
 export type CreatedLessonType = {

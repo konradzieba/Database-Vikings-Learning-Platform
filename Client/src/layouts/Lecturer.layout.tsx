@@ -14,7 +14,7 @@ function LecturerLayout() {
 	const isLoading = !!lecturerNavbarData.email;
 
 	return (
-		<>
+		<div className='layoutWrapper'>
 			{isLoading ? (
 				<>
 					<LecturerNavbar lecturerInfo={lecturerNavbarData} />
@@ -23,7 +23,7 @@ function LecturerLayout() {
 			) : (
 				<FullScreenLoader />
 			)}
-		</>
+		</div>
 	);
 }
 

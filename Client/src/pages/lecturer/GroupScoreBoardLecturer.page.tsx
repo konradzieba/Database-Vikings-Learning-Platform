@@ -1,4 +1,5 @@
 import ScoreBoardLecturer from '@/components/ScoreBoard/ScoreBoardLecturer.component';
+import DataNotFound from '@/components/UI/DataNotFound';
 import useGetStudentsFromGroup from '@/hooks/groups/useGetStudentsFromGroup';
 import useGetGroupsByLecturerId from '@/hooks/users/useGetGroupsByLecturerId';
 import useGetScoreBoardQuery from '@/hooks/users/useGetScoreBoardQuery';
@@ -11,28 +12,24 @@ function GroupScoreBoardLecturerPage() {
 	const [searchTerm, setSearchTerm] = useState('');
 	const { id } = useParams();
 	const { lecturerData } = useLecturerStore();
-	const { data: groupsData } = useGetGroupsByLecturerId(
-		lecturerData.lecturerId
-	);
+	const { data: groupsData } = useGetGroupsByLecturerId(lecturerData.lecturerId);
 	const { data: scoreBoardData } = useGetScoreBoardQuery();
 
 	if (groupsData?.groups.length === 0) {
-		return (
-			<Center h='25vh'>
-				<Title>Nie posiadasz żadnych grup</Title>
-			</Center>
-		);
+		return <DataNotFound firstLineText='Nie posiadasz' secondLineText='żadnych grup' />;
 	}
 
-	const groupName = groupsData?.groups.find(
-		(group) => group.groupId === +id!
-	)?.groupName;
+	const groupName = groupsData?.groups.find(group => group.groupId === +id!)?.groupName;
 
-	const selectLabels = groupsData?.groups?.map((group) => group.groupName);
+	const selectLabels = groupsData?.groups?.map(group => group.groupName);
 
-	const { data: StudentsFromGroup, isPending } = useGetStudentsFromGroup(
-		groupsData?.groups[0].groupId!
-	);
+	const { data: StudentsFromGroup, isPending } = useGetStudentsFromGroup(+id!);
+
+	if (StudentsFromGroup?.students.length === 0) {
+		return (
+			<DataNotFound firstLineText='Brak studentów' secondLineText='w grupie' withAddStudentButton groupId={+id!} />
+		);
+	}
 
 	if (isPending) {
 		return (
@@ -43,11 +40,9 @@ function GroupScoreBoardLecturerPage() {
 	}
 
 	const filteredBySearchTerm = scoreBoardData?.scoreBoard.filter(
-		(student) =>
+		student =>
 			student.indexNumber.toString().includes(searchTerm) ||
-			`${student.User.firstName} ${student.User.lastName}`
-				.toLowerCase()
-				.includes(searchTerm.toLowerCase())
+			`${student.User.firstName} ${student.User.lastName}`.toLowerCase().includes(searchTerm.toLowerCase())
 	);
 
 	return (

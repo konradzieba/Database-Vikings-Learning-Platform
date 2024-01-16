@@ -13,7 +13,6 @@ interface AddTaskModalProps {
 	question: string;
 	closeDate: string;
 	isMarkdown: boolean;
-	isExtra: boolean;
 }
 
 function ModifyAddedTaskModal({ innerProps, context, id }: ContextModalProps<AddTaskModalProps>) {
@@ -40,7 +39,6 @@ function ModifyAddedTaskModal({ innerProps, context, id }: ContextModalProps<Add
 				question: questionDetails,
 				closeDate: selectedDate?.toISOString()!,
 				isMarkdown: textFormat === 'Markdown' ? true : false,
-				isExtra: innerProps.isExtra,
 			};
 
 			const updatedTasks = [...lessonFromGroup.tasks];

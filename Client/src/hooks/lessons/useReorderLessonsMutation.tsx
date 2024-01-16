@@ -12,9 +12,6 @@ export function useReorderLessonsMutation(
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ['lessonsByGroup'] });
 		},
-		onError: (error) => {
-			console.log(error);
-		},
 	});
 
 	return mutation;

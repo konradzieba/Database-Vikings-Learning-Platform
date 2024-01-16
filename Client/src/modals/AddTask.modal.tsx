@@ -37,7 +37,6 @@ function AddTaskModal({ innerProps, context, id }: ContextModalProps<AddTaskModa
 						question: textAreaRef.current?.value!,
 						closeDate: selectedDate?.toISOString()!,
 						isMarkdown: textFormat === 'Markdown' ? true : false,
-						isExtra: false,
 					},
 				],
 			};

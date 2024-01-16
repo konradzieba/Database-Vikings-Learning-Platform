@@ -1,22 +1,65 @@
-import { Button, Group, Select, Stack, Text, Textarea } from '@mantine/core';
+import SocketEvents from '@/utils/sockets/socket-events';
+import socket from '@/utils/sockets/socket-instance';
+import { useLecturerStore } from '@/utils/stores/useLecturerStore';
+import { Button, Center, Flex, Group, Loader, Select, Stack, Text, TextInput, Textarea } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
-import { IconFloatLeft, IconListDetails } from '@tabler/icons-react';
-import { useRef, useState } from 'react';
+import { IconCircleCheck, IconCircleX, IconFloatLeft, IconListDetails, IconTag } from '@tabler/icons-react';
+import { useEffect, useRef, useState } from 'react';
 
 interface CreateSpecialTaskModalProps {
 	modalBody: string;
 }
 
 function CreateSpecialTaskModal({ innerProps, context, id }: ContextModalProps<CreateSpecialTaskModalProps>) {
+	const { lecturerData } = useLecturerStore();
 	const textAreaRef = useRef<HTMLTextAreaElement>(null);
+	const textInputRef = useRef<HTMLInputElement>(null);
 	const [isTextAreaError, setIsTextAreaError] = useState(false);
+	const [isNameInputError, setIsNameInputError] = useState(false);
 	const [textFormat, setTextFormat] = useState<string | null>('Zwykły tekst');
+	const [isSending, setIsSending] = useState(false);
+	const [isSent, setIsSent] = useState(false);
+	const [isCreatingError, setIsCreatingError] = useState(false);
+
+	useEffect(() => {
+		socket.emit(SocketEvents.connection, () => {});
+
+		socket.emit(SocketEvents.CLIENT.JOIN_ROOM, lecturerData.lecturerId!.toString());
+
+		socket.on(SocketEvents.SERVER.ERROR_CREATING_SPECIAL_TASK, ({ error }: { error: boolean }) => {
+			setIsSending(false);
+			setIsCreatingError(true);
+		});
+
+		socket.on(SocketEvents.SERVER.SUCCESS_CREATING_SPECIAL_TASK, ({ success }: { success: boolean }) => {
+			setIsSending(false);
+			setIsSent(true);
+		});
+
+		// return () => {
+		// 	socket.disconnect();
+		// };
+	}, [socket, lecturerData.lecturerId]);
+
+	const sendCreatedSpecialTask = () => {
+		socket.emit(SocketEvents.SERVER.RECEIVE_CREATED_SPECIAL_TASK, {
+			question: textAreaRef.current?.value!,
+			isMarkdown: textFormat === 'Markdown' ? true : false,
+			title: textInputRef.current?.value!,
+			lecturerId: lecturerData.lecturerId,
+		});
+	};
 
 	const handleAddSpecialTask = () => {
 		if (textAreaRef.current?.value === '') {
 			setIsTextAreaError(true);
 			return;
 		}
+		if (textInputRef.current?.value === '') {
+			setIsNameInputError(true);
+			return;
+		}
+		sendCreatedSpecialTask();
 	};
 
 	const handleCloseModal = () => {
@@ -24,8 +67,52 @@ function CreateSpecialTaskModal({ innerProps, context, id }: ContextModalProps<C
 		modals.closeAll();
 	};
 
+	if (isSending) {
+		return (
+			<Center mih={120}>
+				<Loader />
+			</Center>
+		);
+	}
+
+	if (isSent) {
+		return (
+			<>
+				<Flex direction='column' align='center' gap='md' mb='md'>
+					<IconCircleCheck size='3rem' color='var(--good-state-color)' />
+					<Text>Zadanie specjalne zostało stworzone</Text>
+				</Flex>
+				<Button fullWidth onClick={handleCloseModal}>
+					Zamknij
+				</Button>
+			</>
+		);
+	}
+
+	if (isCreatingError) {
+		return (
+			<>
+				<Flex direction='column' align='center' gap='md' mb='md'>
+					<IconCircleX size='3rem' color='var(--bad-state-color)' />
+					<Text>Wystąpił błąd podczas tworzenia zadania specjalnego</Text>
+				</Flex>
+				<Button fullWidth onClick={handleCloseModal}>
+					Rozumiem
+				</Button>
+			</>
+		);
+	}
+
 	return (
 		<Stack>
+			<TextInput
+				label='Tytuł zadania'
+				placeholder='Tytuł zadania...'
+				ref={textInputRef}
+				error={isNameInputError ? 'Tytuł zadania nie może być pusty' : ''}
+				leftSection={<IconTag />}
+				onChange={value => (value.currentTarget.value === '' ? setIsNameInputError(true) : setIsNameInputError(false))}
+			/>
 			<Select
 				value={textFormat}
 				onChange={value => setTextFormat(value)}
@@ -59,7 +146,7 @@ function CreateSpecialTaskModal({ innerProps, context, id }: ContextModalProps<C
 				<Button miw={150} variant='outline' onClick={handleCloseModal}>
 					Anuluj
 				</Button>
-				<Button disabled={isTextAreaError} miw={150} onClick={handleAddSpecialTask}>
+				<Button disabled={isTextAreaError || isNameInputError} miw={150} onClick={handleAddSpecialTask}>
 					Stwórz
 				</Button>
 			</Group>

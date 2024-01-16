@@ -2,7 +2,11 @@ import { Button, Flex, Tabs, Text, rem } from '@mantine/core';
 import { modals } from '@mantine/modals';
 import { useSearchParams } from 'react-router-dom';
 
-function SpecialTaskAnswersStats() {
+interface SpecialTaskAnswersStatsProps {
+	specialTaskId: number;
+}
+
+function SpecialTaskAnswersStats({ specialTaskId }: SpecialTaskAnswersStatsProps) {
 	const [_, setSearchParams] = useSearchParams();
 
 	const handleOpenSpecialTaskDetailsModal = () => {
@@ -12,7 +16,7 @@ function SpecialTaskAnswersStats() {
 			size: 'xl',
 			closeOnClickOutside: false,
 			innerProps: {
-				taskId: 10,
+				specialTaskId: specialTaskId,
 				modalBody: '',
 			},
 		});

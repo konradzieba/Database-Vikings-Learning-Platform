@@ -39,7 +39,6 @@ export function useLoginMutation({ form }: LoginMutationProps) {
 			}
 		},
 		onError: (error: AxiosError) => {
-			console.error(error);
 			if (error.response?.status === 401 || error.response?.status === 400) {
 				form.setFieldError('password', 'Nieprawidłowy email lub hasło');
 			} else {

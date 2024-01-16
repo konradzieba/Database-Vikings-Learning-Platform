@@ -305,7 +305,6 @@ export async function createLesson(
         number: task.number,
         question: task.question,
         closeDate: dayjs(task.closeDate).toDate(),
-        isExtra: task.isExtra,
         isMarkdown: task.isMarkdown,
         Lesson: {
           connect: {

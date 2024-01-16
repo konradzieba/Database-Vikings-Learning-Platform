@@ -21,6 +21,17 @@ router.get(
   AnswersControllers.getEditReplyAnswerData
 );
 
+router.get(
+  '/getEditSpecialTaskAnswerData/:id',
+  validateRequestAndCheckRole(
+    {
+      params: paramsWithIdSchema
+    },
+    EnumRole.LECTURER
+  ),
+  AnswersControllers.getEditSpecialTaskAnswerReplyData
+)
+
 router.post(
   '/createAnswer',
   validateRequestAndCheckRole(
@@ -29,6 +40,18 @@ router.post(
   ),
   AnswersControllers.createAnswer
 );
+
+router.patch(
+  '/specialTaskAnswerReply/:id',
+  validateRequestAndCheckRole(
+    {
+      params: paramsWithIdSchema,
+      body: AnswerSchemas.answerReplySchema,
+    },
+    EnumRole.LECTURER
+  ),
+  AnswersControllers.specialTaskAnswerReply
+)
 
 router.patch(
   '/answerReply/:id',
@@ -53,6 +76,18 @@ router.patch(
   ),
   AnswersControllers.updateAnswerReply
 );
+
+router.patch(
+  '/updateSpecialTaskAnswerReply/:id',
+  validateRequestAndCheckRole(
+    {
+      params: paramsWithIdSchema,
+      body: AnswerSchemas.answerReplyUpdateSchema,
+    },
+    EnumRole.LECTURER
+  ),
+  AnswersControllers.updateSpecialTaskAnswerReply
+)
 
 router.patch(
   '/updateAnswer/:id',

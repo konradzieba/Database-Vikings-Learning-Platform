@@ -42,7 +42,7 @@ function StudentLayout() {
 	}, [isSuccess]);
 
 	return (
-		<>
+		<div className='layoutWrapper'>
 			{isLoading ? (
 				<>
 					<StudentNavbar studentInfo={studentNavbarData} />
@@ -51,7 +51,7 @@ function StudentLayout() {
 			) : (
 				<FullScreenLoader />
 			)}
-		</>
+		</div>
 	);
 }
 

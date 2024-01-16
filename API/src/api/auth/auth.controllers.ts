@@ -123,7 +123,6 @@ export async function registerManyStudents(
       message: 'Students created successfully.',
     });
   } catch (error) {
-    console.error('Error in registerManyStudents:', error);
     next(error);
   }
 }

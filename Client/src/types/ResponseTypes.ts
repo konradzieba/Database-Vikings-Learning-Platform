@@ -31,10 +31,10 @@ const StudentInfoSchema = z.object({
 	health: z.number().int().min(0).max(3),
 	// rank: z.number().int(),
 	isPasswordChanged: z.boolean(),
-	idCheck: z.number(),
 	groupId: z.number(),
 	answersId: z.array(z.number()),
 	aggregatedSendTime: z.number(),
+	lecturerId: z.number().int(),
 });
 
 const MeResponseSchema = z.object({
@@ -86,6 +86,48 @@ const GetLessonsByGroupIdSchema = z.object({
 			isFrequencyChecked: z.boolean(),
 			taskAmount: z.number().int(),
 			groupId: z.number().int(),
+		})
+	),
+});
+
+const getSpecialTaskDetailsByIdSchema = z.object({
+	message: z.string(),
+	specialTask: z.object({
+		id: z.number().int(),
+		title: z.string(),
+		question: z.string(),
+		openDate: z.string(),
+		isMarkdown: z.boolean(),
+		numberOfAnswers: z.number().int(),
+		lecturerId: z.number().int(),
+	}),
+});
+
+const getSpecialTasksToEvaluateSchema = z.object({
+	message: z.string(),
+	specialTasksToEvaluate: z.array(
+		z.object({
+			taskInfo: z.object({
+				id: z.number().int(),
+				title: z.string(),
+			}),
+			answerInfo: z.array(
+				z.object({
+					userId: z.number().int(),
+					studentId: z.number().int(),
+					firstName: z.string(),
+					lastName: z.string(),
+					indexNumber: z.number().int(),
+					id: z.number().int(),
+					solution: z.string(),
+					replyStatus: z.string(),
+					sendDate: z.string(),
+					replyDesc: z.string().nullable(),
+					replyDate: z.string().nullable(),
+					grantedScore: z.number().int().nullable(),
+					specialTaskId: z.number().int(),
+				})
+			),
 		})
 	),
 });
@@ -243,9 +285,7 @@ const getStudentDefaultPasswordStateSchema = z.object({
 
 const getPreviousLessonsImagesSchema = z.object({
 	message: z.string(),
-	previousLessonsImages: z.array(
-		z.object({ number: z.number().int(), image: z.string() })
-	),
+	previousLessonsImages: z.array(z.object({ number: z.number().int(), image: z.string() })),
 });
 
 const getPreDeleteGroupInfoSchema = z.object({
@@ -317,7 +357,7 @@ const getStudentPreviewDataSchema = z.object({
 	}),
 });
 
-const editAnswerReply = z.object({
+const editAnswerReplySchema = z.object({
 	message: string(),
 	answerData: z.object({
 		id: z.number().int(),
@@ -332,46 +372,93 @@ const editAnswerReply = z.object({
 	}),
 });
 
+const getSpecialTasksSchema = z.object({
+	message: z.string(),
+	specialTasks: z.array(
+		z.object({
+			id: z.number().int(),
+			title: z.string(),
+			question: z.string(),
+			isMarkdown: z.boolean(),
+			lecturerId: z.number().int(),
+			openDate: z.string(),
+			numberOfAnswers: z.number().int(),
+		})
+	),
+});
+
+const getSpecialTaskByIdSchema = z.object({
+	message: z.string(),
+	specialTaskInfo: z.object({
+		id: z.number().int(),
+		title: z.string(),
+		question: z.string(),
+		isMarkdown: z.boolean(),
+		numberOfAnswers: z.number().int(),
+		lecturerId: z.number().int(),
+		openDate: z.string(),
+	}),
+	answer: z.object({
+		id: z.number().int(),
+		solution: z.string(),
+		replyStatus: z.string(),
+		sendDate: z.string(),
+		replyDate: z.string(),
+		grantedScore: z.number().int(),
+		specialTaskId: z.number().int(),
+		studentId: z.number().int(),
+	}),
+});
+
+const getStudentSpecialTaskAnswersSchema = z.object({
+	message: z.string(),
+	studentSpecialTaskAnswers: z.array(
+		z.object({
+			question: z.string(),
+			answer: z.object({
+				id: z.number().int(),
+				solution: z.string(),
+				replyStatus: z.string(),
+				sendDate: z.string(),
+				replyDesc: z.string().nullable(),
+				replyDate: z.string().nullable(),
+				grantedScore: z.number().int().nullable(),
+				specialTaskId: z.number().int(),
+			}),
+		})
+	),
+});
+
 export type TMessageResponse = z.infer<typeof MessageResponseSchema>;
 export type TLoginResponse = z.infer<typeof LoginResponseSchema>;
 export type TRegisterManyStudents = z.infer<typeof RegisterManyStudentsSchema>;
 export type TLecturerInfo = z.infer<typeof LecturerInfoSchema>;
 export type TStudentInfo = z.infer<typeof StudentInfoSchema>;
 export type TMeResponse = z.infer<typeof MeResponseSchema>;
-export type TGetGroupsByLecturerId = z.infer<
-	typeof GetGroupsByLecturerIdSchema
->;
+export type TGetGroupsByLecturerId = z.infer<typeof GetGroupsByLecturerIdSchema>;
 export type TGetStudentsFromGroup = z.infer<typeof GetStudentsFromGroupSchema>;
 export type TGetLessonsByGroupId = z.infer<typeof GetLessonsByGroupIdSchema>;
-export type TGetLessonInfoByGroupAndLessonId = z.infer<
-	typeof getLessonInfoByGroupAndLessonIdSchema
->;
-export type TGetStudentLessonsInfo = z.infer<
-	typeof getStudentLessonsInfoSchema
->;
+export type TGetLessonInfoByGroupAndLessonId = z.infer<typeof getLessonInfoByGroupAndLessonIdSchema>;
+export type TGetStudentLessonsInfo = z.infer<typeof getStudentLessonsInfoSchema>;
 export type TGetTasksByLessonId = z.infer<typeof getTasksByLessonIdSchema>;
 export type TGetLessonTaskById = z.infer<typeof getLessonTaskByIdSchema>;
 
 export type TGetStudentTasks = z.infer<typeof getStudentTasksSchema>;
-export type TGetStudentDefaultPasswordState = z.infer<
-	typeof getStudentDefaultPasswordStateSchema
->;
+export type TGetStudentDefaultPasswordState = z.infer<typeof getStudentDefaultPasswordStateSchema>;
 export type TGetTaskInfoById = z.infer<typeof getTaskInfoByIdSchema>;
 export type TGetScoreBoard = z.infer<typeof getScoreBoardSchema>;
 
 export type TGetAbsentStudents = z.infer<typeof getAbsentStudentsSchema>;
 
-export type TGetPreviousLessonsImages = z.infer<
-	typeof getPreviousLessonsImagesSchema
->;
-export type TGetPreDeleteGroupInfo = z.infer<
-	typeof getPreDeleteGroupInfoSchema
->;
-export type TGetPreDeleteLessonInfo = z.infer<
-	typeof getPreDeleteLessonInfoSchema
->;
+export type TGetPreviousLessonsImages = z.infer<typeof getPreviousLessonsImagesSchema>;
+export type TGetPreDeleteGroupInfo = z.infer<typeof getPreDeleteGroupInfoSchema>;
+export type TGetPreDeleteLessonInfo = z.infer<typeof getPreDeleteLessonInfoSchema>;
 export type TGetGroupInfo = z.infer<typeof getGroupInfoSchema>;
-export type TGetStudentPreviewData = z.infer<
-	typeof getStudentPreviewDataSchema
->;
-export type TGetEditAnswerReply = z.infer<typeof editAnswerReply>;
+export type TGetStudentPreviewData = z.infer<typeof getStudentPreviewDataSchema>;
+export type TGetEditAnswerReply = z.infer<typeof editAnswerReplySchema>;
+
+export type TGetSpecialTasks = z.infer<typeof getSpecialTasksSchema>;
+export type TGetSpecialTaskById = z.infer<typeof getSpecialTaskByIdSchema>;
+export type TGetStudentSpecialTaskAnswers = z.infer<typeof getStudentSpecialTaskAnswersSchema>;
+export type TGetSpecialTasksToEvaluate = z.infer<typeof getSpecialTasksToEvaluateSchema>;
+export type TGetSpecialTaskDetailsById = z.infer<typeof getSpecialTaskDetailsByIdSchema>;

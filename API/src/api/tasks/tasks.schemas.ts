@@ -19,7 +19,6 @@ export const taskSchema = z.object({
         path: ['closeDate'],
       }
     ),
-  isExtra: z.boolean({ required_error: 'Task isExtra must be provided' }),
   lessonId: z.number().int('lessonId must be an integer.'),
   isMarkdown: z.boolean({ required_error: 'Task isMarkdown must be provided' }),
 });

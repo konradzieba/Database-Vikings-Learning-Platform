@@ -10,19 +10,23 @@ export function useChangeDefaultPasswordMutation() {
 			modals.closeAll();
 			modals.openConfirmModal({
 				title: 'Sukces!',
-				children: <Text size='sm'>Twoje hasło zostało zmienione pomyślnie!</Text>,
+				children: (
+					<Text size='sm'>Twoje hasło zostało zmienione pomyślnie!</Text>
+				),
 				labels: { confirm: 'Rozumiem', cancel: '' },
 				cancelProps: { display: 'none' },
 				confirmProps: { fullWidth: true },
 			});
 		},
-		onError: error => {
-			console.error(error);
+		onError: () => {
 			modals.closeAll();
 			modals.openConfirmModal({
 				title: 'Błąd...',
 				children: (
-					<Text size='sm'>Podczas zmiany hasła wystąpił nieoczekiwany błąd. Spróbuj po ponownym zalogowaniu.</Text>
+					<Text size='sm'>
+						Podczas zmiany hasła wystąpił nieoczekiwany błąd. Spróbuj po
+						ponownym zalogowaniu.
+					</Text>
 				),
 				labels: { confirm: 'Rozumiem', cancel: '' },
 				cancelProps: { display: 'none' },

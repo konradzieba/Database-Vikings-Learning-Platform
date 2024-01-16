@@ -4,7 +4,6 @@ import { AnswerReplyStatusEnum } from '@/types/Enums';
 export const answerReplySchema = z.object({
 	replyStatus: AnswerReplyStatusEnum,
 	replyDesc: z.string(),
-	replyDate: z.date(),
 	grantedScore: z
 		.string()
 		.min(1, 'Wynik nie może być pusty')

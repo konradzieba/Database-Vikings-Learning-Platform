@@ -14,11 +14,7 @@ import {
 	rem,
 } from '@mantine/core';
 import { ContextModalProps, modals } from '@mantine/modals';
-import {
-	IconBlockquote,
-	IconCoins,
-	IconListDetails,
-} from '@tabler/icons-react';
+import { IconBlockquote, IconCoins, IconListDetails } from '@tabler/icons-react';
 import { CodeHighlight } from '@mantine/code-highlight';
 import { useForm, zodResolver } from '@mantine/form';
 import { answerReplySchema } from './CreateAnswerReply.schema';
@@ -50,11 +46,7 @@ interface EditAnswerReplyModalProps {
 	studentIndex: number;
 }
 
-function EditAnswerReplyModal({
-	context,
-	id,
-	innerProps,
-}: ContextModalProps<EditAnswerReplyModalProps>) {
+function EditAnswerReplyModal({ context, id, innerProps }: ContextModalProps<EditAnswerReplyModalProps>) {
 	const [selectError, setSelectError] = useState<string | null>(null);
 	const {
 		data: answerData,
@@ -66,42 +58,29 @@ function EditAnswerReplyModal({
 		initialValues: {
 			replyStatus: answerData?.answerData.replyStatus as AnswerReplyStatus,
 			replyDesc: answerData?.answerData.replyDesc ?? '',
-			grantedScore: (answerData?.answerData.grantedScore || '') as
-				| number
-				| string,
+			grantedScore: (answerData?.answerData.grantedScore || '') as number | string,
 		},
 		validate: zodResolver(answerReplySchema),
 	});
 
 	useEffect(() => {
 		if (answerData) {
-			answerReplyForm.setFieldValue(
-				'replyStatus',
-				answerData.answerData.replyStatus
-			);
-			answerReplyForm.setFieldValue(
-				'replyDesc',
-				answerData.answerData.replyDesc || ''
-			);
-			answerReplyForm.setFieldValue(
-				'grantedScore',
-				answerData.answerData.grantedScore || ''
-			);
+			answerReplyForm.setFieldValue('replyStatus', answerData.answerData.replyStatus);
+			answerReplyForm.setFieldValue('replyDesc', answerData.answerData.replyDesc || '');
+			answerReplyForm.setFieldValue('grantedScore', answerData.answerData.grantedScore || '');
 		}
 	}, [answerData]);
 
 	const {
-		mutate: createAnswerReply,
+		mutate: editAnswerReply,
 		isPending: isEditing,
 		isSuccess: isEditSuccess,
 		isError: isEditError,
 	} = useEditAnswerReplyMutation(innerProps.answerId, {
-		grantedScore: answerReplyForm.values.grantedScore as number,
+		grantedScore: +answerReplyForm.values.grantedScore as number,
 		replyStatus: answerReplyForm.values.replyStatus as AnswerReplyStatus,
 		replyDesc: answerReplyForm.values.replyDesc,
 	});
-
-	console.log(answerReplyForm.values);
 
 	if (isFetching || isEditing) {
 		return (
@@ -112,9 +91,7 @@ function EditAnswerReplyModal({
 	}
 
 	if (isFetchingError || isEditError) {
-		const error = isFetchingError
-			? 'Nie udało się pobrać danych'
-			: 'Nie udało się skorygować odpowiedzi';
+		const error = isFetchingError ? 'Nie udało się pobrać danych' : 'Nie udało się skorygować odpowiedzi';
 		return (
 			<Center h={120}>
 				<Text>{error}</Text>
@@ -122,15 +99,16 @@ function EditAnswerReplyModal({
 		);
 	}
 
-	console.log(answerData);
-
 	const handleReplyAnswer = () => {
 		answerReplyForm.validate();
+		if (answerReplyForm.values.grantedScore === '') {
+			return;
+		}
 		if (!answerReplyForm.values.replyStatus) {
 			setSelectError('Wybierz status odpowiedzi');
 			return;
 		}
-		createAnswerReply();
+		editAnswerReply();
 	};
 
 	const handleCloseModal = () => {
@@ -153,11 +131,10 @@ function EditAnswerReplyModal({
 
 	return (
 		<form
-			onSubmit={(e) => {
+			onSubmit={e => {
 				e.preventDefault();
 				handleReplyAnswer();
-			}}
-		>
+			}}>
 			<Text c='dimmed' fs='italic'>
 				Data przesłania:&nbsp;
 				{dayjs(answerData?.answerData.sendDate).format('DD/MM/YYYY HH:mm')}
@@ -172,11 +149,7 @@ function EditAnswerReplyModal({
 			</Text>
 
 			<ScrollArea.Autosize mah={250} type='auto' offsetScrollbars>
-				<CodeHighlight
-					code={answerData?.answerData.solution ?? ''}
-					language='sql'
-					withCopyButton={false}
-				/>
+				<CodeHighlight code={answerData?.answerData.solution ?? ''} language='sql' withCopyButton={false} />
 			</ScrollArea.Autosize>
 
 			<Divider my='md' />
@@ -187,20 +160,13 @@ function EditAnswerReplyModal({
 					w='50%'
 					label='Ocena zadania'
 					placeholder='Ocena zadania...'
-					data={selectData.map((item) => item.label)}
-					value={
-						selectData.find(
-							(item) => item.value === answerReplyForm.values.replyStatus
-						)?.label ?? ''
-					}
+					data={selectData.map(item => item.label)}
+					value={selectData.find(item => item.value === answerReplyForm.values.replyStatus)?.label ?? ''}
 					error={selectError}
 					{...(answerReplyForm.getInputProps('replyStatus'),
 					{
-						onChange: (value) => {
-							answerReplyForm.setFieldValue(
-								'replyStatus',
-								selectData.find((item) => item.label === value)!.value
-							);
+						onChange: value => {
+							answerReplyForm.setFieldValue('replyStatus', selectData.find(item => item.label === value)!.value);
 							setSelectError(null);
 						},
 					})}

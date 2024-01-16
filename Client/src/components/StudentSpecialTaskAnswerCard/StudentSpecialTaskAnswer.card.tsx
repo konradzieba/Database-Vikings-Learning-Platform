@@ -11,6 +11,8 @@ interface StudentSpecialTaskAnswerCardProps {
 	sendDate: string;
 	answerId: number;
   answer: string;
+	studentId: number;
+	isScoreGranted: boolean
 }
 
 function StudentSpecialTaskAnswerCard({
@@ -19,7 +21,9 @@ function StudentSpecialTaskAnswerCard({
 	lastName,
 	sendDate,
 	answerId,
-  answer
+  answer,
+	isScoreGranted,
+	studentId,
 }: StudentSpecialTaskAnswerCardProps) {
 	const handlePreviewStudentSpecialAnswer = () => {
 		modals.openContextModal({
@@ -36,6 +40,30 @@ function StudentSpecialTaskAnswerCard({
 		});
 	};
 
+	const openEditSpecialTaskAnswerReplyModal = () => {
+		modals.openContextModal({
+			modal: 'editSpecialTaskAnswerReply',
+			title: 'Koryguj ocenę zadania specjalnego',
+			size: 'lg',
+			closeOnClickOutside: false,
+			// onClose: 
+			innerProps: {
+				answerId,
+				studentId,
+				studentFullName: `${firstName} ${lastName}`,
+				studentIndex: index
+			}
+		})
+	}
+
+	const handleButtonClick = () => {
+		if(!isScoreGranted) {
+			handlePreviewStudentSpecialAnswer();
+		} else {
+			openEditSpecialTaskAnswerReplyModal();
+		}
+	}
+
 	return (
 		<Flex direction='column' px='md' py='md' gap='md' miw='22%' className={classes.answerCardWrapper}>
 			<Box>
@@ -47,8 +75,8 @@ function StudentSpecialTaskAnswerCard({
 				</Text>
 			</Box>
 			<DateTimeDisplay title='Data zwrócenia' date={sendDate} icon={<IconClock />} />
-			<Button miw={150} onClick={handlePreviewStudentSpecialAnswer} className={classes.answerCardButton}>
-				Przejdź
+			<Button miw={150} onClick={handleButtonClick} className={classes.answerCardButton}>
+				{isScoreGranted ? 'Koryguj' : 'Przejdź'}
 			</Button>
 		</Flex>
 	);
